@@ -1,0 +1,25 @@
+{
+    "name": "leroy-merlin-br/laravel-kafka",
+    "type": "library",
+    "keywords": [
+        "kafka"
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.3"
+    },
+    "autoload": {
+        "psr-4" : {
+            "LaravelKafka\\" : "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Boitata Team",
+            "email": "boitata@leroymerlin.com.br"
+        }
+    ],
+    "require": {}
+}

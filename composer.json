@@ -24,5 +24,12 @@
             "name": "Boitata Team",
             "email": "boitata@leroymerlin.com.br"
         }
-    ]
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Metamorphosis\\MetamorphosisServiceProvider"
+            ]
+        }
+    }
 }

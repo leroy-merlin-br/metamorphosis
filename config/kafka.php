@@ -1,7 +1,7 @@
 <?php
 
-
 return [
+
     'brokers' => [
         'default' => [
             'broker' => '',
@@ -13,11 +13,11 @@ return [
             ],
         ],
     ],
-    
+
     'topics' => [
         'default' => [
             'topic' => 'default',
-            'broker-connection' => 'default',
+            'broker' => 'default',
             'consumer-groups' => [
                 'default' => [
                     'offset' => 'initial',

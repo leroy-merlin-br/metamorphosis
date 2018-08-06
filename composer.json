@@ -4,12 +4,15 @@
     "keywords": [
         "kafka"
     ],
+    "description": "Kafka package for laravel applications",
     "require": {
         "php": ">=7.1",
+        "ext-rdkafka": "*",
         "illuminate/support": "~5.5.0|~5.6.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.3"
+        "phpunit/phpunit": "^7.3",
+        "kwn/php-rdkafka-stubs": "~1.1.0"
     },
     "autoload": {
         "psr-4" : {

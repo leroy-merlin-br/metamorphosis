@@ -13,4 +13,13 @@ class MetamorphosisServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/../config/kafka.php', 'kafka');
     }
+
+    public function register()
+    {
+        $this->app->bind('command.kafka:consume', Command::class);
+
+        $this->commands([
+            'command.kafka:consume',
+        ]);
+    }
 }

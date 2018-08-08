@@ -1,40 +1,106 @@
-<?php
+<?php declare(strict_types=1);
 namespace Metamorphosis;
 
+use Metamorphosis\Exceptions\ConfigurationException;
+
+/**
+ * Maps configuration from config file and provides access to them via methods.
+ */
 class Config
 {
+    /**
+     * @var string
+     */
     protected $topic;
 
+    /**
+     * @var array
+     */
     protected $broker;
 
-    protected $consumerGroupConfig;
+    /**
+     * @var string
+     */
+    protected $consumerGroupId;
+
+    /**
+     * @var string
+     */
+    protected $consumerGroupOffset;
+
+    /**
+     * @var callable
+     */
+    protected $consumerGroupHandler;
 
     public function __construct(string $topicKey, string $consumerGroup)
     {
-        $config = config("kafka.topics.{$topicKey}");
-
-        $this->broker = $config['broker'];
-        $this->consumerGroupConfig = [
-            'groupName' => $consumerGroup,
-            'offset' => $config['topics']['consumer-groups'][$consumerGroup]['offset'],
-            'consumer' => $config['topics']['consumer-groups'][$consumerGroup]['consumer'],
-        ];
-
-        $this->topic = $config['topic'];
+        $topicConfig = $this->getTopicConfig($topicKey);
+        $this->setConsumerGroup($topicConfig, $consumerGroup);
+        $this->setBroker($topicConfig);
+        $this->setTopic($topicConfig);
     }
 
     public function getTopic(): string
     {
-        return $this->topic ?? '';
+        return $this->topic;
     }
 
-    public function getBroker(): string
+    public function getBrokerConfig(): array
     {
-        return $this->broker ?? '';
+        return $this->broker;
     }
 
-    public function getConsumerGroupSettings(): array
+    public function getConsumerGroupId(): string
     {
-        return $this->consumerGroupConfig;
+        return $this->consumerGroupId;
+    }
+
+    public function getConsumerGroupOffset(): string
+    {
+        return $this->consumerGroupOffset;
+    }
+
+    public function getConsumerGroupHanlder(): callable
+    {
+        return $this->consumerGroupHandler;
+    }
+
+    private function getTopicConfig(string $topicKey): array
+    {
+        $config = config("kafka.topics.{$topicKey}");
+
+        if (!$config) {
+            throw new ConfigurationException("Topic '{$topicKey}' not found");
+        }
+
+        return $config;
+    }
+
+    private function setConsumerGroup(array $topicConfig, string $consumerGroupId): void
+    {
+        $consumerGroupConfig = $topicConfig['consumer-groups'][$consumerGroupId] ?? null;
+
+        if (!$consumerGroupConfig) {
+            throw new ConfigurationException("Consumer group '{$consumerGroupId}' not found");
+        }
+
+        $this->consumerGroupId = $consumerGroupId;
+        $this->consumerGroupOffset = $consumerGroupConfig['offset'];
+        $this->consumerGroupHandler = $consumerGroupConfig['consumer'];
+    }
+
+    private function setBroker(array $topicConfig): void
+    {
+        $this->broker = config("kafka.brokers.{$topicConfig['broker']}");
+
+        if (!$this->broker) {
+            throw new ConfigurationException("Broker '{$topicConfig['broker']}' configuration not found");
+        }
+    }
+
+    private function setTopic(array $topicConfig): void
+    {
+        $this->topic = $topicConfig['topic'];
     }
 }

@@ -7,18 +7,13 @@ use RdKafka\KafkaConsumer;
 class Consumer
 {
     /**
-     * @var Connector $connector
-     */
-    public $connector;
-
-    /**
-     * @var Conf $conf
+     * @var Conf
      */
     public $conf;
 
     public function __construct(string $topicKey, string $consumerGroup)
     {
-        $config = new Config($topicKey,$consumerGroup);
+        $config = new Config($topicKey, $consumerGroup);
 
         $consumerGroupConfig = $config->getConsumerGroupSettings();
 
@@ -28,8 +23,8 @@ class Consumer
 
         $this->topic = $config->getTopic();
 
-        $this->connector = new Connector($config->getBroker());
-        $this->conf = $this->connector->setup();
+        $connector = new Connector($config->getBrokerConfig());
+        $this->conf = $connector->setup();
     }
 
     public function consume()

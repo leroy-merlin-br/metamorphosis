@@ -19,6 +19,11 @@
             "Metamorphosis\\" : "src/"
         }
     },
+    "autoload-dev": {
+        "files": [
+            "tests/test-helpers.php"
+        ]
+    },
     "authors": [
         {
             "name": "Boitata Team",

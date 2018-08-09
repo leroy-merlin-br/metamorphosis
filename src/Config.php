@@ -33,9 +33,9 @@ class Config
      */
     protected $consumerGroupHandler;
 
-    public function __construct(string $topicKey, string $consumerGroup)
+    public function __construct(string $topic, string $consumerGroup)
     {
-        $topicConfig = $this->getTopicConfig($topicKey);
+        $topicConfig = $this->getTopicConfig($topic);
         $this->setConsumerGroup($topicConfig, $consumerGroup);
         $this->setBroker($topicConfig);
         $this->setTopic($topicConfig);

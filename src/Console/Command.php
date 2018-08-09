@@ -1,5 +1,5 @@
 <?php
-namespace Metamorphosis;
+namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
 
@@ -14,7 +14,6 @@ class Command extends BaseCommand
         {consumer-group : consumer group name.}
         {--offset : Sets offset for consumer}
         {--timeout : Sets timeout for consumer}';
-
 
     public function handle()
     {

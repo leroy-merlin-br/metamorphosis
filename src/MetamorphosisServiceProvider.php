@@ -2,6 +2,8 @@
 namespace Metamorphosis;
 
 use Illuminate\Support\ServiceProvider;
+use Metamorphosis\Console\Command;
+use Metamorphosis\Console\ConsumerMakeCommand;
 
 class MetamorphosisServiceProvider extends ServiceProvider
 {
@@ -17,9 +19,11 @@ class MetamorphosisServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('command.kafka:consume', Command::class);
+        $this->app->bind('command.make:kafka-consumer', ConsumerMakeCommand::class);
 
         $this->commands([
             'command.kafka:consume',
+            'command.make:kafka-consumer',
         ]);
     }
 }

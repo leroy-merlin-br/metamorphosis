@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace Metamorphosis;
 
+use Metamorphosis\Contracts\ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
 
 /**
@@ -29,7 +30,7 @@ class Config
     protected $consumerGroupOffset;
 
     /**
-     * @var callable
+     * @var ConsumerTopicHandler
      */
     protected $consumerGroupHandler;
 
@@ -61,7 +62,7 @@ class Config
         return $this->consumerGroupOffset;
     }
 
-    public function getConsumerGroupHanlder(): callable
+    public function getConsumerGroupHandler(): ConsumerTopicHandler
     {
         return $this->consumerGroupHandler;
     }
@@ -87,7 +88,7 @@ class Config
 
         $this->consumerGroupId = $consumerGroupId;
         $this->consumerGroupOffset = $consumerGroupConfig['offset'];
-        $this->consumerGroupHandler = $consumerGroupConfig['consumer'];
+        $this->consumerGroupHandler = app($consumerGroupConfig['consumer']);
     }
 
     private function setBroker(array $topicConfig): void

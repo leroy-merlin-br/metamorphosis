@@ -2,6 +2,7 @@
 namespace Tests;
 
 use Metamorphosis\Config;
+use Metamorphosis\Contracts\ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +18,7 @@ class ConfigTest extends TestCase
         $this->assertSame('topic-name', $config->getTopic());
         $this->assertSame('consumer-id', $config->getConsumerGroupId());
         $this->assertSame('initial', $config->getConsumerGroupOffset());
-        $this->assertSame('dummyConsumerHandler', $config->getConsumerGroupHanlder());
+        $this->assertInstanceOf(ConsumerTopicHandler::class, $config->getConsumerGroupHandler());
         $this->assertSame([
             'broker' => '',
             'auth' => [

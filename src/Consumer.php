@@ -19,18 +19,18 @@ class Consumer
 
     public $timeout = 2000000;
 
-    protected $consumer;
+    /**
+     * @var \Metamorphosis\Contracts\ConsumerTopicHandler
+     */
+    protected $handler;
 
     public function __construct(string $topic, string $consumerGroup)
     {
         $config = new Config($topic, $consumerGroup);
 
-        $consumerGroupConfig = $config->getConsumerGroupSettings();
-
-        $this->consumerGroup = $consumerGroupConfig['groupName'];
-        $this->offset = $consumerGroupConfig['offset'];
-        $this->consumer = $consumerGroupConfig['consumer'];
-
+        $this->consumerGroup = $config->getConsumerGroupId();
+        $this->offset = $config->getConsumerGroupOffset();
+        $this->handler = $config->getConsumerGroupHandler();
         $this->topic = $config->getTopic();
 
         $connector = new Connector($config->getBrokerConfig());
@@ -51,7 +51,7 @@ class Consumer
                 continue;
             }
 
-            $this->consumer->handle([$message->payload]);
+            $this->handler->handle([$message->payload]);
         }
     }
 

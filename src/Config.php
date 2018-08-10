@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace Metamorphosis;
 
-use Illuminate\Support\Facades\Config as LaravelConfig;
 use Metamorphosis\Contracts\ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
 
@@ -35,7 +34,7 @@ class Config
      */
     protected $consumerGroupHandler;
 
-    public function __construct(string $topic, string $consumerGroup)
+    public function __construct(string $topic, string $consumerGroup = null)
     {
         $topicConfig = $this->getTopicConfig($topic);
         $this->setConsumerGroup($topicConfig, $consumerGroup);
@@ -68,19 +67,21 @@ class Config
         return $this->consumerGroupHandler;
     }
 
-    private function getTopicConfig(string $topicKey): array
+    private function getTopicConfig(string $topic): array
     {
-        $config = LaravelConfig::get("kafka.topics.{$topicKey}");
+        $config = config("kafka.topics.{$topic}");
 
         if (!$config) {
-            throw new ConfigurationException("Topic '{$topicKey}' not found");
+            throw new ConfigurationException("Topic '{$topic}' not found");
         }
 
         return $config;
     }
 
-    private function setConsumerGroup(array $topicConfig, string $consumerGroupId): void
+    private function setConsumerGroup(array $topicConfig, string $consumerGroupId = null): void
     {
+        $consumerGroupId = $consumerGroupId ?? 'default';
+
         $consumerGroupConfig = $topicConfig['consumer-groups'][$consumerGroupId] ?? null;
 
         if (!$consumerGroupConfig) {

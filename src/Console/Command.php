@@ -2,6 +2,7 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
+use Metamorphosis\Config;
 use Metamorphosis\Consumer;
 
 class Command extends BaseCommand
@@ -18,7 +19,9 @@ class Command extends BaseCommand
 
     public function handle()
     {
-        $consumer = new Consumer($this->argument('topic'), $this->argument('consumer-group'));
+        $config = new Config($this->argument('topic'), $this->argument('consumer-group'));
+
+        $consumer = new Consumer($config);
 
         if ($timeout = $this->option('timeout')) {
             $consumer->setTimeout($timeout);

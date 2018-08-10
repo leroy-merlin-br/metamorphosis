@@ -24,10 +24,8 @@ class Consumer
      */
     protected $handler;
 
-    public function __construct(string $topic, string $consumerGroup)
+    public function __construct(Config $config)
     {
-        $config = new Config($topic, $consumerGroup);
-
         $this->consumerGroup = $config->getConsumerGroupId();
         $this->offset = $config->getConsumerGroupOffset();
         $this->handler = $config->getConsumerGroupHandler();

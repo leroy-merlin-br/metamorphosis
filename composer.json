@@ -23,9 +23,9 @@
         }
     },
     "autoload-dev": {
-        "files": [
-            "tests/test-helpers.php"
-        ]
+        "psr-4": {
+            "Tests\\": "tests"
+        }
     },
     "authors": [
         {

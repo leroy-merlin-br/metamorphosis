@@ -1,0 +1,30 @@
+<?php
+
+namespace DummyNamespace;
+
+use Metamorphosis\Contracts\ConsumerTopicHandler;
+
+class DummyClass implements ConsumerTopicHandler
+{
+    /**
+     * Create a new consumer topic handler instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Handle payload.
+     *
+     * @param  array  $data
+     *
+     * @return bool
+     */
+    public function handle(array $data): bool
+    {
+        //
+    }
+}

@@ -3,6 +3,7 @@ namespace Metamorphosis;
 
 use Metamorphosis\Contracts\ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Illuminate\Support\Facades\Config as LaravelConfig;
 
 /**
  * Maps configuration from config file and provides access to them via methods.
@@ -69,7 +70,7 @@ class Config
 
     private function getTopicConfig(string $topicKey): array
     {
-        $config = config("kafka.topics.{$topicKey}");
+        $config = LaravelConfig::get("kafka.topics.{$topicKey}");
 
         if (!$config) {
             throw new ConfigurationException("Topic '{$topicKey}' not found");

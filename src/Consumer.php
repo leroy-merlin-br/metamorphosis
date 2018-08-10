@@ -21,9 +21,9 @@ class Consumer
 
     protected $consumer;
 
-    public function __construct(string $topicKey, string $consumerGroup)
+    public function __construct(string $topic, string $consumerGroup)
     {
-        $config = new Config($topicKey, $consumerGroup);
+        $config = new Config($topic, $consumerGroup);
 
         $consumerGroupConfig = $config->getConsumerGroupSettings();
 
@@ -41,8 +41,6 @@ class Consumer
     {
         $kafkaConsumer = $this->getConsumer();
 
-        $consumer = $this->consumer;
-
         while(true) {
             $message = $kafkaConsumer->consume($this->timeout);
 
@@ -53,7 +51,7 @@ class Consumer
                 continue;
             }
 
-            $consumer([$message->payload]);
+            $this->consumer->handle([$message->payload]);
         }
     }
 

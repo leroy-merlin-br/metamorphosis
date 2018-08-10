@@ -2,6 +2,7 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
+use Metamorphosis\Consumer;
 
 class Command extends BaseCommand
 {

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 namespace Metamorphosis;
 
+use Illuminate\Support\Facades\Config as LaravelConfig;
 use Metamorphosis\Contracts\ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Illuminate\Support\Facades\Config as LaravelConfig;
 
 /**
  * Maps configuration from config file and provides access to them via methods.

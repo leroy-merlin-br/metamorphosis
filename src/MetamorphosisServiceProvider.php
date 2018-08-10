@@ -18,12 +18,9 @@ class MetamorphosisServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->bind('command.kafka:consume', Command::class);
-        $this->app->bind('command.make:kafka-consumer', ConsumerMakeCommand::class);
-
         $this->commands([
-            'command.kafka:consume',
-            'command.make:kafka-consumer',
+            Command::class,
+            ConsumerMakeCommand::class,
         ]);
     }
 }

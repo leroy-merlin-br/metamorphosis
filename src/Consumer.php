@@ -65,9 +65,8 @@ class Consumer
 
     protected function getConsumer(): KafkaConsumer
     {
-        $consumerGroup = key($this->consumerGroup['consumer-groups']);
-        $this->conf->set('group.id', $consumerGroup);
-        $this->conf->set('auto.offset.reset', $this->consumerGroup['consumer-groups']['offset']);
+        $this->conf->set('group.id', $this->consumerGroup);
+        $this->conf->set('auto.offset.reset', $this->offset);
 
         $consumer = new KafkaConsumer($this->conf);
         $consumer->subscribe([$this->topic]);

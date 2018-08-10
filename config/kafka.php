@@ -43,7 +43,7 @@ return [
     |                    when using the consumer command.
     |                    For every consumer group, you may define:
                          'offset': to be used as the 'auto.offset.reset'
-    |                    'consumer': a callable that will receive the message payload
+    |                    'consumer': a consumer class that implements ConsumerTopicHandler
     |
     */
 
@@ -54,7 +54,7 @@ return [
             'consumer-groups' => [
                 'default' => [
                     'offset' => 'initial',
-                    'consumer' => '',
+                    'consumer' => '\App\Kafka\Consumer\ConsumerExample',
                 ],
            ],
         ],

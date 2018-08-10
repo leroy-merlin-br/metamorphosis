@@ -5,25 +5,23 @@ use RdKafka\Conf;
 
 class Connector
 {
-    public $config;
+    /**
+     * @var Broker
+     */
+    public $broker;
 
-    public function __construct(array $config)
+    public function __construct(Broker $broker)
     {
-        $this->config = $config;
+        $this->broker = $broker;
     }
 
     public function setup(): Conf
     {
         $conf = new Conf();
 
-        $conf->set('metadata.broker.list', $this->config['broker']);
+        $conf->set('metadata.broker.list', $this->broker->getConnection());
 
-        if ($this->config['auth']['ssl']) {
-            $conf->set('security.protocol', 'ssl');
-            $conf->set('ssl.ca.location', $this->config['auth']['ca']);
-            $conf->set('ssl.certificate.location', $this->config['auth']['certificate']);
-            $conf->set('ssl.key.location', $this->config['auth']['key']);
-        }
+        $this->broker->authentication($conf);
 
         return $conf;
     }

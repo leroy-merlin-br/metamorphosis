@@ -13,7 +13,7 @@ return [
 
     'brokers' => [
         'default' => [
-            'broker' => '',
+            'connection' => '',
             'auth' => [
                 'protocol' => 'ssl',
                 'ca' => storage_path('ca.pem'),

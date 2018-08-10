@@ -15,7 +15,7 @@ class Config
     protected $topic;
 
     /**
-     * @var array
+     * @var Broker
      */
     protected $broker;
 
@@ -47,7 +47,7 @@ class Config
         return $this->topic;
     }
 
-    public function getBrokerConfig(): array
+    public function getBrokerConfig(): Broker
     {
         return $this->broker;
     }
@@ -95,11 +95,15 @@ class Config
 
     private function setBroker(array $topicConfig): void
     {
-        $this->broker = config("kafka.brokers.{$topicConfig['broker']}");
+        $brokerConfig = config("kafka.brokers.{$topicConfig['broker']}");
 
-        if (!$this->broker) {
+        if (!$brokerConfig) {
             throw new ConfigurationException("Broker '{$topicConfig['broker']}' configuration not found");
         }
+
+        $this->broker = new Broker();
+        $this->broker->setConnection($brokerConfig['connection']);
+        $this->broker->setAuthentication($brokerConfig['auth']);
     }
 
     private function setTopic(array $topicConfig): void

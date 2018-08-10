@@ -1,18 +1,20 @@
 <?php
 namespace Metamorphosis;
 
+use RdKafka\Conf;
+
 class Connector
 {
     public $config;
 
-    public function __construct(string $connection)
+    public function __construct(array $config)
     {
-        $this->config = config('kafka.'.$connection);
+        $this->config = $config;
     }
 
-    public function setup()
+    public function setup(): Conf
     {
-        $conf = new \RdKafka\Conf();
+        $conf = new Conf();
 
         $conf->set('metadata.broker.list', $this->config['broker']);
 

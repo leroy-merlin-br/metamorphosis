@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis;
 
+use Metamorphosis\Middlewares\Dispatcher;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 
@@ -37,19 +38,16 @@ class Consumer
 
     public function run(): void
     {
+        $dispatcher = new Dispatcher($config);
+
         $kafkaConsumer = $this->getConsumer();
 
-        while(true) {
-            $message = $kafkaConsumer->consume($this->timeout);
+        while (true) {
+            $originalMessage = $kafkaConsumer->consume($this->timeout);
 
-            if ($message->err) {
-                echo 'error: ';
-                $this->handleError($message);
-                echo "\n";
-                continue;
-            }
+            $message = new Message($originalMessage);
 
-            $this->handler->handle([$message->payload]);
+            $dispatcher->handle($message);
         }
     }
 
@@ -72,22 +70,5 @@ class Consumer
         $consumer->subscribe([$this->topic]);
 
         return $consumer;
-    }
-
-    protected function handleError($message) {
-        switch ($message->err) {
-            case RD_KAFKA_RESP_ERR_NO_ERROR:
-                var_dump($message);
-                break;
-            case RD_KAFKA_RESP_ERR__PARTITION_EOF:
-                echo "No more messages; will wait for more\n";
-                break;
-            case RD_KAFKA_RESP_ERR__TIMED_OUT:
-                echo "Timed out\n";
-                break;
-            default:
-                var_dump($message);
-                break;
-        }
     }
 }

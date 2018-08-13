@@ -16,7 +16,7 @@ class ConfigTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'broker' => '',
+                        'connection' => '',
                         'auth' => [
                             'protocol' => 'ssl',
                             'ca' => '/path/to/ca',
@@ -37,13 +37,26 @@ class ConfigTest extends LaravelTestCase
                             'consumer-id' => [
                                 'offset' => 'initial',
                                 'consumer' => ConsumerHandlerDummy::class,
-                            ]
+                                'middlewares' => [
+                                    'first_consumer_middleware',
+                                ],
+                            ],
+                        ],
+                        'middlewares' => [
+                            'first_topic_middleware',
                         ],
                     ],
                 ],
-            ]
+                'middlewares' => [
+                    'consumer' => [
+                        'first_global_middleware',
+                        'second_global_middleware',
+                    ],
+                ],
+            ],
         ]);
     }
+
     /** @test */
     public function it_parses_configuration_from_file()
     {
@@ -64,6 +77,12 @@ class ConfigTest extends LaravelTestCase
                 'key' => '/path/to/key',
             ],
         ], $config->getBrokerConfig());
+        $this->assertSame([
+            'first_global_middleware',
+            'second_global_middleware',
+            'first_topic_middleware',
+            'first_consumer_middleware',
+        ], $config->getMiddlewares());
     }
 
     /** @test */
@@ -113,7 +132,7 @@ class ConfigTest extends LaravelTestCase
                     ],
                 ],
             ],
-        ] ]);
+        ]]);
         $topicKey = 'topic-key';
         $consumerGroup = 'default';
 

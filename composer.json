@@ -12,7 +12,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^7.3",
-        "kwn/php-rdkafka-stubs": "~1.1.0"
+        "kwn/php-rdkafka-stubs": "~1.1.0",
+        "satooshi/php-coveralls": "^1.0"
     },
     "autoload": {
         "psr-4" : {

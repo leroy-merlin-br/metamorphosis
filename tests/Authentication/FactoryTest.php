@@ -1,10 +1,11 @@
 <?php
-namespace Tests;
+namespace Tests\Authentication;
 
 use Metamorphosis\Authentication\Factory;
 use Metamorphosis\Authentication\NoAuthentication;
 use Metamorphosis\Authentication\SSLAuthentication;
 use Metamorphosis\Exceptions\AuthenticationException;
+use Tests\LaravelTestCase;
 
 class FactoryTest extends LaravelTestCase
 {
@@ -35,6 +36,19 @@ class FactoryTest extends LaravelTestCase
     {
         $authenticationConfig = [
             'protocol' => 'some-invalid-protocol',
+        ];
+
+        $this->expectException(AuthenticationException::class);
+
+        Factory::make($authenticationConfig);
+    }
+
+    /** @test */
+    public function it_throws_exception_when_authentication_is_passed_without_protocol_key()
+    {
+        $authenticationConfig = [
+            'foo' => 'some-invalid-protocol',
+            'bar' => [],
         ];
 
         $this->expectException(AuthenticationException::class);

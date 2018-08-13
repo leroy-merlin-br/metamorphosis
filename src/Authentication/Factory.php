@@ -12,7 +12,7 @@ class Factory
             return new NoAuthentication();
         }
 
-        switch ($authentication['protocol']) {
+        switch ($authentication['protocol'] ?? []) {
             case 'ssl':
                 return new SSLAuthentication($authentication);
             default:

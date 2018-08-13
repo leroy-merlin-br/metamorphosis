@@ -2,6 +2,7 @@
 namespace Metamorphosis;
 
 use Metamorphosis\Authentication\Factory;
+use Metamorphosis\Contracts\Authentication;
 use RdKafka\Conf;
 
 class Broker
@@ -12,9 +13,15 @@ class Broker
     protected $connection;
 
     /**
-     * @var $authentication \Metamorphosis\Contracts\Authentication
+     * @var $authentication Authentication
      */
     protected $authentication;
+
+    public function __construct(string $connection, array $authentication = null)
+    {
+        $this->setConnection($connection);
+        $this->setAuthentication($authentication);
+    }
 
     public function authentication(Conf $conf): void
     {
@@ -22,16 +29,16 @@ class Broker
     }
 
     public function getConnection(): string
-{
-    return $this->connection;
-}
+    {
+        return $this->connection;
+    }
 
-    public function setConnection(string $connection)
+    protected function setConnection(string $connection): void
     {
         $this->connection = $connection;
     }
 
-    public function setAuthentication($authConfig = null): void
+    protected function setAuthentication($authConfig = null): void
     {
         $this->authentication = Factory::make($authConfig);
     }

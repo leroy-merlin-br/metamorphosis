@@ -6,7 +6,7 @@ use Metamorphosis\Exceptions\AuthenticationException;
 
 class Factory
 {
-    static public function make(array $authentication = null): Authentication
+    public static function make(array $authentication = null): Authentication
     {
         if (!$authentication) {
             return new NoAuthentication();

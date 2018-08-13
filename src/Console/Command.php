@@ -31,6 +31,6 @@ class Command extends BaseCommand
             $consumer->setOffset($offset);
         }
 
-        $consumer->consume();
+        $consumer->run();
     }
 }

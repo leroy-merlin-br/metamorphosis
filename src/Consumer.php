@@ -35,7 +35,7 @@ class Consumer
         $this->conf = $connector->setup();
     }
 
-    public function consume(): void
+    public function run(): void
     {
         $kafkaConsumer = $this->getConsumer();
 
@@ -58,7 +58,7 @@ class Consumer
         $this->timeout = $timeout;
     }
 
-    public function setOffset(string $offset): void
+    public function setOffset($offset): void
     {
         $this->offset = $offset;
     }

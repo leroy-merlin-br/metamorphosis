@@ -16,7 +16,7 @@ class Factory
             case 'ssl':
                 return new SSLAuthentication($authentication);
             default:
-                throw new AuthenticationException();
+                throw new AuthenticationException('Invalid Protocol Configuration.');
         }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Tests;
 
+use Metamorphosis\Broker;
 use Metamorphosis\Config;
 use Metamorphosis\Contracts\ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
@@ -16,7 +17,7 @@ class ConfigTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'broker' => '',
+                        'connection' => '',
                         'auth' => [
                             'protocol' => 'ssl',
                             'ca' => '/path/to/ca',
@@ -55,15 +56,7 @@ class ConfigTest extends LaravelTestCase
         $this->assertSame('consumer-id', $config->getConsumerGroupId());
         $this->assertSame('initial', $config->getConsumerGroupOffset());
         $this->assertInstanceOf(ConsumerTopicHandler::class, $config->getConsumerGroupHandler());
-        $this->assertSame([
-            'broker' => '',
-            'auth' => [
-                'protocol' => 'ssl',
-                'ca' => '/path/to/ca',
-                'certificate' => '/path/to/certificate',
-                'key' => '/path/to/key',
-            ],
-        ], $config->getBrokerConfig());
+        $this->assertInstanceOf(Broker::class, $config->getBrokerConfig());
     }
 
     /** @test */

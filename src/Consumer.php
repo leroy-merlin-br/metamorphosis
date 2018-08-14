@@ -54,8 +54,6 @@ class Consumer
             } catch (\Exception $exception) {
                 $this->handleError($exception);
             }
-
-            $dispatcher->handle($message);
         }
     }
 

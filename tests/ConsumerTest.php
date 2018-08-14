@@ -3,7 +3,7 @@ namespace Tests;
 
 use Metamorphosis\Config;
 use Metamorphosis\Consumer;
-use Metamorphosis\Middlewares\Avro;
+use Metamorphosis\Middlewares\AvroDecode;
 use Metamorphosis\Middlewares\Log;
 use Tests\Dummies\ConsumerHandlerDummy;
 
@@ -36,7 +36,7 @@ class ConsumerTest extends LaravelTestCase
                             ],
                         ],
                         'middlewares' => [
-                            Avro::class,
+                            AvroDecode::class,
                         ],
                     ],
                 ],

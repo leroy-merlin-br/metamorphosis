@@ -55,20 +55,14 @@ return [
                 'default' => [
                     'offset' => 'initial',
                     'consumer' => '\App\Kafka\Consumer\ConsumerExample',
-                    'middlewares' => [
-                        'consumer_group_middleware',
-                    ],
                 ],
-            ],
-            'middlewares' => [
-                'topic_middleware',
             ],
         ],
     ],
 
     'middlewares' => [
         'consumer' => [
-            'first_global_middleware',
+            \Metamorphosis\Middlewares\Log::class,
         ],
     ],
 ];

@@ -101,7 +101,7 @@ class Config
             throw new ConfigurationException("Broker '{$topicConfig['broker']}' configuration not found");
         }
 
-        $this->broker = new Broker($brokerConfig['connection'], $brokerConfig['auth']);
+        $this->broker = new Broker($brokerConfig['connection'], $brokerConfig['auth'] ?? null);
     }
 
     private function setTopic(array $topicConfig): void

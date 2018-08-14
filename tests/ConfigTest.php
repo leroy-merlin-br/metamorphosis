@@ -1,6 +1,7 @@
 <?php
 namespace Tests;
 
+use Metamorphosis\Authentication\NoAuthentication;
 use Metamorphosis\Broker;
 use Metamorphosis\Config;
 use Metamorphosis\Contracts\ConsumerTopicHandler;
@@ -66,6 +67,24 @@ class ConfigTest extends LaravelTestCase
         $config = new Config($topicKey);
 
         $this->assertSame('default', $config->getConsumerGroupId());
+    }
+
+    /** @test */
+    public function it_can_handle_broker_config_without_authentication_key()
+    {
+        config([
+            'kafka.brokers' => [
+                'default' => [
+                    'connection' => 'https:some-connection.com:8991',
+                ],
+            ]
+        ]);
+        $topicKey = 'topic-key';
+
+        $config = new Config($topicKey);
+        $broker = $config->getBrokerConfig();
+
+        $this->assertInstanceOf(NoAuthentication::class, $broker->getAuthentication());
     }
 
     /** @test */

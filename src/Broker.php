@@ -33,6 +33,11 @@ class Broker
         return $this->connection;
     }
 
+    public function getAuthentication(): Authentication
+    {
+        return $this->authentication;
+    }
+
     protected function setConnection(string $connection): void
     {
         $this->connection = $connection;

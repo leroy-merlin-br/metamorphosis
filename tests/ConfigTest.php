@@ -1,6 +1,8 @@
 <?php
 namespace Tests;
 
+use Metamorphosis\Authentication\NoAuthentication;
+use Metamorphosis\Broker;
 use Metamorphosis\Config;
 use Metamorphosis\Contracts\ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
@@ -68,15 +70,7 @@ class ConfigTest extends LaravelTestCase
         $this->assertSame('consumer-id', $config->getConsumerGroupId());
         $this->assertSame('initial', $config->getConsumerGroupOffset());
         $this->assertInstanceOf(ConsumerTopicHandler::class, $config->getConsumerGroupHandler());
-        $this->assertSame([
-            'broker' => '',
-            'auth' => [
-                'protocol' => 'ssl',
-                'ca' => '/path/to/ca',
-                'certificate' => '/path/to/certificate',
-                'key' => '/path/to/key',
-            ],
-        ], $config->getBrokerConfig());
+        $this->assertInstanceOf(Broker::class, $config->getBrokerConfig());
         $this->assertSame([
             'first_global_middleware',
             'second_global_middleware',
@@ -92,6 +86,24 @@ class ConfigTest extends LaravelTestCase
         $config = new Config($topicKey);
 
         $this->assertSame('default', $config->getConsumerGroupId());
+    }
+
+    /** @test */
+    public function it_can_handle_broker_config_without_authentication_key()
+    {
+        config([
+            'kafka.brokers' => [
+                'default' => [
+                    'connection' => 'https:some-connection.com:8991',
+                ],
+            ],
+        ]);
+        $topicKey = 'topic-key';
+
+        $config = new Config($topicKey);
+        $broker = $config->getBrokerConfig();
+
+        $this->assertInstanceOf(NoAuthentication::class, $broker->getAuthentication());
     }
 
     /** @test */

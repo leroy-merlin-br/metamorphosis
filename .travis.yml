@@ -1,0 +1,29 @@
+language: php
+
+php:
+  - 7.1
+  - 7.2
+
+sudo: required
+
+before_install:
+  - git clone https://github.com/edenhill/librdkafka.git
+  - cd librdkafka/
+  - ./configure
+  - sudo make && sudo make install
+  - cd ../
+  - pecl install rdkafka
+  - echo "extension = rdkafka.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+before_script:
+  - composer install --no-interaction
+
+script:
+  - mkdir -p build/logs
+  - phpunit -c phpunit.xml.dist && make coverage
+
+after_script:
+  - php vendor/bin/coveralls -v
+
+notifications:
+  email: false

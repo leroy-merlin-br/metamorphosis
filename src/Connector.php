@@ -8,7 +8,7 @@ class Connector
     /**
      * @var Broker
      */
-    public $broker;
+    protected $broker;
 
     public function __construct(Broker $broker)
     {

@@ -6,11 +6,8 @@ use Metamorphosis\Message;
 interface Middleware
 {
     /**
-     * Handle payload.
-     *
-     * @param Message $message
-     *
-     * @return Message
+     * @param Message           $message
+     * @param MiddlewareHandler $handler
      */
-    public function process(Message $message): Message;
+    public function process(Message $message, MiddlewareHandler $handler): void;
 }

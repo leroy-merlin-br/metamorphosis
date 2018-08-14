@@ -13,9 +13,13 @@ class Message
     public function __construct(KafkaMessage $original)
     {
         $this->original = $original;
+
+        if ($this->hasError()) {
+            throw new \Exception('Invalid message');
+        }
     }
 
-    protected function hasError(): bool
+    public function hasError(): bool
     {
         return RD_KAFKA_RESP_ERR_NO_ERROR !== $this->original->err;
     }

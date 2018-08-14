@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis;
 
+use Metamorphosis\Middlewares\Consumer as ConsumerMiddeware;
 use Metamorphosis\Middlewares\Dispatcher;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
@@ -34,18 +35,25 @@ class Consumer
 
         $connector = new Connector($config->getBrokerConfig());
         $this->conf = $connector->setup();
+
+        $middlewares = $config->getMiddlewares();
+        $middlewares[] = new ConsumerMiddeware($this->handler);
+        $this->middlewareDispatcher = new Dispatcher($middlewares);
     }
 
     public function run(): void
     {
-        $dispatcher = new Dispatcher($config);
-
         $kafkaConsumer = $this->getConsumer();
 
         while (true) {
             $originalMessage = $kafkaConsumer->consume($this->timeout);
 
-            $message = new Message($originalMessage);
+            try {
+                $message = new Message($originalMessage);
+                $this->middlewareDispatcher->handle($message);
+            } catch (\Exception $exception) {
+                $this->handleError($exception);
+            }
 
             $dispatcher->handle($message);
         }
@@ -70,5 +78,11 @@ class Consumer
         $consumer->subscribe([$this->topic]);
 
         return $consumer;
+    }
+
+    protected function handleError(\Exception $exception)
+    {
+        $this->handler->failed($exception);
+        throw $exception;
     }
 }

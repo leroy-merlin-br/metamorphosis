@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 namespace Metamorphosis;
 
-use Metamorphosis\Contracts\ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Metamorphosis\TopicHandler\Consumer\Handler;
 
 /**
  * Maps configuration from config file and provides access to them via methods.
@@ -30,7 +30,7 @@ class Config
     protected $consumerGroupOffset;
 
     /**
-     * @var ConsumerTopicHandler
+     * @var Handler
      */
     protected $consumerGroupHandler;
 
@@ -68,7 +68,7 @@ class Config
         return $this->consumerGroupOffset;
     }
 
-    public function getConsumerGroupHandler(): ConsumerTopicHandler
+    public function getConsumerGroupHandler(): Handler
     {
         return $this->consumerGroupHandler;
     }

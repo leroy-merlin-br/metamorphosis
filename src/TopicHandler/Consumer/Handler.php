@@ -1,10 +1,10 @@
 <?php
-namespace Metamorphosis\Contracts;
+namespace Metamorphosis\TopicHandler\Consumer;
 
 use Exception;
 use Metamorphosis\Message;
 
-interface ConsumerTopicHandler
+interface Handler
 {
     /**
      * Handle payload.
@@ -16,7 +16,7 @@ interface ConsumerTopicHandler
     public function handle(Message $message): bool;
 
     /**
-     * The failure to process.
+     * Handle failure process.
      *
      * @param Exception $exception
      */

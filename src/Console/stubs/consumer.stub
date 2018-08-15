@@ -1,10 +1,10 @@
 <?php
-
 namespace DummyNamespace;
 
-use Metamorphosis\Contracts\ConsumerTopicHandler;
+use Exception;
+use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
-class DummyClass implements ConsumerTopicHandler
+class DummyClass extends AbstractHandler
 {
     /**
      * Create a new consumer topic handler instance.
@@ -24,6 +24,16 @@ class DummyClass implements ConsumerTopicHandler
      * @return bool
      */
     public function handle(array $data): bool
+    {
+        //
+    }
+
+   /**
+    * Handle failure process.
+    *
+    * @param Exception $exception
+    */
+    public function failed(Exception $exception): void
     {
         //
     }

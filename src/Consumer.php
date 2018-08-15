@@ -3,6 +3,7 @@ namespace Metamorphosis;
 
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
+use Metamorphosis\TopicHandler\Consumer\Handler;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 
@@ -22,7 +23,7 @@ class Consumer
     public $timeout = 2000000;
 
     /**
-     * @var \Metamorphosis\Contracts\ConsumerTopicHandler
+     * @var Handler
      */
     protected $handler;
 

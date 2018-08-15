@@ -12,9 +12,7 @@ class IteratorTest extends LaravelTestCase
     /** @test */
     public function it_should_process_current_middleware_and_advance_queue_pointer()
     {
-        $middleware = $this->getMockBuilder(Middleware::class)
-            ->setMethods(['process'])
-            ->getMock();
+        $middleware = $this->createMock(Middleware::class);
 
         $queue = [$middleware];
         $iterator = new Iterator($queue);

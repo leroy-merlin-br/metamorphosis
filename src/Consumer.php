@@ -81,6 +81,5 @@ class Consumer
     protected function handleError(\Exception $exception)
     {
         $this->handler->failed($exception);
-        throw $exception;
     }
 }

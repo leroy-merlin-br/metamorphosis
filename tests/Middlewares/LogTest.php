@@ -3,7 +3,7 @@ namespace Tests\Middlewares;
 
 use Illuminate\Contracts\Logging\Log as BaseLog;
 use Metamorphosis\Message;
-use Metamorphosis\Middlewares\Iterator;
+use Metamorphosis\Middlewares\Handler\Iterator;
 use Metamorphosis\Middlewares\Log;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;

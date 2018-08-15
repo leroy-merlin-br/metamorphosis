@@ -1,8 +1,8 @@
 <?php
 namespace Metamorphosis;
 
-use Metamorphosis\Middlewares\Consumer as ConsumerMiddleware;
-use Metamorphosis\Middlewares\Dispatcher;
+use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
+use Metamorphosis\Middlewares\Handler\Dispatcher;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 

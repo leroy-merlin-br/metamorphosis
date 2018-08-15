@@ -1,5 +1,5 @@
 <?php
-namespace Metamorphosis\Middlewares;
+namespace Metamorphosis\Middlewares\Handler;
 
 use Metamorphosis\Contracts\ConsumerTopicHandler;
 use Metamorphosis\Contracts\Middleware;
@@ -10,13 +10,11 @@ class Consumer implements Middleware
 {
     public function __construct(ConsumerTopicHandler $consumerTopicHandler)
     {
-        dump(__METHOD__);
         $this->consumerTopicHandler = $consumerTopicHandler;
     }
 
     public function process(Message $message, MiddlewareHandler $handler): void
     {
-        dump(__METHOD__);
         $this->consumerTopicHandler->handle($message);
     }
 }

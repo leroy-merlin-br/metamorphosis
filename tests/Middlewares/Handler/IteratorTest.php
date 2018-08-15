@@ -1,9 +1,9 @@
 <?php
-namespace Tests\Middlewares;
+namespace Tests\Middlewares\Handler;
 
 use Metamorphosis\Contracts\Middleware;
 use Metamorphosis\Message;
-use Metamorphosis\Middlewares\Iterator;
+use Metamorphosis\Middlewares\Handler\Iterator;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
 

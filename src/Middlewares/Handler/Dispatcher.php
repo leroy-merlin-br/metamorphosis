@@ -1,5 +1,5 @@
 <?php
-namespace Metamorphosis\Middlewares;
+namespace Metamorphosis\Middlewares\Handler;
 
 use Metamorphosis\Message;
 

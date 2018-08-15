@@ -1,8 +1,8 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\Contracts\Middleware;
 use Metamorphosis\Message;
+use Metamorphosis\Middlewares\Middleware;
 
 class Iterator extends AbstractMiddlewareHandler
 {

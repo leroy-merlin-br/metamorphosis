@@ -32,11 +32,11 @@ class CommandTest extends LaravelTestCase
                             'default' => [
                                 'offset' => 'initial',
                                 'consumer' => ConsumerHandlerDummy::class,
-                            ]
+                            ],
                         ],
                     ],
                 ],
-            ]
+            ],
         ]);
     }
 

@@ -1,11 +1,11 @@
 <?php
 namespace Tests\Middlewares\Handler;
 
-use Metamorphosis\Contracts\ConsumerTopicHandler;
+use Metamorphosis\TopicHandler\Consumer\AbstractHandler as ConsumerTopicHandler;
 use Metamorphosis\Message;
 use Metamorphosis\Middlewares\Handler\Consumer;
 use RdKafka\Message as KafkaMessage;
-use Metamorphosis\Contracts\MiddlewareHandler;
+use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
 use Tests\LaravelTestCase;
 
 class ConsumerTest extends LaravelTestCase

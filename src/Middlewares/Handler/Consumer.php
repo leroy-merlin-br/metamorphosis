@@ -1,12 +1,17 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\Contracts\ConsumerTopicHandler;
-use Metamorphosis\Contracts\Middleware;
+use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
+use Metamorphosis\Middlewares\Middleware;
 use Metamorphosis\Message;
 
 class Consumer implements Middleware
 {
+    /**
+     * @var ConsumerTopicHandler
+     */
+    protected $consumerTopicHandler;
+
     public function __construct(ConsumerTopicHandler $consumerTopicHandler)
     {
         $this->consumerTopicHandler = $consumerTopicHandler;

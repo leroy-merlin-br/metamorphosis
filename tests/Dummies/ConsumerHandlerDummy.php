@@ -2,10 +2,10 @@
 namespace Tests\Dummies;
 
 use Exception;
-use Metamorphosis\Contracts\ConsumerTopicHandler;
 use Metamorphosis\Message;
+use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
-class ConsumerHandlerDummy implements ConsumerTopicHandler
+class ConsumerHandlerDummy extends AbstractHandler
 {
     public function handle(Message $data): bool
     {

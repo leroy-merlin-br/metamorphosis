@@ -4,7 +4,7 @@ namespace Tests;
 use Metamorphosis\Authentication\NoAuthentication;
 use Metamorphosis\Broker;
 use Metamorphosis\Config;
-use Metamorphosis\Contracts\ConsumerTopicHandler;
+use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Tests\Dummies\ConsumerHandlerDummy;
 

@@ -1,19 +1,19 @@
 <?php
 namespace Metamorphosis;
 
+use Metamorphosis\Authentication\Authentication;
 use Metamorphosis\Authentication\Factory;
-use Metamorphosis\Contracts\Authentication;
 use RdKafka\Conf;
 
 class Broker
 {
     /**
-     * @var $connection string
+     * @var string
      */
     protected $connection;
 
     /**
-     * @var $authentication Authentication
+     * @var Authentication
      */
     protected $authentication;
 

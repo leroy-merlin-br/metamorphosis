@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Middlewares\Handler;
 
-use Metamorphosis\Contracts\Middleware;
+use Metamorphosis\Middlewares\Middleware;
 use Metamorphosis\Message;
 use Metamorphosis\Middlewares\Handler\Iterator;
 use RdKafka\Message as KafkaMessage;

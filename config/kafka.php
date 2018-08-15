@@ -56,7 +56,13 @@ return [
                     'offset' => 'initial',
                     'consumer' => '\App\Kafka\Consumer\ConsumerExample',
                 ],
-           ],
+            ],
+        ],
+    ],
+
+    'middlewares' => [
+        'consumer' => [
+            \Metamorphosis\Middlewares\Log::class,
         ],
     ],
 ];

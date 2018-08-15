@@ -39,13 +39,27 @@ class ConfigTest extends LaravelTestCase
                             'consumer-id' => [
                                 'offset' => 'initial',
                                 'consumer' => ConsumerHandlerDummy::class,
-                            ]
+                                'middlewares' => [
+                                    'first_consumer_middleware',
+                                ],
+                            ],
+                        ],
+                        'middlewares' => [
+                            'first_global_middleware',
+                            'first_topic_middleware',
                         ],
                     ],
                 ],
-            ]
+                'middlewares' => [
+                    'consumer' => [
+                        'first_global_middleware',
+                        'second_global_middleware',
+                    ],
+                ],
+            ],
         ]);
     }
+
     /** @test */
     public function it_parses_configuration_from_file()
     {
@@ -58,6 +72,12 @@ class ConfigTest extends LaravelTestCase
         $this->assertSame('initial', $config->getConsumerGroupOffset());
         $this->assertInstanceOf(ConsumerTopicHandler::class, $config->getConsumerGroupHandler());
         $this->assertInstanceOf(Broker::class, $config->getBrokerConfig());
+        $this->assertSame([
+            'first_global_middleware',
+            'second_global_middleware',
+            'first_topic_middleware',
+            'first_consumer_middleware',
+        ], $config->getMiddlewares());
     }
 
     /** @test */
@@ -77,7 +97,7 @@ class ConfigTest extends LaravelTestCase
                 'default' => [
                     'connection' => 'https:some-connection.com:8991',
                 ],
-            ]
+            ],
         ]);
         $topicKey = 'topic-key';
 
@@ -125,7 +145,7 @@ class ConfigTest extends LaravelTestCase
                     ],
                 ],
             ],
-        ] ]);
+        ]]);
         $topicKey = 'topic-key';
         $consumerGroup = 'default';
 

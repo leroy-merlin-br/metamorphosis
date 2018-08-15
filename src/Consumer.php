@@ -1,6 +1,8 @@
 <?php
 namespace Metamorphosis;
 
+use Metamorphosis\Middlewares\Consumer as ConsumerMiddleware;
+use Metamorphosis\Middlewares\Dispatcher;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 
@@ -33,23 +35,25 @@ class Consumer
 
         $connector = new Connector($config->getBrokerConfig());
         $this->conf = $connector->setup();
+
+        $middlewares = $config->getMiddlewares();
+        $middlewares[] = new ConsumerMiddleware($this->handler);
+        $this->middlewareDispatcher = new Dispatcher($middlewares);
     }
 
     public function run(): void
     {
         $kafkaConsumer = $this->getConsumer();
 
-        while(true) {
-            $message = $kafkaConsumer->consume($this->timeout);
+        while (true) {
+            $originalMessage = $kafkaConsumer->consume($this->timeout);
 
-            if ($message->err) {
-                echo 'error: ';
-                $this->handleError($message);
-                echo "\n";
-                continue;
+            try {
+                $message = new Message($originalMessage);
+                $this->middlewareDispatcher->handle($message);
+            } catch (\Exception $exception) {
+                $this->handleError($exception);
             }
-
-            $this->handler->handle([$message->payload]);
         }
     }
 
@@ -74,20 +78,8 @@ class Consumer
         return $consumer;
     }
 
-    protected function handleError($message) {
-        switch ($message->err) {
-            case RD_KAFKA_RESP_ERR_NO_ERROR:
-                var_dump($message);
-                break;
-            case RD_KAFKA_RESP_ERR__PARTITION_EOF:
-                echo "No more messages; will wait for more\n";
-                break;
-            case RD_KAFKA_RESP_ERR__TIMED_OUT:
-                echo "Timed out\n";
-                break;
-            default:
-                var_dump($message);
-                break;
-        }
+    protected function handleError(\Exception $exception)
+    {
+        $this->handler->failed($exception);
     }
 }

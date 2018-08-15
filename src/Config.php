@@ -34,12 +34,18 @@ class Config
      */
     protected $consumerGroupHandler;
 
+    /**
+     * @var iterable
+     */
+    protected $middlewares = [];
+
     public function __construct(string $topic, string $consumerGroup = null)
     {
         $topicConfig = $this->getTopicConfig($topic);
+        $this->setGlobalMiddlewares();
+        $this->setTopic($topicConfig);
         $this->setConsumerGroup($topicConfig, $consumerGroup);
         $this->setBroker($topicConfig);
-        $this->setTopic($topicConfig);
     }
 
     public function getTopic(): string
@@ -67,6 +73,11 @@ class Config
         return $this->consumerGroupHandler;
     }
 
+    public function getMiddlewares(): iterable
+    {
+        return $this->middlewares;
+    }
+
     private function getTopicConfig(string $topic): array
     {
         $config = config("kafka.topics.{$topic}");
@@ -91,6 +102,8 @@ class Config
         $this->consumerGroupId = $consumerGroupId;
         $this->consumerGroupOffset = $consumerGroupConfig['offset'];
         $this->consumerGroupHandler = app($consumerGroupConfig['consumer']);
+
+        $this->setMiddlewares($consumerGroupConfig['middlewares'] ?? []);
     }
 
     private function setBroker(array $topicConfig): void
@@ -107,5 +120,17 @@ class Config
     private function setTopic(array $topicConfig): void
     {
         $this->topic = $topicConfig['topic'];
+
+        $this->setMiddlewares($topicConfig['middlewares'] ?? []);
+    }
+
+    private function setMiddlewares(array $middlewares): void
+    {
+        $this->middlewares = array_unique(array_merge($this->middlewares, $middlewares));
+    }
+
+    private function setGlobalMiddlewares(): void
+    {
+        $this->setMiddlewares(config('kafka.middlewares.consumer'));
     }
 }

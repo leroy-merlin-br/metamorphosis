@@ -45,6 +45,7 @@ class ConfigTest extends LaravelTestCase
                             ],
                         ],
                         'middlewares' => [
+                            'first_global_middleware',
                             'first_topic_middleware',
                         ],
                     ],

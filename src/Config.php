@@ -126,7 +126,7 @@ class Config
 
     private function setMiddlewares(array $middlewares): void
     {
-        $this->middlewares = array_merge($this->middlewares, $middlewares);
+        $this->middlewares = array_unique(array_merge($this->middlewares, $middlewares));
     }
 
     private function setGlobalMiddlewares(): void

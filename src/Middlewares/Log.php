@@ -1,18 +1,18 @@
 <?php
 namespace Metamorphosis\Middlewares;
 
-use Illuminate\Contracts\Logging\Log as BaseLog;
 use Metamorphosis\Message;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
+use Psr\Log\LoggerInterface;
 
 class Log implements Middleware
 {
     /**
-     * @var BaseLog
+     * @var LoggerInterface
      */
     protected $log;
 
-    public function __construct(BaseLog $log)
+    public function __construct(LoggerInterface $log)
     {
         $this->log = $log;
     }

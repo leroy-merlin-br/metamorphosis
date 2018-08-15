@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Middlewares;
 
-use Illuminate\Contracts\Logging\Log as BaseLog;
+use Psr\Log\LoggerInterface;
 use Metamorphosis\Message;
 use Metamorphosis\Middlewares\Handler\Iterator;
 use Metamorphosis\Middlewares\Log;
@@ -13,10 +13,7 @@ class LogTest extends LaravelTestCase
     /** @test */
     public function it_should_log_message()
     {
-        $log = $this->getMockBuilder(BaseLog::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['info'])
-            ->getMock();
+        $log = $this->createMock(LoggerInterface::class);
 
         $middleware = new Log($log);
 
@@ -26,9 +23,7 @@ class LogTest extends LaravelTestCase
 
         $message = new Message($kafkaMessage);
 
-        $handler = $this->getMockBuilder(Iterator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $handler = $this->createMock(Iterator::class);
 
         $log->expects($this->once())
             ->method('info')

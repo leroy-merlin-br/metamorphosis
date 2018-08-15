@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis;
 
+use Exception;
 use RdKafka\Message as KafkaMessage;
 
 class Message
@@ -10,6 +11,9 @@ class Message
      */
     protected $original;
 
+    /**
+     * @var string
+     */
     protected $payload;
 
     public function __construct(KafkaMessage $original)
@@ -19,7 +23,7 @@ class Message
         $this->setPayload($original->payload);
 
         if ($this->hasError()) {
-            throw new \Exception('Invalid message');
+            throw new Exception('Invalid message. Error code: '.$this->original->err);
         }
     }
 
@@ -31,6 +35,11 @@ class Message
     public function getPayload(): string
     {
         return $this->payload;
+    }
+
+    public function getOriginal(): KafkaMessage
+    {
+        return $this->original;
     }
 
     public function hasError(): bool

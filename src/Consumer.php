@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis;
 
-use Metamorphosis\Middlewares\Consumer as ConsumerMiddeware;
+use Metamorphosis\Middlewares\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Dispatcher;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
@@ -37,7 +37,7 @@ class Consumer
         $this->conf = $connector->setup();
 
         $middlewares = $config->getMiddlewares();
-        $middlewares[] = new ConsumerMiddeware($this->handler);
+        $middlewares[] = new ConsumerMiddleware($this->handler);
         $this->middlewareDispatcher = new Dispatcher($middlewares);
     }
 

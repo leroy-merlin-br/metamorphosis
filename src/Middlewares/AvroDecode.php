@@ -4,9 +4,8 @@ namespace Metamorphosis\Middlewares;
 use Avro\DataIO\DataIOReader;
 use Avro\Datum\IODatumReader;
 use Avro\IO\StringIO;
-use Metamorphosis\Contracts\Middleware;
-use Metamorphosis\Contracts\MiddlewareHandler;
 use Metamorphosis\Message;
+use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
 
 class AvroDecode implements Middleware
 {

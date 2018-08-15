@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Authentication;
 
-use Metamorphosis\Contracts\Authentication;
 use Metamorphosis\Exceptions\AuthenticationException;
 
 class Factory

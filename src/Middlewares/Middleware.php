@@ -1,7 +1,8 @@
 <?php
-namespace Metamorphosis\Contracts;
+namespace Metamorphosis\Middlewares;
 
 use Metamorphosis\Message;
+use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
 
 interface Middleware
 {

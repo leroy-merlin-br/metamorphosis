@@ -2,9 +2,8 @@
 namespace Metamorphosis\Middlewares;
 
 use Illuminate\Contracts\Logging\Log as BaseLog;
-use Metamorphosis\Contracts\Middleware;
-use Metamorphosis\Contracts\MiddlewareHandler;
 use Metamorphosis\Message;
+use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
 
 class Log implements Middleware
 {

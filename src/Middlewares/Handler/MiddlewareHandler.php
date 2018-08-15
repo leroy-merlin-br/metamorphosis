@@ -1,5 +1,5 @@
 <?php
-namespace Metamorphosis\Contracts;
+namespace Metamorphosis\Middlewares\Handler;
 
 use Metamorphosis\Message;
 

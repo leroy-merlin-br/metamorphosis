@@ -3,7 +3,6 @@ namespace Metamorphosis\Middlewares\Handler;
 
 use Metamorphosis\Contracts\ConsumerTopicHandler;
 use Metamorphosis\Contracts\Middleware;
-use Metamorphosis\Contracts\MiddlewareHandler;
 use Metamorphosis\Message;
 
 class Consumer implements Middleware

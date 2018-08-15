@@ -1,5 +1,5 @@
 <?php
-namespace Metamorphosis\Contracts;
+namespace Metamorphosis\Authentication;
 
 use RdKafka\Conf;
 

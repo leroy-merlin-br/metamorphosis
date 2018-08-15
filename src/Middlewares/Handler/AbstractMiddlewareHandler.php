@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\Contracts\MiddlewareHandler;
 use Metamorphosis\Message;
 
 abstract class AbstractMiddlewareHandler implements MiddlewareHandler

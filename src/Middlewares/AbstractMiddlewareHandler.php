@@ -6,6 +6,11 @@ use Metamorphosis\Message;
 
 abstract class AbstractMiddlewareHandler implements MiddlewareHandler
 {
+    /**
+     * @var iterable
+     */
+    protected $queue;
+
     public function __construct(iterable $queue)
     {
         $this->queue = $queue;

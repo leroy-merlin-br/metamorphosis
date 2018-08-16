@@ -40,6 +40,10 @@ class LogTest extends LaravelTestCase
                 ]])
             );
 
+        $handler->expects($this->once())
+            ->method('handle')
+            ->with($this->equalTo($message));
+
         $middleware->process($message, $handler);
     }
 }

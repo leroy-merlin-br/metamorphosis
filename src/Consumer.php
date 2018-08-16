@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis;
 
+use Exception;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\TopicHandler\Consumer\Handler;
@@ -52,8 +53,8 @@ class Consumer
             try {
                 $message = new Message($originalMessage);
                 $this->middlewareDispatcher->handle($message);
-            } catch (\Exception $exception) {
-                $this->handleError($exception);
+            } catch (Exception $exception) {
+                $this->handler->failed($exception);
             }
         }
     }
@@ -77,10 +78,5 @@ class Consumer
         $consumer->subscribe([$this->topic]);
 
         return $consumer;
-    }
-
-    protected function handleError(\Exception $exception)
-    {
-        $this->handler->failed($exception);
     }
 }

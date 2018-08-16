@@ -27,14 +27,4 @@ class DummyClass extends AbstractHandler
     {
         //
     }
-
-   /**
-    * Handle failure process.
-    *
-    * @param Exception $exception
-    */
-    public function failed(Exception $exception): void
-    {
-        //
-    }
 }

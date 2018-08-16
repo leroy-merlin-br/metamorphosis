@@ -2,6 +2,7 @@
 namespace Metamorphosis\TopicHandler\Consumer;
 
 use Exception;
+use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Message;
 
 interface Handler
@@ -14,6 +15,13 @@ interface Handler
      * @return bool
      */
     public function handle(Message $message): bool;
+
+    /**
+     * Handle warning exceptions.
+     *
+     * @param ResponseWarningException $exception
+     */
+    public function warning(ResponseWarningException $exception): void;
 
     /**
      * Handle failure process.

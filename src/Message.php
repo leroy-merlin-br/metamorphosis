@@ -1,8 +1,8 @@
 <?php
 namespace Metamorphosis;
 
-use Metamorphosis\Exceptions\KafkaResponseErrorException;
-use Metamorphosis\Exceptions\KafkaResponseHandleableErrorException;
+use Metamorphosis\Exceptions\ResponseErrorException;
+use Metamorphosis\Exceptions\ResponseWarningException;
 use RdKafka\Message as KafkaMessage;
 
 class Message
@@ -57,7 +57,27 @@ class Message
         return $this->original;
     }
 
-    public function hasError(): bool
+    public function getTopicName(): string
+    {
+        return $this->original->topic_name;
+    }
+
+    public function getPartition(): int
+    {
+        return $this->original->partition;
+    }
+
+    public function getKey(): string
+    {
+        return $this->original->key;
+    }
+
+    public function getOffset(): int
+    {
+        return $this->original->offset;
+    }
+
+    private function hasError(): bool
     {
         return RD_KAFKA_RESP_ERR_NO_ERROR !== $this->original->err;
     }
@@ -65,14 +85,14 @@ class Message
     private function throwResponseErrorException(): void
     {
         if (in_array($this->original->err, self::KAFKA_ERROR_WHITELIST)) {
-            throw new KafkaResponseHandleableErrorException(
-                'Handleable error.',
+            throw new ResponseWarningException(
+                'Invalid response.',
                 $this->original->err
             );
         }
 
-        throw new KafkaResponseErrorException(
-            'Invalid message.',
+        throw new ResponseErrorException(
+            'Error response.',
             $this->original->err
         );
     }

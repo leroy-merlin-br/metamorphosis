@@ -3,6 +3,6 @@ namespace Metamorphosis\Exceptions;
 
 use Exception;
 
-class KafkaResponseHandleableErrorException extends Exception
+class ResponseErrorException extends Exception
 {
 }

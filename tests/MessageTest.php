@@ -1,7 +1,8 @@
 <?php
 namespace Tests;
 
-use Exception;
+use Metamorphosis\Exceptions\KafkaResponseErrorException;
+use Metamorphosis\Exceptions\KafkaResponseHandleableErrorException;
 use Metamorphosis\Message;
 use RdKafka\Message as KafkaMessage;
 
@@ -14,8 +15,21 @@ class MessageTest extends LaravelTestCase
         $kafkaMessage->payload = '';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_INVALID_MSG;
 
-        $this->expectException(Exception::class);
+        $this->expectException(KafkaResponseErrorException::class);
         $this->expectExceptionMessage('Invalid message. Error code: '.RD_KAFKA_RESP_ERR_INVALID_MSG);
+
+        new Message($kafkaMessage);
+    }
+
+    /** @test */
+    public function it_should_throw_handleable_error_exception()
+    {
+        $kafkaMessage = new KafkaMessage();
+        $kafkaMessage->payload = '';
+        $kafkaMessage->err = RD_KAFKA_RESP_ERR__PARTITION_EOF;
+
+        $this->expectException(KafkaResponseHandleableErrorException::class);
+        $this->expectExceptionMessage('Invalid message. Error code: '.RD_KAFKA_RESP_ERR__PARTITION_EOF);
 
         new Message($kafkaMessage);
     }

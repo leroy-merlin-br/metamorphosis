@@ -2,6 +2,7 @@
 namespace Metamorphosis;
 
 use Exception;
+use Metamorphosis\Exceptions\KafkaResponseHandleableErrorException;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\TopicHandler\Consumer\Handler;
@@ -53,6 +54,8 @@ class Consumer
             try {
                 $message = new Message($originalMessage);
                 $this->middlewareDispatcher->handle($message);
+            } catch (KafkaResponseHandleableErrorException $exception) {
+                continue;
             } catch (Exception $exception) {
                 $this->handler->failed($exception);
             }

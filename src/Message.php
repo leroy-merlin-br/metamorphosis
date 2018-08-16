@@ -1,18 +1,27 @@
 <?php
 namespace Metamorphosis;
 
-use Exception;
+use Metamorphosis\Exceptions\KafkaResponseErrorException;
+use Metamorphosis\Exceptions\KafkaResponseHandleableErrorException;
 use RdKafka\Message as KafkaMessage;
 
 class Message
 {
+    /**
+     * List of error codes that stop message processing,
+     * but are handled gracefully.
+     */
+    const KAFKA_ERROR_WHITELIST = [
+        RD_KAFKA_RESP_ERR__PARTITION_EOF,
+    ];
+
     /**
      * @var KafkaMessage
      */
     protected $original;
 
     /**
-     * @var string
+     * @var mixed
      */
     protected $payload;
 
@@ -23,16 +32,22 @@ class Message
         $this->setPayload($original->payload);
 
         if ($this->hasError()) {
-            throw new Exception('Invalid message. Error code: '.$this->original->err);
+            $this->throwResponseErrorException();
         }
     }
 
-    public function setPayload(string $payload): void
+    /**
+     * @param mixed $payload
+     */
+    public function setPayload($payload): void
     {
         $this->payload = $payload;
     }
 
-    public function getPayload(): string
+    /**
+     * @return mixed
+     */
+    public function getPayload()
     {
         return $this->payload;
     }
@@ -45,5 +60,20 @@ class Message
     public function hasError(): bool
     {
         return RD_KAFKA_RESP_ERR_NO_ERROR !== $this->original->err;
+    }
+
+    private function throwResponseErrorException(): void
+    {
+        if (in_array($this->original->err, self::KAFKA_ERROR_WHITELIST)) {
+            throw new KafkaResponseHandleableErrorException(
+                'Handleable error.',
+                $this->original->err
+            );
+        }
+
+        throw new KafkaResponseErrorException(
+            'Invalid message.',
+            $this->original->err
+        );
     }
 }

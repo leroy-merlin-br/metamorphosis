@@ -2,6 +2,8 @@
 namespace Metamorphosis;
 
 use Illuminate\Support\ServiceProvider;
+use Metamorphosis\Console\Command;
+use Metamorphosis\Console\ConsumerMakeCommand;
 
 class MetamorphosisServiceProvider extends ServiceProvider
 {
@@ -12,5 +14,13 @@ class MetamorphosisServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->mergeConfigFrom(__DIR__.'/../config/kafka.php', 'kafka');
+    }
+
+    public function register()
+    {
+        $this->commands([
+            Command::class,
+            ConsumerMakeCommand::class,
+        ]);
     }
 }

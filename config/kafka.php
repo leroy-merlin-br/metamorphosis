@@ -13,7 +13,7 @@ return [
 
     'brokers' => [
         'default' => [
-            'broker' => '',
+            'connection' => '',
             'auth' => [
                 'protocol' => 'ssl',
                 'ca' => storage_path('ca.pem'),
@@ -56,7 +56,13 @@ return [
                     'offset' => 'initial',
                     'consumer' => '\App\Kafka\Consumer\ConsumerExample',
                 ],
-           ],
+            ],
+        ],
+    ],
+
+    'middlewares' => [
+        'consumer' => [
+            \Metamorphosis\Middlewares\Log::class,
         ],
     ],
 ];

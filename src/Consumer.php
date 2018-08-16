@@ -1,6 +1,10 @@
 <?php
 namespace Metamorphosis;
 
+use Exception;
+use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
+use Metamorphosis\Middlewares\Handler\Dispatcher;
+use Metamorphosis\TopicHandler\Consumer\Handler;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 
@@ -11,48 +15,64 @@ class Consumer
      */
     public $conf;
 
-    public function __construct(string $topicKey, string $consumerGroup)
+    public $consumerGroup;
+
+    public $offset;
+
+    public $topic;
+
+    public $timeout = 2000000;
+
+    /**
+     * @var Handler
+     */
+    protected $handler;
+
+    public function __construct(Config $config)
     {
-        $config = new Config($topicKey, $consumerGroup);
-
-        $consumerGroupConfig = $config->getConsumerGroupSettings();
-
-        $this->consumerGroup = $consumerGroupConfig['groupName'];
-        $this->offset = $consumerGroupConfig['offset'];
-        $this->consumer = $consumerGroupConfig['consumer'];
-
+        $this->consumerGroup = $config->getConsumerGroupId();
+        $this->offset = $config->getConsumerGroupOffset();
+        $this->handler = $config->getConsumerGroupHandler();
         $this->topic = $config->getTopic();
 
         $connector = new Connector($config->getBrokerConfig());
         $this->conf = $connector->setup();
+
+        $middlewares = $config->getMiddlewares();
+        $middlewares[] = new ConsumerMiddleware($this->handler);
+        $this->middlewareDispatcher = new Dispatcher($middlewares);
     }
 
-    public function consume()
+    public function run(): void
     {
         $kafkaConsumer = $this->getConsumer();
-        $timeout = 2000 * 1000;
 
-        $consumer = $this->consumer;
+        while (true) {
+            $originalMessage = $kafkaConsumer->consume($this->timeout);
 
-        while(true) {
-            $message = $kafkaConsumer->consume($timeout);
-
-            if ($message->err) {
-                echo 'error: ';
-                handleError($message);
-                echo "\n";
-                continue;
+            try {
+                $message = new Message($originalMessage);
+                $this->middlewareDispatcher->handle($message);
+            } catch (Exception $exception) {
+                $this->handler->failed($exception);
             }
-
-            $consumer([$message->payload]);
         }
+    }
+
+    public function setTimeout(int $timeout): void
+    {
+        $this->timeout = $timeout;
+    }
+
+    public function setOffset($offset): void
+    {
+        $this->offset = $offset;
     }
 
     protected function getConsumer(): KafkaConsumer
     {
-        $consumerGroup = key($this->consumerConfs['consumer-groups']);
-        $this->conf->set('group.id', $consumerGroup);
-        $this->conf->set('auto.offset.reset', $this->consumerConfs['consumer-groups']['offset']);
+        $this->conf->set('group.id', $this->consumerGroup);
+        $this->conf->set('auto.offset.reset', $this->offset);
 
         $consumer = new KafkaConsumer($this->conf);
         $consumer->subscribe([$this->topic]);

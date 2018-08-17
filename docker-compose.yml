@@ -1,6 +1,5 @@
 version: "3.1"
 services:
-
     php:
       build: docker
       container_name: kafka-php

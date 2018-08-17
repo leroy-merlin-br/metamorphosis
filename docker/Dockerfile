@@ -1,4 +1,4 @@
-FROM phpdockerio/php72-fpm:latest
+FROM phpdockerio/php72-cli:latest
 WORKDIR "/application"
 
 ARG DEBIAN_FRONTEND=noninteractive

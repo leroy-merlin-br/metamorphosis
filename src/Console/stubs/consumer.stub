@@ -1,8 +1,8 @@
 <?php
 namespace DummyNamespace;
 
-use Exception;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
+use Metamorphosis\Message;
 
 class DummyClass extends AbstractHandler
 {
@@ -19,11 +19,11 @@ class DummyClass extends AbstractHandler
     /**
      * Handle payload.
      *
-     * @param  array  $data
+     * @param Message $message
      *
      * @return bool
      */
-    public function handle(array $data): bool
+    public function handle(Message $message): bool
     {
         //
     }

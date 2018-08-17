@@ -2,6 +2,7 @@
 namespace Metamorphosis;
 
 use Exception;
+use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\TopicHandler\Consumer\Handler;
@@ -15,12 +16,24 @@ class Consumer
      */
     public $conf;
 
+    /**
+     * @var string
+     */
     public $consumerGroup;
 
+    /**
+     * @var string
+     */
     public $offset;
 
+    /**
+     * @var string
+     */
     public $topic;
 
+    /**
+     * @var int
+     */
     public $timeout = 2000000;
 
     /**
@@ -48,11 +61,13 @@ class Consumer
         $kafkaConsumer = $this->getConsumer();
 
         while (true) {
-            $originalMessage = $kafkaConsumer->consume($this->timeout);
+            $response = $kafkaConsumer->consume($this->timeout);
 
             try {
-                $message = new Message($originalMessage);
+                $message = new Message($response);
                 $this->middlewareDispatcher->handle($message);
+            } catch (ResponseWarningException $exception) {
+                $this->handler->warning($exception);
             } catch (Exception $exception) {
                 $this->handler->failed($exception);
             }

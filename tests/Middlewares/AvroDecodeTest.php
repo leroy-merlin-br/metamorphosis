@@ -3,6 +3,7 @@ namespace Tests\Middlewares;
 
 use Avro\DataIO\DataIOWriter;
 use Avro\Datum\IODatumWriter;
+use Avro\Exception\DataIoException;
 use Avro\IO\StringIO;
 use Avro\Schema\Schema;
 use Metamorphosis\Message;
@@ -15,6 +16,32 @@ class AvroDecodeTest extends LaravelTestCase
 {
     /** @test */
     public function it_should_decode_and_update_message_payload()
+    {
+        $data = [['member_id' => 1392, 'member_name' => 'Jose']];
+
+        $binaryString = $this->produceBinaryString($data);
+
+        $middleware = new AvroDecode();
+
+        $kafkaMessage = new KafkaMessage();
+        $kafkaMessage->payload = $binaryString;
+        $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
+
+        $message = new Message($kafkaMessage);
+
+        $handler = $this->createMock(Iterator::class);
+
+        $handler->expects($this->once())
+            ->method('handle')
+            ->with($this->equalTo($message));
+
+        $middleware->process($message, $handler);
+
+        $this->assertSame($data, $message->getPayload());
+    }
+
+    /** @test */
+    public function it_should_decode_and_update_message_payload_with_multiples_records()
     {
         $jose = ['member_id' => 1392, 'member_name' => 'Jose'];
         $maria = ['member_id' => 1642, 'member_name' => 'Maria'];
@@ -41,7 +68,30 @@ class AvroDecodeTest extends LaravelTestCase
         $this->assertSame($data, $message->getPayload());
     }
 
-    public function produceBinaryString($data)
+    /** @test */
+    public function it_should_throw_an_exception_on_invalid_binary_string()
+    {
+        $binaryString = 'invalid-binary-string';
+
+        $middleware = new AvroDecode();
+
+        $kafkaMessage = new KafkaMessage();
+        $kafkaMessage->payload = $binaryString;
+        $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
+
+        $message = new Message($kafkaMessage);
+
+        $handler = $this->createMock(Iterator::class);
+
+        $handler->expects($this->never())
+            ->method('handle');
+
+        $this->expectException(DataIoException::class);
+
+        $middleware->process($message, $handler);
+    }
+
+    private function produceBinaryString($data)
     {
         $schemaJson = <<<_JSON
 {

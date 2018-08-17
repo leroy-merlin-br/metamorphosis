@@ -2,26 +2,42 @@
 namespace Metamorphosis;
 
 use RdKafka\Conf;
+use RdKafka\KafkaConsumer;
 
 class Connector
 {
     /**
-     * @var Broker
+     * @var Config
      */
-    protected $broker;
+    protected $config;
 
-    public function __construct(Broker $broker)
+    public function __construct(Config $config)
     {
-        $this->broker = $broker;
+        $this->config = $config;
     }
 
-    public function setup(): Conf
+    public function getConsumer(): KafkaConsumer
+    {
+        $conf = $this->getConf();
+
+        $conf->set('group.id', $this->config->getConsumerGroupId());
+        $conf->set('auto.offset.reset', $this->config->getConsumerGroupOffset());
+
+        $consumer = new KafkaConsumer($conf);
+        $consumer->subscribe([$this->config->getTopic()]);
+
+        return $consumer;
+    }
+
+    protected function getConf(): Conf
     {
         $conf = new Conf();
 
-        $conf->set('metadata.broker.list', $this->broker->getConnection());
+        $broker = $this->config->getBrokerConfig();
 
-        $this->broker->authentication($conf);
+        $conf->set('metadata.broker.list', $broker->getConnection());
+
+        $broker->authentication($conf);
 
         return $conf;
     }

@@ -93,7 +93,7 @@ class AvroDecodeTest extends LaravelTestCase
 
     private function produceBinaryString($data)
     {
-        $schemaJson = <<<_JSON
+        $schemaJson = <<<'_JSON'
 {
 "name":"member",
 "type":"record",

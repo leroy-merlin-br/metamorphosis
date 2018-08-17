@@ -19,7 +19,7 @@ class Connector
     {
         $conf = new Conf();
 
-        $conf->set('metadata.broker.list', $this->broker->getConnection());
+        $conf->set('metadata.broker.list', $this->broker->getConnections());
 
         $this->broker->authentication($conf);
 

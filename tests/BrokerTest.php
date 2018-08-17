@@ -12,7 +12,7 @@ class BrokerTest extends LaravelTestCase
     {
         $broker = new Broker('some-connection');
 
-        $this->assertSame('some-connection', $broker->getConnection());
+        $this->assertSame('some-connection', $broker->getConnections());
         $this->assertInstanceOf(NoAuthentication::class, $broker->getAuthentication());
     }
 

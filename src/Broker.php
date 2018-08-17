@@ -10,16 +10,16 @@ class Broker
     /**
      * @var string
      */
-    protected $connection;
+    protected $connections;
 
     /**
      * @var Authentication
      */
     protected $authentication;
 
-    public function __construct(string $connection, array $authentication = null)
+    public function __construct($connection, array $authentication = null)
     {
-        $this->setConnection($connection);
+        $this->setConnections($connection);
         $this->setAuthentication($authentication);
     }
 
@@ -28,9 +28,9 @@ class Broker
         $this->authentication->authenticate($conf);
     }
 
-    public function getConnection(): string
+    public function getConnections(): string
     {
-        return $this->connection;
+        return $this->connections;
     }
 
     public function getAuthentication(): Authentication
@@ -38,9 +38,15 @@ class Broker
         return $this->authentication;
     }
 
-    protected function setConnection(string $connection): void
+    protected function setConnections($connections): void
     {
-        $this->connection = $connection;
+        if (is_array($connections)) {
+            $this->connections = implode(',', $connections);
+
+            return;
+        }
+
+        $this->connections = $connections;
     }
 
     protected function setAuthentication($authConfig = null): void

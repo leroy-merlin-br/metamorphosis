@@ -1,6 +1,6 @@
 # Metamorphosis
 
-> Easy and flexible Kafka Library for Laravel and PHP7.
+> Easy and flexible Kafka Library for Laravel and PHP 7.
 
 ![Metamorphosis](./logo.jpg)
 
@@ -11,18 +11,29 @@
 [![Coverage Status](https://coveralls.io/repos/github/leroy-merlin-br/metamorphosis/badge.svg?branch=master)](https://coveralls.io/github/leroy-merlin-br/metamorphosis?branch=master)
 [![StyleCI](https://styleci.io/repos/143462354/shield?branch=master)](https://styleci.io/repos/143462354)
 
+
+- [Introduction](#introduction)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Basic Usage](#usage)
+- [Advanced Guide](docs/advanced.md)
+- [Contributing](docs/CONTRIBUTING.md)
+- [License](#license)
+
+
 <a name="introduction"></a>
 ## Introduction
 
 Metamorphosis provides a simple, straight-forward implementation for working with Kafka inside Laravel applications.
 
-<a name="installation"></a>
+<a name="requirements"></a>
 ## Requirements
 
-- PHP **7.1**
+- PHP >= 7.1
 - [Kafka Driver](https://github.com/edenhill/librdkafka)
 - [Kafka PHP Extension](https://github.com/arnaud-lb/php-rdkafka)
 
+<a name="installation"></a>
 ## Installation
 
 **Important:** *Make sure that you already have installed the OS driver for kafka, and the kafka php extension.*

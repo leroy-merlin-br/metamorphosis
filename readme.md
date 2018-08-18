@@ -15,7 +15,7 @@
 - [Introduction](#introduction)
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Basic Usage](#usage)
+- [Quick Guide](#quick-guide)
 - [Advanced Guide](docs/advanced.md)
 - [Contributing](docs/CONTRIBUTING.md)
 - [License](#license)
@@ -45,14 +45,14 @@ You can install library through Composer:
 $ composer require leroy-merlin-br/metamorphosis
 ```
 
-<a name="usage"></a>
-## Usage
+<a name="quick-guide"></a>
+## Quick Guide
 
 1. The Config: `config/kafka.php`
 
     The config file holds all information about brokers, topics, consumer groups and middlewares.
 
-    It's divided in three sections:
+    To quickly start using, we can focus in two sections:
     - Brokers
     
         An array of brokers, with connection and authentication
@@ -68,12 +68,9 @@ $ composer require leroy-merlin-br/metamorphosis
         Here we can specify the group consumers, each topic can have multiple groups, 
         and each group holds the configuration for which consumer, offset and middleware must use  
 
-    - Middlewares
-
-        Foo Bar
-
 
 2. The Consumer:
+    
     run:
     ```bash
     $ php artisan make:kafka-consumer LogConsumer
@@ -85,11 +82,9 @@ $ composer require leroy-merlin-br/metamorphosis
 
 
 3. The Runner
+
     now to start consuming some topic, 
     just run php artisan kafka:consume topic-name
-
-
-### Basic
 
 
 

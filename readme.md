@@ -45,6 +45,54 @@ You can install library through Composer:
 $ composer require leroy-merlin-br/metamorphosis
 ```
 
+<a name="usage"></a>
+## Usage
+
+1. The Config: `config/kafka.php`
+
+    The config file holds all information about brokers, topics, consumer groups and middlewares.
+
+    It's divided in three sections:
+    - Brokers
+    
+        An array of brokers, with connection and authentication
+       
+        - Authentication: optional. out of the box, the package can connect with SSL Authentication only or without any authentication
+        
+        - Connections: required. can be an string with multiple connections separeted by comma or an array of connections (as string)
+
+    - Topics
+        
+        An array of topics configuration, such as the topic name, which broker connection must use, consumer groups and middlewares
+        
+        Here we can specify the group consumers, each topic can have multiple groups, 
+        and each group holds the configuration for which consumer, offset and middleware must use  
+
+    - Middlewares
+
+        Foo Bar
+
+
+2. The Consumer:
+    run:
+    ```bash
+    $ php artisan make:kafka-consumer LogConsumer
+    ```
+    this will create a KafkaConsumer class inside the application, on the app/Kafka/Consumers/ directory
+    
+    There, you'll have an handler method, which will send all records from the topic to him,
+    also, will be available methods for handle exceptions (failure and warning)
+
+
+3. The Runner
+    now to start consuming some topic, 
+    just run php artisan kafka:consume topic-name
+
+
+### Basic
+
+
+
 <a name="license"></a>
 ## License
 

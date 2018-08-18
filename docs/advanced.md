@@ -1,5 +1,6 @@
 ### Advanced Guide
 
+- [Authentication](#authentication)
 - [Middlewares](#middlewares)
 - [Brokers](#brokers)
 

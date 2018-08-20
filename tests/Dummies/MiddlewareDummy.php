@@ -1,14 +1,14 @@
 <?php
 namespace Tests\Dummies;
 
-use Metamorphosis\Message;
+use Metamorphosis\Record;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
 use Metamorphosis\Middlewares\Middleware;
 
 class MiddlewareDummy implements Middleware
 {
-    public function process(Message $message, MiddlewareHandler $handler): void
+    public function process(Record $record, MiddlewareHandler $handler): void
     {
-        $handler->handle($message);
+        $handler->handle($record);
     }
 }

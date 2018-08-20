@@ -4,23 +4,23 @@ namespace Metamorphosis\Middlewares;
 use Avro\DataIO\DataIOReader;
 use Avro\Datum\IODatumReader;
 use Avro\IO\StringIO;
-use Metamorphosis\Message;
+use Metamorphosis\Record;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
 
 class AvroDecode implements Middleware
 {
-    public function process(Message $message, MiddlewareHandler $handler): void
+    public function process(Record $record, MiddlewareHandler $handler): void
     {
-        $readIo = new StringIO($message->getPayload());
+        $readIo = new StringIO($record->getPayload());
         $dataReader = new DataIOReader($readIo, new IODatumReader());
 
         $records = [];
-        foreach ($dataReader->data() as $record) {
-            $records[] = $record;
+        foreach ($dataReader->data() as $dataRecord) {
+            $records[] = $dataRecord;
         }
 
-        $message->setPayload($records);
+        $record->setPayload($records);
 
-        $handler->handle($message);
+        $handler->handle($record);
     }
 }

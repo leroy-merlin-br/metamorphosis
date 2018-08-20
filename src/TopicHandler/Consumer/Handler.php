@@ -3,16 +3,16 @@ namespace Metamorphosis\TopicHandler\Consumer;
 
 use Exception;
 use Metamorphosis\Exceptions\ResponseWarningException;
-use Metamorphosis\Message;
+use Metamorphosis\Record;
 
 interface Handler
 {
     /**
-     * Handle message.
+     * Handle record.
      *
-     * @param Message $message
+     * @param Record $record
      */
-    public function handle(Message $message): void;
+    public function handle(Record $record): void;
 
     /**
      * Handle warning exceptions.

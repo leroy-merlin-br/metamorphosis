@@ -2,7 +2,7 @@
 namespace Tests\Middlewares\Handler;
 
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler as ConsumerTopicHandler;
-use Metamorphosis\Message;
+use Metamorphosis\Record;
 use Metamorphosis\Middlewares\Handler\Consumer;
 use RdKafka\Message as KafkaMessage;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
@@ -20,13 +20,13 @@ class ConsumerTest extends LaravelTestCase
         $kafkaMessage->payload = 'original message';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
+        $record = new Record($kafkaMessage);
         $middleware = new Consumer($consumerTopicHandler);
 
         $consumerTopicHandler->expects($this->once())
             ->method('handle')
-            ->with($this->equalTo($message));
+            ->with($this->equalTo($record));
 
-        $middleware->process($message, $middlewareHandler);
+        $middleware->process($record, $middlewareHandler);
     }
 }

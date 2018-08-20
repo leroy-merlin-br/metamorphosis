@@ -6,26 +6,10 @@ use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\TopicHandler\Consumer\Handler;
-use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 
 class Consumer
 {
-    /**
-     * @var Conf
-     */
-    public $conf;
-
-    /**
-     * @var string
-     */
-    public $consumerGroup;
-
-    /**
-     * @var string
-     */
-    public $offset;
-
     /**
      * @var string
      */
@@ -41,27 +25,24 @@ class Consumer
      */
     protected $handler;
 
-    public function __construct(Config $config)
+    /**
+     * @var KafkaConsumer
+     */
+    protected $kafkaConsumer;
+
+    public function __construct(Config $config, KafkaConsumer $kafkaConsumer)
     {
-        $this->consumerGroup = $config->getConsumerGroupId();
+        $this->kafkaConsumer = $kafkaConsumer;
         $this->offset = $config->getConsumerGroupOffset();
         $this->handler = $config->getConsumerGroupHandler();
-        $this->topic = $config->getTopic();
 
-        $connector = new Connector($config->getBrokerConfig());
-        $this->conf = $connector->setup();
-
-        $middlewares = $config->getMiddlewares();
-        $middlewares[] = new ConsumerMiddleware($this->handler);
-        $this->middlewareDispatcher = new Dispatcher($middlewares);
+        $this->setMiddlewareDispatcher($config->getMiddlewares());
     }
 
     public function run(): void
     {
-        $kafkaConsumer = $this->getConsumer();
-
         while (true) {
-            $response = $kafkaConsumer->consume($this->timeout);
+            $response = $this->kafkaConsumer->consume($this->timeout);
 
             try {
                 $message = new Message($response);
@@ -79,19 +60,9 @@ class Consumer
         $this->timeout = $timeout;
     }
 
-    public function setOffset($offset): void
+    protected function setMiddlewareDispatcher(array $middlewares): void
     {
-        $this->offset = $offset;
-    }
-
-    protected function getConsumer(): KafkaConsumer
-    {
-        $this->conf->set('group.id', $this->consumerGroup);
-        $this->conf->set('auto.offset.reset', $this->offset);
-
-        $consumer = new KafkaConsumer($this->conf);
-        $consumer->subscribe([$this->topic]);
-
-        return $consumer;
+        $middlewares[] = new ConsumerMiddleware($this->handler);
+        $this->middlewareDispatcher = new Dispatcher($middlewares);
     }
 }

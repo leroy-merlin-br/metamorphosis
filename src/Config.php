@@ -39,12 +39,12 @@ class Config
      */
     protected $middlewares = [];
 
-    public function __construct(string $topic, string $consumerGroup = null)
+    public function __construct(string $topic, string $consumerGroup = null, string $offset = null)
     {
         $topicConfig = $this->getTopicConfig($topic);
         $this->setGlobalMiddlewares();
         $this->setTopic($topicConfig);
-        $this->setConsumerGroup($topicConfig, $consumerGroup);
+        $this->setConsumerGroup($topicConfig, $consumerGroup, $offset);
         $this->setBroker($topicConfig);
     }
 
@@ -89,8 +89,11 @@ class Config
         return $config;
     }
 
-    private function setConsumerGroup(array $topicConfig, string $consumerGroupId = null): void
-    {
+    private function setConsumerGroup(
+        array $topicConfig,
+        string $consumerGroupId = null,
+        string $offset = null
+    ): void {
         $consumerGroupId = $consumerGroupId ?? 'default';
 
         $consumerGroupConfig = $topicConfig['consumer-groups'][$consumerGroupId] ?? null;
@@ -100,7 +103,7 @@ class Config
         }
 
         $this->consumerGroupId = $consumerGroupId;
-        $this->consumerGroupOffset = $consumerGroupConfig['offset'];
+        $this->consumerGroupOffset = $offset ?: $consumerGroupConfig['offset'];
         $this->consumerGroupHandler = app($consumerGroupConfig['consumer']);
 
         $this->setMiddlewares($consumerGroupConfig['middlewares'] ?? []);

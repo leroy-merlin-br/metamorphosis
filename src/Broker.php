@@ -17,9 +17,9 @@ class Broker
      */
     protected $authentication;
 
-    public function __construct($connection, array $authentication = null)
+    public function __construct($connections, array $authentication = null)
     {
-        $this->setConnections($connection);
+        $this->setConnections($connections);
         $this->setAuthentication($authentication);
     }
 

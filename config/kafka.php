@@ -64,7 +64,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Middlewares
+    | Global Middlewares
     |--------------------------------------------------------------------------
     |
     | Here you may specify the global middlewares that will be applied for every

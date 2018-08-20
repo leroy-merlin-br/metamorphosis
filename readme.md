@@ -113,34 +113,38 @@ $ composer require leroy-merlin-br/metamorphosis
     also, will be available methods for handle exceptions (failure and warning)
     
     ```php
-   class PriceUpdateConsumer extends AbstractHandler
-   {
-       public $repository;
-    
-       /**
-        * Create a new consumer topic handler instance.
-        *
-        * @return void
-        */
-       public function __construct(Repository $repository)
-       {
-           $this->repository = $repository;
-       }
-   
-       /**
-        * Handle payload.
-        *
-        * @param Message $message
-        *
-        * @return void
-        */
-       public function handle(Message $message): void
-       {
-           $product = $message->getPayload();
-                   
-           $this->repository->update($product['id'], $product['price']);
-       }
-   }
+    use App\Kafka\Consumers\PriceUpdateConsumer;
+    use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
+    use Metamorphosis\Record;
+
+    class PriceUpdateConsumer extends AbstractHandler
+    {
+        public $repository;
+         
+        /**
+         * Create a new consumer topic handler instance.
+         *
+         * @return void
+         */
+        public function __construct(Repository $repository)
+        {
+            $this->repository = $repository;
+        }
+
+        /**
+         * Handle payload.
+         *
+         * @param Record $record
+         *
+         * @return void
+         */
+        public function handle(Record $record): void
+        {
+            $product = $record->getPayload();
+                    
+            $this->repository->update($product['id'], $product['price']);
+        }
+    }
     ```
 
 

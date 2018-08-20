@@ -3,12 +3,12 @@ namespace Metamorphosis;
 
 use Metamorphosis\Exceptions\ResponseErrorException;
 use Metamorphosis\Exceptions\ResponseWarningException;
-use RdKafka\Message as KafkaMessage;
+use RdKafka\Message;
 
-class Message
+class Record
 {
     /**
-     * List of error codes that stop message processing,
+     * List of error codes that stop record processing,
      * but are handled gracefully.
      */
     const KAFKA_ERROR_WHITELIST = [
@@ -16,7 +16,7 @@ class Message
     ];
 
     /**
-     * @var KafkaMessage
+     * @var Message
      */
     protected $original;
 
@@ -25,7 +25,7 @@ class Message
      */
     protected $payload;
 
-    public function __construct(KafkaMessage $original)
+    public function __construct(Message $original)
     {
         $this->original = $original;
 
@@ -52,7 +52,7 @@ class Message
         return $this->payload;
     }
 
-    public function getOriginal(): KafkaMessage
+    public function getOriginal(): Message
     {
         return $this->original;
     }

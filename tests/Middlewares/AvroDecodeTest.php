@@ -6,7 +6,7 @@ use Avro\Datum\IODatumWriter;
 use Avro\Exception\DataIoException;
 use Avro\IO\StringIO;
 use Avro\Schema\Schema;
-use Metamorphosis\Message;
+use Metamorphosis\Record;
 use Metamorphosis\Middlewares\AvroDecode;
 use Metamorphosis\Middlewares\Handler\Iterator;
 use RdKafka\Message as KafkaMessage;
@@ -27,17 +27,17 @@ class AvroDecodeTest extends LaravelTestCase
         $kafkaMessage->payload = $binaryString;
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
+        $record = new Record($kafkaMessage);
 
         $handler = $this->createMock(Iterator::class);
 
         $handler->expects($this->once())
             ->method('handle')
-            ->with($this->equalTo($message));
+            ->with($this->equalTo($record));
 
-        $middleware->process($message, $handler);
+        $middleware->process($record, $handler);
 
-        $this->assertSame($data, $message->getPayload());
+        $this->assertSame($data, $record->getPayload());
     }
 
     /** @test */
@@ -55,17 +55,17 @@ class AvroDecodeTest extends LaravelTestCase
         $kafkaMessage->payload = $binaryString;
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
+        $record = new Record($kafkaMessage);
 
         $handler = $this->createMock(Iterator::class);
 
         $handler->expects($this->once())
             ->method('handle')
-            ->with($this->equalTo($message));
+            ->with($this->equalTo($record));
 
-        $middleware->process($message, $handler);
+        $middleware->process($record, $handler);
 
-        $this->assertSame($data, $message->getPayload());
+        $this->assertSame($data, $record->getPayload());
     }
 
     /** @test */
@@ -79,7 +79,7 @@ class AvroDecodeTest extends LaravelTestCase
         $kafkaMessage->payload = $binaryString;
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
+        $record = new Record($kafkaMessage);
 
         $handler = $this->createMock(Iterator::class);
 
@@ -88,7 +88,7 @@ class AvroDecodeTest extends LaravelTestCase
 
         $this->expectException(DataIoException::class);
 
-        $middleware->process($message, $handler);
+        $middleware->process($record, $handler);
     }
 
     private function produceBinaryString($data)

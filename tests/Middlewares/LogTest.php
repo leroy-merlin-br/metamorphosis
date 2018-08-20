@@ -2,7 +2,7 @@
 namespace Tests\Middlewares;
 
 use Psr\Log\LoggerInterface;
-use Metamorphosis\Message;
+use Metamorphosis\Record;
 use Metamorphosis\Middlewares\Handler\Iterator;
 use Metamorphosis\Middlewares\Log;
 use RdKafka\Message as KafkaMessage;
@@ -18,22 +18,22 @@ class LogTest extends LaravelTestCase
         $middleware = new Log($log);
 
         $kafkaMessage = new KafkaMessage();
-        $kafkaMessage->payload = 'original message';
+        $kafkaMessage->payload = 'original record';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
+        $record = new Record($kafkaMessage);
 
         $handler = $this->createMock(Iterator::class);
 
         $log->expects($this->once())
             ->method('info')
             ->with(
-                $this->equalTo('Processing kafka message: original message'),
+                $this->equalTo('Processing kafka record: original record'),
                 $this->equalTo(['original' => [
                     'err' => RD_KAFKA_RESP_ERR_NO_ERROR,
                     'topic_name' => null,
                     'partition' => null,
-                    'payload' => 'original message',
+                    'payload' => 'original record',
                     'len' => null,
                     'key' => null,
                     'offset' => null,
@@ -42,8 +42,8 @@ class LogTest extends LaravelTestCase
 
         $handler->expects($this->once())
             ->method('handle')
-            ->with($this->equalTo($message));
+            ->with($this->equalTo($record));
 
-        $middleware->process($message, $handler);
+        $middleware->process($record, $handler);
     }
 }

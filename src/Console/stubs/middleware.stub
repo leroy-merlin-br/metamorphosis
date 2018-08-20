@@ -1,15 +1,15 @@
 <?php
 namespace DummyNamespace;
 
-use Metamorphosis\Message;
+use Metamorphosis\Record;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
 
 class DummyClass implements Middleware
 {
-    public function process(Message $message, MiddlewareHandler $handler): void
+    public function process(Record $record, MiddlewareHandler $handler): void
     {
         // Here you can treat your record before handle in your consumer
 
-        $handler->handle($message);
+        $handler->handle($record);
     }
 }

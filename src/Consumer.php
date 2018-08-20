@@ -45,8 +45,8 @@ class Consumer
             $response = $this->kafkaConsumer->consume($this->timeout);
 
             try {
-                $message = new Message($response);
-                $this->middlewareDispatcher->handle($message);
+                $record = new Record($response);
+                $this->middlewareDispatcher->handle($record);
             } catch (ResponseWarningException $exception) {
                 $this->handler->warning($exception);
             } catch (Exception $exception) {

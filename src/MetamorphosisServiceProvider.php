@@ -4,6 +4,7 @@ namespace Metamorphosis;
 use Illuminate\Support\ServiceProvider;
 use Metamorphosis\Console\Command;
 use Metamorphosis\Console\ConsumerMakeCommand;
+use Metamorphosis\Console\MiddlewareMakeCommand;
 
 class MetamorphosisServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,7 @@ class MetamorphosisServiceProvider extends ServiceProvider
         $this->commands([
             Command::class,
             ConsumerMakeCommand::class,
+            MiddlewareMakeCommand::class,
         ]);
     }
 }

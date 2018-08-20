@@ -57,9 +57,27 @@ $ composer require leroy-merlin-br/metamorphosis
     
         An array of brokers, with connection and authentication
        
-        - Authentication: optional. out of the box, the package can connect with SSL Authentication only or without any authentication
+        - Connections: required. can be an string with multiple connections separated by comma or an array of connections (as string)
         
-        - Connections: required. can be an string with multiple connections separeted by comma or an array of connections (as string)
+        - Authentication: optional. out of the box, the package can connect with SSL Authentication only or without any authentication
+
+        ```php
+          'brokers' => [
+              'price-brokers' => [
+                  'connections' => 'localhost:8091,localhost:8092',
+                  'auth' => [
+                      'protocol' => 'ssl',
+                      'ca' => storage_path('ca.pem'),
+                      'certificate' => storage_path('kafka.cert'),
+                      'key' => storage_path('kafka.key'),
+                  ],
+              ],
+              'stock-brokers' => [
+                  'connections' => ['localhost:8091', 'localhost:8092'],
+                  'auth' => [], // can be an empty array or even don't have this key in the broker config
+              ],
+          ],
+        ```
 
     - Topics
         
@@ -68,6 +86,20 @@ $ composer require leroy-merlin-br/metamorphosis
         Here we can specify the group consumers, each topic can have multiple groups, 
         and each group holds the configuration for which consumer, offset and middleware must use  
 
+        ```php
+          'topics' => [
+              'price-update' => [
+                  'topic' => 'products.price.update',
+                  'broker' => 'price-brokers',
+                  'consumer-groups' => [
+                      'default' => [
+                          'offset' => 'initial',
+                          'consumer' => '\App\Kafka\Consumers\PriceUpdateConsumer',
+                      ],
+                  ],
+              ],
+          ],
+        ```
 
 2. The Consumer:
     
@@ -79,6 +111,47 @@ $ composer require leroy-merlin-br/metamorphosis
     
     There, you'll have an handler method, which will send all records from the topic to him,
     also, will be available methods for handle exceptions (failure and warning)
+    
+    ```php
+       class PriceUpdateConsumer extends AbstractHandler
+       {
+           public $product;
+        
+           /**
+            * Create a new consumer topic handler instance.
+            *
+            * @return void
+            */
+           public function __construct(Product $product)
+           {
+               $this->product = $product;
+           }
+       
+           /**
+            * Handle payload.
+            *
+            * @param Message $message
+            *
+            * @return bool
+            */
+           public function handle(Message $message): bool
+           {
+               $price = $message->getPayload();
+                  
+               $this->product->updatePrice($price);
+           }
+        
+           public function warning(ResponseWarningException $exception): void
+           {
+               // treat any warnings, like partition without new records to process
+           }
+       
+           public function failed(Exception $exception): void
+           {
+               // treat any failed executions, like an record with unparsable payload or connection error
+           }
+       }
+    ```
 
 
 3. The Runner

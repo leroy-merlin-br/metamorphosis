@@ -18,7 +18,7 @@ class ConfigTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'connection' => '',
+                        'connections' => '',
                         'auth' => [
                             'protocol' => 'ssl',
                             'ca' => '/path/to/ca',
@@ -95,7 +95,7 @@ class ConfigTest extends LaravelTestCase
         config([
             'kafka.brokers' => [
                 'default' => [
-                    'connection' => 'https:some-connection.com:8991',
+                    'connections' => 'https:some-connection.com:8991',
                 ],
             ],
         ]);
@@ -153,5 +153,44 @@ class ConfigTest extends LaravelTestCase
         $this->expectExceptionMessage("Broker 'invalid-broker' configuration not found");
 
         new Config($topicKey, $consumerGroup);
+    }
+
+    /** @test */
+    public function it_can_handle_multiple_connections_for_same_broker_as_string()
+    {
+        config([
+            'kafka.brokers' => [
+                'default' => [
+                    'connections' => 'https:some-connection.com:8991,https:some-connection.com:8992',
+                ],
+            ],
+        ]);
+        $topicKey = 'topic-key';
+
+        $config = new Config($topicKey);
+        $broker = $config->getBrokerConfig();
+
+        $this->assertSame('https:some-connection.com:8991,https:some-connection.com:8992', $broker->getConnections());
+    }
+
+    /** @test */
+    public function it_can_handle_multiple_connections_for_same_broker_as_array()
+    {
+        config([
+            'kafka.brokers' => [
+                'default' => [
+                    'connections' => [
+                        'https:some-connection.com:8991',
+                        'https:some-connection.com:8992',
+                    ],
+                ],
+            ],
+        ]);
+        $topicKey = 'topic-key';
+
+        $config = new Config($topicKey);
+        $broker = $config->getBrokerConfig();
+
+        $this->assertSame('https:some-connection.com:8991,https:some-connection.com:8992', $broker->getConnections());
     }
 }

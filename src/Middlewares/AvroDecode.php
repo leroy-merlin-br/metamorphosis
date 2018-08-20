@@ -14,13 +14,12 @@ class AvroDecode implements Middleware
         $readIo = new StringIO($message->getPayload());
         $dataReader = new DataIOReader($readIo, new IODatumReader());
 
-        $decodedMessage = '';
-
-        foreach ($dataReader->data() as $datum) {
-            $decodedMessage .= $datum;
+        $records = [];
+        foreach ($dataReader->data() as $record) {
+            $records[] = $record;
         }
 
-        $message->setPayload($decodedMessage);
+        $message->setPayload($records);
 
         $handler->handle($message);
     }

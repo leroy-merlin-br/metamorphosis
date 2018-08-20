@@ -91,7 +91,7 @@ class Config
 
     private function setConsumerGroup(array $topicConfig, string $consumerGroupId = null): void
     {
-        if (!$consumerGroupId && 1 === count($topicConfig['consumer-groups'])) {
+        if (!$consumerGroupId && count($topicConfig['consumer-groups']) === 1) {
             $consumerGroupId = current(array_keys($topicConfig['consumer-groups']));
         }
 

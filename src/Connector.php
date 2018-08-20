@@ -23,7 +23,7 @@ class Connector
         $conf->set('group.id', $this->config->getConsumerGroupId());
         $conf->set('auto.offset.reset', $this->config->getConsumerGroupOffset());
 
-        $consumer = new KafkaConsumer($conf);
+        $consumer = resolve(KafkaConsumer::class, ['conf' => $conf]);
         $consumer->subscribe([$this->config->getTopic()]);
 
         return $consumer;
@@ -31,9 +31,9 @@ class Connector
 
     protected function getConf(): Conf
     {
-        $conf = new Conf();
-
         $broker = $this->config->getBrokerConfig();
+
+        $conf = resolve(Conf::class);
 
         $conf->set('metadata.broker.list', $broker->getConnection());
 

@@ -97,7 +97,7 @@ class Config
         if (!$consumerGroupId && count($topicConfig['consumer-groups']) === 1) {
             $consumerGroupId = current(array_keys($topicConfig['consumer-groups']));
         }
-      
+
         $consumerGroupId = $consumerGroupId ?? 'default';
 
         $consumerGroupConfig = $topicConfig['consumer-groups'][$consumerGroupId] ?? null;

@@ -15,7 +15,7 @@ class CommandTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'connection' => '',
+                        'connections' => '',
                         'auth' => [
                             'protocol' => 'ssl',
                             'ca' => '/path/to/ca',

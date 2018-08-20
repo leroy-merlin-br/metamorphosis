@@ -23,7 +23,7 @@ class ConsumerTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'connection' => '',
+                        'connections' => '',
                     ],
                 ],
                 'topics' => [

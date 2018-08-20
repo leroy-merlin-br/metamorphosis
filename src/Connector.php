@@ -37,7 +37,7 @@ class Connector
 
         $conf->set('metadata.broker.list', $broker->getConnection());
 
-        $broker->authentication($conf);
+        $broker->authenticate($conf);
 
         return $conf;
     }

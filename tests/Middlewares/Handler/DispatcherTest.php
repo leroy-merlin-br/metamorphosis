@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Middlewares\Handler;
 
-use Metamorphosis\Message;
+use Metamorphosis\Record;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Middleware;
 use RdKafka\Message as KafkaMessage;
@@ -21,12 +21,12 @@ class DispatcherTest extends LaravelTestCase
         $kafkaMessage->payload = 'original message';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
+        $record = new Record($kafkaMessage);
 
         $middleware->expects($this->once())
             ->method('process')
-            ->with($this->equalTo($message));
+            ->with($this->equalTo($record));
 
-        $dispatcher->handle($message);
+        $dispatcher->handle($record);
     }
 }

@@ -1,12 +1,12 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\Message;
+use Metamorphosis\Record;
 
 interface MiddlewareHandler
 {
     /**
-     * @param Message $message
+     * @param Record $record
      */
-    public function handle(Message $message): void;
+    public function handle(Record $record): void;
 }

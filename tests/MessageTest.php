@@ -3,7 +3,7 @@ namespace Tests;
 
 use Metamorphosis\Exceptions\ResponseErrorException;
 use Metamorphosis\Exceptions\ResponseWarningException;
-use Metamorphosis\Message;
+use Metamorphosis\Record;
 use RdKafka\Message as KafkaMessage;
 
 class MessageTest extends LaravelTestCase
@@ -19,7 +19,7 @@ class MessageTest extends LaravelTestCase
         $this->expectExceptionMessage('Error response.');
         $this->expectExceptionCode(RD_KAFKA_RESP_ERR_INVALID_MSG);
 
-        new Message($kafkaMessage);
+        new Record($kafkaMessage);
     }
 
     /** @test */
@@ -33,32 +33,32 @@ class MessageTest extends LaravelTestCase
         $this->expectExceptionMessage('Invalid response.');
         $this->expectExceptionCode(RD_KAFKA_RESP_ERR__PARTITION_EOF);
 
-        new Message($kafkaMessage);
+        new Record($kafkaMessage);
     }
 
     /** @test */
     public function it_should_provides_getter_and_setter_for_payload()
     {
         $kafkaMessage = new KafkaMessage();
-        $kafkaMessage->payload = 'original message';
+        $kafkaMessage->payload = 'original record';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
-        $message->setPayload('new message');
+        $record = new Record($kafkaMessage);
+        $record->setPayload('new record');
 
-        $this->assertSame('new message', $message->getPayload());
+        $this->assertSame('new record', $record->getPayload());
     }
 
     /** @test */
     public function it_should_get_original_message()
     {
         $kafkaMessage = new KafkaMessage();
-        $kafkaMessage->payload = 'original message';
+        $kafkaMessage->payload = 'original record';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
+        $record = new Record($kafkaMessage);
 
-        $this->assertSame($kafkaMessage, $message->getOriginal());
+        $this->assertSame($kafkaMessage, $record->getOriginal());
     }
 
     /** @test */
@@ -68,9 +68,9 @@ class MessageTest extends LaravelTestCase
         $kafkaMessage->topic_name = 'topic-name';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
+        $record = new Record($kafkaMessage);
 
-        $this->assertSame('topic-name', $message->getTopicName());
+        $this->assertSame('topic-name', $record->getTopicName());
     }
 
     /** @test */
@@ -80,9 +80,9 @@ class MessageTest extends LaravelTestCase
         $kafkaMessage->partition = 0;
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
+        $record = new Record($kafkaMessage);
 
-        $this->assertSame(0, $message->getPartition());
+        $this->assertSame(0, $record->getPartition());
     }
 
     /** @test */
@@ -92,9 +92,9 @@ class MessageTest extends LaravelTestCase
         $kafkaMessage->key = 'key';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
+        $record = new Record($kafkaMessage);
 
-        $this->assertSame('key', $message->getKey());
+        $this->assertSame('key', $record->getKey());
     }
 
     /** @test */
@@ -104,8 +104,8 @@ class MessageTest extends LaravelTestCase
         $kafkaMessage->offset = 10;
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $message = new Message($kafkaMessage);
+        $record = new Record($kafkaMessage);
 
-        $this->assertSame(10, $message->getOffset());
+        $this->assertSame(10, $record->getOffset());
     }
 }

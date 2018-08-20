@@ -109,11 +109,14 @@ $ php artisan vendor:publish --provider="Metamorphosis\MetamorphosisServiceProvi
 
 2. The Consumer:
     
-    run:
+    After making all needed configs, you need to create the consumer, which will handle all records received
+    from the topic specified in the config.
+    
+    Creating the consumer is easy as running the following command: 
     ```bash
     $ php artisan make:kafka-consumer PriceUpdateConsumer
     ```
-    this will create a KafkaConsumer class inside the application, on the app/Kafka/Consumers/PriceUpdateConsumer.php directory
+    This will create a KafkaConsumer class inside the application, on the app/Kafka/Consumers/PriceUpdateConsumer.php directory
     
     There, you'll have an handler method, which will send all records from the topic to him,
     also, will be available methods for handle exceptions (failure and warning)

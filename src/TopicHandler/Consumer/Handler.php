@@ -8,13 +8,11 @@ use Metamorphosis\Message;
 interface Handler
 {
     /**
-     * Handle payload.
+     * Handle message.
      *
      * @param Message $message
-     *
-     * @return bool
      */
-    public function handle(Message $message): bool;
+    public function handle(Message $message): void;
 
     /**
      * Handle warning exceptions.

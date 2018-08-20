@@ -131,6 +131,6 @@ class Config
 
     private function setGlobalMiddlewares(): void
     {
-        $this->setMiddlewares(config('kafka.middlewares.consumer'));
+        $this->setMiddlewares(config('kafka.middlewares.consumer', []));
     }
 }

@@ -3,12 +3,12 @@ namespace Tests\Console;
 
 use Tests\LaravelTestCase;
 
-class ConsumerMakeCommandTest extends LaravelTestCase
+class MiddlewareMakeCommandTest extends LaravelTestCase
 {
     /** @test */
-    public function it_should_generate_consumer_handler()
+    public function it_should_generate_middleware()
     {
-        $command = 'make:kafka-consumer';
+        $command = 'make:kafka-middleware';
         $parameters = [
             'name' => str_random(8),
         ];

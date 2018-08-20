@@ -2,8 +2,10 @@
 namespace Test;
 
 use Metamorphosis\Broker;
+use Metamorphosis\Config;
 use Metamorphosis\Connector;
 use RdKafka\Conf;
+use RdKafka\KafkaConsumer;
 use Tests\LaravelTestCase;
 
 class ConnectorTest extends LaravelTestCase
@@ -11,12 +13,18 @@ class ConnectorTest extends LaravelTestCase
     /** @test */
     public function it_should_make_connector_setup()
     {
-        $broker = new Broker('some-connection');
+        $config = $this->createMock(Config::class);
+        $conf = $this->app->instance(Conf::class, $this->createMock(Conf::class));
+        $consumer = $this->app->instance(KafkaConsumer::class, $this->createMock(KafkaConsumer::class));
 
-        $connector = new Connector($broker);
+        $connector = new Connector($config);
 
-        $conf = $connector->setup();
+        $config->expects($this->once())
+            ->method('getBrokerConfig')
+            ->will($this->returnValue($this->createMock(Broker::class)));
 
-        $this->assertInstanceOf(Conf::class, $conf);
+        $result = $connector->getConsumer();
+
+        $this->assertInstanceOf(KafkaConsumer::class, $result);
     }
 }

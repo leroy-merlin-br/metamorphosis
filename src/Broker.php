@@ -23,7 +23,7 @@ class Broker
         $this->setAuthentication($authentication);
     }
 
-    public function authentication(Conf $conf): void
+    public function authenticate(Conf $conf): void
     {
         $this->authentication->authenticate($conf);
     }

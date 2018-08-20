@@ -3,6 +3,7 @@ namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
 use Metamorphosis\Config;
+use Metamorphosis\Connector;
 use Metamorphosis\Consumer;
 
 class Command extends BaseCommand
@@ -19,16 +20,18 @@ class Command extends BaseCommand
 
     public function handle()
     {
-        $config = new Config($this->argument('topic'), $this->argument('consumer-group'));
+        $config = new Config(
+            $this->argument('topic'),
+            $this->argument('consumer-group'),
+            $this->option('offset')
+        );
 
-        $consumer = new Consumer($config);
+        $connector = new Connector($config);
+
+        $consumer = new Consumer($config, $connector->getConsumer());
 
         if ($timeout = $this->option('timeout')) {
             $consumer->setTimeout($timeout);
-        }
-
-        if ($offset = $this->option('offset')) {
-            $consumer->setOffset($offset);
         }
 
         $consumer->run();

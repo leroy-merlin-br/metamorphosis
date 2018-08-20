@@ -10,7 +10,7 @@ class MiddlewareMakeCommandTest extends LaravelTestCase
     {
         $command = 'make:kafka-middleware';
         $parameters = [
-            'name' => 'LogMiddleware',
+            'name' => str_random(8),
         ];
 
         $statusCode = $this->artisan($command, $parameters);

@@ -10,7 +10,7 @@ class ConsumerMakeCommandTest extends LaravelTestCase
     {
         $command = 'make:kafka-consumer';
         $parameters = [
-            'name' => 'SampleConsumer',
+            'name' => str_random(8),
         ];
 
         $statusCode = $this->artisan($command, $parameters);

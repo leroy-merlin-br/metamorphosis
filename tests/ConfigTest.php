@@ -193,4 +193,36 @@ class ConfigTest extends LaravelTestCase
 
         $this->assertSame('https:some-connection.com:8991,https:some-connection.com:8992', $broker->getConnections());
     }
+
+    /** @test */
+    public function it_can_handle_no_middleware_configuration()
+    {
+        config([
+            'kafka' => [
+                'brokers' => [
+                    'default' => [
+                        'connections' => '',
+                    ],
+                ],
+                'topics' => [
+                    'topic-key' => [
+                        'topic' => 'topic-name',
+                        'broker' => 'default',
+                        'consumer-groups' => [
+                            'consumer-id' => [
+                                'offset' => 'initial',
+                                'consumer' => ConsumerHandlerDummy::class,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $topicKey = 'topic-key';
+        $consumerGroup = 'consumer-id';
+        $config = new Config($topicKey, $consumerGroup);
+
+        $this->assertEmpty($config->getMiddlewares());
+    }
 }

@@ -45,6 +45,12 @@ You can install library through Composer:
 $ composer require leroy-merlin-br/metamorphosis
 ```
 
+And publish the config file with:
+
+```
+$ php artisan vendor:publish --provider="Metamorphosis\MetamorphosisServiceProvider"
+```
+
 <a name="quick-guide"></a>
 ## Quick Guide
 

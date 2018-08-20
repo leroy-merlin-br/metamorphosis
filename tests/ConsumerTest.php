@@ -59,8 +59,11 @@ class ConsumerTest extends LaravelTestCase
 
         $kafkaConsumer = $this->createMock(KafkaConsumer::class);
         $consumer = new Consumer($config, $kafkaConsumer);
+        $consumer->setTimeout(30);
 
-        $kafkaConsumer->method('consume')
+        $kafkaConsumer->expects($this->exactly(4))
+            ->method('consume')
+            ->with($this->equalTo(30))
             ->will($this->returnCallback([$this, 'consumeMockDataProvider']));
 
         // Ensure that one message went through the middleware stack

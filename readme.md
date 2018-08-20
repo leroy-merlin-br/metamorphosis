@@ -105,59 +105,67 @@ $ composer require leroy-merlin-br/metamorphosis
     
     run:
     ```bash
-    $ php artisan make:kafka-consumer LogConsumer
+    $ php artisan make:kafka-consumer PriceUpdateConsumer
     ```
-    this will create a KafkaConsumer class inside the application, on the app/Kafka/Consumers/ directory
+    this will create a KafkaConsumer class inside the application, on the app/Kafka/Consumers/PriceUpdateConsumer.php directory
     
     There, you'll have an handler method, which will send all records from the topic to him,
     also, will be available methods for handle exceptions (failure and warning)
     
     ```php
-       class PriceUpdateConsumer extends AbstractHandler
+   class PriceUpdateConsumer extends AbstractHandler
+   {
+       public $repository;
+    
+       /**
+        * Create a new consumer topic handler instance.
+        *
+        * @return void
+        */
+       public function __construct(Repository $repository)
        {
-           public $product;
-        
-           /**
-            * Create a new consumer topic handler instance.
-            *
-            * @return void
-            */
-           public function __construct(Product $product)
-           {
-               $this->product = $product;
-           }
-       
-           /**
-            * Handle payload.
-            *
-            * @param Message $message
-            *
-            * @return bool
-            */
-           public function handle(Message $message): bool
-           {
-               $price = $message->getPayload();
-                  
-               $this->product->updatePrice($price);
-           }
-        
-           public function warning(ResponseWarningException $exception): void
-           {
-               // treat any warnings, like partition without new records to process
-           }
-       
-           public function failed(Exception $exception): void
-           {
-               // treat any failed executions, like an record with unparsable payload or connection error
-           }
+           $this->repository = $repository;
        }
+   
+       /**
+        * Handle payload.
+        *
+        * @param Message $message
+        *
+        * @return void
+        */
+       public function handle(Message $message): void
+       {
+           $product = $message->getPayload();
+                   
+           $this->repository->update($product['id'], $product['price']);
+       }
+   }
     ```
 
 
 3. The Runner
-
-    now to start consuming some topic, 
-    just run php artisan kafka:consume topic-name
+    
+    Now you just need to start consuming the price update topic.
+    The simplest way to see it working is by running
+    ```bash
+    $ php artisan kafka:consume price-update
+    ```
+    
+    This command will run in a while true, that means, it will never stop running.
+    But, errors can happen, so we strongly advice you to run this command along with supervisor,
+    like this example below:
+    ```bash
+       [program:kafka-consumer-price-update]
+       process_name=%(program_name)s_%(process_num)02d
+       command=php /var/www/default/artisan kafka:consume price-update --offset=earliest --timeout=-1
+       autostart=true
+       autorestart=true
+       user=root
+       numprocs=6
+       redirect_stderr=true
+       stdout_logfile=/var/log/default/kafka-consumer-price-update.log
+    ```
 
 
 

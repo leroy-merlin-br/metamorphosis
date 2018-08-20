@@ -39,7 +39,7 @@ Metamorphosis provides a simple, straight-forward implementation for working wit
 **Important:** *Make sure that you already have installed the OS driver for kafka, and the kafka php extension.*
 
 
-You can install library through Composer:
+You can install the library via Composer:
 
 ```
 $ composer require leroy-merlin-br/metamorphosis
@@ -87,7 +87,7 @@ $ php artisan vendor:publish --provider="Metamorphosis\MetamorphosisServiceProvi
 
     - Topics
         
-        An array of topics configuration, such as the topic name, which broker connection must use, consumer groups and middlewares
+        An array of topics configuration, such as the topic name, which broker connection should use, consumer groups and middlewares
         
         Here we can specify the group consumers, each topic can have multiple groups, 
         and each group holds the configuration for which consumer, offset and middleware must use  
@@ -109,18 +109,18 @@ $ php artisan vendor:publish --provider="Metamorphosis\MetamorphosisServiceProvi
 
 2. The Consumer:
     
-    After making all needed configs, you need to create the consumer, which will handle all records received
+    After setting up the required configs, you need to create the consumer, which will handle all records received
     from the topic specified in the config.
     
     Creating the consumer is easy as running the following command: 
     ```bash
     $ php artisan make:kafka-consumer PriceUpdateConsumer
     ```
-    This will create a KafkaConsumer class inside the application, on the app/Kafka/Consumers/PriceUpdateConsumer.php directory
+    This will create a KafkaConsumer class inside the application, on the app/Kafka/Consumers/ directory
     
-    There, you'll have an handler method, which will send all records from the topic to him,
-    also, will be available methods for handle exceptions (failure and warning)
-    
+    There, you'll have a handler method, which will send all records from the topic to the Consumer,
+    also, methods will be available for handling exceptions
+
     ```php
     use App\Kafka\Consumers\PriceUpdateConsumer;
     use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
@@ -159,13 +159,16 @@ $ php artisan vendor:publish --provider="Metamorphosis\MetamorphosisServiceProvi
 
 3. The Runner
     
-    Now you just need to start consuming the price update topic.
-    The simplest way to see it working is by running
+    Now you just need to start consuming the topic.
+    
+    The simplest way to see it working is by running the kafka:consume command along with the topic name
+    declared in the topics config key:
+    
     ```bash
     $ php artisan kafka:consume price-update
     ```
     
-    This command will run in a while true, that means, it will never stop running.
+    This command will run in a `while true`, that means, it will never stop running.
     But, errors can happen, so we strongly advice you to run this command along with supervisor,
     like this example below:
     ```bash

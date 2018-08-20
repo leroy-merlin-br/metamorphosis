@@ -7,9 +7,8 @@ use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
 class ConsumerHandlerDummy extends AbstractHandler
 {
-    public function handle(Message $data): bool
+    public function handle(Message $data): void
     {
-        return true;
     }
 
     public function failed(Exception $exception): void

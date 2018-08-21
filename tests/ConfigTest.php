@@ -90,6 +90,30 @@ class ConfigTest extends LaravelTestCase
     }
 
     /** @test */
+    public function it_gets_single_consumer_group_defined()
+    {
+        config([
+            'kafka.topics' => [
+                'topic-key' => [
+                    'topic' => 'topic-name',
+                    'broker' => 'default',
+                    'consumer-groups' => [
+                        'any-name' => [
+                            'offset' => 'earliest',
+                            'consumer' => ConsumerHandlerDummy::class,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $topicKey = 'topic-key';
+        $config = new Config($topicKey);
+
+        $this->assertSame('any-name', $config->getConsumerGroupId());
+    }
+
+    /** @test */
     public function it_can_handle_broker_config_without_authentication_key()
     {
         config([

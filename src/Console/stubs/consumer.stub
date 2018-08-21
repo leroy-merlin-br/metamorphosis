@@ -2,7 +2,7 @@
 namespace DummyNamespace;
 
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
-use Metamorphosis\Message;
+use Metamorphosis\Record;
 
 class DummyClass extends AbstractHandler
 {
@@ -17,11 +17,11 @@ class DummyClass extends AbstractHandler
     }
 
     /**
-     * Handle message.
+     * Handle record.
      *
-     * @param Message $message
+     * @param Record $record
      */
-    public function handle(Message $message): void
+    public function handle(Record $record): void
     {
         //
     }

@@ -45,6 +45,6 @@ class ConsumerMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Kafka\Consumer';
+        return $rootNamespace.'\Kafka\Consumers';
     }
 }

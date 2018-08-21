@@ -37,13 +37,15 @@ return [
     |
     | 'topic': The topic name to subscribe to
     | 'broker': The broker identification key
+    | 'middlewares': an array of middlewares applied for this topic and all consumer-groups inside
     | 'consumer-groups': You may define more than one consumer group per topic.
     |                    If there is just one defined, it will be used by default,
     |                    otherwise, you may pass which consumer group should be used
     |                    when using the consumer command.
     |                    For every consumer group, you may define:
-                         'offset': to be used as the 'auto.offset.reset'
+    |                    'offset': to be used as the 'auto.offset.reset'
     |                    'consumer': a consumer class that implements ConsumerTopicHandler
+    |                    'middlewares': an array of middlewares applied only for this consumer-group
     |
     */
 
@@ -59,6 +61,17 @@ return [
             ],
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Global Middlewares
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the global middlewares that will be applied for every
+    | consumed topic. Middlewares work between the received data from broker and
+    | before being passed into consumers.
+    | Available middlewares: log, avro-decode
+    */
 
     'middlewares' => [
         'consumer' => [

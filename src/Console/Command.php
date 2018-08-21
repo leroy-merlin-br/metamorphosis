@@ -15,8 +15,8 @@ class Command extends BaseCommand
     protected $signature = 'kafka:consume
         {topic : topic.}
         {consumer-group? : consumer group name.}
-        {--offset : Sets offset for consumer}
-        {--timeout : Sets timeout for consumer}';
+        {--offset= : Sets offset for consumer}
+        {--timeout= : Sets timeout for consumer}';
 
     public function handle()
     {

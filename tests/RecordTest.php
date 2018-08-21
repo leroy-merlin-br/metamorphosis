@@ -6,17 +6,20 @@ use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Record;
 use RdKafka\Message as KafkaMessage;
 
-class MessageTest extends LaravelTestCase
+class RecordTest extends LaravelTestCase
 {
     /** @test */
     public function it_should_throw_exception_when_base_message_has_errors()
     {
-        $kafkaMessage = new KafkaMessage();
+        $kafkaMessage = $this->createMock(KafkaMessage::class);
         $kafkaMessage->payload = '';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_INVALID_MSG;
 
+        $kafkaMessage->method('errstr')
+             ->willReturn('Invalid Message');
+
         $this->expectException(ResponseErrorException::class);
-        $this->expectExceptionMessage('Error response.');
+        $this->expectExceptionMessage('Error response: Invalid Message');
         $this->expectExceptionCode(RD_KAFKA_RESP_ERR_INVALID_MSG);
 
         new Record($kafkaMessage);
@@ -25,12 +28,15 @@ class MessageTest extends LaravelTestCase
     /** @test */
     public function it_should_throw_warning_exception()
     {
-        $kafkaMessage = new KafkaMessage();
+        $kafkaMessage = $this->createMock(KafkaMessage::class);
         $kafkaMessage->payload = '';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR__PARTITION_EOF;
 
+        $kafkaMessage->method('errstr')
+             ->willReturn('Partition EOF');
+
         $this->expectException(ResponseWarningException::class);
-        $this->expectExceptionMessage('Invalid response.');
+        $this->expectExceptionMessage('Invalid response: Partition EOF');
         $this->expectExceptionCode(RD_KAFKA_RESP_ERR__PARTITION_EOF);
 
         new Record($kafkaMessage);

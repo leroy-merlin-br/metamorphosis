@@ -56,7 +56,7 @@ return [
             'consumer-groups' => [
                 'default' => [
                     'offset' => 'initial',
-                    'consumer' => '\App\Kafka\Consumer\ConsumerExample',
+                    'consumer' => '\App\Kafka\Consumers\ConsumerExample',
                 ],
             ],
         ],

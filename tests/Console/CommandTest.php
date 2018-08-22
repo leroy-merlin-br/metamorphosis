@@ -2,6 +2,7 @@
 namespace Tests\Console;
 
 use Metamorphosis\Exceptions\ConfigurationException;
+use RuntimeException;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
 
@@ -50,6 +51,21 @@ class CommandTest extends LaravelTestCase
 
         $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage('Topic \'some-topic\' not found');
+
+        $this->artisan($command, $parameters);
+    }
+
+    /** @test */
+    public function it_calls_command_with_offset_without_partition()
+    {
+        $command = 'kafka:consume';
+        $parameters = [
+            'topic' => 'some-topic',
+            '--offset' => 1,
+        ];
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Not enough options ("partition" is required when "offset" is supplied).');
 
         $this->artisan($command, $parameters);
     }

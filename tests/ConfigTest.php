@@ -33,11 +33,13 @@ class ConfigTest extends LaravelTestCase
                         'broker' => 'default',
                         'consumer-groups' => [
                             'default' => [
-                                'offset' => 'earliest',
+                                'offset-reset' => 'earliest',
+                                'offset' => 0,
                                 'consumer' => ConsumerHandlerDummy::class,
                             ],
                             'consumer-id' => [
-                                'offset' => 'initial',
+                                'offset-reset' => 'initial',
+                                'offset' => 0,
                                 'consumer' => ConsumerHandlerDummy::class,
                                 'middlewares' => [
                                     'first_consumer_middleware',
@@ -69,7 +71,7 @@ class ConfigTest extends LaravelTestCase
 
         $this->assertSame('topic-name', $config->getTopic());
         $this->assertSame('consumer-id', $config->getConsumerGroupId());
-        $this->assertSame('initial', $config->getConsumerOffset());
+        $this->assertSame('initial', $config->getConsumerOffsetReset());
         $this->assertInstanceOf(ConsumerTopicHandler::class, $config->getConsumerHandler());
         $this->assertInstanceOf(Broker::class, $config->getBrokerConfig());
         $this->assertSame([
@@ -99,7 +101,8 @@ class ConfigTest extends LaravelTestCase
                     'broker' => 'default',
                     'consumer-groups' => [
                         'any-name' => [
-                            'offset' => 'earliest',
+                            'offset-reset' => 'earliest',
+                            'offset' => 0,
                             'consumer' => ConsumerHandlerDummy::class,
                         ],
                     ],
@@ -164,7 +167,8 @@ class ConfigTest extends LaravelTestCase
                 'broker' => 'invalid-broker',
                 'consumer-groups' => [
                     'default' => [
-                        'offset' => 'earliest',
+                        'offset-reset' => 'earliest',
+                        'offset' => 0,
                         'consumer' => ConsumerHandlerDummy::class,
                     ],
                 ],
@@ -234,7 +238,8 @@ class ConfigTest extends LaravelTestCase
                         'broker' => 'default',
                         'consumer-groups' => [
                             'consumer-id' => [
-                                'offset' => 'initial',
+                                'offset-reset' => 'initial',
+                                'offset' => 0,
                                 'consumer' => ConsumerHandlerDummy::class,
                             ],
                         ],

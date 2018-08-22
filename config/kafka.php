@@ -57,7 +57,7 @@ return [
                 'default' => [
                     'offset-reset' => 'initial', // can be initial, earliest, etc
                     'offset' => 4636,
-                    'consumer' => '\App\Kafka\Consumer\ConsumerExample',
+                    'consumer' => '\App\Kafka\Consumers\ConsumerExample',
                 ],
             ],
         ],

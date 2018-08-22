@@ -11,11 +11,6 @@ use RdKafka\ConsumerTopic;
 class Consumer
 {
     /**
-     * @var string
-     */
-    public $topic;
-
-    /**
      * @var int
      */
     public $timeout = 2000000;
@@ -38,7 +33,6 @@ class Consumer
     public function __construct(Config $config, ConsumerTopic $kafkaConsumer)
     {
         $this->kafkaConsumer = $kafkaConsumer;
-        $this->offset = $config->getConsumerGroupOffset();
         $this->handler = $config->getConsumerGroupHandler();
 
         $this->setMiddlewareDispatcher($config->getMiddlewares());

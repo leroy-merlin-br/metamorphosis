@@ -7,6 +7,7 @@ use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\TopicHandler\Consumer\Handler;
 use RdKafka\KafkaConsumer;
+use RdKafka\ConsumerTopic;
 
 class Consumer
 {
@@ -21,16 +22,21 @@ class Consumer
     public $timeout = 2000000;
 
     /**
+     * @var Dispatcher
+     */
+    protected $middlewareDispatcher;
+
+    /**
      * @var Handler
      */
     protected $handler;
 
     /**
-     * @var KafkaConsumer
+     * @var \RdKafka\ConsumerTopic
      */
     protected $kafkaConsumer;
 
-    public function __construct(Config $config, KafkaConsumer $kafkaConsumer)
+    public function __construct(Config $config, ConsumerTopic $kafkaConsumer)
     {
         $this->kafkaConsumer = $kafkaConsumer;
         $this->offset = $config->getConsumerGroupOffset();
@@ -42,7 +48,13 @@ class Consumer
     public function run(): void
     {
         while (true) {
-            $response = $this->kafkaConsumer->consume($this->timeout);
+
+            $response = $this->kafkaConsumer->consume(0, $this->timeout);
+
+            if (!$response) {
+                dump('empty');
+                continue;
+            }
 
             try {
                 $record = new Record($response);

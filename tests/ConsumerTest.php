@@ -4,6 +4,7 @@ namespace Tests;
 use Exception;
 use Metamorphosis\Config;
 use Metamorphosis\Consumer;
+use RdKafka\ConsumerTopic;
 use RdKafka\KafkaConsumer;
 use RdKafka\Message as KafkaMessage;
 use Tests\Dummies\ConsumerHandlerDummy;
@@ -57,13 +58,13 @@ class ConsumerTest extends LaravelTestCase
         $middleware = $this->createMock(MiddlewareDummy::class);
         $this->app->instance(MiddlewareDummy::class, $middleware);
 
-        $kafkaConsumer = $this->createMock(KafkaConsumer::class);
-        $consumer = new Consumer($config, $kafkaConsumer);
+        $consumerTopic = $this->createMock(ConsumerTopic::class);
+        $consumer = new Consumer($config, $consumerTopic);
         $consumer->setTimeout(30);
 
-        $kafkaConsumer->expects($this->exactly(4))
+        $consumerTopic->expects($this->exactly(4))
             ->method('consume')
-            ->with($this->equalTo(30))
+            ->with(0, $this->equalTo(30))
             ->will($this->returnCallback([$this, 'consumeMockDataProvider']));
 
         // Ensure that one message went through the middleware stack

@@ -25,6 +25,12 @@ class Record
      */
     protected $payload;
 
+    /**
+     * @param \RdKafka\Message $original
+     *
+     * @throws \Metamorphosis\Exceptions\ResponseErrorException
+     * @throws \Metamorphosis\Exceptions\ResponseWarningException
+     */
     public function __construct(Message $original)
     {
         $this->original = $original;

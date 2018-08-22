@@ -23,7 +23,7 @@ class Connector
         $conf->set('group.id', $this->config->getConsumerGroupId());
         $conf->set('auto.offset.reset', $this->config->getConsumerGroupOffset());
 
-        $consumer = resolve(KafkaConsumer::class, ['conf' => $conf]);
+        $consumer = app(KafkaConsumer::class, ['conf' => $conf]);
         $consumer->subscribe([$this->config->getTopic()]);
 
         return $consumer;
@@ -33,7 +33,7 @@ class Connector
     {
         $broker = $this->config->getBrokerConfig();
 
-        $conf = resolve(Conf::class);
+        $conf = app(Conf::class);
 
         $conf->set('metadata.broker.list', $broker->getConnections());
 

@@ -3,7 +3,6 @@ namespace Metamorphosis;
 
 use RdKafka\Conf;
 use RdKafka\ConsumerTopic;
-use RdKafka\KafkaConsumer;
 use RdKafka\TopicConf;
 
 class Connector
@@ -28,13 +27,9 @@ class Connector
 
         $broker->authenticate($conf);
 
-
-
-
         $consumer = new \RdKafka\Consumer($conf);
 
         $consumer->addBrokers($broker->getConnections());
-
 
         $topicConf = new TopicConf();
 
@@ -42,12 +37,10 @@ class Connector
         //$topicConf->set('offset.store.method', 'broker');
         // make this configurable ? config/kafka.php
 
-
         // Set where to start consuming messages when there is no initial offset in
         // offset store or the desired offset is out of range.
         // 'smallest': start from the beginning
         $topicConf->set('auto.offset.reset', $this->config->getConsumerGroupOffset());
-
 
         $topicConsumer = $consumer->newTopic($this->config->getTopic(), $topicConf);
 

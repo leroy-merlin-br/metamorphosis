@@ -5,7 +5,6 @@ use Exception;
 use Metamorphosis\Config;
 use Metamorphosis\Consumer;
 use RdKafka\ConsumerTopic;
-use RdKafka\KafkaConsumer;
 use RdKafka\Message as KafkaMessage;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\Dummies\MiddlewareDummy;

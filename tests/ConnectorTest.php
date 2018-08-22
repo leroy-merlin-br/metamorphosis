@@ -4,9 +4,7 @@ namespace Test;
 use Metamorphosis\Broker;
 use Metamorphosis\Config;
 use Metamorphosis\Connector;
-use RdKafka\Conf;
 use RdKafka\ConsumerTopic;
-use RdKafka\KafkaConsumer;
 use Tests\LaravelTestCase;
 
 class ConnectorTest extends LaravelTestCase

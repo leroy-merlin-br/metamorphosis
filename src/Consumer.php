@@ -6,7 +6,6 @@ use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\TopicHandler\Consumer\Handler;
-use RdKafka\KafkaConsumer;
 use RdKafka\ConsumerTopic;
 
 class Consumer
@@ -48,11 +47,11 @@ class Consumer
     public function run(): void
     {
         while (true) {
-
             $response = $this->kafkaConsumer->consume(0, $this->timeout);
 
             if (!$response) {
                 dump('empty');
+
                 continue;
             }
 

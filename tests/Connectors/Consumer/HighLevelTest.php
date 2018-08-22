@@ -3,11 +3,12 @@ namespace Test;
 
 use Metamorphosis\Broker;
 use Metamorphosis\Config;
-use Metamorphosis\Connector;
+use Metamorphosis\Connectors\Consumer\HighLevel;
+use Metamorphosis\Consumers\HighLevel as HighLevelConsumer;
 use RdKafka\ConsumerTopic;
 use Tests\LaravelTestCase;
 
-class ConnectorTest extends LaravelTestCase
+class HighLevelTest extends LaravelTestCase
 {
     /** @test */
     public function it_should_make_connector_setup()
@@ -15,18 +16,26 @@ class ConnectorTest extends LaravelTestCase
         $config = $this->createMock(Config::class);
         $this->app->instance(ConsumerTopic::class, $this->createMock(ConsumerTopic::class));
 
-        $connector = new Connector($config);
+        $connector = new HighLevel($config);
 
         $config->expects($this->once())
             ->method('getBrokerConfig')
             ->will($this->returnValue($this->createMock(Broker::class)));
 
         $config->expects($this->once())
-            ->method('getConsumerOffset')
+            ->method('getConsumerGroupId')
+            ->will($this->returnValue('group.id'));
+
+        $config->expects($this->once())
+            ->method('getConsumerOffsetReset')
             ->will($this->returnValue('smallest'));
+
+        $config->expects($this->once())
+            ->method('getTopic')
+            ->will($this->returnValue('some.topic'));
 
         $result = $connector->getConsumer();
 
-        $this->assertInstanceOf(ConsumerTopic::class, $result);
+        $this->assertInstanceOf(HighLevelConsumer::class, $result);
     }
 }

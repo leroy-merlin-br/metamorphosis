@@ -3,8 +3,8 @@ namespace Tests;
 
 use Exception;
 use Metamorphosis\Config;
-use Metamorphosis\Consumer;
-use RdKafka\ConsumerTopic;
+use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\Runner;
 use RdKafka\Message as KafkaMessage;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\Dummies\MiddlewareDummy;
@@ -32,11 +32,13 @@ class ConsumerTest extends LaravelTestCase
                         'broker' => 'default',
                         'consumer-groups' => [
                             'default' => [
-                                'offset' => 'earliest',
+                                'offset-reset' => 'earliest',
+                                'offset' => 0,
                                 'consumer' => ConsumerHandlerDummy::class,
                             ],
                             'consumer-id' => [
-                                'offset' => 'earliest',
+                                'offset-reset' => 'earliest',
+                                'offset' => 0,
                                 'consumer' => ConsumerHandlerDummy::class,
                             ],
                         ],
@@ -57,13 +59,13 @@ class ConsumerTest extends LaravelTestCase
         $middleware = $this->createMock(MiddlewareDummy::class);
         $this->app->instance(MiddlewareDummy::class, $middleware);
 
-        $consumerTopic = $this->createMock(ConsumerTopic::class);
-        $consumer = new Consumer($config, $consumerTopic);
+        $consumerInterface = $this->createMock(ConsumerInterface::class);
+        $consumer = new Runner($config, $consumerInterface);
         $consumer->setTimeout(30);
 
-        $consumerTopic->expects($this->exactly(4))
+        $consumerInterface->expects($this->exactly(4))
             ->method('consume')
-            ->with(0, $this->equalTo(30))
+            ->with($this->equalTo(30))
             ->will($this->returnCallback([$this, 'consumeMockDataProvider']));
 
         // Ensure that one message went through the middleware stack

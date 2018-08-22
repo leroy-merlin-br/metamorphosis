@@ -4,7 +4,7 @@
 
 _:warning: Warning! This package is in beta stage. It does not provide resources to produce records to Kafka yet. Use it in production at your own risk._
 
-![Metamorphosis](./docs/logo.jpg)
+![Metamorphosis](./docs/logo.png)
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/leroy-merlin-br/metamorphosis.svg?style=flat-square)](https://packagist.org/packages/leroy-merlin-br/metamorphosis)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)

@@ -72,6 +72,7 @@ class ConfigTest extends LaravelTestCase
         $this->assertSame('topic-name', $config->getTopic());
         $this->assertSame('consumer-id', $config->getConsumerGroupId());
         $this->assertSame('initial', $config->getConsumerOffsetReset());
+        $this->assertSame(0, $config->getConsumerOffset());
         $this->assertInstanceOf(ConsumerTopicHandler::class, $config->getConsumerHandler());
         $this->assertInstanceOf(Broker::class, $config->getBrokerConfig());
         $this->assertSame([

@@ -39,13 +39,20 @@ return [
     | 'broker': The broker identification key
     | 'middlewares': an array of middlewares applied for this topic and all consumer-groups inside
     | 'consumer-groups': You may define more than one consumer group per topic.
-    |                    If there is just one defined, it will be used by default,
-    |                    otherwise, you may pass which consumer group should be used
-    |                    when using the consumer command.
-    |                    For every consumer group, you may define:
-    |                    'offset': to be used as the 'auto.offset.reset'
-    |                    'consumer': a consumer class that implements ConsumerTopicHandler
-    |                    'middlewares': an array of middlewares applied only for this consumer-group
+    |       If there is just one defined, it will be used by default,
+    |       otherwise, you may pass which consumer group should be used
+    |       when using the consumer command.
+    |       For every consumer group, you may define:
+    | 'consumer-groups.*.offset-reset': action to take when there is no initial
+    |       offset in offset store or the desired offset is out of range.
+    |       This config will be passed to 'auto.offset.reset'.
+    |       The valid options are: smallest, earliest, beginning, largest, latest, end, error.
+    | 'consumer-groups.*.offset': the offset at which to start consumption.
+    |       You can use a positive integer or any of the constants: RD_KAFKA_OFFSET_BEGINNING,
+    |       RD_KAFKA_OFFSET_END, RD_KAFKA_OFFSET_STORED.
+    | 'consumer-groups.*.partition': the partition to consume.
+    | 'consumer-groups.*.consumer': a consumer class that implements ConsumerTopicHandler
+    | 'consumer-groups.*.middlewares': an array of middlewares applied only for this consumer-group
     |
     */
 
@@ -55,8 +62,9 @@ return [
             'broker' => 'default',
             'consumer-groups' => [
                 'default' => [
-                    'offset-reset' => 'initial', // can be initial, earliest, etc
-                    'offset' => 4636,
+                    'offset-reset' => 'largest',
+                    'offset' => RD_KAFKA_OFFSET_BEGINNING,
+                    'partition' => 0,
                     'consumer' => '\App\Kafka\Consumers\ConsumerExample',
                 ],
             ],

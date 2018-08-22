@@ -1,12 +1,13 @@
 <?php
-namespace Metamorphosis;
+namespace Metamorphosis\Connectors\Consumer;
 
+use Metamorphosis\Consumer;
+use Metamorphosis\Consumers\ConsumerInterface;
 use RdKafka\Conf;
 use RdKafka\Consumer;
-use RdKafka\ConsumerTopic;
 use RdKafka\TopicConf;
 
-class Connector
+class LowLevel implements ConnectorInterface
 {
     /**
      * @var Config
@@ -18,7 +19,7 @@ class Connector
         $this->config = $config;
     }
 
-    public function getConsumer(): ConsumerTopic
+    public function getConsumer(): ConsumerInterface
     {
         $conf = $this->getConf();
         $conf->set('group.id', $this->config->getConsumerGroupId());
@@ -34,9 +35,9 @@ class Connector
         $topicConsumer = $consumer->newTopic($this->config->getTopic(), $topicConfig);
 
         // get partition from config/command option and offset for command option/config?
-        $topicConsumer->consumeStart(0, $this->config->getConsumerGroupOffsetReset());
+        $topicConsumer->consumeStart($this->config->getPartition(), $this->config->getConsumerGroupOffsetReset());
 
-        return $topicConsumer;
+        return new LowLevel($this->config, $topicConsumer);
     }
 
     protected function getTopicConfigs()

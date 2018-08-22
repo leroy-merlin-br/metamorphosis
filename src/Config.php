@@ -27,6 +27,11 @@ class Config
     /**
      * @var string
      */
+    protected $consumerGroupOffsetReset;
+
+    /**
+     * @var int
+     */
     protected $consumerGroupOffset;
 
     /**
@@ -39,8 +44,12 @@ class Config
      */
     protected $middlewares = [];
 
-    public function __construct(string $topic, string $consumerGroup = null, string $offset = null)
-    {
+    public function __construct(
+        string $topic,
+        string $consumerGroup = null,
+        string $offset = null,
+        int $partition = null
+    ) {
         $topicConfig = $this->getTopicConfig($topic);
         $this->setGlobalMiddlewares();
         $this->setTopic($topicConfig);
@@ -63,7 +72,12 @@ class Config
         return $this->consumerGroupId;
     }
 
-    public function getConsumerGroupOffset(): string
+    public function getConsumerGroupOffsetReset(): string
+    {
+        return $this->consumerGroupOffsetReset;
+    }
+
+    public function getConsumerGroupOffset(): int
     {
         return $this->consumerGroupOffset;
     }
@@ -76,6 +90,11 @@ class Config
     public function getMiddlewares(): iterable
     {
         return $this->middlewares;
+    }
+
+    public function getPartition(): ?int
+    {
+        return $this->partition;
     }
 
     private function getTopicConfig(string $topic): array
@@ -107,7 +126,8 @@ class Config
         }
 
         $this->consumerGroupId = $consumerGroupId;
-        $this->consumerGroupOffset = $offset ?: $consumerGroupConfig['offset'];
+        $this->consumerGroupOffsetReset = $consumerGroupConfig['offset-reset'];
+        $this->consumerGroupOffset = !is_null($offset) ? $offset : $consumerGroupConfig['offset'];
         $this->consumerGroupHandler = app($consumerGroupConfig['consumer']);
 
         $this->setMiddlewares($consumerGroupConfig['middlewares'] ?? []);

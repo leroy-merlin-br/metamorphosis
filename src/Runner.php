@@ -6,9 +6,8 @@ use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\TopicHandler\Consumer\Handler;
-use RdKafka\ConsumerTopic;
 
-class Consumer
+class Runner
 {
     /**
      * @var int
@@ -26,13 +25,13 @@ class Consumer
     protected $handler;
 
     /**
-     * @var \RdKafka\ConsumerTopic
+     * @var Consumer
      */
-    protected $kafkaConsumer;
+    protected $consumer;
 
-    public function __construct(Config $config, ConsumerTopic $kafkaConsumer)
+    public function __construct(Config $config, Consumer $consumer)
     {
-        $this->kafkaConsumer = $kafkaConsumer;
+        $this->consumer = $consumer;
         $this->handler = $config->getConsumerGroupHandler();
 
         $this->setMiddlewareDispatcher($config->getMiddlewares());
@@ -41,7 +40,7 @@ class Consumer
     public function run(): void
     {
         while (true) {
-            $response = $this->kafkaConsumer->consume(0, $this->timeout);
+            $response = $this->consumer->consume($this->timeout);
 
             if (!$response) {
                 dump('empty');

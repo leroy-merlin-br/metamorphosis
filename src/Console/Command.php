@@ -3,7 +3,6 @@ namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
 use Metamorphosis\Config;
-use Metamorphosis\Connector;
 use Metamorphosis\Consumer;
 
 class Command extends BaseCommand
@@ -15,25 +14,32 @@ class Command extends BaseCommand
     protected $signature = 'kafka:consume
         {topic : topic.}
         {consumer-group? : consumer group name.}
-        {--offset= : Sets offset for consumer}
-        {--timeout= : Sets timeout for consumer}';
+        {--offset= : Sets the offset at which to start consumption.}
+        {--partition= : Sets the partition to consume.}
+        {--timeout= : Sets timeout for consumer.}';
 
     public function handle()
     {
         $config = new Config(
             $this->argument('topic'),
             $this->argument('consumer-group'),
-            $this->option('offset')
+            $this->option('offset'),
+            $this->getPartition()
         );
 
-        $connector = new Connector($config);
+        $connector = ConnectorFactory::make($config);
 
-        $consumer = new Consumer($config, $connector->getConsumer());
+        $runner = new Runner($config, $connector->getConsumer());
 
         if ($timeout = $this->option('timeout')) {
-            $consumer->setTimeout($timeout);
+            $runner->setTimeout($timeout);
         }
 
-        $consumer->run();
+        $runner->run();
+    }
+
+    protected function getPartition(): ?int
+    {
+        return !is_null($this->option('partition')) ? (int) $this->option('partition') : null;
     }
 }

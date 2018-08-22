@@ -9,7 +9,7 @@ use RdKafka\Message as KafkaMessage;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\Dummies\MiddlewareDummy;
 
-class ConsumerTest extends LaravelTestCase
+class RunnerTest extends LaravelTestCase
 {
     /**
      * Counter for mocking infinite loop.

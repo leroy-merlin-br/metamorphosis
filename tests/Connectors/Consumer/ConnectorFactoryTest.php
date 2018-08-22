@@ -47,7 +47,7 @@ class ConnectorFactoryTest extends LaravelTestCase
     /** @test */
     public function it_makes_low_level_class()
     {
-        $config = new Config('topic-key', 'with-partition',3,0);
+        $config = new Config('topic-key', 'with-partition', 3, 0);
 
         $lowLevelConnector = ConnectorFactory::make($config);
 

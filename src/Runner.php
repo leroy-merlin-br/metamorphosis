@@ -43,12 +43,6 @@ class Runner
         while (true) {
             $response = $this->consumer->consume($this->timeout);
 
-            if (!$response) {
-                dump('empty');
-
-                continue;
-            }
-
             try {
                 $record = new Record($response);
                 $this->middlewareDispatcher->handle($record);

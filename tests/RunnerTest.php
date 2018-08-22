@@ -60,8 +60,8 @@ class RunnerTest extends LaravelTestCase
         $this->app->instance(MiddlewareDummy::class, $middleware);
 
         $consumerInterface = $this->createMock(ConsumerInterface::class);
-        $consumer = new Runner($config, $consumerInterface);
-        $consumer->setTimeout(30);
+        $runner = new Runner();
+        $runner->setTimeout(30);
 
         $consumerInterface->expects($this->exactly(4))
             ->method('consume')
@@ -75,7 +75,7 @@ class RunnerTest extends LaravelTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Error when consuming.');
 
-        $consumer->run();
+        $runner->run($config, $consumerInterface);
     }
 
     public function consumeMockDataProvider()

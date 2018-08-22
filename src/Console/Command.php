@@ -4,7 +4,6 @@ namespace Metamorphosis\Console;
 use Illuminate\Console\Command as BaseCommand;
 use Metamorphosis\Config;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
-use Metamorphosis\Consumer;
 use Metamorphosis\Runner;
 use RuntimeException;
 
@@ -21,7 +20,7 @@ class Command extends BaseCommand
         {--partition= : Sets the partition to consume.}
         {--timeout= : Sets timeout for consumer.}';
 
-    public function handle()
+    public function handle(Runner $runner)
     {
         if (!is_null($this->getIntOption('offset')) && is_null($this->getIntOption('partition'))) {
             throw new RuntimeException('Not enough options ("partition" is required when "offset" is supplied).');
@@ -36,13 +35,11 @@ class Command extends BaseCommand
 
         $connector = ConnectorFactory::make($config);
 
-        $runner = new Runner($config, $connector->getConsumer());
-
         if ($timeout = $this->option('timeout')) {
             $runner->setTimeout($timeout);
         }
 
-        $runner->run();
+        $runner->run($config, $connector->getConsumer());
     }
 
     protected function getIntOption(string $option): ?int

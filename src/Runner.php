@@ -25,23 +25,14 @@ class Runner
      */
     protected $handler;
 
-    /**
-     * @var ConsumerInterface
-     */
-    protected $consumer;
-
-    public function __construct(Config $config, ConsumerInterface $consumer)
+    public function run(Config $config, ConsumerInterface $consumer): void
     {
-        $this->consumer = $consumer;
         $this->handler = $config->getConsumerHandler();
 
         $this->setMiddlewareDispatcher($config->getMiddlewares());
-    }
 
-    public function run(): void
-    {
         while (true) {
-            $response = $this->consumer->consume($this->timeout);
+            $response = $consumer->consume($this->timeout);
 
             try {
                 $record = new Record($response);

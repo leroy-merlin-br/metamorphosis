@@ -1,8 +1,9 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\Consumer;
+use Metamorphosis\Config;
 use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
 use RdKafka\Conf;
 use RdKafka\Consumer;
 use RdKafka\TopicConf;
@@ -35,9 +36,9 @@ class LowLevel implements ConnectorInterface
         $topicConsumer = $consumer->newTopic($this->config->getTopic(), $topicConfig);
 
         // get partition from config/command option and offset for command option/config?
-        $topicConsumer->consumeStart($this->config->getPartition(), $this->config->getConsumerGroupOffsetReset());
+        $topicConsumer->consumeStart($this->config->getPartition(), $this->config->getConsumerOffset());
 
-        return new LowLevel($this->config, $topicConsumer);
+        return new LowLevelConsumer($this->config, $topicConsumer);
     }
 
     protected function getTopicConfigs()
@@ -47,7 +48,7 @@ class LowLevel implements ConnectorInterface
         // Set where to start consuming messages when there is no initial offset in
         // offset store or the desired offset is out of range.
         // 'smallest': start from the beginning
-        $topicConfig->set('auto.offset.reset', $this->config->getConsumerGroupOffsetReset());
+        $topicConfig->set('auto.offset.reset', $this->config->getConsumerOffsetReset());
 
         return $topicConfig;
     }

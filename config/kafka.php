@@ -64,7 +64,7 @@ return [
                 'default' => [
                     'offset-reset' => 'largest',
                     'offset' => RD_KAFKA_OFFSET_BEGINNING,
-                    'partition' => 0,
+                    'partition' => null,
                     'consumer' => '\App\Kafka\Consumers\ConsumerExample',
                 ],
             ],

@@ -1,8 +1,8 @@
 <?php
 namespace Metamorphosis\Consumers;
 
-use Metamorphosis\Record;
 use RdKafka\KafkaConsumer;
+use RdKafka\Message;
 
 class HighLevel implements ConsumerInterface
 {
@@ -19,9 +19,9 @@ class HighLevel implements ConsumerInterface
     /**
      * @param int $timeout
      *
-     * @return Record
+     * @return Message
      */
-    public function consume(int $timeout): Record
+    public function consume(int $timeout): Message
     {
         return $this->consumer->consume($timeout);
     }

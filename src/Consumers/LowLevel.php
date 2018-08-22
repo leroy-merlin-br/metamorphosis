@@ -2,8 +2,8 @@
 namespace Metamorphosis\Consumers;
 
 use Metamorphosis\Config;
-use Metamorphosis\Record;
 use RdKafka\ConsumerTopic;
+use RdKafka\Message;
 
 class LowLevel implements ConsumerInterface
 {
@@ -26,10 +26,10 @@ class LowLevel implements ConsumerInterface
     /**
      * @param int $timeout
      *
-     * @return Record
+     * @return Message
      */
-    public function consume(int $timeout): Record
+    public function consume(int $timeout): Message
     {
-        return $this->consumer->consume($config->getPartition(), $timeout);
+        return $this->consumer->consume($this->config->getPartition(), $timeout);
     }
 }

@@ -2,6 +2,7 @@
 namespace Metamorphosis;
 
 use Exception;
+use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
@@ -25,14 +26,14 @@ class Runner
     protected $handler;
 
     /**
-     * @var Consumer
+     * @var ConsumerInterface
      */
     protected $consumer;
 
-    public function __construct(Config $config, Consumer $consumer)
+    public function __construct(Config $config, ConsumerInterface $consumer)
     {
         $this->consumer = $consumer;
-        $this->handler = $config->getConsumerGroupHandler();
+        $this->handler = $config->getConsumerHandler();
 
         $this->setMiddlewareDispatcher($config->getMiddlewares());
     }

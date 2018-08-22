@@ -1,9 +1,11 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
+use Metamorphosis\Config;
 use Metamorphosis\Consumers\ConsumerInterface;
-use Metamorphosis\Consumers\HighLevel;
+use Metamorphosis\Consumers\HighLevel as HighLevelConsumer;
 use RdKafka\Conf;
+use RdKafka\KafkaConsumer;
 
 class HighLevel implements ConnectorInterface
 {
@@ -22,12 +24,12 @@ class HighLevel implements ConnectorInterface
         $conf = $this->getConf();
 
         $conf->set('group.id', $this->config->getConsumerGroupId());
-        $conf->set('auto.offset.reset', $this->config->getConsumerGroupOffset());
+        $conf->set('auto.offset.reset', $this->config->getConsumerOffsetReset());
 
         $consumer = app(KafkaConsumer::class, ['conf' => $conf]);
         $consumer->subscribe([$this->config->getTopic()]);
 
-        return new HighLevel($consumer);
+        return new HighLevelConsumer($consumer);
     }
 
     protected function getConf(): Conf

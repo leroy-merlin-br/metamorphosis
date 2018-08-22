@@ -22,7 +22,7 @@ class ConnectorTest extends LaravelTestCase
             ->will($this->returnValue($this->createMock(Broker::class)));
 
         $config->expects($this->once())
-            ->method('getConsumerGroupOffset')
+            ->method('getConsumerOffset')
             ->will($this->returnValue('smallest'));
 
         $result = $connector->getConsumer();

@@ -1,14 +1,14 @@
 <?php
 namespace Metamorphosis\Consumers;
 
-use Metamorphosis\Record;
+use RdKafka\Message;
 
 interface ConsumerInterface
 {
     /**
      * @param int $timeout
      *
-     * @return Record
+     * @return Message
      */
-    public function consume(int $timeout): Record;
+    public function consume(int $timeout): Message;
 }

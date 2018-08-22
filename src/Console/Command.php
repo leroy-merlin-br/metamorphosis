@@ -3,7 +3,9 @@ namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
 use Metamorphosis\Config;
+use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\Consumer;
+use Metamorphosis\Runner;
 use RuntimeException;
 
 class Command extends BaseCommand
@@ -21,15 +23,15 @@ class Command extends BaseCommand
 
     public function handle()
     {
-        if ($this->option('offset') && is_null($this->getPartition())) {
+        if (!is_null($this->getIntOption('offset')) && is_null($this->getIntOption('partition'))) {
             throw new RuntimeException('Not enough options ("partition" is required when "offset" is supplied).');
         }
 
         $config = new Config(
             $this->argument('topic'),
             $this->argument('consumer-group'),
-            $this->option('offset'),
-            $this->getPartition()
+            $this->getIntOption('partition'),
+            $this->getIntOption('offset')
         );
 
         $connector = ConnectorFactory::make($config);
@@ -43,8 +45,10 @@ class Command extends BaseCommand
         $runner->run();
     }
 
-    protected function getPartition(): ?int
+    protected function getIntOption(string $option): ?int
     {
-        return !is_null($this->option('partition')) ? (int) $this->option('partition') : null;
+        return !is_null($this->option($option))
+            ? (int) $this->option($option)
+            : null;
     }
 }

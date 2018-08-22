@@ -2,6 +2,7 @@
 namespace Metamorphosis;
 
 use RdKafka\Conf;
+use RdKafka\Consumer;
 use RdKafka\ConsumerTopic;
 use RdKafka\TopicConf;
 
@@ -25,14 +26,14 @@ class Connector
         $broker = $this->config->getBrokerConfig();
         $broker->authenticate($conf);
 
-        $consumer = new \RdKafka\Consumer($conf);
+        $consumer = new Consumer($conf);
         $consumer->addBrokers($broker->getConnections());
 
         $topicConfig = $this->getTopicConfigs();
 
         $topicConsumer = $consumer->newTopic($this->config->getTopic(), $topicConfig);
 
-        // get partition from config and offset for command output/config?
+        // get partition from config/command option and offset for command option/config?
         $topicConsumer->consumeStart(0, 4000);
 
         return $topicConsumer;
@@ -41,10 +42,6 @@ class Connector
     protected function getTopicConfigs()
     {
         $topicConfig = new TopicConf();
-
-        $topicConfig->set('offset.store.method', 'broker');
-        //$topicConfig->set('offset.store.method', 'broker');
-        // make this configurable ? config/kafka.php
 
         // Set where to start consuming messages when there is no initial offset in
         // offset store or the desired offset is out of range.

@@ -55,7 +55,8 @@ return [
             'broker' => 'default',
             'consumer-groups' => [
                 'default' => [
-                    'offset' => 'initial',
+                    'offset-reset' => 'initial', // can be initial, earliest, etc
+                    'offset' => 4636,
                     'consumer' => '\App\Kafka\Consumer\ConsumerExample',
                 ],
             ],

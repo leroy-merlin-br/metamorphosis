@@ -127,3 +127,47 @@ This will create a PriceTransformerMiddleware class inside the application, on t
 You can configure this inside the `config/kafka.php` file, putting in one of the three levels, depending on how generic or specific is the middleware.
 
 For more details about middlewares, see [this section](#middlewares).
+
+<a name="commands-running-consumer"></a>
+#### Running Consumer
+This command serves to start consuming from kafka and receiving data inside your consumer.
+The most basic usage it's by just using the follow command:  
+
+```bash
+$ php artisan kafka:consume price-update
+```
+
+This command will run in a `while true`, that means, it will never stop running.
+But, errors can happen, so we strongly advice you to run this command along with [supervisor](http://supervisord.org/running.html),
+like this example below:
+```bash
+[program:kafka-consumer-price-update]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/default/artisan kafka:consume price-update --timeout=-1
+autostart=true
+autorestart=true
+user=root
+numprocs=6
+redirect_stderr=true
+stdout_logfile=/var/log/default/kafka-consumer-price-update.log
+```
+
+Although you can run this simple command, we've some options you can pass to make it more flexible to your needs.
+
+If you wish do specify in which partition the consumer must be attached, you can set the option `--partition=1`
+
+And if you need to start the consumption of a topic in a specific offset (it can be useful for debug purposes)
+you can pass the `--offset=23` option, but for this, it will be required to specify the partition too.
+
+An example of how it would be using all this options, for example, we would run a consumer for a price topic
+getting records from the second partition and an offset of 34:
+
+```bash
+$ php artisan kafka:consume price-update --partition=2 --offset=23
+```
+
+Also, you can specify what would be the timeout for the consumer, by using the `--timeout=` option, the time is in milliseconds.
+```bash
+$ php artisan kafka:consume price-update --timeout=23000
+```
+

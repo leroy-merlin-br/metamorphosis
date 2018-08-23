@@ -12,7 +12,7 @@
 ### Authentication
 You can set which type of authentication each broker will need to connect.
 
-This is possible filling the `auth` key in the broker config:
+This is possible by filling the `auth` key in the broker config:
 
 ``` php
 'brokers' => [
@@ -35,7 +35,7 @@ This is possible filling the `auth` key in the broker config:
 If the protocol key is set to `ssl`, it will make a SSL Authentication, and it will need some extra fields along with protocol.
 The fields are `ca` with the `ca.pem` file, `certificate` with the `.cert` file and the `.key` file
 
-If the broker do not need any authentication to connect, you can leave the `auth` key as a empty `array` or event delete it.
+If the broker do not need any authentication to connect, you can leave the `auth` key as a empty `array` or even delete it.
 
 ---
 
@@ -45,7 +45,7 @@ If the broker do not need any authentication to connect, you can leave the `auth
    
    You can log or transform records before reach your application consumer.
    
-   This package brigns with two middlewares, `\Metamorphosis\Middlewares\Log` and `\Metamorphosis\Middlewares\AvroDecode`, but you can create your own
+   This package comes with two middlewares, `\Metamorphosis\Middlewares\Log` and `\Metamorphosis\Middlewares\AvroDecode`, but you can create your own
    using the `php artisan make:kafka-middleware` command.
    
    You can use global middlewares, topic middlewares or consumer-group middlewares, just setting in the `config/kafka.php`

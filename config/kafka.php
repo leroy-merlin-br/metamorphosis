@@ -47,10 +47,10 @@ return [
     |       offset in offset store or the desired offset is out of range.
     |       This config will be passed to 'auto.offset.reset'.
     |       The valid options are: smallest, earliest, beginning, largest, latest, end, error.
-    | 'consumer-groups.*.offset': the offset at which to start consumption.
+    | 'consumer-groups.*.offset': the offset at which to start consumption. This only applies if partition is set.
     |       You can use a positive integer or any of the constants: RD_KAFKA_OFFSET_BEGINNING,
     |       RD_KAFKA_OFFSET_END, RD_KAFKA_OFFSET_STORED.
-    | 'consumer-groups.*.partition': the partition to consume.
+    | 'consumer-groups.*.partition': the partition to consume. It can be null, if you don't wish do specify one.
     | 'consumer-groups.*.consumer': a consumer class that implements ConsumerTopicHandler
     | 'consumer-groups.*.middlewares': an array of middlewares applied only for this consumer-group
     |

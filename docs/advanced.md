@@ -114,3 +114,16 @@ class PriceUpdateConsumer extends AbstractHandler
 }
 ```
 
+
+<a name="commands-middleware"></a>
+#### Creating Middleware
+You can create a middleware class, that works between the received data from broker and before being passed into consumers, using the follow command:
+
+```bash
+$ php artisan make:kafka-middleware PriceTransformerMiddleware
+```
+
+This will create a PriceTransformerMiddleware class inside the application, on the app/Kafka/Middlewares/ directory.
+You can configure this inside the `config/kafka.php` file, putting in one of the three levels, depending on how generic or specific is the middleware.
+
+For more details about middlewares, see [this section](#middlewares).

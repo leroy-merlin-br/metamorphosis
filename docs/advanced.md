@@ -35,7 +35,7 @@ This is possible filling the `auth` key in the broker config:
 If the protocol key is set to `ssl`, it will make a SSL Authentication, and it will need some extra fields along with protocol.
 The fields are `ca` with the `ca.pem` file, `certificate` with the `.cert` file and the `.key` file
 
-If the broker do not need any authentication to connect, you can leave the `auth` key as a empty array or event delete it.
+If the broker do not need any authentication to connect, you can leave the `auth` key as a empty `array` or event delete it.
 
 ---
 
@@ -45,10 +45,10 @@ If the broker do not need any authentication to connect, you can leave the `auth
    
    You can log or transform records before reach your application consumer.
    
-   This package brigns with two middlewares, Log and AvroDecode, but you can create your own
+   This package brigns with two middlewares, `\Metamorphosis\Middlewares\Log` and `\Metamorphosis\Middlewares\AvroDecode`, but you can create your own
    using the `php artisan make:kafka-middleware` command.
    
-   You can use global middlewares, topic middlewares or consumer-group middlewares, just setting in the config/kafka.php
+   You can use global middlewares, topic middlewares or consumer-group middlewares, just setting in the `config/kafka.php`
    
    The order matters here, they'll be execute as queue, from the most specific to most global scope (group-consumers scope > topic scope > global scope)
 
@@ -63,18 +63,20 @@ You can create a consumer class, that will handle all records received from the 
 ```bash
 $ php artisan make:kafka-consumer PriceUpdateConsumer
 ```
-This will create a KafkaConsumer class inside the application, on the app/Kafka/Consumers/ directory
+This will create a KafkaConsumer class inside the application, on the `app/Kafka/Consumers/` directory
 
-There, you'll have a handler method, which will send all records from the topic to the Consumer.
+There, you'll have a `handler` method, which will send all records from the topic to the Consumer.
 Methods will be available for handling exceptions:
  - `warning` method will be call whenever something not critical is received from the topic.
     Like a message informing that there's no more records to consume.
  - `failure` method will be call whenever something critical happens, like an error to decode the record.
 
 ```php
-use App\Kafka\Consumers\PriceUpdateConsumer;
-use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
+use App\Repository;
+use Exception;
+use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Record;
+use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
 class PriceUpdateConsumer extends AbstractHandler
 {
@@ -106,10 +108,12 @@ class PriceUpdateConsumer extends AbstractHandler
     
     public function warning(ResponseWarningException $exception): void
     {
+        // handle warning exception
     }
 
     public function failed(Exception $exception): void
     {
+        // handle failure exception
     }
 }
 ```
@@ -123,7 +127,7 @@ You can create a middleware class, that works between the received data from bro
 $ php artisan make:kafka-middleware PriceTransformerMiddleware
 ```
 
-This will create a PriceTransformerMiddleware class inside the application, on the app/Kafka/Middlewares/ directory.
+This will create a PriceTransformerMiddleware class inside the application, on the `app/Kafka/Middlewares/` directory.
 You can configure this inside the `config/kafka.php` file, putting in one of the three levels, depending on how generic or specific is the middleware.
 
 For more details about middlewares, see [this section](#middlewares).

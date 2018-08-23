@@ -1,8 +1,9 @@
 <?php
 namespace DummyNamespace;
 
-use Metamorphosis\Record;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
+use Metamorphosis\Middlewares\Middleware;
+use Metamorphosis\Record;
 
 class DummyClass implements Middleware
 {

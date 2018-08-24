@@ -9,7 +9,7 @@ class DummyClass implements Middleware
 {
     public function process(Record $record, MiddlewareHandler $handler): void
     {
-        // Here you can treat your record before handle in your consumer
+        // Here you can manipulate your record before handle it in your consumer
 
         $handler->handle($record);
     }

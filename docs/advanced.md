@@ -30,7 +30,7 @@ This is possible by filling the `auth` key in the broker config:
           'auth' => [], // can be an empty array or even don't have this key in the broker config
       ],
   ],
-``` 
+```
 
 If the protocol key is set to `ssl`, it will make a SSL Authentication, and it will need some extra fields along with protocol.
 The fields are `ca` with the `ca.pem` file, `certificate` with the `.cert` file and the `.key` file
@@ -41,16 +41,96 @@ If the broker do not need any authentication to connect, you can leave the `auth
 
 <a name="middlewares"></a>
 ### Middlewares
-   Middlewares work between the received data from broker and before being passed into consumers.
-   
-   You can log or transform records before reach your application consumer.
-   
-   This package comes with two middlewares, `\Metamorphosis\Middlewares\Log` and `\Metamorphosis\Middlewares\AvroDecode`, but you can create your own
-   using the `php artisan make:kafka-middleware` command.
-   
-   You can use global middlewares, topic middlewares or consumer-group middlewares, just setting in the `config/kafka.php`
-   
-   The order matters here, they'll be execute as queue, from the most specific to most global scope (group-consumers scope > topic scope > global scope)
+
+Middlewares work between the received data from broker and before being handled by consumers.
+
+They behave similar to [PSR-15](https://www.php-fig.org/psr/psr-15/) middlewares. The main difference is that instead
+of returning a `Response`, they are intended to transform, validate or do any kind of manipulation on the record's payload.
+After that, they delegate the proccess back to the `MiddlewareHandler`. They can prevent the record to reach the consumer class by throwing an exception.
+
+This package comes with two middlewares, `\Metamorphosis\Middlewares\Log` and `\Metamorphosis\Middlewares\AvroDecode`, but you can create your own
+using the `php artisan make:kafka-middleware` command.
+
+Example:
+
+Let's say all records you consume on Kafka are json serialized. You could use a middleware to deserialize them. You may generate a new middleware using the command:
+
+```bash
+$ php artisan make:kafka-middleware JsonDeserializer
+```
+
+The generated class will be placed on `app/Kafka/Middlewares` directory, and will look like this:
+
+```php
+<?php
+namespace App\Kafka\Middlewares;
+
+use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
+use Metamorphosis\Middlewares\Middleware;
+use Metamorphosis\Record;
+
+class JsonDeserializer implements Middleware
+{
+    public function process(Record $record, MiddlewareHandler $handler): void
+    {
+        // Here you can manipulate your record before handle it in your consumer
+
+        $handler->handle($record);
+    }
+}
+
+```
+
+You may overwrite the record payload by calling `$record->setPayload()`:
+
+```php
+public function process(Record $record, MiddlewareHandler $handler): void
+{
+    $payload = $record->getPayload();
+
+    $record->setPayload(json_decode($payload));
+
+    $handler->handle($record);
+}
+```
+
+Then you may configure this new middleware to be executed for every record by adding it on the config file `config/kafka.php`:
+
+```php
+// ...
+'middlewares' => [
+    'consumer' => [
+        \Metamorphosis\Middlewares\Log::class,
+        \App\Kafka\Middlewares\JsonDeserializer::class,
+    ],
+],
+// ...
+```
+
+If you wish, you may set a middleware to run of a topic level or a consumer group level:
+
+```php
+'topics' => [
+    'price-update' => [
+        'topic' => 'products.price.update',
+        'broker' => 'price-brokers',
+        'consumer-groups' => [
+            'default' => [
+                'offset' => 'initial',
+                'consumer' => '\App\Kafka\Consumers\PriceUpdateConsumer',
+                'middlewares' => [
+                    \App\Kafka\Middlewares\ConsumerGroupMiddlewareExample::class,
+                ],
+            ],
+        ],
+        'middlewares' => [
+            \App\Kafka\Middlewares\TopicMiddlewareExample::class,
+        ],
+    ],
+],
+```
+
+The order matters here, they'll be execute as queue, from the most global scope to the most specific (global scope > topic scope > group-consumers scope).
 
 
 <a name="commands"></a>
@@ -105,7 +185,7 @@ class PriceUpdateConsumer extends AbstractHandler
 
         $this->repository->update($product['id'], $product['price']);
     }
-    
+
     public function warning(ResponseWarningException $exception): void
     {
         // handle warning exception
@@ -135,7 +215,7 @@ For more details about middlewares, see [this section](#middlewares).
 <a name="commands-running-consumer"></a>
 #### Running Consumer
 This command serves to start consuming from kafka and receiving data inside your consumer.
-The most basic usage it's by just using the follow command:  
+The most basic usage it's by just using the follow command:
 
 ```bash
 $ php artisan kafka:consume price-update

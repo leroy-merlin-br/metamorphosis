@@ -92,7 +92,7 @@ To quickly start using, we can focus in two sections:
     An array of topics configuration, such as the topic name, which broker connection should use, consumer groups and middlewares.
 
     Here we can specify the group consumers, each topic can have multiple groups, 
-    and each group holds the configuration for which consumer, offset and middleware it must use.
+    and each group holds the configuration for which consumer, offset-reset (for setting initial offset) and middleware it must use.
 
     ```php
       'topics' => [
@@ -101,7 +101,7 @@ To quickly start using, we can focus in two sections:
               'broker' => 'price-brokers',
               'consumer-groups' => [
                   'default' => [
-                      'offset' => 'initial',
+                      'offset-reset' => 'smallest',
                       'consumer' => '\App\Kafka\Consumers\PriceUpdateConsumer',
                   ],
               ],
@@ -176,7 +176,7 @@ like this example below:
 ```bash
 [program:kafka-consumer-price-update]
 process_name=%(program_name)s_%(process_num)02d
-command=php /var/www/default/artisan kafka:consume price-update --offset=earliest --timeout=-1
+command=php /var/www/default/artisan kafka:consume price-update --timeout=-1
 autostart=true
 autorestart=true
 user=root

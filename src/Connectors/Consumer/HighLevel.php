@@ -1,10 +1,13 @@
 <?php
-namespace Metamorphosis;
+namespace Metamorphosis\Connectors\Consumer;
 
+use Metamorphosis\Config;
+use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\Consumers\HighLevel as HighLevelConsumer;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 
-class Connector
+class HighLevel implements ConnectorInterface
 {
     /**
      * @var Config
@@ -16,17 +19,17 @@ class Connector
         $this->config = $config;
     }
 
-    public function getConsumer(): KafkaConsumer
+    public function getConsumer(): ConsumerInterface
     {
         $conf = $this->getConf();
 
         $conf->set('group.id', $this->config->getConsumerGroupId());
-        $conf->set('auto.offset.reset', $this->config->getConsumerGroupOffset());
+        $conf->set('auto.offset.reset', $this->config->getConsumerOffsetReset());
 
-        $consumer = resolve(KafkaConsumer::class, ['conf' => $conf]);
+        $consumer = app(KafkaConsumer::class, ['conf' => $conf]);
         $consumer->subscribe([$this->config->getTopic()]);
 
-        return $consumer;
+        return new HighLevelConsumer($consumer);
     }
 
     protected function getConf(): Conf

@@ -3,13 +3,13 @@ namespace Tests;
 
 use Exception;
 use Metamorphosis\Config;
-use Metamorphosis\Consumer;
-use RdKafka\KafkaConsumer;
+use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\Runner;
 use RdKafka\Message as KafkaMessage;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\Dummies\MiddlewareDummy;
 
-class ConsumerTest extends LaravelTestCase
+class RunnerTest extends LaravelTestCase
 {
     /**
      * Counter for mocking infinite loop.
@@ -32,11 +32,13 @@ class ConsumerTest extends LaravelTestCase
                         'broker' => 'default',
                         'consumer-groups' => [
                             'default' => [
-                                'offset' => 'earliest',
+                                'offset-reset' => 'earliest',
+                                'offset' => 0,
                                 'consumer' => ConsumerHandlerDummy::class,
                             ],
                             'consumer-id' => [
-                                'offset' => 'earliest',
+                                'offset-reset' => 'earliest',
+                                'offset' => 0,
                                 'consumer' => ConsumerHandlerDummy::class,
                             ],
                         ],
@@ -57,11 +59,11 @@ class ConsumerTest extends LaravelTestCase
         $middleware = $this->createMock(MiddlewareDummy::class);
         $this->app->instance(MiddlewareDummy::class, $middleware);
 
-        $kafkaConsumer = $this->createMock(KafkaConsumer::class);
-        $consumer = new Consumer($config, $kafkaConsumer);
-        $consumer->setTimeout(30);
+        $consumerInterface = $this->createMock(ConsumerInterface::class);
+        $runner = new Runner();
+        $runner->setTimeout(30);
 
-        $kafkaConsumer->expects($this->exactly(4))
+        $consumerInterface->expects($this->exactly(4))
             ->method('consume')
             ->with($this->equalTo(30))
             ->will($this->returnCallback([$this, 'consumeMockDataProvider']));
@@ -73,7 +75,7 @@ class ConsumerTest extends LaravelTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Error when consuming.');
 
-        $consumer->run();
+        $runner->run($config, $consumerInterface);
     }
 
     public function consumeMockDataProvider()

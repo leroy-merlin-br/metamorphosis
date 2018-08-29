@@ -25,26 +25,40 @@ class Config
     protected $consumerGroupId;
 
     /**
+     * @var int
+     */
+    protected $consumerPartition;
+
+    /**
      * @var string
      */
-    protected $consumerGroupOffset;
+    protected $consumerOffsetReset;
+
+    /**
+     * @var int
+     */
+    protected $consumerOffset;
 
     /**
      * @var Handler
      */
-    protected $consumerGroupHandler;
+    protected $consumerHandler;
 
     /**
      * @var iterable
      */
     protected $middlewares = [];
 
-    public function __construct(string $topic, string $consumerGroup = null, string $offset = null)
-    {
+    public function __construct(
+        string $topic,
+        string $consumerGroupId = null,
+        int $partition = null,
+        int $offset = null
+    ) {
         $topicConfig = $this->getTopicConfig($topic);
         $this->setGlobalMiddlewares();
         $this->setTopic($topicConfig);
-        $this->setConsumerGroup($topicConfig, $consumerGroup, $offset);
+        $this->setConsumerGroup($topicConfig, $consumerGroupId, $partition, $offset);
         $this->setBroker($topicConfig);
     }
 
@@ -63,19 +77,29 @@ class Config
         return $this->consumerGroupId;
     }
 
-    public function getConsumerGroupOffset(): string
+    public function getConsumerOffsetReset(): string
     {
-        return $this->consumerGroupOffset;
+        return $this->consumerOffsetReset;
     }
 
-    public function getConsumerGroupHandler(): Handler
+    public function getConsumerOffset(): int
     {
-        return $this->consumerGroupHandler;
+        return $this->consumerOffset;
+    }
+
+    public function getConsumerHandler(): Handler
+    {
+        return $this->consumerHandler;
     }
 
     public function getMiddlewares(): iterable
     {
         return $this->middlewares;
+    }
+
+    public function getPartition(): ?int
+    {
+        return $this->consumerPartition;
     }
 
     private function getTopicConfig(string $topic): array
@@ -92,7 +116,8 @@ class Config
     private function setConsumerGroup(
         array $topicConfig,
         string $consumerGroupId = null,
-        string $offset = null
+        int $partition = null,
+        int $offset = null
     ): void {
         if (!$consumerGroupId && count($topicConfig['consumer-groups']) === 1) {
             $consumerGroupId = current(array_keys($topicConfig['consumer-groups']));
@@ -100,17 +125,19 @@ class Config
 
         $consumerGroupId = $consumerGroupId ?? 'default';
 
-        $consumerGroupConfig = $topicConfig['consumer-groups'][$consumerGroupId] ?? null;
+        $consumerConfig = $topicConfig['consumer-groups'][$consumerGroupId] ?? null;
 
-        if (!$consumerGroupConfig) {
+        if (!$consumerConfig) {
             throw new ConfigurationException("Consumer group '{$consumerGroupId}' not found");
         }
 
         $this->consumerGroupId = $consumerGroupId;
-        $this->consumerGroupOffset = $offset ?: $consumerGroupConfig['offset'];
-        $this->consumerGroupHandler = app($consumerGroupConfig['consumer']);
+        $this->consumerPartition = !is_null($partition) ? $partition : ($consumerConfig['partition'] ?? null);
+        $this->consumerOffsetReset = $consumerConfig['offset-reset'] ?? 'largest';
+        $this->consumerOffset = !is_null($offset) ? $offset : $consumerConfig['offset'];
+        $this->consumerHandler = app($consumerConfig['consumer']);
 
-        $this->setMiddlewares($consumerGroupConfig['middlewares'] ?? []);
+        $this->setMiddlewares($consumerConfig['middlewares'] ?? []);
     }
 
     private function setBroker(array $topicConfig): void

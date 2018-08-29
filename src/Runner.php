@@ -2,47 +2,37 @@
 namespace Metamorphosis;
 
 use Exception;
+use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\TopicHandler\Consumer\Handler;
-use RdKafka\KafkaConsumer;
 
-class Consumer
+class Runner
 {
-    /**
-     * @var string
-     */
-    public $topic;
-
     /**
      * @var int
      */
     public $timeout = 2000000;
 
     /**
+     * @var Dispatcher
+     */
+    protected $middlewareDispatcher;
+
+    /**
      * @var Handler
      */
     protected $handler;
 
-    /**
-     * @var KafkaConsumer
-     */
-    protected $kafkaConsumer;
-
-    public function __construct(Config $config, KafkaConsumer $kafkaConsumer)
+    public function run(Config $config, ConsumerInterface $consumer): void
     {
-        $this->kafkaConsumer = $kafkaConsumer;
-        $this->offset = $config->getConsumerGroupOffset();
-        $this->handler = $config->getConsumerGroupHandler();
+        $this->handler = $config->getConsumerHandler();
 
         $this->setMiddlewareDispatcher($config->getMiddlewares());
-    }
 
-    public function run(): void
-    {
         while (true) {
-            $response = $this->kafkaConsumer->consume($this->timeout);
+            $response = $consumer->consume($this->timeout);
 
             try {
                 $record = new Record($response);

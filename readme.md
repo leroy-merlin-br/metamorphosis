@@ -65,7 +65,7 @@ To quickly start using, we can focus in two sections:
 
     An array of brokers, with connection and authentication configurations:
 
-    - `connections`: *required*. can be an `string` with multiple connections separated by comma or an `array` of connections (as `string`)
+    - `connections`: *required*. can be a `string` with multiple connections separated by comma or an `array` of connections (as `string`)
 
     - `auth`: *optional*. out of the box, the package can connect with SSL Authentication only or without any authentication
 

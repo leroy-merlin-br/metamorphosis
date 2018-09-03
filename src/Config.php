@@ -59,6 +59,7 @@ class Config
         $this->setGlobalMiddlewares();
         $this->setTopic($topicConfig);
         $this->setConsumerGroup($topicConfig, $consumerGroupId, $partition, $offset);
+        $this->setProducer($topicConfig);
         $this->setBroker($topicConfig);
     }
 
@@ -97,7 +98,7 @@ class Config
         return $this->middlewares;
     }
 
-    public function getPartition(): ?int
+    public function getConsumerPartition(): ?int
     {
         return $this->consumerPartition;
     }
@@ -138,6 +139,17 @@ class Config
         $this->consumerHandler = app($consumerConfig['consumer']);
 
         $this->setMiddlewares($consumerConfig['middlewares'] ?? []);
+    }
+
+    private function setProducer(array $topicConfig): void
+    {
+        $producerConfig = $topicConfig['producer'] ?? null;
+
+        if (!$producerConfig) {
+            return;
+        }
+
+        $this->setMiddlewares($producerConfig['middlewares'] ?? []);
     }
 
     private function setBroker(array $topicConfig): void

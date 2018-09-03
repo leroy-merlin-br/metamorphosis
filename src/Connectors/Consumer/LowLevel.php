@@ -36,7 +36,7 @@ class LowLevel implements ConnectorInterface
         $topicConsumer = $consumer->newTopic($this->config->getTopic(), $topicConfig);
 
         // get partition from config/command option and offset for command option/config?
-        $topicConsumer->consumeStart($this->config->getPartition(), $this->config->getConsumerOffset());
+        $topicConsumer->consumeStart($this->config->getConsumerPartition(), $this->config->getConsumerOffset());
 
         return new LowLevelConsumer($this->config, $topicConsumer);
     }

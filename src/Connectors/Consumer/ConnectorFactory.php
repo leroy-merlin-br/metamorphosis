@@ -16,6 +16,6 @@ class ConnectorFactory
 
     protected static function requiresPartition(Config $config): bool
     {
-        return !is_null($config->getPartition());
+        return !is_null($config->getConsumerPartition());
     }
 }

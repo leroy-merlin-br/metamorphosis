@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\Record;
+use Metamorphosis\Record\Record;
 
 interface MiddlewareHandler
 {

@@ -129,6 +129,7 @@ class Config
         $consumerConfig = $topicConfig['consumer-groups'][$consumerGroupId] ?? null;
 
         if (!$consumerConfig) {
+            // maybe create configs specific for each type (consumer/producer)
             throw new ConfigurationException("Consumer group '{$consumerGroupId}' not found");
         }
 
@@ -178,5 +179,7 @@ class Config
     private function setGlobalMiddlewares(): void
     {
         $this->setMiddlewares(config('kafka.middlewares.consumer', []));
+        $this->setMiddlewares(config('kafka.middlewares.producer', []));
+        $this->setMiddlewares(config('kafka.middlewares.global', []));
     }
 }

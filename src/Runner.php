@@ -6,6 +6,7 @@ use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
+use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\TopicHandler\Consumer\Handler;
 
 class Runner
@@ -35,7 +36,7 @@ class Runner
             $response = $consumer->consume($this->timeout);
 
             try {
-                $record = new Record($response);
+                $record = new ConsumerRecord($response);
                 $this->middlewareDispatcher->handle($record);
             } catch (ResponseWarningException $exception) {
                 $this->handler->warning($exception);
@@ -56,3 +57,5 @@ class Runner
         $this->middlewareDispatcher = new Dispatcher($middlewares);
     }
 }
+
+

@@ -3,7 +3,7 @@ namespace Metamorphosis\Middlewares\Handler;
 
 use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
 use Metamorphosis\Middlewares\Middleware;
-use Metamorphosis\Record;
+use Metamorphosis\Record\Record;
 
 class Consumer implements Middleware
 {

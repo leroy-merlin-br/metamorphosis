@@ -1,8 +1,8 @@
 <?php
 namespace Metamorphosis\Middlewares;
 
-use Metamorphosis\Record;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
+use Metamorphosis\Record\Record;
 use Psr\Log\LoggerInterface;
 
 class Log implements Middleware

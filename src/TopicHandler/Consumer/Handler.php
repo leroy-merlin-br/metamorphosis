@@ -3,7 +3,7 @@ namespace Metamorphosis\TopicHandler\Consumer;
 
 use Exception;
 use Metamorphosis\Exceptions\ResponseWarningException;
-use Metamorphosis\Record\Record as Record;
+use Metamorphosis\Record\Record;
 
 interface Handler
 {

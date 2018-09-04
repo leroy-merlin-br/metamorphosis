@@ -3,7 +3,7 @@ namespace Metamorphosis;
 
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
-use Metamorphosis\Record\ProducerRecord as RecordProducer;
+use Metamorphosis\Record\ProducerRecord;
 
 class Producer
 {
@@ -20,7 +20,7 @@ class Producer
 
         $this->setMiddlewareDispatcher($config->getMiddlewares());
 
-        $record = new RecordProducer($record, $topic, $partition, $key);
+        $record = new ProducerRecord($record, $topic, $partition, $key);
         $this->middlewareDispatcher->handle($record);
     }
 

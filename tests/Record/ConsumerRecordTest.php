@@ -1,12 +1,13 @@
 <?php
-namespace Tests;
+namespace Tests\Record;
 
 use Metamorphosis\Exceptions\ResponseErrorException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Record\ConsumerRecord as Record;
 use RdKafka\Message as KafkaMessage;
+use Tests\LaravelTestCase;
 
-class RecordTest extends LaravelTestCase
+class ConsumerRecordTest extends LaravelTestCase
 {
     /** @test */
     public function it_should_throw_exception_when_base_message_has_errors()

@@ -3,14 +3,37 @@ namespace Metamorphosis\Record;
 
 class ProducerRecord implements Record
 {
+    /**
+     * The message after any transformations that will be send to the topic.
+     *
+     * @var mixed
+     */
     protected $payload;
 
+    /**
+     * @var mixed|null
+     */
     protected $key;
 
+    /**
+     * The partition which the message will be send inside the topic.
+     *
+     * @var null|int
+     */
     protected $partition;
 
+    /**
+     * Original message before passed by any kind of transformations.
+     *
+     * @var mixed
+     */
     protected $original;
 
+    /**
+     * Topic which the message will be send to.
+     *
+     * @var string
+     */
     protected $topic;
 
     public function __construct($payload, $topic, $partition = null, $key = null)

@@ -57,5 +57,3 @@ class Runner
         $this->middlewareDispatcher = new Dispatcher($middlewares);
     }
 }
-
-

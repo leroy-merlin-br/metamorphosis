@@ -6,8 +6,11 @@ use Metamorphosis\Record\ConsumerRecord as ProduceRecord;
 abstract class AbstractHandler
 {
     private $record;
+
     private $topic;
+
     private $partition;
+
     private $key;
 
     public function __construct($record, $topic, $partition, $key)

@@ -69,7 +69,7 @@ return [
                 ],
             ],
             'producer' => [
-                'middlewares' => []
+                'middlewares' => [],
             ],
         ],
     ],

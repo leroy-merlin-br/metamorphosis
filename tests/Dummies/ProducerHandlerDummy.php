@@ -9,7 +9,6 @@ class ProducerHandlerDummy extends AbstractHandler
 {
     public function handle(Record $data): void
     {
-
     }
 
     public function failed(Exception $exception): void

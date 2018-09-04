@@ -2,7 +2,7 @@
 namespace Tests\Middlewares\Handler;
 
 use Metamorphosis\Middlewares\Middleware;
-use Metamorphosis\Record;
+use Metamorphosis\Record\ConsumerRecord as Record;
 use Metamorphosis\Middlewares\Handler\Iterator;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;

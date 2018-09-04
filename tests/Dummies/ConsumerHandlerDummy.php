@@ -2,7 +2,7 @@
 namespace Tests\Dummies;
 
 use Exception;
-use Metamorphosis\Record;
+use Metamorphosis\Record\Record;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
 class ConsumerHandlerDummy extends AbstractHandler

@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Middlewares\Handler;
 
-use Metamorphosis\Record;
+use Metamorphosis\Record\ConsumerRecord as Record;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Middleware;
 use RdKafka\Message as KafkaMessage;

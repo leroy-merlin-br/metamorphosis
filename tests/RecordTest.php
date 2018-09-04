@@ -3,7 +3,7 @@ namespace Tests;
 
 use Metamorphosis\Exceptions\ResponseErrorException;
 use Metamorphosis\Exceptions\ResponseWarningException;
-use Metamorphosis\Record;
+use Metamorphosis\Record\ConsumerRecord as Record;
 use RdKafka\Message as KafkaMessage;
 
 class RecordTest extends LaravelTestCase

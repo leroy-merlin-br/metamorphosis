@@ -17,7 +17,7 @@ class LowLevelTest extends LaravelTestCase
         $message = new Message();
 
         $config->expects($this->exactly(1))
-            ->method('getPartition')
+            ->method('getConsumerPartition')
             ->willReturn(1);
 
         $consumerTopic->expects($this->exactly(1))

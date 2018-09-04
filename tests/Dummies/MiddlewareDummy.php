@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Dummies;
 
-use Metamorphosis\Record;
+use Metamorphosis\Record\Record;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
 use Metamorphosis\Middlewares\Middleware;
 

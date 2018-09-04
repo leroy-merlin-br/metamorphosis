@@ -2,7 +2,7 @@
 namespace Tests\Middlewares\Handler;
 
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler as ConsumerTopicHandler;
-use Metamorphosis\Record;
+use Metamorphosis\Record\ConsumerRecord as Record;
 use Metamorphosis\Middlewares\Handler\Consumer;
 use RdKafka\Message as KafkaMessage;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandler;

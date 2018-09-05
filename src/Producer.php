@@ -12,9 +12,7 @@ class Producer
      */
     public $middlewareDispatcher;
 
-    protected $config;
-
-    public function produce($record, $topic, $partition = null, $key = null)
+    public function produce($record, $topic, $partition = null, $key = null): void
     {
         $config = new Config($topic);
 
@@ -26,7 +24,7 @@ class Producer
 
     protected function setMiddlewareDispatcher(array $middlewares)
     {
-        $middlewares[] = new ProducerMiddleware();
+        $middlewares[] = app(ProducerMiddleware::class);
         $this->middlewareDispatcher = new Dispatcher($middlewares);
     }
 }

@@ -3,6 +3,7 @@ namespace Metamorphosis\Connectors\Producer;
 
 use Metamorphosis\Config;
 use RdKafka\Conf;
+use RdKafka\Producer as KafkaProducer;
 use RdKafka\ProducerTopic;
 
 class Connector
@@ -17,7 +18,7 @@ class Connector
 
         $broker->authenticate($conf);
 
-        $producer = new \RdKafka\Producer($conf);
+        $producer = app(KafkaProducer::class, ['conf' => $conf]);
 
         return $producer->newTopic($config->getTopic());
     }

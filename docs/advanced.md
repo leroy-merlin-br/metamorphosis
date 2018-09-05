@@ -143,7 +143,7 @@ You can create a consumer class, that will handle all records received from the 
 ```bash
 $ php artisan make:kafka-consumer PriceUpdateConsumer
 ```
-This will create a KafkaConsumer class inside the application, on the `app/Kafka/Consumers/` directory
+This will create a KafkaConsumer class inside the application, on the `app/Kafka/Consumers/` directory.
 
 There, you'll have a `handler` method, which will send all records from the topic to the Consumer.
 Methods will be available for handling exceptions:
@@ -238,16 +238,16 @@ stdout_logfile=/var/log/default/kafka-consumer-price-update.log
 
 Although you can run this simple command, we've some options you can pass to make it more flexible to your needs.
 
-If you wish do specify in which partition the consumer must be attached, you can set the option `--partition=1`
+If you wish do specify in which partition the consumer must be attached, you can set the option `--partition=`
 
 And if you need to start the consumption of a topic in a specific offset (it can be useful for debug purposes)
-you can pass the `--offset=23` option, but for this, it will be required to specify the partition too.
+you can pass the `--offset=` option, but for this, it will be required to specify the partition too.
 
 An example of how it would be using all this options, for example, we would run a consumer for a price topic
 getting records from the second partition and an offset of 34:
 
 ```bash
-$ php artisan kafka:consume price-update --partition=2 --offset=23
+$ php artisan kafka:consume price-update --partition=2 --offset=34
 ```
 
 Also, you can specify what would be the timeout for the consumer, by using the `--timeout=` option, the time is in milliseconds.

@@ -7,19 +7,9 @@ use RdKafka\ProducerTopic;
 
 class Connector
 {
-    /**
-     * @var Config
-     */
-    protected $config;
-
-    public function __construct(Config $config)
+    public function getProducer(Config $config): ProducerTopic
     {
-        $this->config = $config;
-    }
-
-    public function getProducer(): ProducerTopic
-    {
-        $broker = $this->config->getBrokerConfig();
+        $broker = $config->getBrokerConfig();
 
         $conf = resolve(Conf::class);
 
@@ -29,6 +19,6 @@ class Connector
 
         $producer = new \RdKafka\Producer($conf);
 
-        return $producer->newTopic($this->config->getTopic());
+        return $producer->newTopic($config->getTopic());
     }
 }

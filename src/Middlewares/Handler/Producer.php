@@ -8,12 +8,21 @@ use Metamorphosis\Record\Record;
 
 class Producer implements Middleware
 {
+    /**
+     * @var Connector
+     */
+    private $connector;
+
+    public function __construct(Connector $connector)
+    {
+        $this->connector = $connector;
+    }
+
     public function process(Record $record, MiddlewareHandler $handler): void
     {
-        $config = new Config($record->getTopicName());
+        $config = app(Config::class, ['topic' => $record->getTopicName()]);
 
-        $connector = new Connector($config);
-        $producer = $connector->getProducer();
+        $producer = $this->connector->getProducer($config);
 
         $producer->produce($record->getPartition(), 0, $record->getPayload(), $record->getKey());
     }

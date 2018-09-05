@@ -60,12 +60,12 @@ class ProducerRecord implements Record
         return $this->topic;
     }
 
-    public function getPartition(): int
+    public function getPartition(): ?int
     {
         return $this->partition;
     }
 
-    public function getKey(): string
+    public function getKey(): ?string
     {
         return $this->key;
     }

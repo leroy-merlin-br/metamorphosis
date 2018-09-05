@@ -13,9 +13,9 @@ class ConnectorTest extends LaravelTestCase
     {
         $config = $this->createMock(Config::class);
 
-        $connector = new Connector($config);
+        $connector = new Connector();
 
-        $producer = $connector->getProducer();
+        $producer = $connector->getProducer($config);
 
         $this->assertInstanceOf(ProducerTopic::class, $producer);
     }

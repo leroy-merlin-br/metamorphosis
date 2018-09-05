@@ -31,16 +31,16 @@ interface Record
     /**
      * Get the partition number where the record was published.
      *
-     * @return int
+     * @return int|null
      */
-    public function getPartition(): int;
+    public function getPartition();
 
     /**
      * Get the record key.
      *
-     * @return string
+     * @return string|null
      */
-    public function getKey(): string;
+    public function getKey();
 
     /**
      * Get original record when manipulating the topic.

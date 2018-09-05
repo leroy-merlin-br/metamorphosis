@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\Config;
+use Metamorphosis\Config\Producer as ProducerConfig;
 use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Middlewares\Middleware;
 use Metamorphosis\Record\Record;
@@ -20,7 +20,7 @@ class Producer implements Middleware
 
     public function process(Record $record, MiddlewareHandler $handler): void
     {
-        $config = app(Config::class, ['topic' => $record->getTopicName()]);
+        $config = app(ProducerConfig::class, ['topic' => $record->getTopicName()]);
 
         $producer = $this->connector->getProducer($config);
 

@@ -1,14 +1,14 @@
 <?php
 namespace Metamorphosis\Connectors\Producer;
 
-use Metamorphosis\Config;
+use Metamorphosis\Config\Producer;
 use RdKafka\Conf;
 use RdKafka\Producer as KafkaProducer;
 use RdKafka\ProducerTopic;
 
 class Connector
 {
-    public function getProducer(Config $config): ProducerTopic
+    public function getProducer(Producer $config): ProducerTopic
     {
         $broker = $config->getBrokerConfig();
 

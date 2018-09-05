@@ -2,7 +2,7 @@
 namespace Test;
 
 use Metamorphosis\Broker;
-use Metamorphosis\Config;
+use Metamorphosis\Config\Consumer;
 use Metamorphosis\Connectors\Consumer\HighLevel;
 use Metamorphosis\Consumers\HighLevel as HighLevelConsumer;
 use RdKafka\ConsumerTopic;
@@ -13,7 +13,7 @@ class HighLevelTest extends LaravelTestCase
     /** @test */
     public function it_should_make_connector_setup()
     {
-        $config = $this->createMock(Config::class);
+        $config = $this->createMock(Consumer::class);
         $this->app->instance(ConsumerTopic::class, $this->createMock(ConsumerTopic::class));
 
         $connector = new HighLevel($config);

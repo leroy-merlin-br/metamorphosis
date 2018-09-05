@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Connectors\Consumer;
 
-use Metamorphosis\Config;
+use Metamorphosis\Config\Consumer;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\Connectors\Consumer\HighLevel;
 use Metamorphosis\Connectors\Consumer\LowLevel;
@@ -47,7 +47,7 @@ class ConnectorFactoryTest extends LaravelTestCase
     /** @test */
     public function it_makes_low_level_class()
     {
-        $config = new Config('topic-key', 'with-partition', 3, 0);
+        $config = new Consumer('topic-key', 'with-partition', 3, 0);
 
         $lowLevelConnector = ConnectorFactory::make($config);
 
@@ -57,7 +57,7 @@ class ConnectorFactoryTest extends LaravelTestCase
     /** @test */
     public function it_makes_high_level_class()
     {
-        $config = new Config('topic-key', 'without-partition');
+        $config = new Consumer('topic-key', 'without-partition');
 
         $highLevelConnector = ConnectorFactory::make($config);
 

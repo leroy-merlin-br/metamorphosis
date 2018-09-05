@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\Config;
+use Metamorphosis\Config\Consumer as ConsumerConfig;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
 use RdKafka\Conf;
@@ -11,11 +11,11 @@ use RdKafka\TopicConf;
 class LowLevel implements ConnectorInterface
 {
     /**
-     * @var Config
+     * @var ConsumerConfig
      */
     protected $config;
 
-    public function __construct(Config $config)
+    public function __construct(ConsumerConfig $config)
     {
         $this->config = $config;
     }

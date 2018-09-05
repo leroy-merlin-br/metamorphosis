@@ -2,7 +2,7 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
-use Metamorphosis\Config;
+use Metamorphosis\Config\Consumer;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\Runner;
 use RuntimeException;
@@ -26,7 +26,7 @@ class Command extends BaseCommand
             throw new RuntimeException('Not enough options ("partition" is required when "offset" is supplied).');
         }
 
-        $config = new Config(
+        $config = new Consumer(
             $this->argument('topic'),
             $this->argument('consumer-group'),
             $this->getIntOption('partition'),

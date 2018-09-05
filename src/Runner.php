@@ -2,6 +2,7 @@
 namespace Metamorphosis;
 
 use Exception;
+use Metamorphosis\Config\Consumer;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
@@ -26,7 +27,7 @@ class Runner
      */
     protected $handler;
 
-    public function run(Config $config, ConsumerInterface $consumer): void
+    public function run(Consumer $config, ConsumerInterface $consumer): void
     {
         $this->handler = $config->getConsumerHandler();
 

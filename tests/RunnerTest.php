@@ -2,7 +2,7 @@
 namespace Tests;
 
 use Exception;
-use Metamorphosis\Config;
+use Metamorphosis\Config\Consumer;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Runner;
 use RdKafka\Message as KafkaMessage;
@@ -54,7 +54,7 @@ class RunnerTest extends LaravelTestCase
 
         $topicKey = 'topic-key';
         $consumerGroup = 'consumer-id';
-        $config = new Config($topicKey, $consumerGroup);
+        $config = new Consumer($topicKey, $consumerGroup);
 
         $middleware = $this->createMock(MiddlewareDummy::class);
         $this->app->instance(MiddlewareDummy::class, $middleware);

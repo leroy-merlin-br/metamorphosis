@@ -63,4 +63,19 @@ class ProducerRecordTest extends LaravelTestCase
 
         $this->assertSame($key, $record->getKey());
     }
+
+    /** @test */
+    public function it_should_override_payload()
+    {
+        $originalMessage = ['message' => 'original record'];
+        $changedMessage = ['message' => 'changed record'];
+        $topicName = 'some-topic';
+
+        $record = new Record($originalMessage, $topicName);
+
+        $record->setPayload($changedMessage);
+
+        $this->assertSame($originalMessage, $record->getOriginal());
+        $this->assertSame($changedMessage, $record->getPayload());
+    }
 }

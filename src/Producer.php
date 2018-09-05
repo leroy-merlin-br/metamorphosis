@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis;
 
-use Metamorphosis\Config\Consumer;
+use Metamorphosis\Config\Producer as ProducerConfig;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Record\ProducerRecord;
@@ -15,7 +15,7 @@ class Producer
 
     public function produce($record, $topic, $partition = null, $key = null): void
     {
-        $config = new Consumer($topic);
+        $config = new ProducerConfig($topic);
 
         $this->setMiddlewareDispatcher($config->getMiddlewares());
 

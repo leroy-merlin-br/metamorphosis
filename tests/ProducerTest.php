@@ -3,7 +3,6 @@ namespace Tests;
 
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer;
-use Tests\Dummies\ConsumerHandlerDummy;
 
 class ProducerTest extends LaravelTestCase
 {
@@ -34,13 +33,6 @@ class ProducerTest extends LaravelTestCase
                     'some-topic' => [
                         'topic' => 'topic-name',
                         'broker' => 'default',
-                        'consumer-groups' => [
-                            'default' => [
-                                'offset-reset' => 'earliest',
-                                'offset' => 0,
-                                'consumer' => ConsumerHandlerDummy::class,
-                            ],
-                        ],
                     ],
                 ],
             ],

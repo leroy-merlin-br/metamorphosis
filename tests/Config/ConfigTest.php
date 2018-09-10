@@ -4,9 +4,7 @@ namespace Tests\Config;
 use Metamorphosis\Authentication\NoAuthentication;
 use Metamorphosis\Broker;
 use Metamorphosis\Config\Config;
-use Metamorphosis\Config\Consumer;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase

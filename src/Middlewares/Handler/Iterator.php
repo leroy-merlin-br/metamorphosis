@@ -14,10 +14,6 @@ class Iterator extends AbstractMiddlewareHandler
 
         if ($middleware instanceof Middleware) {
             $middleware->process($record, $this);
-
-            return;
         }
-
-        $middleware($record, $this);
     }
 }

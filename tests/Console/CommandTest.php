@@ -110,4 +110,25 @@ class CommandTest extends LaravelTestCase
 
         $this->artisan($command, $parameters);
     }
+
+    /** @test */
+    public function it_accepts_timeout_when_calling_command()
+    {
+        $runner = $this->createMock(Runner::class);
+        $this->instance(Runner::class, $runner);
+
+        $runner->expects($this->once())
+            ->method('run')
+            ->with($this->anything(), $this->callback(function ($subject) {
+                return $subject instanceof HighLevel;
+            }));
+
+        $command = 'kafka:consume';
+        $parameters = [
+            'topic' => 'topic-key',
+            '--timeout' => 1,
+        ];
+
+        $this->artisan($command, $parameters);
+    }
 }

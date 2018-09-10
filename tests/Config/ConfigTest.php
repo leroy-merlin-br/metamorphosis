@@ -50,7 +50,8 @@ class ConfigTest extends LaravelTestCase
     public function it_parses_configuration_from_file()
     {
         $topicKey = 'topic-key';
-        $config =  new class($topicKey) extends Config {};
+        $config = new class($topicKey) extends Config {
+        };
 
         $this->assertSame('topic-name', $config->getTopic());
         $this->assertInstanceOf(Broker::class, $config->getBrokerConfig());
@@ -72,7 +73,8 @@ class ConfigTest extends LaravelTestCase
         ]);
         $topicKey = 'topic-key';
 
-        $config = new class($topicKey) extends Config{};
+        $config = new class($topicKey) extends Config {
+        };
         $broker = $config->getBrokerConfig();
 
         $this->assertInstanceOf(NoAuthentication::class, $broker->getAuthentication());
@@ -86,7 +88,8 @@ class ConfigTest extends LaravelTestCase
         $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage("Topic 'invalid-topic-key' not found");
 
-        new class($topicKey) extends Config{};
+        new class($topicKey) extends Config {
+        };
     }
 
     /** @test */
@@ -103,7 +106,8 @@ class ConfigTest extends LaravelTestCase
         $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage("Broker 'invalid-broker' configuration not found");
 
-        new class($topicKey) extends Config{};
+        new class($topicKey) extends Config {
+        };
     }
 
     /** @test */
@@ -118,7 +122,8 @@ class ConfigTest extends LaravelTestCase
         ]);
         $topicKey = 'topic-key';
 
-        $config = new class($topicKey) extends Config{};
+        $config = new class($topicKey) extends Config {
+        };
         $broker = $config->getBrokerConfig();
 
         $this->assertSame('https:some-connection.com:8991,https:some-connection.com:8992', $broker->getConnections());
@@ -139,7 +144,8 @@ class ConfigTest extends LaravelTestCase
         ]);
         $topicKey = 'topic-key';
 
-        $config = new class($topicKey) extends Config{};
+        $config = new class($topicKey) extends Config {
+        };
         $broker = $config->getBrokerConfig();
 
         $this->assertSame('https:some-connection.com:8991,https:some-connection.com:8992', $broker->getConnections());
@@ -165,7 +171,8 @@ class ConfigTest extends LaravelTestCase
         ]);
 
         $topicKey = 'topic-key';
-        $config = new class($topicKey) extends Config{};
+        $config = new class($topicKey) extends Config {
+        };
 
         $this->assertEmpty($config->getMiddlewares());
     }

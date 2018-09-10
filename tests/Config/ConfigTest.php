@@ -1,12 +1,13 @@
 <?php
-namespace Tests;
+namespace Tests\Config;
 
 use Metamorphosis\Authentication\NoAuthentication;
 use Metamorphosis\Broker;
+use Metamorphosis\Config\Config;
 use Metamorphosis\Config\Consumer;
-use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Tests\Dummies\ConsumerHandlerDummy;
+use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase
 {
@@ -31,21 +32,6 @@ class ConfigTest extends LaravelTestCase
                     'topic-key' => [
                         'topic' => 'topic-name',
                         'broker' => 'default',
-                        'consumer-groups' => [
-                            'default' => [
-                                'offset-reset' => 'earliest',
-                                'offset' => 0,
-                                'consumer' => ConsumerHandlerDummy::class,
-                            ],
-                            'consumer-id' => [
-                                'offset-reset' => 'initial',
-                                'offset' => 0,
-                                'consumer' => ConsumerHandlerDummy::class,
-                                'middlewares' => [
-                                    'first_consumer_middleware',
-                                ],
-                            ],
-                        ],
                         'middlewares' => [
                             'first_global_middleware',
                             'first_topic_middleware',
@@ -66,55 +52,14 @@ class ConfigTest extends LaravelTestCase
     public function it_parses_configuration_from_file()
     {
         $topicKey = 'topic-key';
-        $consumerGroup = 'consumer-id';
-        $config = new Consumer($topicKey, $consumerGroup);
+        $config =  new class($topicKey) extends Config {};
 
         $this->assertSame('topic-name', $config->getTopic());
-        $this->assertSame('consumer-id', $config->getConsumerGroupId());
-        $this->assertSame('initial', $config->getConsumerOffsetReset());
-        $this->assertSame(0, $config->getConsumerOffset());
-        $this->assertInstanceOf(ConsumerTopicHandler::class, $config->getConsumerHandler());
         $this->assertInstanceOf(Broker::class, $config->getBrokerConfig());
         $this->assertSame([
             'first_global_middleware',
-            'second_global_middleware',
             'first_topic_middleware',
-            'first_consumer_middleware',
         ], $config->getMiddlewares());
-    }
-
-    /** @test */
-    public function it_gets_default_consumer_group_when_none_is_passed()
-    {
-        $topicKey = 'topic-key';
-        $config = new Consumer($topicKey);
-
-        $this->assertSame('default', $config->getConsumerGroupId());
-    }
-
-    /** @test */
-    public function it_gets_single_consumer_group_defined()
-    {
-        config([
-            'kafka.topics' => [
-                'topic-key' => [
-                    'topic' => 'topic-name',
-                    'broker' => 'default',
-                    'consumer-groups' => [
-                        'any-name' => [
-                            'offset-reset' => 'earliest',
-                            'offset' => 0,
-                            'consumer' => ConsumerHandlerDummy::class,
-                        ],
-                    ],
-                ],
-            ],
-        ]);
-
-        $topicKey = 'topic-key';
-        $config = new Consumer($topicKey);
-
-        $this->assertSame('any-name', $config->getConsumerGroupId());
     }
 
     /** @test */
@@ -129,7 +74,7 @@ class ConfigTest extends LaravelTestCase
         ]);
         $topicKey = 'topic-key';
 
-        $config = new Consumer($topicKey);
+        $config = new class($topicKey) extends Config{};
         $broker = $config->getBrokerConfig();
 
         $this->assertInstanceOf(NoAuthentication::class, $broker->getAuthentication());
@@ -139,24 +84,11 @@ class ConfigTest extends LaravelTestCase
     public function it_throws_an_exception_when_topic_key_is_invalid()
     {
         $topicKey = 'invalid-topic-key';
-        $consumerGroup = 'consumer-id';
 
         $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage("Topic 'invalid-topic-key' not found");
 
-        new Consumer($topicKey, $consumerGroup);
-    }
-
-    /** @test */
-    public function it_throws_an_exception_when_consumer_group_is_invalid()
-    {
-        $topicKey = 'topic-key';
-        $consumerGroup = 'invalid-consumer-id';
-
-        $this->expectException(ConfigurationException::class);
-        $this->expectExceptionMessage("Consumer group 'invalid-consumer-id' not found");
-
-        new Consumer($topicKey, $consumerGroup);
+        new class($topicKey) extends Config{};
     }
 
     /** @test */
@@ -166,22 +98,14 @@ class ConfigTest extends LaravelTestCase
             'topic-key' => [
                 'topic' => 'topic-name',
                 'broker' => 'invalid-broker',
-                'consumer-groups' => [
-                    'default' => [
-                        'offset-reset' => 'earliest',
-                        'offset' => 0,
-                        'consumer' => ConsumerHandlerDummy::class,
-                    ],
-                ],
             ],
         ]]);
         $topicKey = 'topic-key';
-        $consumerGroup = 'default';
 
         $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage("Broker 'invalid-broker' configuration not found");
 
-        new Consumer($topicKey, $consumerGroup);
+        new class($topicKey) extends Config{};
     }
 
     /** @test */
@@ -196,7 +120,7 @@ class ConfigTest extends LaravelTestCase
         ]);
         $topicKey = 'topic-key';
 
-        $config = new Consumer($topicKey);
+        $config = new class($topicKey) extends Config{};
         $broker = $config->getBrokerConfig();
 
         $this->assertSame('https:some-connection.com:8991,https:some-connection.com:8992', $broker->getConnections());
@@ -217,7 +141,7 @@ class ConfigTest extends LaravelTestCase
         ]);
         $topicKey = 'topic-key';
 
-        $config = new Consumer($topicKey);
+        $config = new class($topicKey) extends Config{};
         $broker = $config->getBrokerConfig();
 
         $this->assertSame('https:some-connection.com:8991,https:some-connection.com:8992', $broker->getConnections());
@@ -237,21 +161,13 @@ class ConfigTest extends LaravelTestCase
                     'topic-key' => [
                         'topic' => 'topic-name',
                         'broker' => 'default',
-                        'consumer-groups' => [
-                            'consumer-id' => [
-                                'offset-reset' => 'initial',
-                                'offset' => 0,
-                                'consumer' => ConsumerHandlerDummy::class,
-                            ],
-                        ],
                     ],
                 ],
             ],
         ]);
 
         $topicKey = 'topic-key';
-        $consumerGroup = 'consumer-id';
-        $config = new Consumer($topicKey, $consumerGroup);
+        $config = new class($topicKey) extends Config{};
 
         $this->assertEmpty($config->getMiddlewares());
     }

@@ -48,8 +48,13 @@ They behave similar to [PSR-15](https://www.php-fig.org/psr/psr-15/) middlewares
 of returning a `Response`, they are intended to transform, validate or do any kind of manipulation on the record's payload.
 After that, they delegate the proccess back to the `MiddlewareHandler`. They can prevent the record to reach the consumer class by throwing an exception.
 
-This package comes with two middlewares, `\Metamorphosis\Middlewares\Log` and `\Metamorphosis\Middlewares\AvroDecode`, but you can create your own
-using the `php artisan make:kafka-middleware` command.
+This package comes with the following middlewares:
+
+- `\Metamorphosis\Middlewares\AvroDecode`
+- `\Metamorphosis\Middlewares\JsonDecode`
+- `\Metamorphosis\Middlewares\Log`
+
+You can easily create your own middleware using the command `php artisan make:kafka-middleware`.
 
 Example:
 

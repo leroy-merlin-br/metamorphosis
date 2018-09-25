@@ -1,8 +1,8 @@
 <?php
 namespace Metamorphosis;
 
-use JsonException;
 use Metamorphosis\Config\Producer as ProducerConfig;
+use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Record\ProducerRecord;
@@ -53,7 +53,7 @@ class Producer
         $record = json_encode($record);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new JsonException('Cannot convert data into a valid JSON: '.json_last_error_msg());
+            throw new JsonException('Cannot convert data into a valid JSON. Reason: '.json_last_error_msg());
         }
 
         return $record;

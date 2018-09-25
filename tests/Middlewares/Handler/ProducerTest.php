@@ -12,13 +12,15 @@ class ProducerTest extends LaravelTestCase
     /** @test */
     public function it_should_process()
     {
+        // Set
         $connector = $this->createMock(Connector::class);
         $this->app->instance(Connector::class, $connector);
+        $record = json_encode(['message' => 'original record']);
 
         $producerHandler = new Producer($connector);
         $middlewareHandler = $this->createMock(MiddlewareHandler::class);
 
-        $record = new ProducerRecord(['message' => 'original record'], 'topic-key');
+        $record = new ProducerRecord($record, 'topic-key');
 
         $this->assertNull($producerHandler->process($record, $middlewareHandler));
     }

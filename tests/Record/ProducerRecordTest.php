@@ -9,7 +9,7 @@ class ProducerRecordTest extends LaravelTestCase
     /** @test */
     public function it_should_get_message()
     {
-        $message = ['message' => 'original record'];
+        $message = json_encode(['message' => 'original record']);
         $topicName = 'some-topic';
 
         $record = new Record($message, $topicName);
@@ -20,7 +20,7 @@ class ProducerRecordTest extends LaravelTestCase
     /** @test */
     public function it_should_get_original_message()
     {
-        $message = ['message' => 'original record'];
+        $message = json_encode(['message' => 'original record']);
         $topicName = 'some-topic';
 
         $record = new Record($message, $topicName);
@@ -31,7 +31,7 @@ class ProducerRecordTest extends LaravelTestCase
     /** @test */
     public function it_should_get_topic_name()
     {
-        $message = ['message' => 'original record'];
+        $message = json_encode(['message' => 'original record']);
         $topicName = 'some-topic';
 
         $record = new Record($message, $topicName);
@@ -42,7 +42,7 @@ class ProducerRecordTest extends LaravelTestCase
     /** @test */
     public function it_should_get_partition()
     {
-        $message = ['message' => 'original record'];
+        $message = json_encode(['message' => 'original record']);
         $topicName = 'some-topic';
         $partition = 0;
 
@@ -54,7 +54,7 @@ class ProducerRecordTest extends LaravelTestCase
     /** @test */
     public function it_should_get_key()
     {
-        $message = ['message' => 'original record'];
+        $message = json_encode(['message' => 'original record']);
         $topicName = 'some-topic';
         $partition = 0;
         $key = 'message-key';
@@ -67,8 +67,8 @@ class ProducerRecordTest extends LaravelTestCase
     /** @test */
     public function it_should_override_payload()
     {
-        $originalMessage = ['message' => 'original record'];
-        $changedMessage = ['message' => 'changed record'];
+        $originalMessage = json_encode(['message' => 'original record']);
+        $changedMessage = json_encode(['message' => 'changed record']);
         $topicName = 'some-topic';
 
         $record = new Record($originalMessage, $topicName);

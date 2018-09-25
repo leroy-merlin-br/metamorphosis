@@ -36,7 +36,7 @@ class ProducerRecord implements Record
      */
     protected $topic;
 
-    public function __construct($payload, $topic, $partition = null, $key = null)
+    public function __construct(string $payload, string $topic, int $partition = null, string $key = null)
     {
         $this->payload = $payload;
         $this->original = $payload;
@@ -50,7 +50,7 @@ class ProducerRecord implements Record
         $this->payload = $payload;
     }
 
-    public function getPayload()
+    public function getPayload(): string
     {
         return $this->payload;
     }

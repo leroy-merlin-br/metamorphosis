@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 use Metamorphosis\Console\Command;
 use Metamorphosis\Console\ConsumerMakeCommand;
@@ -24,5 +25,10 @@ class MetamorphosisServiceProvider extends ServiceProvider
             ConsumerMakeCommand::class,
             MiddlewareMakeCommand::class,
         ]);
+
+        App::bind('metamorphosis', function()
+        {
+            return new Producer();
+        });
     }
 }

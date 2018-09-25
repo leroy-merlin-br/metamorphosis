@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Middlewares\Handler;
 
-use Metamorphosis\TopicHandler\Consumer\AbstractHandler as ConsumerTopicHandler;
+use Metamorphosis\ConsumerHandler\AbstractHandler as ConsumerTopicHandler;
 use Metamorphosis\Record\ConsumerRecord as Record;
 use Metamorphosis\Middlewares\Handler\Consumer;
 use RdKafka\Message as KafkaMessage;

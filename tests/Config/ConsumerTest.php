@@ -2,7 +2,7 @@
 namespace Tests\Config;
 
 use Metamorphosis\Config\Consumer;
-use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
+use Metamorphosis\ConsumerHandler\Handler as ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;

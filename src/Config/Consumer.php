@@ -84,7 +84,6 @@ class Consumer extends Config
         $consumerConfig = $topicConfig['consumer-groups'][$consumerGroupId] ?? null;
 
         if (!$consumerConfig) {
-            // maybe create configs specific for each type (consumer/producer)
             throw new ConfigurationException("Consumer group '{$consumerGroupId}' not found");
         }
 

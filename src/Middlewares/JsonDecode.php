@@ -3,7 +3,7 @@ namespace Metamorphosis\Middlewares;
 
 use Exception;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
-use Metamorphosis\Record;
+use Metamorphosis\Record\Record;
 
 class JsonDecode implements Middleware
 {

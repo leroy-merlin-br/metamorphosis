@@ -4,7 +4,7 @@ namespace Tests\Middlewares;
 use Exception;
 use Metamorphosis\Middlewares\Handler\Iterator;
 use Metamorphosis\Middlewares\JsonDecode;
-use Metamorphosis\Record;
+use Metamorphosis\Record\ConsumerRecord;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
 
@@ -23,7 +23,7 @@ class JsonDecodeTest extends LaravelTestCase
         $kafkaMessage->payload = $json;
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $record = new Record($kafkaMessage);
+        $record = new ConsumerRecord($kafkaMessage);
 
         $handler = $this->createMock(Iterator::class);
 
@@ -47,7 +47,7 @@ class JsonDecodeTest extends LaravelTestCase
         $kafkaMessage->payload = $json;
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $record = new Record($kafkaMessage);
+        $record = new ConsumerRecord($kafkaMessage);
 
         $handler = $this->createMock(Iterator::class);
 

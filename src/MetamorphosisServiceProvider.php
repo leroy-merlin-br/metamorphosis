@@ -26,8 +26,7 @@ class MetamorphosisServiceProvider extends ServiceProvider
             MiddlewareMakeCommand::class,
         ]);
 
-        App::bind('metamorphosis', function()
-        {
+        App::bind('metamorphosis', function () {
             return new Producer();
         });
     }

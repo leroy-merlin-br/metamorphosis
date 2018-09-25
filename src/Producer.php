@@ -14,7 +14,21 @@ class Producer
      */
     public $middlewareDispatcher;
 
-    public function produce($record, $topic, $partition = null, $key = null): void
+    /**
+     * @param array|string $record An array or string with the payload to be send in a topic.
+     *                             If an array is passed, it will be json_encoded before send.
+     *                             If string is passed, it will already be treated as json
+     * @param string       $topic The key name for the topic which the record should be send to.
+     *                            This key is the one set inside the config/kafka.php file.
+     * @param int|null     $partition The partition where the record should be send.
+     * @param string|null  $key The key that defines which partition kafka will put the record.
+     *                          If a key is passed, kafka can guarantee order inside a group of consumers.
+     *                          If no key is passed, kafka cannot guarantee that the record will be delivery
+     *                          in any order, even when inside a same consumer group.
+     *
+     * @throws JsonException When an array is passed and something wrong happens while encoding the array into json.
+     */
+    public function produce($record, string $topic, int $partition = null, string $key = null): void
     {
         $config = new ProducerConfig($topic);
 

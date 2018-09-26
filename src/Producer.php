@@ -2,10 +2,12 @@
 namespace Metamorphosis;
 
 use Metamorphosis\Config\Producer as ProducerConfig;
+use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Record\ProducerRecord;
+use Metamorphosis\TopicHandler\Producer\Handler;
 
 class Producer
 {
@@ -15,28 +17,32 @@ class Producer
     public $middlewareDispatcher;
 
     /**
-     * @param array|string $record    An array or string with the payload to be send in a topic.
-     *                                If an array is passed, it will be json_encoded before send.
-     *                                If string is passed, it will already be treated as json
-     * @param string       $topic     The key name for the topic which the record should be send to.
-     *                                This key is the one set inside the config/kafka.php file.
-     * @param int|null     $partition The partition where the record should be send
-     * @param string|null  $key       The key that defines which partition kafka will put the record.
-     *                                If a key is passed, kafka can guarantee order inside a group of consumers.
-     *                                If no key is passed, kafka cannot guarantee that the record will be delivery
-     *                                in any order, even when inside a same consumer group.
-     *
-     * @throws JsonException When an array is passed and something wrong happens while encoding it into json
+     * @var Handler
      */
-    public function produce($record, string $topic, int $partition = null, string $key = null): void
+    private $producerHandler;
+
+    /**
+     * @param Handler $producerHandler
+     *
+     * @throws \Metamorphosis\Exceptions\JsonException When an array is passed and something wrong happens while encoding it into json
+     */
+    public function produce(Handler $producerHandler): void
     {
-        $config = new ProducerConfig($topic);
+        $this->producerHandler = $producerHandler;
+
+        $config = new ProducerConfig($producerHandler->getTopic());
 
         $this->setMiddlewareDispatcher($config->getMiddlewares());
+
+        $record = $producerHandler->getRecord();
 
         if (is_array($record)) {
             $record = $this->encodeRecord($record);
         }
+
+        $topic = $producerHandler->getTopic();
+        $partition = $producerHandler->getPartition();
+        $key = $producerHandler->getKey();
 
         $record = new ProducerRecord($record, $topic, $partition, $key);
         $this->middlewareDispatcher->handle($record);
@@ -44,7 +50,11 @@ class Producer
 
     protected function setMiddlewareDispatcher(array $middlewares)
     {
-        $middlewares[] = app(ProducerMiddleware::class);
+        $middlewares[] = app(ProducerMiddleware::class, [
+            'connector' => app(Connector::class),
+            'producerHandler' => $this->producerHandler,
+        ]);
+
         $this->middlewareDispatcher = new Dispatcher($middlewares);
     }
 

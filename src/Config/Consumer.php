@@ -2,7 +2,7 @@
 namespace Metamorphosis\Config;
 
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\ConsumerHandler\Handler;
+use Metamorphosis\TopicHandler\Consumer\Handler;
 
 /**
  * Maps configuration from config file and provides access to them via methods.

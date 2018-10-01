@@ -31,8 +31,10 @@ class Producer implements Middleware
 
         $this->connector->setHandler($this->producerHandler);
 
-        $producer = $this->connector->getProducer($config);
+        $producer = $this->connector->getProducerTopic($config);
 
         $producer->produce($record->getPartition(), 0, $record->getPayload(), $record->getKey());
+
+        $this->connector->handleResponsesFromBroker();
     }
 }

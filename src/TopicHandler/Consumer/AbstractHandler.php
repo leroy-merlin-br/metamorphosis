@@ -1,5 +1,5 @@
 <?php
-namespace Metamorphosis\ConsumerHandler;
+namespace Metamorphosis\TopicHandler\Consumer;
 
 use Exception;
 use Metamorphosis\Exceptions\ResponseWarningException;

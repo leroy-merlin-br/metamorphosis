@@ -1,8 +1,6 @@
 <?php
 namespace Metamorphosis\TopicHandler\Producer;
 
-use RdKafka\Message;
-
 interface Handler
 {
     /**
@@ -18,10 +16,6 @@ interface Handler
      * @param int|null     $partition The partition where the record should be send
      */
     public function __construct($record, string $topic, string $key = null, int $partition = null);
-
-    public function success(Message $message): void;
-
-    public function failed(Message $message): void;
 
     public function getRecord();
 

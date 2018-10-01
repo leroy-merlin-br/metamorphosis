@@ -1,27 +1,15 @@
 <?php declare(strict_types=1);
 namespace Metamorphosis\Config;
 
-use Metamorphosis\Broker;
-
 /**
  * Maps configuration from config file and provides access to them via methods.
  */
 class Producer extends Config
 {
     /**
-     * @var string
+     * @var int
      */
-    protected $topic;
-
-    /**
-     * @var Broker
-     */
-    protected $broker;
-
-    /**
-     * @var iterable
-     */
-    protected $middlewares = [];
+    protected $timeoutResponses = 50;
 
     public function __construct(string $topic)
     {
@@ -38,7 +26,19 @@ class Producer extends Config
             return;
         }
 
+        $this->setTimeoutResponse($producerConfig['timeout-responses'] ?? $this->timeoutResponses);
+
         $this->setMiddlewares($producerConfig['middlewares'] ?? []);
+    }
+
+    public function getTimeoutResponse(): int
+    {
+        return $this->timeoutResponses;
+    }
+
+    protected function setTimeoutResponse(int $timeout): void
+    {
+        $this->timeoutResponses = $timeout;
     }
 
     protected function setGlobalMiddlewares(): void

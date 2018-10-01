@@ -17,9 +17,11 @@ class ProducerHandlerDummy extends AbstractHandler implements HandleableResponse
 
     public function success(Message $message): void
     {
+        dump('success!');
     }
 
     public function failed(Message $message): void
     {
+        dump('failed!');
     }
 }

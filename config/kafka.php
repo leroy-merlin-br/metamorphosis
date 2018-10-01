@@ -70,6 +70,7 @@ return [
             ],
             'producer' => [
                 'middlewares' => [],
+                'timeout-responses' => 50,
             ],
         ],
     ],

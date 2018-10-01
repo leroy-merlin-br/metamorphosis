@@ -21,6 +21,11 @@ class Connector
      */
     private $handler;
 
+    /**
+     * @var int $timeoutInSeconds Timeout in seconds for the queue when getting messages from the broker for responses.
+     */
+    private $timeoutInSeconds;
+
     public function setHandler(Handler $handler)
     {
         $this->handler = $handler;
@@ -50,6 +55,7 @@ class Connector
 
         if ($this->canHandleResponse()) {
             $this->queue = app(Queue::class, ['producer' => $producer]);
+            $this->timeoutInSeconds = $config->getTimeoutResponse();
         }
 
         return $producer->newTopic($config->getTopic());
@@ -65,8 +71,7 @@ class Connector
             throw new \Exception('this should not happen at all');
         }
 
-        $timeoutInSeconds = 50;
-        $this->queue->poll($timeoutInSeconds);
+        $this->queue->poll($this->timeoutInSeconds);
     }
 
     private function canHandleResponse(): bool

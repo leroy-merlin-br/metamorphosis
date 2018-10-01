@@ -20,7 +20,6 @@ class Queue
     public function poll(int $timeout): void
     {
         while ($this->hasContent()) {
-            dump('polling');
             $this->producer->poll($timeout);
         }
     }

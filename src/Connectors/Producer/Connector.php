@@ -22,7 +22,7 @@ class Connector
     private $handler;
 
     /**
-     * @var int $timeoutInSeconds Timeout in seconds for the queue when getting messages from the broker for responses.
+     * @var int Timeout in seconds for the queue when getting messages from the broker for responses
      */
     private $timeoutInSeconds;
 
@@ -40,7 +40,7 @@ class Connector
         $conf->set('metadata.broker.list', $broker->getConnections());
 
         if ($this->canHandleResponse()) {
-            $conf->setDrMsgCb(function($kafka, Message $message) {
+            $conf->setDrMsgCb(function ($kafka, Message $message) {
                 if ($message->err) {
                     $this->handler->failed($message);
                 } else {
@@ -76,6 +76,6 @@ class Connector
 
     private function canHandleResponse(): bool
     {
-        return $this->handler instanceof HandleableResponse;
+        return $this->handler ? $this->handler instanceof HandleableResponse : false;
     }
 }

@@ -19,10 +19,9 @@ class Producer implements Middleware
      */
     private $producerHandler;
 
-    public function __construct(Connector $connector, Handler $producerHandler)
+    public function __construct(Connector $connector)
     {
         $this->connector = $connector;
-        $this->producerHandler = $producerHandler;
     }
 
     public function process(Record $record, MiddlewareHandler $handler): void
@@ -36,5 +35,10 @@ class Producer implements Middleware
         $producer->produce($record->getPartition(), 0, $record->getPayload(), $record->getKey());
 
         $this->connector->handleResponsesFromBroker();
+    }
+
+    public function setProducerHandler(Handler $handler)
+    {
+        $this->producerHandler = $handler;
     }
 }

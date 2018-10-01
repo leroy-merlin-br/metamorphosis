@@ -4,6 +4,7 @@ namespace Tests;
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer;
+use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 
 class ProducerTest extends LaravelTestCase
 {
@@ -12,10 +13,18 @@ class ProducerTest extends LaravelTestCase
     {
         $record = ['message' => 'some message'];
         $topic = 'some-topic';
+
         $this->app->instance(ProducerMiddleware::class, $this->createMock(ProducerMiddleware::class));
+        $producerHandler = new class($record, $topic) extends AbstractHandler {
+            public function __construct($record, string $topic, ?string $key = null, ?int $partition = null)
+            {
+                $this->record = $record;
+                $this->topic = $topic;
+            }
+        };
         $producer = new Producer();
 
-        $this->assertNull($producer->produce($record, $topic));
+        $this->assertNull($producer->produce($producerHandler));
     }
 
     /** @test */
@@ -25,8 +34,15 @@ class ProducerTest extends LaravelTestCase
         $topic = 'some-topic';
         $this->app->instance(ProducerMiddleware::class, $this->createMock(ProducerMiddleware::class));
         $producer = new Producer();
+        $producerHandler = new class($record, $topic) extends AbstractHandler {
+            public function __construct($record, string $topic, ?string $key = null, ?int $partition = null)
+            {
+                $this->record = $record;
+                $this->topic = $topic;
+            }
+        };
 
-        $this->assertNull($producer->produce($record, $topic));
+        $this->assertNull($producer->produce($producerHandler));
     }
 
     /** @test */
@@ -36,10 +52,17 @@ class ProducerTest extends LaravelTestCase
         $topic = 'some-topic';
         $this->app->instance(ProducerMiddleware::class, $this->createMock(ProducerMiddleware::class));
         $producer = new Producer();
+        $producerHandler = new class($record, $topic) extends AbstractHandler {
+            public function __construct($record, string $topic, ?string $key = null, ?int $partition = null)
+            {
+                $this->record = $record;
+                $this->topic = $topic;
+            }
+        };
 
         $this->expectException(JsonException::class);
 
-        $producer->produce($record, $topic);
+        $producer->produce($producerHandler);
     }
 
     public function setUp()

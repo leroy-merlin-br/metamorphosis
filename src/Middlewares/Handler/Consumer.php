@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\ConsumerHandler\Handler as ConsumerTopicHandler;
+use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
 use Metamorphosis\Middlewares\Middleware;
 use Metamorphosis\Record\Record;
 

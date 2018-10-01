@@ -15,7 +15,7 @@ class ConnectorTest extends LaravelTestCase
 
         $connector = new Connector();
 
-        $producer = $connector->getProducer($config);
+        $producer = $connector->getProducerTopic($config);
 
         $this->assertInstanceOf(ProducerTopic::class, $producer);
     }

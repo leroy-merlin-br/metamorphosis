@@ -2,7 +2,6 @@
 namespace Metamorphosis;
 
 use Metamorphosis\Config\Producer as ProducerConfig;
-use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
@@ -31,7 +30,6 @@ class Producer
         $this->producerHandler = $producerHandler;
 
         $config = new ProducerConfig($producerHandler->getTopic());
-
         $this->setMiddlewareDispatcher($config->getMiddlewares());
 
         $record = $producerHandler->getRecord();
@@ -50,10 +48,9 @@ class Producer
 
     protected function setMiddlewareDispatcher(array $middlewares)
     {
-        $middlewares[] = app(ProducerMiddleware::class, [
-            'connector' => app(Connector::class),
-            'producerHandler' => $this->producerHandler,
-        ]);
+        $producerMiddleware = app(ProducerMiddleware::class);
+        $producerMiddleware->setProducerHandler($this->producerHandler);
+        $middlewares[] = $producerMiddleware;
 
         $this->middlewareDispatcher = new Dispatcher($middlewares);
     }

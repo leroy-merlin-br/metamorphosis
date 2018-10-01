@@ -3,7 +3,7 @@ namespace Metamorphosis;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
-use Metamorphosis\Console\Command;
+use Metamorphosis\Console\ConsumerCommand;
 use Metamorphosis\Console\ConsumerMakeCommand;
 use Metamorphosis\Console\MiddlewareMakeCommand;
 
@@ -21,7 +21,7 @@ class MetamorphosisServiceProvider extends ServiceProvider
     public function register()
     {
         $this->commands([
-            Command::class,
+            ConsumerCommand::class,
             ConsumerMakeCommand::class,
             MiddlewareMakeCommand::class,
         ]);

@@ -7,7 +7,7 @@ use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\Runner;
 use RuntimeException;
 
-class Command extends BaseCommand
+class ConsumerCommand extends BaseCommand
 {
     protected $name = 'kafka:consume';
 

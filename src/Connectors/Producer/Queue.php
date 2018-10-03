@@ -25,7 +25,7 @@ class Queue
     }
 
     /**
-     * Checks if the kafka inner-queue for response messages has any content for being retrieved
+     * Checks if the kafka inner-queue for response messages has any content for being retrieved.
      *
      * @return bool
      */

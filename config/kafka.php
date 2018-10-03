@@ -63,7 +63,7 @@ return [
             'consumer-groups' => [
                 'default' => [
                     'offset-reset' => 'largest',
-                    'offset' => RD_KAFKA_OFFSET_BEGINNING,
+                    'offset' => 0,
                     'partition' => null,
                     'consumer' => '\App\Kafka\Consumers\ConsumerExample',
                 ],

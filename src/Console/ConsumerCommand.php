@@ -33,12 +33,17 @@ class ConsumerCommand extends BaseCommand
             $this->getIntOption('offset')
         );
 
+        $this->writeStartingConsumer($config);
+
         $connector = ConnectorFactory::make($config);
+
+        $this->writeConnectingBroker($config);
 
         if ($timeout = $this->option('timeout')) {
             $runner->setTimeout($timeout);
         }
 
+        $this->output->writeln('Running consumer..');
         $runner->run($config, $connector->getConsumer());
     }
 
@@ -47,5 +52,18 @@ class ConsumerCommand extends BaseCommand
         return !is_null($this->option($option))
             ? (int) $this->option($option)
             : null;
+    }
+
+    private function writeStartingConsumer(Config $config)
+    {
+        $text = 'Starting consumer for topic: '.$config->getTopic();
+        $text .= ' on consumer group: '.$config->getConsumerGroupId();
+
+        $this->output->writeln($text);
+    }
+
+    private function writeConnectingBroker(Config $config)
+    {
+        $this->output->writeln('Connecting in '.$config->getBrokerConfig()->getConnections());
     }
 }

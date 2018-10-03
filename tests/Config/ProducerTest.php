@@ -24,13 +24,33 @@ class ProducerTest extends LaravelTestCase
                     ],
                 ],
                 'topics' => [
-                    'topic-key' => [
+                    'topic-key-basic' => [
+                        'topic' => 'topic-name',
+                        'broker' => 'default',
+                        'middlewares' => [
+                            'first_global_middleware',
+                            'first_topic_middleware',
+                        ],
+                    ],
+                    'topic-key-partial' => [
+                        'topic' => 'topic-name',
+                        'broker' => 'default',
+                        'producer' => [
+                            'timeout-responses' => 80,
+                        ],
+                        'middlewares' => [
+                            'first_global_middleware',
+                            'first_topic_middleware',
+                        ],
+                    ],
+                    'topic-key-full' => [
                         'topic' => 'topic-name',
                         'broker' => 'default',
                         'producer' => [
                             'middlewares' => [
                                 'first_producer_middleware',
                             ],
+                            'timeout-responses' => 75,
                         ],
                         'middlewares' => [
                             'first_global_middleware',
@@ -49,9 +69,39 @@ class ProducerTest extends LaravelTestCase
     }
 
     /** @test */
-    public function it_parses_configuration_from_file()
+    public function it_parses_basic_configuration_from_file()
     {
-        $topicKey = 'topic-key';
+        $topicKey = 'topic-key-basic';
+        $config = new Producer($topicKey);
+
+        $this->assertSame([
+            'first_global_middleware',
+            'second_global_middleware',
+            'first_topic_middleware',
+        ], $config->getMiddlewares());
+
+        $this->assertSame(50, $config->getTimeoutResponse());
+    }
+
+    /** @test */
+    public function it_parses_partial_configuration_from_file()
+    {
+        $topicKey = 'topic-key-partial';
+        $config = new Producer($topicKey);
+
+        $this->assertSame([
+            'first_global_middleware',
+            'second_global_middleware',
+            'first_topic_middleware',
+        ], $config->getMiddlewares());
+
+        $this->assertSame(80, $config->getTimeoutResponse());
+    }
+
+    /** @test */
+    public function it_parses_full_configuration_from_file()
+    {
+        $topicKey = 'topic-key-full';
         $config = new Producer($topicKey);
 
         $this->assertSame([
@@ -60,5 +110,7 @@ class ProducerTest extends LaravelTestCase
             'first_topic_middleware',
             'first_producer_middleware',
         ], $config->getMiddlewares());
+
+        $this->assertSame(75, $config->getTimeoutResponse());
     }
 }

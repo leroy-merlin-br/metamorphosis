@@ -22,13 +22,9 @@ class Producer extends Config
     {
         $producerConfig = $topicConfig['producer'] ?? null;
 
-        if (!$producerConfig) {
-            return;
-        }
+        $this->setMiddlewares($producerConfig['middlewares'] ?? []);
 
         $this->setTimeoutResponse($producerConfig['timeout-responses'] ?? $this->timeoutResponses);
-
-        $this->setMiddlewares($producerConfig['middlewares'] ?? []);
     }
 
     public function getTimeoutResponse(): int

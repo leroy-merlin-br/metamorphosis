@@ -9,8 +9,7 @@ use Tests\LaravelTestCase;
 
 class LowLevelTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_consume()
+    public function testItShouldConsume()
     {
         $config = $this->createMock(Consumer::class);
         $consumerTopic = $this->createMock(ConsumerTopic::class);

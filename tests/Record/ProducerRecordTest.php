@@ -6,8 +6,7 @@ use Tests\LaravelTestCase;
 
 class ProducerRecordTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_get_message()
+    public function testItShouldGetMessage()
     {
         $message = json_encode(['message' => 'original record']);
         $topicName = 'some-topic';
@@ -17,8 +16,7 @@ class ProducerRecordTest extends LaravelTestCase
         $this->assertSame($message, $record->getPayload());
     }
 
-    /** @test */
-    public function it_should_get_original_message()
+    public function testItShouldGetOriginalMessage()
     {
         $message = json_encode(['message' => 'original record']);
         $topicName = 'some-topic';
@@ -28,8 +26,7 @@ class ProducerRecordTest extends LaravelTestCase
         $this->assertSame($message, $record->getOriginal());
     }
 
-    /** @test */
-    public function it_should_get_topic_name()
+    public function testItShouldGetTopicName()
     {
         $message = json_encode(['message' => 'original record']);
         $topicName = 'some-topic';
@@ -39,8 +36,7 @@ class ProducerRecordTest extends LaravelTestCase
         $this->assertSame($topicName, $record->getTopicName());
     }
 
-    /** @test */
-    public function it_should_get_partition()
+    public function testItShouldGetPartition()
     {
         $message = json_encode(['message' => 'original record']);
         $topicName = 'some-topic';
@@ -51,8 +47,7 @@ class ProducerRecordTest extends LaravelTestCase
         $this->assertSame($partition, $record->getPartition());
     }
 
-    /** @test */
-    public function it_should_get_key()
+    public function testItShouldGetKey()
     {
         $message = json_encode(['message' => 'original record']);
         $topicName = 'some-topic';
@@ -64,8 +59,7 @@ class ProducerRecordTest extends LaravelTestCase
         $this->assertSame($key, $record->getKey());
     }
 
-    /** @test */
-    public function it_should_override_payload()
+    public function testItShouldOverridePayload()
     {
         $originalMessage = json_encode(['message' => 'original record']);
         $changedMessage = json_encode(['message' => 'changed record']);

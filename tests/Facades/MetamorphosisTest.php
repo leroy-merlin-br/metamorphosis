@@ -7,8 +7,7 @@ use Tests\LaravelTestCase;
 
 class MetamorphosisTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_facade_producer()
+    public function testItShouldFacadeProducer()
     {
         $producer = Metamorphosis::getFacadeRoot();
 

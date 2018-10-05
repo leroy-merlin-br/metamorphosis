@@ -4,16 +4,15 @@ namespace Tests\Connectors\Producer;
 use Exception;
 use Metamorphosis\Config\Producer;
 use Metamorphosis\Connectors\Producer\Connector;
-use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
+use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use RdKafka\Message;
 use RdKafka\ProducerTopic;
 use Tests\LaravelTestCase;
 
 class ConnectorTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_make_setup()
+    public function testItShouldMakeSetup()
     {
         $config = $this->createMock(Producer::class);
 
@@ -24,8 +23,7 @@ class ConnectorTest extends LaravelTestCase
         $this->assertInstanceOf(ProducerTopic::class, $producer);
     }
 
-    /** @test */
-    public function it_should_make_setup_with_topic_handler()
+    public function testItShouldMakeSetupWithTopicHandler()
     {
         $config = $this->createMock(Producer::class);
 
@@ -48,8 +46,7 @@ class ConnectorTest extends LaravelTestCase
         $this->assertInstanceOf(ProducerTopic::class, $producer);
     }
 
-    /** @test */
-    public function it_should_handle_response_from_broker()
+    public function testItShouldHandleResponseFromBroker()
     {
         $config = $this->createMock(Producer::class);
 
@@ -79,8 +76,7 @@ class ConnectorTest extends LaravelTestCase
         $this->assertInstanceOf(ProducerTopic::class, $producer);
     }
 
-    /** @test */
-    public function it_should_not_handle_response_from_broker()
+    public function testItShouldNotHandleResponseFromBroker()
     {
         $config = $this->createMock(Producer::class);
 
@@ -105,8 +101,7 @@ class ConnectorTest extends LaravelTestCase
         $this->assertNull($nullReturn);
     }
 
-    /** @test */
-    public function it_should_throw_exception_when_handle_response_from_broker()
+    public function testItShouldThrowExceptionWhenHandleResponseFromBroker()
     {
         $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
             public function success(Message $message): void

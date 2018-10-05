@@ -9,10 +9,19 @@ use RuntimeException;
 
 class ConsumerCommand extends BaseCommand
 {
+    /**
+     * @var {inheritdoc}
+     */
     protected $name = 'kafka:consume';
 
+    /**
+     * @var {inheritdoc}
+     */
     protected $description = 'Consumes something';
 
+    /**
+     * @var {inheritdoc}
+     */
     protected $signature = 'kafka:consume
         {topic : topic.}
         {consumer-group? : consumer group name.}

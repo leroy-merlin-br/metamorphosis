@@ -6,13 +6,12 @@ use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Record\ProducerRecord;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
-use Tests\LaravelTestCase;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface as ProducerHandler;
+use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_process()
+    public function testItShouldProcess()
     {
         // Set
         $connector = $this->createMock(Connector::class);

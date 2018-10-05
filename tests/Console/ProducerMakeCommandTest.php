@@ -5,8 +5,7 @@ use Tests\LaravelTestCase;
 
 class ProducerMakeCommandTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_generate_producer_handler()
+    public function testItShouldGenerateProducerHandler()
     {
         $command = 'make:kafka-producer';
         $parameters = [

@@ -9,8 +9,7 @@ use Tests\LaravelTestCase;
 
 class FactoryTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_makes_ssl_authentication_class()
+    public function testItMakesSslAuthenticationClass()
     {
         $authenticationConfig = [
             'protocol' => 'ssl',
@@ -24,15 +23,13 @@ class FactoryTest extends LaravelTestCase
         $this->assertInstanceOf(SSLAuthentication::class, $authenticationClass);
     }
 
-    /** @test */
-    public function it_makes_no_authentication_class()
+    public function testItMakesNoAuthenticationClass()
     {
         $this->assertInstanceOf(NoAuthentication::class, Factory::make([]));
         $this->assertInstanceOf(NoAuthentication::class, Factory::make(null));
     }
 
-    /** @test */
-    public function it_throws_exception_when_invalid_protocol_is_passed()
+    public function testItThrowsExceptionWhenInvalidProtocolIsPassed()
     {
         $authenticationConfig = [
             'protocol' => 'some-invalid-protocol',
@@ -43,8 +40,7 @@ class FactoryTest extends LaravelTestCase
         Factory::make($authenticationConfig);
     }
 
-    /** @test */
-    public function it_throws_exception_when_authentication_is_passed_without_protocol_key()
+    public function testItThrowsExceptionWhenAuthenticationIsPassedWithoutProtocolKey()
     {
         $authenticationConfig = [
             'foo' => 'some-invalid-protocol',

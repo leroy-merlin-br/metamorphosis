@@ -1,17 +1,16 @@
 <?php
 namespace Tests\Middlewares\Handler;
 
-use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
-use Metamorphosis\Record\ConsumerRecord as Record;
 use Metamorphosis\Middlewares\Handler\Consumer;
-use RdKafka\Message as KafkaMessage;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
+use Metamorphosis\Record\ConsumerRecord as Record;
+use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
+use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
 
 class ConsumerTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_call_handle_method_of_consumer_topic_handler()
+    public function testItShouldCallHandleMethodOfConsumerTopicHandler()
     {
         $consumerTopicHandler = $this->createMock(ConsumerTopicHandler::class);
         $middlewareHandler = $this->createMock(MiddlewareHandlerInterface::class);

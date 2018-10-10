@@ -2,7 +2,7 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
-use Metamorphosis\Config\Consumer;
+use Metamorphosis\Config\Consumer as ConsumerConfig;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\Runner;
 use RuntimeException;
@@ -26,7 +26,7 @@ class ConsumerCommand extends BaseCommand
             throw new RuntimeException('Not enough options ("partition" is required when "offset" is supplied).');
         }
 
-        $config = new Consumer(
+        $config = new ConsumerConfig(
             $this->argument('topic'),
             $this->argument('consumer-group'),
             $this->getIntOption('partition'),
@@ -54,7 +54,7 @@ class ConsumerCommand extends BaseCommand
             : null;
     }
 
-    private function writeStartingConsumer(Config $config)
+    private function writeStartingConsumer(ConsumerConfig $config)
     {
         $text = 'Starting consumer for topic: '.$config->getTopic();
         $text .= ' on consumer group: '.$config->getConsumerGroupId();
@@ -62,7 +62,7 @@ class ConsumerCommand extends BaseCommand
         $this->output->writeln($text);
     }
 
-    private function writeConnectingBroker(Config $config)
+    private function writeConnectingBroker(ConsumerConfig $config)
     {
         $this->output->writeln('Connecting in '.$config->getBrokerConfig()->getConnections());
     }

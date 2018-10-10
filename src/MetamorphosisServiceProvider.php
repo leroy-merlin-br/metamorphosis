@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Metamorphosis\Console\ConsumerCommand;
 use Metamorphosis\Console\ConsumerMakeCommand;
 use Metamorphosis\Console\MiddlewareMakeCommand;
+use Metamorphosis\Console\ProducerMakeCommand;
 
 class MetamorphosisServiceProvider extends ServiceProvider
 {
@@ -24,6 +25,7 @@ class MetamorphosisServiceProvider extends ServiceProvider
             ConsumerCommand::class,
             ConsumerMakeCommand::class,
             MiddlewareMakeCommand::class,
+            ProducerMakeCommand::class,
         ]);
 
         App::bind('metamorphosis', function () {

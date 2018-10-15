@@ -68,7 +68,7 @@ class Connector
         }
 
         if (!$this->queue) {
-            throw new \Exception('this should not happen at all');
+            throw new \Exception('Cannot handle responses from broker without implementing '.HandleableResponseInterface::class);
         }
 
         $this->queue->poll($this->timeoutInSeconds);

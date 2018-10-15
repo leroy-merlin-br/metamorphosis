@@ -6,7 +6,7 @@ use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Record\ProducerRecord;
-use Metamorphosis\TopicHandler\Producer\Handler;
+use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
 class Producer
 {
@@ -16,16 +16,16 @@ class Producer
     public $middlewareDispatcher;
 
     /**
-     * @var Handler
+     * @var HandlerInterface
      */
     private $producerHandler;
 
     /**
-     * @param Handler $producerHandler
+     * @param HandlerInterface $producerHandler
      *
      * @throws \Metamorphosis\Exceptions\JsonException When an array is passed and something wrong happens while encoding it into json
      */
-    public function produce(Handler $producerHandler): void
+    public function produce(HandlerInterface $producerHandler): void
     {
         $this->producerHandler = $producerHandler;
 

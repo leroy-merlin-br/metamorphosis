@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Record;
 
-class ProducerRecord implements Record
+class ProducerRecord implements RecordInterface
 {
     /**
      * The message after any transformations that will be send to the topic.

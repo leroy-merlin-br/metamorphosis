@@ -3,11 +3,11 @@ namespace Metamorphosis\Middlewares\Handler;
 
 use Metamorphosis\Config\Producer as ProducerConfig;
 use Metamorphosis\Connectors\Producer\Connector;
-use Metamorphosis\Middlewares\Middleware;
-use Metamorphosis\Record\Record;
-use Metamorphosis\TopicHandler\Producer\Handler;
+use Metamorphosis\Middlewares\MiddlewareInterface;
+use Metamorphosis\Record\RecordInterface;
+use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
-class Producer implements Middleware
+class Producer implements MiddlewareInterface
 {
     /**
      * @var Connector
@@ -15,7 +15,7 @@ class Producer implements Middleware
     private $connector;
 
     /**
-     * @var Handler
+     * @var HandlerInterface
      */
     private $producerHandler;
 
@@ -24,7 +24,7 @@ class Producer implements Middleware
         $this->connector = $connector;
     }
 
-    public function process(Record $record, MiddlewareHandler $handler): void
+    public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
         $config = app(ProducerConfig::class, ['topic' => $record->getTopicName()]);
 
@@ -37,7 +37,7 @@ class Producer implements Middleware
         $this->connector->handleResponsesFromBroker();
     }
 
-    public function setProducerHandler(Handler $handler)
+    public function setProducerHandler(HandlerInterface $handler)
     {
         $this->producerHandler = $handler;
     }

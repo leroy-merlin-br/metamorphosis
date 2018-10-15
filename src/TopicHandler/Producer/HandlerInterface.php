@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\TopicHandler\Producer;
 
-interface Handler
+interface HandlerInterface
 {
     /**
      * @param array|string $record    An array or string with the payload to be send in a topic.

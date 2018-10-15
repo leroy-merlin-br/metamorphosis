@@ -4,7 +4,7 @@ namespace Tests\Connectors\Producer;
 use Exception;
 use Metamorphosis\Config\Producer;
 use Metamorphosis\Connectors\Producer\Connector;
-use Metamorphosis\TopicHandler\Producer\HandleableResponse;
+use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use RdKafka\Message;
 use RdKafka\ProducerTopic;
@@ -29,7 +29,7 @@ class ConnectorTest extends LaravelTestCase
     {
         $config = $this->createMock(Producer::class);
 
-        $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponse {
+        $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
             public function __construct($record, string $topic, ?string $key = null, ?int $partition = null)
             {
             }
@@ -57,7 +57,7 @@ class ConnectorTest extends LaravelTestCase
     {
         $config = $this->createMock(Producer::class);
 
-        $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponse {
+        $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
             public function __construct($record, string $topic, ?string $key = null, ?int $partition = null)
             {
             }
@@ -120,7 +120,7 @@ class ConnectorTest extends LaravelTestCase
     /** @test */
     public function it_should_throw_exception_when_handle_response_from_broker()
     {
-        $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponse {
+        $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
             public function __construct($record, string $topic, ?string $key = null, ?int $partition = null)
             {
             }

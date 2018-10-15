@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Record;
 
-interface Record
+interface RecordInterface
 {
     /**
      * Overwrite record payload.

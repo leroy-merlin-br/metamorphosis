@@ -1,9 +1,9 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\Record\Record;
+use Metamorphosis\Record\RecordInterface;
 
-abstract class AbstractMiddlewareHandler implements MiddlewareHandler
+abstract class AbstractMiddlewareHandler implements MiddlewareHandlerInterface
 {
     /**
      * @var iterable
@@ -18,7 +18,7 @@ abstract class AbstractMiddlewareHandler implements MiddlewareHandler
     /**
      * Handles the current entry in the middleware queue and advances.
      *
-     * @param Record $record
+     * @param RecordInterface $record
      */
-    abstract public function handle(Record $record): void;
+    abstract public function handle(RecordInterface $record): void;
 }

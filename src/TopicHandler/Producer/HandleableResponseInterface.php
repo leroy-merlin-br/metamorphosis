@@ -3,7 +3,7 @@ namespace Metamorphosis\TopicHandler\Producer;
 
 use RdKafka\Message;
 
-interface HandleableResponse
+interface HandleableResponseInterface
 {
     public function success(Message $message): void;
 

@@ -5,7 +5,7 @@ use Metamorphosis\Exceptions\ResponseErrorException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use RdKafka\Message;
 
-class ConsumerRecord implements Record
+class ConsumerRecord implements RecordInterface
 {
     /**
      * List of error codes that stop record processing,

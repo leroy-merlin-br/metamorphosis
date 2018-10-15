@@ -2,10 +2,10 @@
 namespace Tests\Dummies;
 
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
-use Metamorphosis\TopicHandler\Producer\HandleableResponse;
+use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use RdKafka\Message;
 
-class ProducerHandlerDummy extends AbstractHandler implements HandleableResponse
+class ProducerHandlerDummy extends AbstractHandler implements HandleableResponseInterface
 {
     public function __construct($record, string $topic, string $key = null, int $partition = null)
     {

@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\TopicHandler\Producer;
 
-abstract class AbstractHandler implements Handler
+abstract class AbstractHandler implements HandlerInterface
 {
     protected $record;
 

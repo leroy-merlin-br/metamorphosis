@@ -2,8 +2,8 @@
 namespace Metamorphosis\Connectors\Producer;
 
 use Metamorphosis\Config\Producer;
-use Metamorphosis\TopicHandler\Producer\HandleableResponse;
-use Metamorphosis\TopicHandler\Producer\Handler;
+use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
+use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use RdKafka\Conf;
 use RdKafka\Message;
 use RdKafka\Producer as KafkaProducer;
@@ -17,7 +17,7 @@ class Connector
     public $queue;
 
     /**
-     * @var Handler
+     * @var HandlerInterface
      */
     private $handler;
 
@@ -26,7 +26,7 @@ class Connector
      */
     private $timeoutInSeconds;
 
-    public function setHandler(Handler $handler)
+    public function setHandler(HandlerInterface $handler)
     {
         $this->handler = $handler;
     }
@@ -76,6 +76,6 @@ class Connector
 
     private function canHandleResponse(): bool
     {
-        return $this->handler instanceof HandleableResponse;
+        return $this->handler instanceof HandleableResponseInterface;
     }
 }

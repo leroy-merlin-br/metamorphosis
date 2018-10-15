@@ -51,10 +51,10 @@ class Connector
 
         $broker->authenticate($conf);
 
-        $producer = app(KafkaProducer::class, ['conf' => $conf]);
+        $producer = app(KafkaProducer::class, compact('conf'));
 
         if ($this->canHandleResponse()) {
-            $this->queue = app(Queue::class, ['producer' => $producer]);
+            $this->queue = app(Queue::class, compact('producer'));
             $this->timeoutInSeconds = $config->getTimeoutResponse();
         }
 

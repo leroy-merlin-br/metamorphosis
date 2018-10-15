@@ -76,6 +76,6 @@ class Connector
 
     private function canHandleResponse(): bool
     {
-        return $this->handler ? $this->handler instanceof HandleableResponse : false;
+        return $this->handler instanceof HandleableResponse;
     }
 }

@@ -13,9 +13,7 @@ class Queue
     }
 
     /**
-     * Polls queue for retrieving new messages from broker about latest message send.
-     *
-     * @param int $timeout
+     * Polls queue for retrieving new messages from broker about latest sent message.
      */
     public function poll(int $timeout): void
     {
@@ -25,9 +23,7 @@ class Queue
     }
 
     /**
-     * Checks if the kafka inner-queue for response messages has any content for being retrieved.
-     *
-     * @return bool
+     * Checks if the kafka inner-queue for response messages has any content being retrieved.
      */
     protected function hasContent(): bool
     {

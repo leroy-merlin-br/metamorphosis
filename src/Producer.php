@@ -21,9 +21,7 @@ class Producer
     private $producerHandler;
 
     /**
-     * @param HandlerInterface $producerHandler
-     *
-     * @throws \Metamorphosis\Exceptions\JsonException When an array is passed and something wrong happens while encoding it into json
+     * @throws JsonException When an array is passed and something wrong happens while encoding it into json
      */
     public function produce(HandlerInterface $producerHandler): void
     {

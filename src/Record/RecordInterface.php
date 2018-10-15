@@ -23,8 +23,6 @@ interface RecordInterface
 
     /**
      * Get the topic name where the record was published.
-     *
-     * @return string
      */
     public function getTopicName(): string;
 

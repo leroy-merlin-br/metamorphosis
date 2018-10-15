@@ -26,8 +26,6 @@ class ConsumerRecord implements RecordInterface
     protected $payload;
 
     /**
-     * @param \RdKafka\Message $original
-     *
      * @throws \Metamorphosis\Exceptions\ResponseErrorException
      * @throws \Metamorphosis\Exceptions\ResponseWarningException
      */
@@ -71,8 +69,6 @@ class ConsumerRecord implements RecordInterface
      * With this object, it is possible to get original payload.
      *
      * @see https://arnaud-lb.github.io/php-rdkafka/phpdoc/class.rdkafka-message.html
-     *
-     * @return Message
      */
     public function getOriginal(): Message
     {
@@ -81,8 +77,6 @@ class ConsumerRecord implements RecordInterface
 
     /**
      * Get the topic name where the record was published.
-     *
-     * @return string
      */
     public function getTopicName(): string
     {
@@ -91,8 +85,6 @@ class ConsumerRecord implements RecordInterface
 
     /**
      * Get the partition number where the record was published.
-     *
-     * @return int
      */
     public function getPartition(): int
     {
@@ -101,8 +93,6 @@ class ConsumerRecord implements RecordInterface
 
     /**
      * Get the record key.
-     *
-     * @return string
      */
     public function getKey(): string
     {
@@ -111,8 +101,6 @@ class ConsumerRecord implements RecordInterface
 
     /**
      * Get the record offset.
-     *
-     * @return int
      */
     public function getOffset(): int
     {

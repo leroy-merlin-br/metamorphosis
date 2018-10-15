@@ -23,11 +23,6 @@ class LowLevel implements ConsumerInterface
         $this->consumer = $consumer;
     }
 
-    /**
-     * @param int $timeout
-     *
-     * @return Message
-     */
     public function consume(int $timeout): Message
     {
         return $this->consumer->consume($this->config->getConsumerPartition(), $timeout);

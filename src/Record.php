@@ -27,8 +27,6 @@ class Record
     protected $payload;
 
     /**
-     * @param \RdKafka\Message $original
-     *
      * @throws \Metamorphosis\Exceptions\ResponseErrorException
      * @throws \Metamorphosis\Exceptions\ResponseWarningException
      */
@@ -82,8 +80,6 @@ class Record
 
     /**
      * Get the topic name where the record was published.
-     *
-     * @return string
      */
     public function getTopicName(): string
     {
@@ -92,8 +88,6 @@ class Record
 
     /**
      * Get the partition number where the record was published.
-     *
-     * @return int
      */
     public function getPartition(): int
     {
@@ -102,8 +96,6 @@ class Record
 
     /**
      * Get the record key.
-     *
-     * @return string
      */
     public function getKey(): string
     {
@@ -112,8 +104,6 @@ class Record
 
     /**
      * Get the record offset.
-     *
-     * @return int
      */
     public function getOffset(): int
     {

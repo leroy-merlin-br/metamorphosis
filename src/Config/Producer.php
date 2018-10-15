@@ -4,7 +4,7 @@ namespace Metamorphosis\Config;
 /**
  * Maps configuration from config file and provides access to them via methods.
  */
-class Producer extends Config
+class Producer extends AbstractConfig
 {
     /**
      * @var int

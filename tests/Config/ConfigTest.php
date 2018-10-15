@@ -3,7 +3,7 @@ namespace Tests\Config;
 
 use Metamorphosis\Authentication\NoAuthentication;
 use Metamorphosis\Broker;
-use Metamorphosis\Config\Config;
+use Metamorphosis\Config\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Tests\LaravelTestCase;
 
@@ -50,7 +50,7 @@ class ConfigTest extends LaravelTestCase
     public function it_parses_configuration_from_file()
     {
         $topicKey = 'topic-key';
-        $config = new class($topicKey) extends Config {
+        $config = new class($topicKey) extends AbstractConfig {
         };
 
         $this->assertSame('topic-name', $config->getTopic());
@@ -73,7 +73,7 @@ class ConfigTest extends LaravelTestCase
         ]);
         $topicKey = 'topic-key';
 
-        $config = new class($topicKey) extends Config {
+        $config = new class($topicKey) extends AbstractConfig {
         };
         $broker = $config->getBrokerConfig();
 
@@ -88,7 +88,7 @@ class ConfigTest extends LaravelTestCase
         $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage("Topic 'invalid-topic-key' not found");
 
-        new class($topicKey) extends Config {
+        new class($topicKey) extends AbstractConfig {
         };
     }
 
@@ -106,7 +106,7 @@ class ConfigTest extends LaravelTestCase
         $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage("Broker 'invalid-broker' configuration not found");
 
-        new class($topicKey) extends Config {
+        new class($topicKey) extends AbstractConfig {
         };
     }
 
@@ -122,7 +122,7 @@ class ConfigTest extends LaravelTestCase
         ]);
         $topicKey = 'topic-key';
 
-        $config = new class($topicKey) extends Config {
+        $config = new class($topicKey) extends AbstractConfig {
         };
         $broker = $config->getBrokerConfig();
 
@@ -144,7 +144,7 @@ class ConfigTest extends LaravelTestCase
         ]);
         $topicKey = 'topic-key';
 
-        $config = new class($topicKey) extends Config {
+        $config = new class($topicKey) extends AbstractConfig {
         };
         $broker = $config->getBrokerConfig();
 
@@ -171,7 +171,7 @@ class ConfigTest extends LaravelTestCase
         ]);
 
         $topicKey = 'topic-key';
-        $config = new class($topicKey) extends Config {
+        $config = new class($topicKey) extends AbstractConfig {
         };
 
         $this->assertEmpty($config->getMiddlewares());

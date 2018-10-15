@@ -7,7 +7,7 @@ use Metamorphosis\TopicHandler\Consumer\Handler;
 /**
  * Maps configuration from config file and provides access to them via methods.
  */
-class Consumer extends Config
+class Consumer extends AbstractConfig
 {
     /**
      * @var string

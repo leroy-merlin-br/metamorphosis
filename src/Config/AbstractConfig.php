@@ -7,7 +7,7 @@ use Metamorphosis\Exceptions\ConfigurationException;
 /**
  * Maps configuration from config file and provides access to them via methods.
  */
-abstract class Config
+abstract class AbstractConfig
 {
     /**
      * @var string

@@ -30,10 +30,6 @@ class ConnectorTest extends LaravelTestCase
         $config = $this->createMock(Producer::class);
 
         $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
-            public function __construct($record, string $topic, ?string $key = null, ?int $partition = null)
-            {
-            }
-
             public function success(Message $message): void
             {
             }
@@ -58,10 +54,6 @@ class ConnectorTest extends LaravelTestCase
         $config = $this->createMock(Producer::class);
 
         $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
-            public function __construct($record, string $topic, ?string $key = null, ?int $partition = null)
-            {
-            }
-
             public function success(Message $message): void
             {
             }
@@ -93,10 +85,6 @@ class ConnectorTest extends LaravelTestCase
         $config = $this->createMock(Producer::class);
 
         $handler = new class('record', 'some-topic') extends AbstractHandler {
-            public function __construct($record, string $topic, ?string $key = null, ?int $partition = null)
-            {
-            }
-
             public function success(Message $message): void
             {
             }
@@ -121,10 +109,6 @@ class ConnectorTest extends LaravelTestCase
     public function it_should_throw_exception_when_handle_response_from_broker()
     {
         $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
-            public function __construct($record, string $topic, ?string $key = null, ?int $partition = null)
-            {
-            }
-
             public function success(Message $message): void
             {
             }

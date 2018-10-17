@@ -15,7 +15,7 @@ interface HandlerInterface
      *                                in any order, even when inside a same consumer group.
      * @param int|null     $partition The partition where the record should be send
      */
-    public function __construct($record, string $topic, string $key = null, int $partition = null);
+    public function __construct($record, string $topic = null, string $key = null, int $partition = null);
 
     public function getRecord();
 

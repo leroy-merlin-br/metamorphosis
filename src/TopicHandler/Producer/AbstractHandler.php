@@ -11,6 +11,14 @@ abstract class AbstractHandler implements HandlerInterface
 
     protected $partition;
 
+    public function __construct($record, string $topic = null, string $key = null, int $partition = null)
+    {
+        $this->record = $record;
+        $this->topic = $topic;
+        $this->key = $key;
+        $this->partition = $partition;
+    }
+
     public function getRecord()
     {
         return $this->record;

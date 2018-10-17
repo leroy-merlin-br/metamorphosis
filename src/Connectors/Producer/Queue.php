@@ -5,6 +5,9 @@ use RdKafka\Producer;
 
 class Queue
 {
+    /**
+     * @var Producer
+     */
     private $producer;
 
     public function __construct(Producer $producer)

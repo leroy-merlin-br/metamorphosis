@@ -2,7 +2,6 @@
 namespace DummyNamespace;
 
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
-use RdKafka\Message;
 
 class DummyClass extends AbstractHandler
 {
@@ -12,15 +11,5 @@ class DummyClass extends AbstractHandler
         $this->topic = $topic;
         $this->key = $key;
         $this->partition = $partition;
-    }
-
-    public function success(Message $message): void
-    {
-        // This will be called when a record is successfully send to kafka
-    }
-
-    public function failed(Message $message): void
-    {
-        // This will be called when a record was not sent to kafka
     }
 }

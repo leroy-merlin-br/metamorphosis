@@ -39,24 +39,13 @@ class Connector
 
         $conf->set('metadata.broker.list', $broker->getConnections());
 
-        if ($this->canHandleResponse()) {
-            $conf->setDrMsgCb(function ($kafka, Message $message) {
-                if ($message->err) {
-                    $this->handler->failed($message);
-                } else {
-                    $this->handler->success($message);
-                }
-            });
-        }
+        $this->setCallbackResponses($conf);
 
         $broker->authenticate($conf);
 
         $producer = app(KafkaProducer::class, compact('conf'));
 
-        if ($this->canHandleResponse()) {
-            $this->queue = app(Queue::class, compact('producer'));
-            $this->timeoutInSeconds = $config->getTimeoutResponse();
-        }
+        $this->prepareQueueCallbackResponse($config, $producer);
 
         return $producer->newTopic($config->getTopic());
     }
@@ -72,6 +61,31 @@ class Connector
         }
 
         $this->queue->poll($this->timeoutInSeconds);
+    }
+
+    private function setCallbackResponses(Conf $conf)
+    {
+        if (!$this->canHandleResponse()) {
+            return;
+        }
+
+        $conf->setDrMsgCb(function ($kafka, Message $message) {
+            if ($message->err) {
+                $this->handler->failed($message);
+            } else {
+                $this->handler->success($message);
+            }
+        });
+    }
+
+    private function prepareQueueCallbackResponse(Producer $config, KafkaProducer $producer)
+    {
+        if (!$this->canHandleResponse()) {
+            return;
+        }
+
+        $this->queue = app(Queue::class, compact('producer'));
+        $this->timeoutInSeconds = $config->getTimeoutResponse();
     }
 
     private function canHandleResponse(): bool

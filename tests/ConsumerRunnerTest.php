@@ -4,12 +4,12 @@ namespace Tests;
 use Exception;
 use Metamorphosis\Config\Consumer;
 use Metamorphosis\Consumers\ConsumerInterface;
-use Metamorphosis\Runner;
+use Metamorphosis\ConsumerRunner;
 use RdKafka\Message as KafkaMessage;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\Dummies\MiddlewareDummy;
 
-class RunnerTest extends LaravelTestCase
+class ConsumerRunnerTest extends LaravelTestCase
 {
     /**
      * Counter for mocking infinite loop.
@@ -60,7 +60,7 @@ class RunnerTest extends LaravelTestCase
         $this->app->instance(MiddlewareDummy::class, $middleware);
 
         $consumerInterface = $this->createMock(ConsumerInterface::class);
-        $runner = new Runner();
+        $runner = new ConsumerRunner();
         $runner->setTimeout(30);
 
         $consumerInterface->expects($this->exactly(4))

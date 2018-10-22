@@ -10,7 +10,7 @@ use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\TopicHandler\Consumer\Handler;
 
-class Runner
+class ConsumerRunner
 {
     /**
      * @var int

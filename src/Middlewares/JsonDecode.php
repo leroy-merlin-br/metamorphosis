@@ -2,12 +2,12 @@
 namespace Metamorphosis\Middlewares;
 
 use Exception;
-use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
-use Metamorphosis\Record;
+use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
+use Metamorphosis\Record\RecordInterface;
 
-class JsonDecode implements Middleware
+class JsonDecode implements MiddlewareInterface
 {
-    public function process(Record $record, MiddlewareHandler $handler): void
+    public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
         $payload = json_decode($record->getPayload(), true);
 

@@ -2,10 +2,10 @@
 namespace Metamorphosis\Middlewares\Handler;
 
 use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
-use Metamorphosis\Middlewares\Middleware;
-use Metamorphosis\Record;
+use Metamorphosis\Middlewares\MiddlewareInterface;
+use Metamorphosis\Record\RecordInterface;
 
-class Consumer implements Middleware
+class Consumer implements MiddlewareInterface
 {
     /**
      * @var ConsumerTopicHandler
@@ -17,7 +17,7 @@ class Consumer implements Middleware
         $this->consumerTopicHandler = $consumerTopicHandler;
     }
 
-    public function process(Record $record, MiddlewareHandler $handler): void
+    public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
         $this->consumerTopicHandler->handle($record);
     }

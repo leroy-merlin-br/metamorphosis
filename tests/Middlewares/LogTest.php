@@ -2,7 +2,7 @@
 namespace Tests\Middlewares;
 
 use Psr\Log\LoggerInterface;
-use Metamorphosis\Record;
+use Metamorphosis\Record\ConsumerRecord as Record;
 use Metamorphosis\Middlewares\Handler\Iterator;
 use Metamorphosis\Middlewares\Log;
 use RdKafka\Message as KafkaMessage;

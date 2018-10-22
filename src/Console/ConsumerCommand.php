@@ -2,12 +2,12 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
-use Metamorphosis\Config;
+use Metamorphosis\Config\Consumer as ConsumerConfig;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
-use Metamorphosis\Runner;
+use Metamorphosis\ConsumerRunner;
 use RuntimeException;
 
-class Command extends BaseCommand
+class ConsumerCommand extends BaseCommand
 {
     protected $name = 'kafka:consume';
 
@@ -20,13 +20,13 @@ class Command extends BaseCommand
         {--partition= : Sets the partition to consume.}
         {--timeout= : Sets timeout for consumer.}';
 
-    public function handle(Runner $runner)
+    public function handle(ConsumerRunner $runner)
     {
         if (!is_null($this->getIntOption('offset')) && is_null($this->getIntOption('partition'))) {
             throw new RuntimeException('Not enough options ("partition" is required when "offset" is supplied).');
         }
 
-        $config = new Config(
+        $config = new ConsumerConfig(
             $this->argument('topic'),
             $this->argument('consumer-group'),
             $this->getIntOption('partition'),
@@ -54,7 +54,7 @@ class Command extends BaseCommand
             : null;
     }
 
-    private function writeStartingConsumer(Config $config)
+    private function writeStartingConsumer(ConsumerConfig $config)
     {
         $text = 'Starting consumer for topic: '.$config->getTopic();
         $text .= ' on consumer group: '.$config->getConsumerGroupId();
@@ -62,7 +62,7 @@ class Command extends BaseCommand
         $this->output->writeln($text);
     }
 
-    private function writeConnectingBroker(Config $config)
+    private function writeConnectingBroker(ConsumerConfig $config)
     {
         $this->output->writeln('Connecting in '.$config->getBrokerConfig()->getConnections());
     }

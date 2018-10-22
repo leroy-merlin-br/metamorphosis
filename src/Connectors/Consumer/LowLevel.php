@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\Config;
+use Metamorphosis\Config\Consumer as ConsumerConfig;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
 use RdKafka\Conf;
@@ -11,11 +11,11 @@ use RdKafka\TopicConf;
 class LowLevel implements ConnectorInterface
 {
     /**
-     * @var Config
+     * @var ConsumerConfig
      */
     protected $config;
 
-    public function __construct(Config $config)
+    public function __construct(ConsumerConfig $config)
     {
         $this->config = $config;
     }
@@ -35,8 +35,7 @@ class LowLevel implements ConnectorInterface
 
         $topicConsumer = $consumer->newTopic($this->config->getTopic(), $topicConfig);
 
-        // get partition from config/command option and offset for command option/config?
-        $topicConsumer->consumeStart($this->config->getPartition(), $this->config->getConsumerOffset());
+        $topicConsumer->consumeStart($this->config->getConsumerPartition(), $this->config->getConsumerOffset());
 
         return new LowLevelConsumer($this->config, $topicConsumer);
     }

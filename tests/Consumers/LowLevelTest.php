@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Consumers;
 
-use Metamorphosis\Config;
+use Metamorphosis\Config\Consumer;
 use Metamorphosis\Consumers\LowLevel;
 use RdKafka\ConsumerTopic;
 use RdKafka\Message;
@@ -12,12 +12,12 @@ class LowLevelTest extends LaravelTestCase
     /** @test */
     public function it_should_consume()
     {
-        $config = $this->createMock(Config::class);
+        $config = $this->createMock(Consumer::class);
         $consumerTopic = $this->createMock(ConsumerTopic::class);
         $message = new Message();
 
         $config->expects($this->exactly(1))
-            ->method('getPartition')
+            ->method('getConsumerPartition')
             ->willReturn(1);
 
         $consumerTopic->expects($this->exactly(1))

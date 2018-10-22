@@ -1,0 +1,8 @@
+<?php
+namespace DummyNamespace;
+
+use Metamorphosis\TopicHandler\Producer\AbstractHandler;
+
+class DummyClass extends AbstractHandler
+{
+}

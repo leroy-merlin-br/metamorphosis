@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Metamorphosis;
+namespace Metamorphosis\Config;
 
 use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\TopicHandler\Consumer\Handler;
@@ -7,18 +7,8 @@ use Metamorphosis\TopicHandler\Consumer\Handler;
 /**
  * Maps configuration from config file and provides access to them via methods.
  */
-class Config
+class Consumer extends AbstractConfig
 {
-    /**
-     * @var string
-     */
-    protected $topic;
-
-    /**
-     * @var Broker
-     */
-    protected $broker;
-
     /**
      * @var string
      */
@@ -44,32 +34,14 @@ class Config
      */
     protected $consumerHandler;
 
-    /**
-     * @var iterable
-     */
-    protected $middlewares = [];
-
     public function __construct(
         string $topic,
         string $consumerGroupId = null,
         int $partition = null,
         int $offset = null
     ) {
-        $topicConfig = $this->getTopicConfig($topic);
-        $this->setGlobalMiddlewares();
-        $this->setTopic($topicConfig);
-        $this->setConsumerGroup($topicConfig, $consumerGroupId, $partition, $offset);
-        $this->setBroker($topicConfig);
-    }
-
-    public function getTopic(): string
-    {
-        return $this->topic;
-    }
-
-    public function getBrokerConfig(): Broker
-    {
-        return $this->broker;
+        parent::__construct($topic);
+        $this->setConsumerGroup($this->getTopicConfig($topic), $consumerGroupId, $partition, $offset);
     }
 
     public function getConsumerGroupId(): string
@@ -92,25 +64,9 @@ class Config
         return $this->consumerHandler;
     }
 
-    public function getMiddlewares(): iterable
-    {
-        return $this->middlewares;
-    }
-
-    public function getPartition(): ?int
+    public function getConsumerPartition(): ?int
     {
         return $this->consumerPartition;
-    }
-
-    private function getTopicConfig(string $topic): array
-    {
-        $config = config("kafka.topics.{$topic}");
-
-        if (!$config) {
-            throw new ConfigurationException("Topic '{$topic}' not found");
-        }
-
-        return $config;
     }
 
     private function setConsumerGroup(
@@ -140,31 +96,9 @@ class Config
         $this->setMiddlewares($consumerConfig['middlewares'] ?? []);
     }
 
-    private function setBroker(array $topicConfig): void
+    protected function setGlobalMiddlewares(): void
     {
-        $brokerConfig = config("kafka.brokers.{$topicConfig['broker']}");
-
-        if (!$brokerConfig) {
-            throw new ConfigurationException("Broker '{$topicConfig['broker']}' configuration not found");
-        }
-
-        $this->broker = new Broker($brokerConfig['connections'], $brokerConfig['auth'] ?? null);
-    }
-
-    private function setTopic(array $topicConfig): void
-    {
-        $this->topic = $topicConfig['topic'];
-
-        $this->setMiddlewares($topicConfig['middlewares'] ?? []);
-    }
-
-    private function setMiddlewares(array $middlewares): void
-    {
-        $this->middlewares = array_unique(array_merge($this->middlewares, $middlewares));
-    }
-
-    private function setGlobalMiddlewares(): void
-    {
+        parent::setGlobalMiddlewares();
         $this->setMiddlewares(config('kafka.middlewares.consumer', []));
     }
 }

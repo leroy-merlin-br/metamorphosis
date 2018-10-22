@@ -1,11 +1,11 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\Config;
+use Metamorphosis\Config\Consumer;
 
 class ConnectorFactory
 {
-    public static function make(Config $config): ConnectorInterface
+    public static function make(Consumer $config): ConnectorInterface
     {
         if (self::requiresPartition($config)) {
             return new LowLevel($config);
@@ -14,8 +14,8 @@ class ConnectorFactory
         return new HighLevel($config);
     }
 
-    protected static function requiresPartition(Config $config): bool
+    protected static function requiresPartition(Consumer $config): bool
     {
-        return !is_null($config->getPartition());
+        return !is_null($config->getConsumerPartition());
     }
 }

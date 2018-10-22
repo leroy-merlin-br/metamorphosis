@@ -1,11 +1,11 @@
 <?php
-namespace Metamorphosis;
+namespace Metamorphosis\Record;
 
 use Metamorphosis\Exceptions\ResponseErrorException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use RdKafka\Message;
 
-class Record
+class ConsumerRecord implements RecordInterface
 {
     /**
      * List of error codes that stop record processing,
@@ -27,8 +27,6 @@ class Record
     protected $payload;
 
     /**
-     * @param \RdKafka\Message $original
-     *
      * @throws \Metamorphosis\Exceptions\ResponseErrorException
      * @throws \Metamorphosis\Exceptions\ResponseWarningException
      */
@@ -72,8 +70,6 @@ class Record
      * With this object, it is possible to get original payload.
      *
      * @see https://arnaud-lb.github.io/php-rdkafka/phpdoc/class.rdkafka-message.html
-     *
-     * @return Message
      */
     public function getOriginal(): Message
     {
@@ -82,8 +78,6 @@ class Record
 
     /**
      * Get the topic name where the record was published.
-     *
-     * @return string
      */
     public function getTopicName(): string
     {
@@ -92,8 +86,6 @@ class Record
 
     /**
      * Get the partition number where the record was published.
-     *
-     * @return int
      */
     public function getPartition(): int
     {
@@ -102,8 +94,6 @@ class Record
 
     /**
      * Get the record key.
-     *
-     * @return string
      */
     public function getKey(): string
     {
@@ -112,8 +102,6 @@ class Record
 
     /**
      * Get the record offset.
-     *
-     * @return int
      */
     public function getOffset(): int
     {

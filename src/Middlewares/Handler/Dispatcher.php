@@ -1,11 +1,11 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\Record;
+use Metamorphosis\Record\RecordInterface;
 
 class Dispatcher extends AbstractMiddlewareHandler
 {
-    public function handle(Record $record): void
+    public function handle(RecordInterface $record): void
     {
         reset($this->queue);
         $iterator = new Iterator($this->queue);

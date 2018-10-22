@@ -1,7 +1,7 @@
 <?php
 namespace DummyNamespace;
 
-use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
+use Metamorphosis\ConsumerHandler\AbstractHandler;
 use Metamorphosis\Record;
 
 class DummyClass extends AbstractHandler

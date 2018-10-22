@@ -16,11 +16,6 @@ class HighLevel implements ConsumerInterface
         $this->consumer = $consumer;
     }
 
-    /**
-     * @param int $timeout
-     *
-     * @return Message
-     */
     public function consume(int $timeout): Message
     {
         return $this->consumer->consume($timeout);

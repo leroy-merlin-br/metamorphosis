@@ -2,13 +2,15 @@
 namespace Metamorphosis;
 
 use Exception;
+use Metamorphosis\Config\Consumer;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
+use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\TopicHandler\Consumer\Handler;
 
-class Runner
+class ConsumerRunner
 {
     /**
      * @var int
@@ -25,7 +27,7 @@ class Runner
      */
     protected $handler;
 
-    public function run(Config $config, ConsumerInterface $consumer): void
+    public function run(Consumer $config, ConsumerInterface $consumer): void
     {
         $this->handler = $config->getConsumerHandler();
 
@@ -35,7 +37,7 @@ class Runner
             $response = $consumer->consume($this->timeout);
 
             try {
-                $record = new Record($response);
+                $record = new ConsumerRecord($response);
                 $this->middlewareDispatcher->handle($record);
             } catch (ResponseWarningException $exception) {
                 $this->handler->warning($exception);

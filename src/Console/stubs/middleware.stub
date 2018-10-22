@@ -3,7 +3,7 @@ namespace DummyNamespace;
 
 use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
 use Metamorphosis\Middlewares\Middleware;
-use Metamorphosis\Record;
+use Metamorphosis\Record\Record;
 
 class DummyClass implements Middleware
 {

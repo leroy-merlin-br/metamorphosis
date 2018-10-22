@@ -6,7 +6,7 @@ use Avro\Datum\IODatumWriter;
 use Avro\Exception\DataIoException;
 use Avro\IO\StringIO;
 use Avro\Schema\Schema;
-use Metamorphosis\Record;
+use Metamorphosis\Record\ConsumerRecord as Record;
 use Metamorphosis\Middlewares\AvroDecode;
 use Metamorphosis\Middlewares\Handler\Iterator;
 use RdKafka\Message as KafkaMessage;

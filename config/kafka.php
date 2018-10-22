@@ -68,6 +68,10 @@ return [
                     'consumer' => '\App\Kafka\Consumers\ConsumerExample',
                 ],
             ],
+            'producer' => [
+                'middlewares' => [],
+                'timeout-responses' => 50,
+            ],
         ],
     ],
 
@@ -84,6 +88,12 @@ return [
 
     'middlewares' => [
         'consumer' => [
+            \Metamorphosis\Middlewares\Log::class,
+        ],
+        'producer' => [
+            \Metamorphosis\Middlewares\Log::class,
+        ],
+        'global' => [
             \Metamorphosis\Middlewares\Log::class,
         ],
     ],

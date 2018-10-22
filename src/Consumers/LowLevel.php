@@ -1,14 +1,14 @@
 <?php
 namespace Metamorphosis\Consumers;
 
-use Metamorphosis\Config;
+use Metamorphosis\Config\Consumer as ConsumerConfig;
 use RdKafka\ConsumerTopic;
 use RdKafka\Message;
 
 class LowLevel implements ConsumerInterface
 {
     /**
-     * @var Config
+     * @var ConsumerConfig
      */
     protected $config;
 
@@ -17,19 +17,14 @@ class LowLevel implements ConsumerInterface
      */
     protected $consumer;
 
-    public function __construct(Config $config, ConsumerTopic $consumer)
+    public function __construct(ConsumerConfig $config, ConsumerTopic $consumer)
     {
         $this->config = $config;
         $this->consumer = $consumer;
     }
 
-    /**
-     * @param int $timeout
-     *
-     * @return Message
-     */
     public function consume(int $timeout): Message
     {
-        return $this->consumer->consume($this->config->getPartition(), $timeout);
+        return $this->consumer->consume($this->config->getConsumerPartition(), $timeout);
     }
 }

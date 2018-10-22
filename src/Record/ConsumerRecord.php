@@ -13,6 +13,7 @@ class ConsumerRecord implements RecordInterface
      */
     const KAFKA_ERROR_WHITELIST = [
         RD_KAFKA_RESP_ERR__PARTITION_EOF,
+        RD_KAFKA_RESP_ERR__TIMED_OUT,
     ];
 
     /**

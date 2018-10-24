@@ -38,9 +38,15 @@ class Consumer extends AbstractConfig
         string $topic,
         string $consumerGroupId = null,
         int $partition = null,
-        int $offset = null
+        int $offset = null,
+        string $brokerKey = null
     ) {
         parent::__construct($topic);
+
+        if ($brokerKey) {
+            $this->setBroker($brokerKey);
+        }
+
         $this->setConsumerGroup($this->getTopicConfig($topic), $consumerGroupId, $partition, $offset);
     }
 

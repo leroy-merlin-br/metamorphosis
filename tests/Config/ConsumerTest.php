@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Config;
 
+use Metamorphosis\Authentication\NoAuthentication;
 use Metamorphosis\Config\Consumer;
 use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
@@ -124,5 +125,36 @@ class ConsumerTest extends LaravelTestCase
         $this->expectExceptionMessage("Consumer group 'invalid-consumer-id' not found");
 
         new Consumer($topicKey, $consumerGroup);
+    }
+
+    /** @test */
+    public function it_throws_exception_when_overriding_broker_with_invalid_broker()
+    {
+        $topicKey = 'topic-key';
+        $broker = 'invalid_broker';
+
+        $this->expectException(ConfigurationException::class);
+        $this->expectExceptionMessage("Broker 'invalid_broker' configuration not found");
+
+        new Consumer($topicKey, null, null, null, $broker);
+    }
+
+    /** @test */
+    public function it_overrides_broker_from_config_when_passed_by_constructor()
+    {
+        $topicKey = 'topic-key';
+        $broker = 'another-broker';
+        $connection = 'some-connection';
+        config([
+            "kafka.brokers.{$broker}" => [
+                'connections' => $connection,
+                'auth' => [],
+            ],
+        ]);
+
+        $config = new Consumer($topicKey, null, null, null, $broker);
+
+        $this->assertSame($connection, $config->getBrokerConfig()->getConnections());
+        $this->assertInstanceOf(NoAuthentication::class, $config->getBrokerConfig()->getAuthentication());
     }
 }

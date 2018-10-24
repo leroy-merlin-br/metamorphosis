@@ -124,7 +124,7 @@ also, methods will be available for handling exceptions
 ```php
 use App\Kafka\Consumers\PriceUpdateConsumer;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
-use Metamorphosis\Record;
+use Metamorphosis\Record\RecordInterface;
 
 class PriceUpdateConsumer extends AbstractHandler
 {
@@ -147,7 +147,7 @@ class PriceUpdateConsumer extends AbstractHandler
      *
      * @return void
      */
-    public function handle(Record $record): void
+    public function handle(RecordInterface $record): void
     {
         $product = $record->getPayload();
 

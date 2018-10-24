@@ -139,7 +139,7 @@ class ConsumerCommandTest extends LaravelTestCase
             'kafka.brokers.some-broker' => [
                 'connections' => '',
                 'auth' => [],
-            ]
+            ],
         ]);
 
         $runner = $this->createMock(ConsumerRunner::class);
@@ -155,7 +155,7 @@ class ConsumerCommandTest extends LaravelTestCase
         $parameters = [
             'topic' => 'topic-key',
             '--timeout' => 1,
-            '--broker' => 'some-broker'
+            '--broker' => 'some-broker',
         ];
 
         $this->artisan($command, $parameters);

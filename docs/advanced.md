@@ -244,7 +244,7 @@ stdout_logfile=/var/log/default/kafka-consumer-price-update.log
 
 ##### Options
 
-Although you can run this simple command, it has some option you can pass to make it more flexible to your needs.
+Although you can run this simple command, it provides some options you can pass to make it more flexible to your needs.
 
 - `--broker=`
 

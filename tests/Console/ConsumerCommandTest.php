@@ -9,7 +9,7 @@ use RuntimeException;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
 
-class CommandTest extends LaravelTestCase
+class ConsumerCommandTest extends LaravelTestCase
 {
     public function setUp()
     {
@@ -127,6 +127,35 @@ class CommandTest extends LaravelTestCase
         $parameters = [
             'topic' => 'topic-key',
             '--timeout' => 1,
+        ];
+
+        $this->artisan($command, $parameters);
+    }
+
+    /** @test */
+    public function it_overrides_broker_connection_when_calling_command()
+    {
+        config([
+            'kafka.brokers.some-broker' => [
+                'connections' => '',
+                'auth' => [],
+            ],
+        ]);
+
+        $runner = $this->createMock(ConsumerRunner::class);
+        $this->instance(ConsumerRunner::class, $runner);
+
+        $runner->expects($this->once())
+            ->method('run')
+            ->with($this->anything(), $this->callback(function ($subject) {
+                return $subject instanceof HighLevel;
+            }));
+
+        $command = 'kafka:consume';
+        $parameters = [
+            'topic' => 'topic-key',
+            '--timeout' => 1,
+            '--broker' => 'some-broker',
         ];
 
         $this->artisan($command, $parameters);

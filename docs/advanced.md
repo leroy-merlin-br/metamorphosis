@@ -7,6 +7,7 @@
    - [Creating Consumer](#commands-consumer)
    - [Creating Middleware](#commands-middleware)
    - [Running Consumer](#commands-running-consumer)
+        - [Options](#options)
 
 <a name="authentication"></a>
 ### Authentication
@@ -70,13 +71,13 @@ The generated class will be placed on `app/Kafka/Middlewares` directory, and wil
 <?php
 namespace App\Kafka\Middlewares;
 
-use Metamorphosis\Middlewares\Handler\MiddlewareHandler;
-use Metamorphosis\Middlewares\Middleware;
-use Metamorphosis\Record;
+use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
+use Metamorphosis\Middlewares\MiddlewareInterface;
+use Metamorphosis\Record\RecordInterface;
 
-class JsonDeserializer implements Middleware
+class JsonDeserializer implements MiddlewareInterface
 {
-    public function process(Record $record, MiddlewareHandler $handler): void
+    public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
         // Here you can manipulate your record before handle it in your consumer
 
@@ -89,7 +90,7 @@ class JsonDeserializer implements Middleware
 You may overwrite the record payload by calling `$record->setPayload()`:
 
 ```php
-public function process(Record $record, MiddlewareHandler $handler): void
+public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
 {
     $payload = $record->getPayload();
 
@@ -160,7 +161,7 @@ Methods will be available for handling exceptions:
 use App\Repository;
 use Exception;
 use Metamorphosis\Exceptions\ResponseWarningException;
-use Metamorphosis\Record;
+use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
 class PriceUpdateConsumer extends AbstractHandler
@@ -184,7 +185,7 @@ class PriceUpdateConsumer extends AbstractHandler
      *
      * @return void
      */
-    public function handle(Record $record): void
+    public function handle(RecordInterface $record): void
     {
         $product = $record->getPayload();
 
@@ -241,22 +242,33 @@ redirect_stderr=true
 stdout_logfile=/var/log/default/kafka-consumer-price-update.log
 ```
 
-Although you can run this simple command, we've some options you can pass to make it more flexible to your needs.
+##### Options
 
-If you wish do specify in which partition the consumer must be attached, you can set the option `--partition=`
+Although you can run this simple command, it provides some options you can pass to make it more flexible to your needs.
 
-And if you need to start the consumption of a topic in a specific offset (it can be useful for debug purposes)
-you can pass the `--offset=` option, but for this, it will be required to specify the partition too.
+- `--broker=`
 
-An example of how it would be using all this options, for example, we would run a consumer for a price topic
-getting records from the second partition and an offset of 34:
+    Sometimes, you may want to change which broker the consumer should connect to (maybe for testing/debug purposes).
+    For that, you just nedd to call the `--broker` option with another broker connection key already set in the `config/kafka.php` file.
+    
+    `$ php artisan kafka:consume price-update --broker='some-other-broker'`
 
-```bash
-$ php artisan kafka:consume price-update --partition=2 --offset=34
-```
+- `--offset=`
 
-Also, you can specify what would be the timeout for the consumer, by using the `--timeout=` option, the time is in milliseconds.
-```bash
-$ php artisan kafka:consume price-update --timeout=23000
-```
+    And if you need to start the consumption of a topic in a specific offset (it can be useful for debug purposes)
+    you can pass the `--offset=` option, but for this, it will be required to specify the partition too.
+    
+    `$ php artisan kafka:consume price-update --partition=2 --offset=34`
+
+- `--partition=`
+
+    If you wish do specify in which partition the consumer must be attached, you can set the option `--partition=`.
+    
+    `$ php artisan kafka:consume price-update --partition=2 --offset=34`
+
+- `--timeout=`
+
+   You can specify what would be the timeout for the consumer, by using the `--timeout=` option, the time is in milliseconds.
+
+   `$ php artisan kafka:consume price-update --timeout=23000`
 

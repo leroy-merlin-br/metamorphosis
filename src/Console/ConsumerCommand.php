@@ -18,6 +18,7 @@ class ConsumerCommand extends BaseCommand
         {consumer-group? : consumer group name.}
         {--offset= : Sets the offset at which to start consumption.}
         {--partition= : Sets the partition to consume.}
+        {--broker= : Override broker connection from config.}
         {--timeout= : Sets timeout for consumer.}';
 
     public function handle(ConsumerRunner $runner)
@@ -30,7 +31,8 @@ class ConsumerCommand extends BaseCommand
             $this->argument('topic'),
             $this->argument('consumer-group'),
             $this->getIntOption('partition'),
-            $this->getIntOption('offset')
+            $this->getIntOption('offset'),
+            $this->option('broker')
         );
 
         $this->writeStartingConsumer($config);

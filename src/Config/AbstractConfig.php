@@ -24,12 +24,12 @@ abstract class AbstractConfig
      */
     protected $middlewares = [];
 
-    public function __construct(string $topic)
+    public function __construct(string $topic, string $broker = null)
     {
         $topicConfig = $this->getTopicConfig($topic);
         $this->setGlobalMiddlewares();
         $this->setTopic($topicConfig);
-        $this->setBroker($topicConfig);
+        $this->setBroker($broker ?: $topicConfig['broker']);
     }
 
     public function getTopic(): string
@@ -58,12 +58,12 @@ abstract class AbstractConfig
         return $config;
     }
 
-    protected function setBroker(array $topicConfig): void
+    protected function setBroker(string $brokerKey): void
     {
-        $brokerConfig = config("kafka.brokers.{$topicConfig['broker']}");
+        $brokerConfig = config("kafka.brokers.{$brokerKey}");
 
         if (!$brokerConfig) {
-            throw new ConfigurationException("Broker '{$topicConfig['broker']}' configuration not found");
+            throw new ConfigurationException("Broker '{$brokerKey}' configuration not found");
         }
 
         $this->broker = new Broker($brokerConfig['connections'], $brokerConfig['auth'] ?? null);

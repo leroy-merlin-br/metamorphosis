@@ -34,14 +34,24 @@ class Consumer extends AbstractConfig
      */
     protected $consumerHandler;
 
+    /**
+     * The maximum amount of RAM the ConsumerRunner may consume.
+     *
+     * @var int
+     */
+    protected $memory;
+
     public function __construct(
         string $topic,
         string $consumerGroupId = null,
         int $partition = null,
-        int $offset = null
+        int $offset = null,
+        int $memory = null
     ) {
         parent::__construct($topic);
         $this->setConsumerGroup($this->getTopicConfig($topic), $consumerGroupId, $partition, $offset);
+
+        $this->memory = $memory;
     }
 
     public function getConsumerGroupId(): string
@@ -67,6 +77,11 @@ class Consumer extends AbstractConfig
     public function getConsumerPartition(): ?int
     {
         return $this->consumerPartition;
+    }
+
+    public function getMemoryLimit(): ?int
+    {
+        return $this->memory;
     }
 
     private function setConsumerGroup(

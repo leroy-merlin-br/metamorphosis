@@ -44,6 +44,8 @@ class ConsumerRunner
             } catch (Exception $exception) {
                 $this->handler->failed($exception);
             }
+
+            $this->stopIfNecessary($config);
         }
     }
 
@@ -56,5 +58,32 @@ class ConsumerRunner
     {
         $middlewares[] = new ConsumerMiddleware($this->handler);
         $this->middlewareDispatcher = new Dispatcher($middlewares);
+    }
+
+    /**
+     * It checks to see if we have exceeded our memory limits. If so, we'll stop
+     * this worker and let whatever is "monitoring" it restart the process.
+     */
+    protected function stopIfNecessary(Consumer $config): void
+    {
+        if ($this->memoryExceeded($config->getMemoryLimit())) {
+            $this->stop(12);
+        }
+    }
+
+    /**
+     * Determine if the memory limit has been exceeded.
+     */
+    protected function memoryExceeded(int $memoryLimit): bool
+    {
+        return $memoryLimit && (memory_get_usage(true) / 1024 / 1024) >= $memoryLimit;
+    }
+
+    /**
+     * Stop consuming and bail out of the script.
+     */
+    protected function stop(int $status = 0): void
+    {
+        exit($status);
     }
 }

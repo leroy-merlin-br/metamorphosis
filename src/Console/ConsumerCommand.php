@@ -18,7 +18,8 @@ class ConsumerCommand extends BaseCommand
         {consumer-group? : consumer group name.}
         {--offset= : Sets the offset at which to start consumption.}
         {--partition= : Sets the partition to consume.}
-        {--timeout= : Sets timeout for consumer.}';
+        {--timeout= : Sets timeout for consumer.}
+        {--memory=128 : The memory limit in megabytes}';
 
     public function handle(ConsumerRunner $runner)
     {
@@ -30,7 +31,8 @@ class ConsumerCommand extends BaseCommand
             $this->argument('topic'),
             $this->argument('consumer-group'),
             $this->getIntOption('partition'),
-            $this->getIntOption('offset')
+            $this->getIntOption('offset'),
+            $this->getIntOption('memory')
         );
 
         $this->writeStartingConsumer($config);

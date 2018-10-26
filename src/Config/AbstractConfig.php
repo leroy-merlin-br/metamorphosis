@@ -24,12 +24,12 @@ abstract class AbstractConfig
      */
     protected $middlewares = [];
 
-    public function __construct(string $topic)
+    public function __construct(string $topic, string $broker = null)
     {
         $topicConfig = $this->getTopicConfig($topic);
         $this->setGlobalMiddlewares();
         $this->setTopic($topicConfig);
-        $this->setBroker($topicConfig['broker']);
+        $this->setBroker($broker ?: $topicConfig['broker']);
     }
 
     public function getTopic(): string

@@ -139,4 +139,4 @@ redirect_stderr=true
 stdout_logfile=/var/log/default/kafka-consumer-price-update.log
 ```
 
-That's it. For more information about usage, middlewares, broker authentication, consumer groups and other advanced topics, please have a look at our [Advanced Usage Guide](docs/advanced.md).
+That's it. For more information about usage, middlewares, broker authentication, consumer groups and other advanced topics, please have a look at our [Advanced Usage Guide](advanced.md).

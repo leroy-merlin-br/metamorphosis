@@ -1,5 +1,5 @@
 <?php
-namespace Test;
+namespace Tests\Connectors\Consumer;
 
 use Metamorphosis\Broker;
 use Metamorphosis\Config\Consumer;

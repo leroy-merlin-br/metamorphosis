@@ -1,0 +1,13 @@
+parameters:
+    level: max
+    includes:
+        - vendor/phpstan/phpstan-phpunit/extension.neon
+    paths:
+        - config
+        - src
+        - tests
+    ignoreErrors:
+        # https://github.com/arnaud-lb/php-rdkafka/pull/188
+        - '#Method RdKafka\\TopicConf::set\(\) invoked with 2 parameters, 0 required.#'
+         # Know values from Command
+        - '#expects string, array|string|null given#'

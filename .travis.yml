@@ -23,6 +23,7 @@ before_script:
 script:
   - mkdir -p build/logs
   - vendor/bin/phpcs
+  - vendor/bin/phpstan analyze
   - phpunit -c phpunit.xml.dist && make coverage
 
 after_script:

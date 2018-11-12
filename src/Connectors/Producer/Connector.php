@@ -13,7 +13,7 @@ use RdKafka\ProducerTopic;
 class Connector
 {
     /**
-     * @var Queue
+     * @var Queue|null
      */
     public $queue;
 

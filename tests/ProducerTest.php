@@ -50,7 +50,7 @@ class ProducerTest extends LaravelTestCase
         $this->app->instance(ProducerMiddleware::class, $this->createMock(ProducerMiddleware::class));
         $producer = new Producer();
         $producerHandler = new class($record, $topic) extends AbstractHandler {
-            public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
+            public function __construct($record, string $topic = null)
             {
                 $this->record = $record;
                 $this->topic = $topic;

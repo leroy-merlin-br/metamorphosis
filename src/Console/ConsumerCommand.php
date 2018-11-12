@@ -10,17 +10,17 @@ use RuntimeException;
 class ConsumerCommand extends BaseCommand
 {
     /**
-     * @var {inheritdoc}
+     * {inheritdoc}
      */
     protected $name = 'kafka:consume';
 
     /**
-     * @var {inheritdoc}
+     * {inheritdoc}
      */
     protected $description = 'Consumes something';
 
     /**
-     * @var {inheritdoc}
+     * {inheritdoc}
      */
     protected $signature = 'kafka:consume
         {topic : topic.}
@@ -50,7 +50,9 @@ class ConsumerCommand extends BaseCommand
 
         $this->writeConnectingBroker($config);
 
-        if ($timeout = $this->option('timeout')) {
+        /** @var int */
+        $timeout = $this->option('timeout');
+        if ($timeout) {
             $runner->setTimeout($timeout);
         }
 

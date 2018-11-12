@@ -5,7 +5,7 @@ use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 
 class SecondProducerHandlerDummy extends AbstractHandler
 {
-    public function __construct($record, string $topic, string $key = null, int $partition = null)
+    public function __construct($record, ?string $topic = NULL, ?string $key = NULL, ?int $partition = NULL)
     {
         $this->record = $record;
         $this->topic = $topic;

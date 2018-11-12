@@ -20,7 +20,7 @@ abstract class AbstractConfig
     protected $broker;
 
     /**
-     * @var iterable
+     * @var array
      */
     protected $middlewares = [];
 
@@ -42,7 +42,7 @@ abstract class AbstractConfig
         return $this->broker;
     }
 
-    public function getMiddlewares(): iterable
+    public function getMiddlewares(): array
     {
         return $this->middlewares;
     }

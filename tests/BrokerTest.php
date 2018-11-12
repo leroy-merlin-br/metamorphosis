@@ -19,6 +19,6 @@ class BrokerTest extends LaravelTestCase
     {
         $broker = new Broker('some-connection');
 
-        $this->assertNull($broker->authenticate(new Conf()));
+        $broker->authenticate(new Conf());
     }
 }

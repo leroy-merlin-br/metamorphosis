@@ -1,8 +1,8 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\Middlewares\MiddlewareInterface;
+use Metamorphosis\Record\RecordInterface;
 
 class Iterator extends AbstractMiddlewareHandler
 {

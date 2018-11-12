@@ -9,8 +9,7 @@ use Tests\LaravelTestCase;
 
 class AbstractHandlerTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_handle_warning_consumer()
+    public function testItShouldHandleWarningConsumer()
     {
         $consumerHandler = new class() extends AbstractHandler {
             public function handle(RecordInterface $record): void
@@ -23,8 +22,7 @@ class AbstractHandlerTest extends LaravelTestCase
         $this->assertNull($voidReturn);
     }
 
-    /** @test */
-    public function it_should_handle_failed_consumer()
+    public function testItShouldHandleFailedConsumer()
     {
         $consumerHandler = new class() extends AbstractHandler {
             public function handle(RecordInterface $record): void

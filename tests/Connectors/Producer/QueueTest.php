@@ -7,8 +7,7 @@ use Tests\LaravelTestCase;
 
 class QueueTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_poll()
+    public function testItShouldPoll()
     {
         $producer = $this->createMock(Producer::class);
         $queue = new Queue($producer);

@@ -44,8 +44,7 @@ class ConnectorFactoryTest extends LaravelTestCase
         ]);
     }
 
-    /** @test */
-    public function it_makes_low_level_class()
+    public function testItMakesLowLevelClass()
     {
         $config = new Consumer('topic-key', 'with-partition', 3, 0);
 
@@ -54,8 +53,7 @@ class ConnectorFactoryTest extends LaravelTestCase
         $this->assertInstanceOf(LowLevel::class, $lowLevelConnector);
     }
 
-    /** @test */
-    public function it_makes_high_level_class()
+    public function testItMakesHighLevelClass()
     {
         $config = new Consumer('topic-key', 'without-partition');
 

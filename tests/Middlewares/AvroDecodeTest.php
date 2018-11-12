@@ -6,16 +6,15 @@ use Avro\Datum\IODatumWriter;
 use Avro\Exception\DataIoException;
 use Avro\IO\StringIO;
 use Avro\Schema\Schema;
-use Metamorphosis\Record\ConsumerRecord as Record;
 use Metamorphosis\Middlewares\AvroDecode;
 use Metamorphosis\Middlewares\Handler\Iterator;
+use Metamorphosis\Record\ConsumerRecord as Record;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
 
 class AvroDecodeTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_decode_and_update_message_payload()
+    public function testItShouldDecodeAndUpdateMessagePayload()
     {
         $data = [['member_id' => 1392, 'member_name' => 'Jose']];
 
@@ -40,8 +39,7 @@ class AvroDecodeTest extends LaravelTestCase
         $this->assertSame($data, $record->getPayload());
     }
 
-    /** @test */
-    public function it_should_decode_and_update_message_payload_with_multiples_records()
+    public function testItShouldDecodeAndUpdateMessagePayloadWithMultiplesRecords()
     {
         $jose = ['member_id' => 1392, 'member_name' => 'Jose'];
         $maria = ['member_id' => 1642, 'member_name' => 'Maria'];
@@ -68,8 +66,7 @@ class AvroDecodeTest extends LaravelTestCase
         $this->assertSame($data, $record->getPayload());
     }
 
-    /** @test */
-    public function it_should_throw_an_exception_on_invalid_binary_string()
+    public function testItShouldThrowAnExceptionOnInvalidBinaryString()
     {
         $binaryString = 'invalid-binary-string';
 

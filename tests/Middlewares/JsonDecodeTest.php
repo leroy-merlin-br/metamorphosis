@@ -10,8 +10,7 @@ use Tests\LaravelTestCase;
 
 class JsonDecodeTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_decode_and_update_message_payload()
+    public function testItShouldDecodeAndUpdateMessagePayload()
     {
         $data = [['member_id' => 1392, 'member_name' => 'Jose']];
 
@@ -36,8 +35,7 @@ class JsonDecodeTest extends LaravelTestCase
         $this->assertSame($data, $record->getPayload());
     }
 
-    /** @test */
-    public function it_should_throw_an_exception_on_invalid_json_string()
+    public function testItShouldThrowAnExceptionOnInvalidJsonString()
     {
         $json = "{'Organization': 'Metamorphosis Team'}";
 

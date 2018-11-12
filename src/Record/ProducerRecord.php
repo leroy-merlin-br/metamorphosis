@@ -18,7 +18,7 @@ class ProducerRecord implements RecordInterface
     /**
      * The partition which the message will be send inside the topic.
      *
-     * @var null|int
+     * @var int|null
      */
     protected $partition;
 

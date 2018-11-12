@@ -1,9 +1,9 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\RecordInterface;
+use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
 
 class Consumer implements MiddlewareInterface
 {

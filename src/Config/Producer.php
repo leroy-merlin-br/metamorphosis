@@ -9,7 +9,7 @@ class Producer extends AbstractConfig
     /**
      * @var int
      */
-    protected $timeoutResponses = 50;
+    protected $timeoutResponses = 1;
 
     public function __construct(string $topic)
     {

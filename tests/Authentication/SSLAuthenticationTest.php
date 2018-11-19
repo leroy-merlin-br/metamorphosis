@@ -19,7 +19,7 @@ class SSLAuthenticationTest extends LaravelTestCase
 
         $sslAuthentication = new SSLAuthentication($authConfig);
 
-        $this->assertNull($sslAuthentication->authenticate(new Conf()));
+        $this->assertNull($sslAuthentication->setAuthentication(new Conf()));
     }
 
     /** @test */
@@ -34,6 +34,6 @@ class SSLAuthenticationTest extends LaravelTestCase
 
         $this->expectException(AuthenticationException::class);
 
-        $sslAuthentication->authenticate(new Conf());
+        $sslAuthentication->setAuthentication(new Conf());
     }
 }

@@ -23,9 +23,9 @@ class Broker
         $this->setAuthentication($authentication);
     }
 
-    public function authenticate(Conf $conf): void
+    public function prepareAuthentication(Conf $conf): void
     {
-        $this->authentication->authenticate($conf);
+        $this->authentication->setAuthentication($conf);
     }
 
     public function getConnections(): string

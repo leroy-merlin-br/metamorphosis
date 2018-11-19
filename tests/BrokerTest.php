@@ -17,10 +17,10 @@ class BrokerTest extends LaravelTestCase
     }
 
     /** @test */
-    public function it_should_authenticate()
+    public function it_should_prepare_authentication()
     {
         $broker = new Broker('some-connection');
 
-        $this->assertNull($broker->authenticate(new Conf()));
+        $this->assertNull($broker->prepareAuthentication(new Conf()));
     }
 }

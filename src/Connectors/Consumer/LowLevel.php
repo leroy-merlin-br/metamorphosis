@@ -19,7 +19,7 @@ class LowLevel extends AbstractConnector implements ConnectorInterface
     {
         $broker = $this->config->getBrokerConfig();
 
-        $conf = $this->getConf($broker);
+        $conf = $this->getDefaultConf($broker);
 
         $conf->set('group.id', $this->config->getConsumerGroupId());
 

@@ -37,7 +37,7 @@ class Connector extends AbstractConnector
     {
         $broker = $config->getBrokerConfig();
 
-        $conf = $this->getConf($broker);
+        $conf = $this->getDefaultConf($broker);
 
         $this->setCallbackResponses($conf);
 

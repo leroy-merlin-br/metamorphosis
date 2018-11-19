@@ -12,7 +12,7 @@ abstract class AbstractConnector
      */
     protected $config;
 
-    protected function getConf(Broker $broker): Conf
+    protected function getDefaultConf(Broker $broker): Conf
     {
         $conf = resolve(Conf::class);
 

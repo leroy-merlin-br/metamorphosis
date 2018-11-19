@@ -1,8 +1,8 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\Connectors\AbstractConnector;
 use Metamorphosis\Config\Consumer as ConfigConsumer;
+use Metamorphosis\Connectors\AbstractConnector;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
 use RdKafka\Consumer;

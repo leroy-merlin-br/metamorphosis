@@ -2,8 +2,8 @@
 namespace Metamorphosis\Connectors;
 
 use Metamorphosis\Broker;
-use RdKafka\Conf;
 use Metamorphosis\Config\AbstractConfig;
+use RdKafka\Conf;
 
 abstract class AbstractConnector
 {

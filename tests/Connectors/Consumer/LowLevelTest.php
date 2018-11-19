@@ -22,6 +22,10 @@ class LowLevelTest extends LaravelTestCase
             ->will($this->returnValue($this->createMock(Broker::class)));
 
         $config->expects($this->once())
+            ->method('enableHighPerformance')
+            ->will($this->returnValue(true));
+
+        $config->expects($this->once())
             ->method('getConsumerGroupId')
             ->will($this->returnValue('group.id'));
 

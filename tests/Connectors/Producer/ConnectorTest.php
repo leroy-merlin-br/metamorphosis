@@ -16,6 +16,10 @@ class ConnectorTest extends LaravelTestCase
     {
         $config = $this->createMock(Producer::class);
 
+        $config->expects($this->once())
+            ->method('enableHighPerformance')
+            ->will($this->returnValue(true));
+
         $connector = new Connector();
 
         $producer = $connector->getProducerTopic($config);

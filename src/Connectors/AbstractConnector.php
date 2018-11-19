@@ -20,6 +20,16 @@ abstract class AbstractConnector
 
         $broker->prepareAuthentication($conf);
 
+        $this->setHighPerformance($conf);
+
         return $conf;
+    }
+
+    protected function setHighPerformance(Conf $conf): void
+    {
+        $conf->set('socket.timeout.ms', 50);
+
+        pcntl_sigprocmask(SIG_BLOCK, [SIGIO]);
+        $conf->set('internal.termination.signal', SIGIO);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Connectors;
 
-use Metamorphosis\Broker;
 use Metamorphosis\Config\AbstractConfig;
 use RdKafka\Conf;
 
@@ -12,15 +11,18 @@ abstract class AbstractConnector
      */
     protected $config;
 
-    protected function getDefaultConf(Broker $broker): Conf
+    protected function getDefaultConf(AbstractConfig $config): Conf
     {
         $conf = resolve(Conf::class);
+        $broker = $config->getBrokerConfig();
 
         $conf->set('metadata.broker.list', $broker->getConnections());
 
         $broker->prepareAuthentication($conf);
 
-        $this->setHighPerformance($conf);
+        if ($config->enableHighPerformance()) {
+            $this->setHighPerformance($conf);
+        }
 
         return $conf;
     }

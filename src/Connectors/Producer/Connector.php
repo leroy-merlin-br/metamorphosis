@@ -35,9 +35,7 @@ class Connector extends AbstractConnector
 
     public function getProducerTopic(Producer $config): ProducerTopic
     {
-        $broker = $config->getBrokerConfig();
-
-        $conf = $this->getDefaultConf($broker);
+        $conf = $this->getDefaultConf($config);
 
         $this->setCallbackResponses($conf);
 

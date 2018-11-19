@@ -16,8 +16,7 @@ class HighLevel extends AbstractConnector implements ConnectorInterface
 
     public function getConsumer(): ConsumerInterface
     {
-        $broker = $this->config->getBrokerConfig();
-        $conf = $this->getDefaultConf($broker);
+        $conf = $this->getDefaultConf($this->config);
 
         $conf->set('group.id', $this->config->getConsumerGroupId());
         $conf->set('auto.offset.reset', $this->config->getConsumerOffsetReset());

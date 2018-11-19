@@ -1,32 +1,27 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\Config\Consumer as ConsumerConfig;
+use Metamorphosis\Connectors\AbstractConnector;
+use Metamorphosis\Config\Consumer as ConfigConsumer;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
-use RdKafka\Conf;
 use RdKafka\Consumer;
 use RdKafka\TopicConf;
 
-class LowLevel implements ConnectorInterface
+class LowLevel extends AbstractConnector implements ConnectorInterface
 {
-    /**
-     * @var ConsumerConfig
-     */
-    protected $config;
-
-    public function __construct(ConsumerConfig $config)
+    public function __construct(ConfigConsumer $config)
     {
         $this->config = $config;
     }
 
     public function getConsumer(): ConsumerInterface
     {
-        $conf = $this->getConf();
-        $conf->set('group.id', $this->config->getConsumerGroupId());
-
         $broker = $this->config->getBrokerConfig();
-        $broker->authenticate($conf);
+
+        $conf = $this->getConf($broker);
+
+        $conf->set('group.id', $this->config->getConsumerGroupId());
 
         $consumer = new Consumer($conf);
         $consumer->addBrokers($broker->getConnections());
@@ -50,10 +45,5 @@ class LowLevel implements ConnectorInterface
         $topicConfig->set('auto.offset.reset', $this->config->getConsumerOffsetReset());
 
         return $topicConfig;
-    }
-
-    protected function getConf(): Conf
-    {
-        return resolve(Conf::class);
     }
 }

@@ -6,10 +6,19 @@ use RdKafka\Conf;
 
 class SSLAuthentication implements Authentication
 {
+    /**
+     * @var string
+     */
     protected $ca;
 
+    /**
+     * @var string
+     */
     protected $certificate;
 
+    /**
+     * @var string
+     */
     protected $key;
 
     public function __construct(array $authConfig)

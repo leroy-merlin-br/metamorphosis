@@ -9,8 +9,7 @@ use Tests\LaravelTestCase;
 
 class ConsumerRecordTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_throw_exception_when_base_message_has_errors()
+    public function testItShouldThrowExceptionWhenBaseMessageHasErrors()
     {
         $kafkaMessage = $this->createMock(KafkaMessage::class);
         $kafkaMessage->payload = '';
@@ -26,8 +25,7 @@ class ConsumerRecordTest extends LaravelTestCase
         new Record($kafkaMessage);
     }
 
-    /** @test */
-    public function it_should_throw_warning_exception()
+    public function testItShouldThrowWarningException()
     {
         $kafkaMessage = $this->createMock(KafkaMessage::class);
         $kafkaMessage->payload = '';
@@ -43,8 +41,7 @@ class ConsumerRecordTest extends LaravelTestCase
         new Record($kafkaMessage);
     }
 
-    /** @test */
-    public function it_should_provides_getter_and_setter_for_payload()
+    public function testItShouldProvidesGetterAndSetterForPayload()
     {
         $kafkaMessage = new KafkaMessage();
         $kafkaMessage->payload = 'original record';
@@ -56,8 +53,7 @@ class ConsumerRecordTest extends LaravelTestCase
         $this->assertSame('new record', $record->getPayload());
     }
 
-    /** @test */
-    public function it_should_get_original_message()
+    public function testItShouldGetOriginalMessage()
     {
         $kafkaMessage = new KafkaMessage();
         $kafkaMessage->payload = 'original record';
@@ -68,8 +64,7 @@ class ConsumerRecordTest extends LaravelTestCase
         $this->assertSame($kafkaMessage, $record->getOriginal());
     }
 
-    /** @test */
-    public function it_should_get_topic_name()
+    public function testItShouldGetTopicName()
     {
         $kafkaMessage = new KafkaMessage();
         $kafkaMessage->topic_name = 'topic-name';
@@ -80,8 +75,7 @@ class ConsumerRecordTest extends LaravelTestCase
         $this->assertSame('topic-name', $record->getTopicName());
     }
 
-    /** @test */
-    public function it_should_get_partition()
+    public function testItShouldGetPartition()
     {
         $kafkaMessage = new KafkaMessage();
         $kafkaMessage->partition = 0;
@@ -92,8 +86,7 @@ class ConsumerRecordTest extends LaravelTestCase
         $this->assertSame(0, $record->getPartition());
     }
 
-    /** @test */
-    public function it_should_get_key()
+    public function testItShouldGetKey()
     {
         $kafkaMessage = new KafkaMessage();
         $kafkaMessage->key = 'key';
@@ -104,8 +97,7 @@ class ConsumerRecordTest extends LaravelTestCase
         $this->assertSame('key', $record->getKey());
     }
 
-    /** @test */
-    public function it_should_get_offset()
+    public function testItShouldGetOffset()
     {
         $kafkaMessage = new KafkaMessage();
         $kafkaMessage->offset = 10;

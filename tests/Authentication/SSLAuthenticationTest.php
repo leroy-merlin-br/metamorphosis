@@ -8,8 +8,7 @@ use Tests\LaravelTestCase;
 
 class SSLAuthenticationTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_validate_authentication_configurations()
+    public function testItShouldValidateAuthenticationConfigurations()
     {
         $authConfig = [
             'ca' => 'path/to/ca',
@@ -22,8 +21,7 @@ class SSLAuthenticationTest extends LaravelTestCase
         $this->assertNull($sslAuthentication->setAuthentication(new Conf()));
     }
 
-    /** @test */
-    public function it_should_throws_exception_when_invalid_authentication_configurations()
+    public function testItShouldThrowsExceptionWhenInvalidAuthenticationConfigurations()
     {
         $authConfig = [
             'certificate' => 'path/to/certificate',

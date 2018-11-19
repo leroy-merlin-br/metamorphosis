@@ -8,8 +8,7 @@ use Tests\LaravelTestCase;
 
 class HighLevelTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_consume()
+    public function testItShouldConsume()
     {
         $kafkaConsumer = $this->createMock(KafkaConsumer::class);
         $message = new Message();

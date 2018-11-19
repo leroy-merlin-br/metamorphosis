@@ -88,8 +88,6 @@ class PriceUpdateConsumer extends AbstractHandler
 
     /**
      * Create a new consumer topic handler instance.
-     *
-     * @return void
      */
     public function __construct(Repository $repository)
     {
@@ -98,10 +96,6 @@ class PriceUpdateConsumer extends AbstractHandler
 
     /**
      * Handle payload.
-     *
-     * @param Record $record
-     *
-     * @return void
      */
     public function handle(RecordInterface $record): void
     {

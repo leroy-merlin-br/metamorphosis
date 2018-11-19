@@ -77,7 +77,7 @@ class Consumer extends AbstractConfig
         int $partition = null,
         int $offset = null
     ): void {
-        if (!$consumerGroupId && count($topicConfig['consumer-groups']) === 1) {
+        if (!$consumerGroupId && 1 === count($topicConfig['consumer-groups'])) {
             $consumerGroupId = current(array_keys($topicConfig['consumer-groups']));
         }
 

@@ -11,7 +11,7 @@ class JsonDecode implements MiddlewareInterface
     {
         $payload = json_decode($record->getPayload(), true);
 
-        if ($payload === null && json_last_error() !== JSON_ERROR_NONE) {
+        if (null === $payload && JSON_ERROR_NONE !== json_last_error()) {
             throw new Exception(
                 'Malformed JSON. Error: '.json_last_error_msg()
             );

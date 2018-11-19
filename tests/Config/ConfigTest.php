@@ -46,8 +46,7 @@ class ConfigTest extends LaravelTestCase
         ]);
     }
 
-    /** @test */
-    public function it_parses_configuration_from_file()
+    public function testItParsesConfigurationFromFile()
     {
         $topicKey = 'topic-key';
         $config = new class($topicKey) extends AbstractConfig {
@@ -61,8 +60,7 @@ class ConfigTest extends LaravelTestCase
         ], $config->getMiddlewares());
     }
 
-    /** @test */
-    public function it_can_handle_broker_config_without_authentication_key()
+    public function testItCanHandleBrokerConfigWithoutAuthenticationKey()
     {
         config([
             'kafka.brokers' => [
@@ -80,8 +78,7 @@ class ConfigTest extends LaravelTestCase
         $this->assertInstanceOf(NoAuthentication::class, $broker->getAuthentication());
     }
 
-    /** @test */
-    public function it_throws_an_exception_when_topic_key_is_invalid()
+    public function testItThrowsAnExceptionWhenTopicKeyIsInvalid()
     {
         $topicKey = 'invalid-topic-key';
 
@@ -92,15 +89,16 @@ class ConfigTest extends LaravelTestCase
         };
     }
 
-    /** @test */
-    public function it_throws_an_exception_when_broker_is_invalid()
+    public function testItThrowsAnExceptionWhenBrokerIsInvalid()
     {
-        config(['kafka.topics' => [
-            'topic-key' => [
-                'topic' => 'topic-name',
-                'broker' => 'invalid-broker',
+        config([
+            'kafka.topics' => [
+                'topic-key' => [
+                    'topic' => 'topic-name',
+                    'broker' => 'invalid-broker',
+                ],
             ],
-        ]]);
+        ]);
         $topicKey = 'topic-key';
 
         $this->expectException(ConfigurationException::class);
@@ -110,8 +108,7 @@ class ConfigTest extends LaravelTestCase
         };
     }
 
-    /** @test */
-    public function it_can_handle_multiple_connections_for_same_broker_as_string()
+    public function testItCanHandleMultipleConnectionsForSameBrokerAsString()
     {
         config([
             'kafka.brokers' => [
@@ -129,8 +126,7 @@ class ConfigTest extends LaravelTestCase
         $this->assertSame('https:some-connection.com:8991,https:some-connection.com:8992', $broker->getConnections());
     }
 
-    /** @test */
-    public function it_can_handle_multiple_connections_for_same_broker_as_array()
+    public function testItCanHandleMultipleConnectionsForSameBrokerAsArray()
     {
         config([
             'kafka.brokers' => [
@@ -151,8 +147,7 @@ class ConfigTest extends LaravelTestCase
         $this->assertSame('https:some-connection.com:8991,https:some-connection.com:8992', $broker->getConnections());
     }
 
-    /** @test */
-    public function it_can_handle_no_middleware_configuration()
+    public function testItCanHandleNoMiddlewareConfiguration()
     {
         config([
             'kafka' => [

@@ -1,9 +1,9 @@
 <?php
 namespace Tests\Dummies;
 
-use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Middlewares\MiddlewareInterface;
+use Metamorphosis\Record\RecordInterface;
 
 class MiddlewareDummy implements MiddlewareInterface
 {

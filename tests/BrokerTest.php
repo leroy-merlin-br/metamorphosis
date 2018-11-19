@@ -7,8 +7,7 @@ use RdKafka\Conf;
 
 class BrokerTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_construct_broker_without_authentication()
+    public function testItShouldConstructBrokerWithoutAuthentication()
     {
         $broker = new Broker('some-connection');
 
@@ -16,8 +15,7 @@ class BrokerTest extends LaravelTestCase
         $this->assertInstanceOf(NoAuthentication::class, $broker->getAuthentication());
     }
 
-    /** @test */
-    public function it_should_prepare_authentication()
+    public function testItShouldPrepareAuthentication()
     {
         $broker = new Broker('some-connection');
 

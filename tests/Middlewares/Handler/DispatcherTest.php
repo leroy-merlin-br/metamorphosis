@@ -1,16 +1,15 @@
 <?php
 namespace Tests\Middlewares\Handler;
 
-use Metamorphosis\Record\ConsumerRecord as Record;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\MiddlewareInterface;
+use Metamorphosis\Record\ConsumerRecord as Record;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
 
 class DispatcherTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_create_iterator_instance_and_start_it()
+    public function testItShouldCreateIteratorInstanceAndStartIt()
     {
         $middleware = $this->createMock(MiddlewareInterface::class);
 

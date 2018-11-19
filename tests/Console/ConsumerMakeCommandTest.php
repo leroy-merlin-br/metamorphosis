@@ -5,8 +5,7 @@ use Tests\LaravelTestCase;
 
 class ConsumerMakeCommandTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_generate_consumer_handler()
+    public function testItShouldGenerateConsumerHandler()
     {
         $command = 'make:kafka-consumer';
         $parameters = [

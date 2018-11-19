@@ -68,8 +68,7 @@ class ProducerTest extends LaravelTestCase
         ]);
     }
 
-    /** @test */
-    public function it_parses_basic_configuration_from_file()
+    public function testItParsesBasicConfigurationFromFile()
     {
         $topicKey = 'topic-key-basic';
         $config = new Producer($topicKey);
@@ -83,8 +82,7 @@ class ProducerTest extends LaravelTestCase
         $this->assertSame(1, $config->getTimeoutResponse());
     }
 
-    /** @test */
-    public function it_parses_partial_configuration_from_file()
+    public function testItParsesPartialConfigurationFromFile()
     {
         $topicKey = 'topic-key-partial';
         $config = new Producer($topicKey);
@@ -98,8 +96,7 @@ class ProducerTest extends LaravelTestCase
         $this->assertSame(80, $config->getTimeoutResponse());
     }
 
-    /** @test */
-    public function it_parses_full_configuration_from_file()
+    public function testItParsesFullConfigurationFromFile()
     {
         $topicKey = 'topic-key-full';
         $config = new Producer($topicKey);

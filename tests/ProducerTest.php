@@ -8,8 +8,7 @@ use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 
 class ProducerTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_produce_record_as_array_through_middleware_queue()
+    public function testItShouldProduceRecordAsArrayThroughMiddlewareQueue()
     {
         $record = ['message' => 'some message'];
         $topic = 'some-topic';
@@ -27,8 +26,7 @@ class ProducerTest extends LaravelTestCase
         $this->assertNull($producer->produce($producerHandler));
     }
 
-    /** @test */
-    public function it_should_produce_record_as_string_through_middleware_queue()
+    public function testItShouldProduceRecordAsStringThroughMiddlewareQueue()
     {
         $record = json_encode(['message' => 'some message']);
         $topic = 'some-topic';
@@ -45,8 +43,7 @@ class ProducerTest extends LaravelTestCase
         $this->assertNull($producer->produce($producerHandler));
     }
 
-    /** @test */
-    public function it_should_throw_json_exception_when_passing_mal_formatted_array()
+    public function testItShouldThrowJsonExceptionWhenPassingMalFormattedArray()
     {
         $record = ["\xB1\x31"];
         $topic = 'some-topic';

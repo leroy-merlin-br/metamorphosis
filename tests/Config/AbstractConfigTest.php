@@ -171,4 +171,42 @@ class AbstractConfigTest extends LaravelTestCase
 
         $this->assertEmpty($config->getMiddlewares());
     }
+
+    public function testItAcceptHighPerformanceConfigurationPerTopic()
+    {
+        config([
+            'kafka.topics' => [
+                'topic-high-performance-enabled-active' => [
+                    'topic' => 'topic-name',
+                    'broker' => 'default',
+                ],
+                'topic-high-performance-enable-passive' => [
+                    'topic' => 'topic-name',
+                    'broker' => 'default',
+                    'high-performance' => true,
+                ],
+                'topic-high-performance-inactive' => [
+                    'topic' => 'topic-name',
+                    'broker' => 'default',
+                    'high-performance' => false,
+                ],
+            ],
+        ]);
+
+        $topicKey = 'topic-high-performance-enabled-active';
+        $configEnabledActive = new class($topicKey) extends AbstractConfig {
+        };
+
+        $topicKey = 'topic-high-performance-enable-passive';
+        $configEnabledPassive = new class($topicKey) extends AbstractConfig {
+        };
+
+        $topicKey = 'topic-high-performance-inactive';
+        $configDisabled = new class($topicKey) extends AbstractConfig {
+        };
+
+        $this->assertTrue($configEnabledActive->enableHighPerformance());
+        $this->assertTrue($configEnabledPassive->enableHighPerformance());
+        $this->assertFalse($configDisabled->enableHighPerformance());
+    }
 }

@@ -34,7 +34,7 @@ abstract class AbstractConfig
         $topicConfig = $this->getTopicConfig($topic);
         $this->setGlobalMiddlewares();
         $this->setTopic($topicConfig);
-        $this->setHighPerformanceConfig();
+        $this->setHighPerformanceConfig($topic);
         $this->setBroker($broker ?: $topicConfig['broker']);
     }
 
@@ -58,9 +58,9 @@ abstract class AbstractConfig
         return $this->enableHighPerformance;
     }
 
-    protected function setHighPerformanceConfig(): void
+    protected function setHighPerformanceConfig(string $topic): void
     {
-        $highPerformance = (bool) config("kafka.{$this->getTopic()}.high-performance", true);
+        $highPerformance = (bool) config("kafka.topics.{$topic}.high-performance", true);
         $this->enableHighPerformance = $highPerformance;
     }
 

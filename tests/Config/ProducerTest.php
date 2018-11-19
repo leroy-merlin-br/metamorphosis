@@ -80,7 +80,7 @@ class ProducerTest extends LaravelTestCase
             'first_topic_middleware',
         ], $config->getMiddlewares());
 
-        $this->assertSame(50, $config->getTimeoutResponse());
+        $this->assertSame(1, $config->getTimeoutResponse());
     }
 
     /** @test */

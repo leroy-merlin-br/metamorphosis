@@ -7,7 +7,7 @@ use Metamorphosis\Config\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Tests\LaravelTestCase;
 
-class ConfigTest extends LaravelTestCase
+class AbstractConfigTest extends LaravelTestCase
 {
     public function setUp()
     {

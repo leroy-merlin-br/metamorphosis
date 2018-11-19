@@ -60,7 +60,7 @@ return [
         'default' => [
             'topic' => 'default',
             'broker' => 'default',
-            'high-performance' =>  false,
+            'high-performance' => false,
             'consumer-groups' => [
                 'default' => [
                     'offset-reset' => 'largest',

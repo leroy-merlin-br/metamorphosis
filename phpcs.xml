@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<ruleset name="Metamorphosis">
+    <arg name="basepath" value="."/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="45"/>
+    <arg name="cache" value=".phpcs-cache"/>
+    <arg name="colors"/>
+
+    <!-- Ignore warnings and show progress of the run -->
+    <arg value="nps"/>
+
+    <!-- Folders that will be tracked -->
+    <file>config</file>
+    <file>src</file>
+    <file>tests</file>
+
+    <rule ref="LeroyMerlin"/>
+
+    <!-- Excluded patterns in some folders -->
+    <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName">
+        <exclude-pattern>config</exclude-pattern>
+    </rule>
+    <!-- To be fixed with https://github.com/leroy-merlin-br/php-coding-standard/pull/7 -->
+    <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment">
+        <exclude-pattern>src/Producer.php</exclude-pattern>
+        <exclude-pattern>src/Record/ConsumerRecord.php</exclude-pattern>
+    </rule>
+</ruleset>

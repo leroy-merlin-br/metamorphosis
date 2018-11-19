@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis\Connectors\Producer;
 
+use Exception;
 use Metamorphosis\Config\Producer;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
@@ -57,7 +58,7 @@ class Connector
         }
 
         if (!$this->queue) {
-            throw new \Exception('Cannot handle responses from broker without implementing '.HandleableResponseInterface::class);
+            throw new Exception('Cannot handle responses from broker without implementing '.HandleableResponseInterface::class);
         }
 
         $this->queue->poll($this->timeoutInSeconds);

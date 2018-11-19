@@ -1,15 +1,15 @@
 <?php
 namespace Tests\Console;
 
+use Metamorphosis\ConsumerRunner;
 use Metamorphosis\Consumers\HighLevel;
 use Metamorphosis\Consumers\LowLevel;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\ConsumerRunner;
 use RuntimeException;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
 
-class CommandTest extends LaravelTestCase
+class ConsumerCommandTest extends LaravelTestCase
 {
     public function setUp()
     {
@@ -39,8 +39,7 @@ class CommandTest extends LaravelTestCase
         ]);
     }
 
-    /** @test */
-    public function it_calls_command_with_invalid_topic()
+    public function testItCallsCommandWithInvalidTopic()
     {
         $command = 'kafka:consume';
         $parameters = [
@@ -53,8 +52,7 @@ class CommandTest extends LaravelTestCase
         $this->artisan($command, $parameters);
     }
 
-    /** @test */
-    public function it_calls_command_with_offset_without_partition()
+    public function testItCallsCommandWithOffsetWithoutPartition()
     {
         $command = 'kafka:consume';
         $parameters = [
@@ -68,8 +66,7 @@ class CommandTest extends LaravelTestCase
         $this->artisan($command, $parameters);
     }
 
-    /** @test */
-    public function it_calls_with_high_level_consumer()
+    public function testItCallsWithHighLevelConsumer()
     {
         $runner = $this->createMock(ConsumerRunner::class);
 
@@ -89,8 +86,7 @@ class CommandTest extends LaravelTestCase
         $this->artisan($command, $parameters);
     }
 
-    /** @test */
-    public function it_calls_with_low_level_consumer()
+    public function testItCallsWithLowLevelConsumer()
     {
         $runner = $this->createMock(ConsumerRunner::class);
         $this->instance(ConsumerRunner::class, $runner);
@@ -111,8 +107,7 @@ class CommandTest extends LaravelTestCase
         $this->artisan($command, $parameters);
     }
 
-    /** @test */
-    public function it_accepts_timeout_when_calling_command()
+    public function testItAcceptsTimeoutWhenCallingCommand()
     {
         $runner = $this->createMock(ConsumerRunner::class);
         $this->instance(ConsumerRunner::class, $runner);
@@ -127,6 +122,34 @@ class CommandTest extends LaravelTestCase
         $parameters = [
             'topic' => 'topic-key',
             '--timeout' => 1,
+        ];
+
+        $this->artisan($command, $parameters);
+    }
+
+    public function testItOverridesBrokerConnectionWhenCallingCommand()
+    {
+        config([
+            'kafka.brokers.some-broker' => [
+                'connections' => '',
+                'auth' => [],
+            ],
+        ]);
+
+        $runner = $this->createMock(ConsumerRunner::class);
+        $this->instance(ConsumerRunner::class, $runner);
+
+        $runner->expects($this->once())
+            ->method('run')
+            ->with($this->anything(), $this->callback(function ($subject) {
+                return $subject instanceof HighLevel;
+            }));
+
+        $command = 'kafka:consume';
+        $parameters = [
+            'topic' => 'topic-key',
+            '--timeout' => 1,
+            '--broker' => 'some-broker',
         ];
 
         $this->artisan($command, $parameters);

@@ -57,7 +57,7 @@ class Producer
     {
         $record = json_encode($record);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (JSON_ERROR_NONE !== json_last_error()) {
             throw new JsonException('Cannot convert data into a valid JSON. Reason: '.json_last_error_msg());
         }
 

@@ -46,9 +46,11 @@ class Consumer extends AbstractConfig
         string $consumerGroupId = null,
         int $partition = null,
         int $offset = null,
+        string $brokerKey = null,
         int $memory = null
     ) {
-        parent::__construct($topic);
+        parent::__construct($topic, $brokerKey);
+
         $this->setConsumerGroup($this->getTopicConfig($topic), $consumerGroupId, $partition, $offset);
 
         $this->memory = $memory;
@@ -90,7 +92,7 @@ class Consumer extends AbstractConfig
         int $partition = null,
         int $offset = null
     ): void {
-        if (!$consumerGroupId && count($topicConfig['consumer-groups']) === 1) {
+        if (!$consumerGroupId && 1 === count($topicConfig['consumer-groups'])) {
             $consumerGroupId = current(array_keys($topicConfig['consumer-groups']));
         }
 

@@ -3,8 +3,8 @@ namespace Tests;
 
 use Exception;
 use Metamorphosis\Config\Consumer;
-use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\ConsumerRunner;
+use Metamorphosis\Consumers\ConsumerInterface;
 use RdKafka\Message as KafkaMessage;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\Dummies\MiddlewareDummy;
@@ -12,12 +12,11 @@ use Tests\Dummies\MiddlewareDummy;
 class ConsumerRunnerTest extends LaravelTestCase
 {
     /**
-     * Counter for mocking infinite loop.
+     * @var int Counter for mocking infinite loop.
      */
     protected $messageCount = 0;
 
-    /** @test */
-    public function it_should_run()
+    public function testItShouldRun()
     {
         config([
             'kafka' => [

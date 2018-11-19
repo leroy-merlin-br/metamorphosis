@@ -10,8 +10,7 @@ use Tests\LaravelTestCase;
 
 class LowLevelTest extends LaravelTestCase
 {
-    /** @test */
-    public function it_should_make_connector_setup()
+    public function testItShouldMakeConnectorSetup()
     {
         $config = $this->createMock(Consumer::class);
         $this->app->instance(ConsumerTopic::class, $this->createMock(ConsumerTopic::class));

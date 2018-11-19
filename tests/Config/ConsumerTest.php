@@ -1,9 +1,10 @@
 <?php
 namespace Tests\Config;
 
+use Metamorphosis\Authentication\NoAuthentication;
 use Metamorphosis\Config\Consumer;
-use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
 
@@ -61,8 +62,7 @@ class ConsumerTest extends LaravelTestCase
         ]);
     }
 
-    /** @test */
-    public function it_parses_configuration_from_file()
+    public function testItParsesConfigurationFromFile()
     {
         $topicKey = 'topic-key';
         $consumerGroup = 'consumer-id';
@@ -80,8 +80,7 @@ class ConsumerTest extends LaravelTestCase
         ], $config->getMiddlewares());
     }
 
-    /** @test */
-    public function it_gets_default_consumer_group_when_none_is_passed()
+    public function testItGetsDefaultConsumerGroupWhenNoneIsPassed()
     {
         $topicKey = 'topic-key';
         $config = new Consumer($topicKey);
@@ -89,8 +88,7 @@ class ConsumerTest extends LaravelTestCase
         $this->assertSame('default', $config->getConsumerGroupId());
     }
 
-    /** @test */
-    public function it_gets_single_consumer_group_defined()
+    public function testItGetsSingleConsumerGroupDefined()
     {
         config([
             'kafka.topics' => [
@@ -114,8 +112,7 @@ class ConsumerTest extends LaravelTestCase
         $this->assertSame('any-name', $config->getConsumerGroupId());
     }
 
-    /** @test */
-    public function it_throws_an_exception_when_consumer_group_is_invalid()
+    public function testItThrowsAnExceptionWhenConsumerGroupIsInvalid()
     {
         $topicKey = 'topic-key';
         $consumerGroup = 'invalid-consumer-id';
@@ -124,5 +121,34 @@ class ConsumerTest extends LaravelTestCase
         $this->expectExceptionMessage("Consumer group 'invalid-consumer-id' not found");
 
         new Consumer($topicKey, $consumerGroup);
+    }
+
+    public function testItThrowsExceptionWhenOverridingBrokerWithInvalidBroker()
+    {
+        $topicKey = 'topic-key';
+        $broker = 'invalid_broker';
+
+        $this->expectException(ConfigurationException::class);
+        $this->expectExceptionMessage("Broker 'invalid_broker' configuration not found");
+
+        new Consumer($topicKey, null, null, null, $broker);
+    }
+
+    public function testItOverridesBrokerFromConfigWhenPassedByConstructor()
+    {
+        $topicKey = 'topic-key';
+        $broker = 'another-broker';
+        $connection = 'some-connection';
+        config([
+            "kafka.brokers.{$broker}" => [
+                'connections' => $connection,
+                'auth' => [],
+            ],
+        ]);
+
+        $config = new Consumer($topicKey, null, null, null, $broker);
+
+        $this->assertSame($connection, $config->getBrokerConfig()->getConnections());
+        $this->assertInstanceOf(NoAuthentication::class, $config->getBrokerConfig()->getAuthentication());
     }
 }

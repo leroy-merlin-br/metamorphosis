@@ -3,12 +3,24 @@ namespace Metamorphosis\TopicHandler\Producer;
 
 abstract class AbstractHandler implements HandlerInterface
 {
+    /**
+     * @var mixed
+     */
     protected $record;
 
+    /**
+     * @var string
+     */
     protected $topic;
 
+    /**
+     * @var string
+     */
     protected $key;
 
+    /**
+     * @var int
+     */
     protected $partition;
 
     public function __construct($record, string $topic = null, string $key = null, int $partition = null)

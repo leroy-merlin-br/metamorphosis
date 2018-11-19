@@ -9,17 +9,27 @@ use RuntimeException;
 
 class ConsumerCommand extends BaseCommand
 {
+    /**
+     * @var {inheritdoc}
+     */
     protected $name = 'kafka:consume';
 
+    /**
+     * @var {inheritdoc}
+     */
     protected $description = 'Consumes something';
 
+    /**
+     * @var {inheritdoc}
+     */
     protected $signature = 'kafka:consume
         {topic : topic.}
         {consumer-group? : consumer group name.}
         {--offset= : Sets the offset at which to start consumption.}
         {--partition= : Sets the partition to consume.}
+        {--broker= : Override broker connection from config.}
         {--timeout= : Sets timeout for consumer.}
-        {--memory=128 : The memory limit in megabytes}';
+        {--memory=128 : The memory limit in megabytes.}';
 
     public function handle(ConsumerRunner $runner)
     {
@@ -32,6 +42,7 @@ class ConsumerCommand extends BaseCommand
             $this->argument('consumer-group'),
             $this->getIntOption('partition'),
             $this->getIntOption('offset'),
+            $this->option('broker'),
             $this->getIntOption('memory')
         );
 

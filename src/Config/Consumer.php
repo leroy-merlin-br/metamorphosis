@@ -39,7 +39,7 @@ class Consumer extends AbstractConfig
      *
      * @var int
      */
-    protected $memory;
+    protected $memoryLimit;
 
     public function __construct(
         string $topic,
@@ -47,13 +47,13 @@ class Consumer extends AbstractConfig
         int $partition = null,
         int $offset = null,
         string $brokerKey = null,
-        int $memory = null
+        int $memoryLimit = null
     ) {
         parent::__construct($topic, $brokerKey);
 
         $this->setConsumerGroup($this->getTopicConfig($topic), $consumerGroupId, $partition, $offset);
 
-        $this->memory = $memory;
+        $this->memoryLimit = $memoryLimit;
     }
 
     public function getConsumerGroupId(): string
@@ -83,7 +83,7 @@ class Consumer extends AbstractConfig
 
     public function getMemoryLimit(): ?int
     {
-        return $this->memory;
+        return $this->memoryLimit;
     }
 
     private function setConsumerGroup(

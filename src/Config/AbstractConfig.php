@@ -53,7 +53,7 @@ abstract class AbstractConfig
         return $this->middlewares;
     }
 
-    public function enableHighPerformance(): bool
+    public function isHighPerformanceEnabled(): bool
     {
         return $this->enableHighPerformance;
     }

@@ -22,7 +22,7 @@ class HighLevelTest extends LaravelTestCase
             ->will($this->returnValue($this->createMock(Broker::class)));
 
         $config->expects($this->once())
-            ->method('enableHighPerformance')
+            ->method('isHighPerformanceEnabled')
             ->will($this->returnValue(true));
 
         $config->expects($this->once())

@@ -205,8 +205,8 @@ class AbstractConfigTest extends LaravelTestCase
         $configDisabled = new class($topicKey) extends AbstractConfig {
         };
 
-        $this->assertTrue($configEnabledActive->enableHighPerformance());
-        $this->assertTrue($configEnabledPassive->enableHighPerformance());
-        $this->assertFalse($configDisabled->enableHighPerformance());
+        $this->assertTrue($configEnabledActive->isHighPerformanceEnabled());
+        $this->assertTrue($configEnabledPassive->isHighPerformanceEnabled());
+        $this->assertFalse($configDisabled->isHighPerformanceEnabled());
     }
 }

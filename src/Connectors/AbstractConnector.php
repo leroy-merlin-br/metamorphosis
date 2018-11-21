@@ -20,7 +20,7 @@ abstract class AbstractConnector
 
         $broker->prepareAuthentication($conf);
 
-        if ($config->enableHighPerformance()) {
+        if ($config->isHighPerformanceEnabled()) {
             $this->setHighPerformance($conf);
         }
 

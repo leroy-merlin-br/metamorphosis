@@ -127,6 +127,26 @@ class ConsumerCommandTest extends LaravelTestCase
         $this->artisan($command, $parameters);
     }
 
+    public function testItAcceptsMemoryLimitWhenCallingCommand()
+    {
+        $runner = $this->createMock(ConsumerRunner::class);
+        $this->instance(ConsumerRunner::class, $runner);
+
+        $runner->expects($this->once())
+            ->method('run')
+            ->with($this->anything(), $this->callback(function ($subject) {
+                return $subject instanceof HighLevel;
+            }));
+
+        $command = 'kafka:consume';
+        $parameters = [
+            'topic' => 'topic-key',
+            '--memory' => 256,
+        ];
+
+        $this->artisan($command, $parameters);
+    }
+
     public function testItOverridesBrokerConnectionWhenCallingCommand()
     {
         config([

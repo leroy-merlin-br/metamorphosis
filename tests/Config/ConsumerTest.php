@@ -151,4 +151,20 @@ class ConsumerTest extends LaravelTestCase
         $this->assertSame($connection, $config->getBrokerConfig()->getConnections());
         $this->assertInstanceOf(NoAuthentication::class, $config->getBrokerConfig()->getAuthentication());
     }
+
+    public function testMemoryLimitShouldBeNullByDefault()
+    {
+        $topicKey = 'topic-key';
+        $config = new Consumer($topicKey);
+
+        $this->assertNull($config->getMemoryLimit());
+    }
+
+    public function testItSetsMemoryLimit()
+    {
+        $topicKey = 'topic-key';
+        $config = new Consumer($topicKey, null, null, null, null, 256);
+
+        $this->assertSame(256, $config->getMemoryLimit());
+    }
 }

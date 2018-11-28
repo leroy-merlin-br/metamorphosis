@@ -22,6 +22,9 @@
         "satooshi/php-coveralls": "^1.0",
         "nealio82/avro-php": "^0.1.2"
     },
+    "suggest": {
+        "nealio82/avro-php": "Required to use Avro features."
+    },
     "autoload": {
         "psr-4" : {
             "Metamorphosis\\" : "src/"

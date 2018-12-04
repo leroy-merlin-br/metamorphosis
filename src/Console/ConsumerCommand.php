@@ -28,12 +28,17 @@ class ConsumerCommand extends BaseCommand
         {--offset= : Sets the offset at which to start consumption.}
         {--partition= : Sets the partition to consume.}
         {--broker= : Override broker connection from config.}
-        {--timeout= : Sets timeout for consumer.}';
+        {--timeout= : Sets timeout for consumer.}
+        {--only= : Run only the specific offset passed.}';
 
     public function handle(ConsumerRunner $runner)
     {
         if ($this->hasOffset() && !$this->hasPartition()) {
             throw new RuntimeException('Not enough options ("partition" is required when "offset" is supplied).');
+        }
+
+        if ($this->option('only')  && (!$this->hasOffset() && !$this->hasPartition())) {
+            throw new RuntimeException('Not enough options ("offset" and "partition" is required when "only" is supplied).');
         }
 
         $config = new ConsumerConfig(
@@ -55,7 +60,9 @@ class ConsumerCommand extends BaseCommand
         }
 
         $this->output->writeln('Running consumer..');
-        $runner->run($config, $connector->getConsumer());
+
+        $runner->times($this->getTimes())
+            ->run($config, $connector->getConsumer());
     }
 
     protected function getIntOption(string $option): ?int
@@ -73,6 +80,11 @@ class ConsumerCommand extends BaseCommand
     private function hasPartition(): bool
     {
         return !is_null($this->getIntOption('partition'));
+    }
+
+    private function getTimes()
+    {
+        return $this->option('only') ? 1 : 0;
     }
 
     private function writeStartingConsumer(ConsumerConfig $config)

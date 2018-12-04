@@ -18,6 +18,11 @@ class ConsumerRunner
     public $timeout = 2000000;
 
     /**
+     * @var int
+     */
+    public $times = 0;
+
+    /**
      * @var Dispatcher
      */
     protected $middlewareDispatcher;
@@ -44,6 +49,8 @@ class ConsumerRunner
             } catch (Exception $exception) {
                 $this->handler->failed($exception);
             }
+
+            $this->shouldStopRunning();
         }
     }
 
@@ -52,9 +59,23 @@ class ConsumerRunner
         $this->timeout = $timeout;
     }
 
+    public function times(int $times): self
+    {
+        $this->times = $times;
+
+        return $this;
+    }
+
     protected function setMiddlewareDispatcher(array $middlewares): void
     {
         $middlewares[] = new ConsumerMiddleware($this->handler);
         $this->middlewareDispatcher = new Dispatcher($middlewares);
+    }
+
+    protected function shouldStopRunning()
+    {
+        if ($this->times !== 0) {
+            exit(9);
+        }
     }
 }

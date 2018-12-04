@@ -32,7 +32,7 @@ class ConsumerCommand extends BaseCommand
 
     public function handle(ConsumerRunner $runner)
     {
-        if (!is_null($this->getIntOption('offset')) && is_null($this->getIntOption('partition'))) {
+        if ($this->hasOffset() && !$this->hasPartition()) {
             throw new RuntimeException('Not enough options ("partition" is required when "offset" is supplied).');
         }
 
@@ -63,6 +63,16 @@ class ConsumerCommand extends BaseCommand
         return !is_null($this->option($option))
             ? (int) $this->option($option)
             : null;
+    }
+
+    private function hasOffset(): bool
+    {
+        return !is_null($this->getIntOption('offset'));
+    }
+
+    private function hasPartition(): bool
+    {
+        return !is_null($this->getIntOption('partition'));
     }
 
     private function writeStartingConsumer(ConsumerConfig $config)

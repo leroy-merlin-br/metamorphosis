@@ -5,6 +5,7 @@ use Exception;
 use Metamorphosis\Config\Consumer;
 use Metamorphosis\ConsumerRunner;
 use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\MemoryManager;
 use RdKafka\Message as KafkaMessage;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\Dummies\MiddlewareDummy;
@@ -53,13 +54,15 @@ class ConsumerRunnerTest extends LaravelTestCase
 
         $topicKey = 'topic-key';
         $consumerGroup = 'consumer-id';
-        $config = new Consumer($topicKey, $consumerGroup);
+        $memoryLimit = 128;
+        $config = new Consumer($topicKey, $consumerGroup, null, null, null, $memoryLimit);
 
         $middleware = $this->createMock(MiddlewareDummy::class);
         $this->app->instance(MiddlewareDummy::class, $middleware);
 
         $consumerInterface = $this->createMock(ConsumerInterface::class);
-        $runner = new ConsumerRunner();
+        $memoryManager = $this->createMock(MemoryManager::class);
+        $runner = new ConsumerRunner($memoryManager);
         $runner->setTimeout(30);
 
         $consumerInterface->expects($this->exactly(4))
@@ -70,6 +73,11 @@ class ConsumerRunnerTest extends LaravelTestCase
         // Ensure that one message went through the middleware stack
         $middleware->expects($this->once())
             ->method('process');
+
+        $memoryManager->expects($this->exactly(3))
+            ->method('memoryExceeded')
+            ->with($this->equalTo($memoryLimit))
+            ->will($this->returnValue(false));
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Error when consuming.');

@@ -27,6 +27,16 @@ class ConsumerRunner
      */
     protected $handler;
 
+    /**
+     * @var MemoryManager
+     */
+    private $memoryManager;
+
+    public function __construct(MemoryManager $memoryManager)
+    {
+        $this->memoryManager = $memoryManager;
+    }
+
     public function run(Consumer $config, ConsumerInterface $consumer): void
     {
         $this->handler = $config->getConsumerHandler();
@@ -66,17 +76,9 @@ class ConsumerRunner
      */
     protected function stopIfNecessary(Consumer $config): void
     {
-        if ($this->memoryExceeded($config->getMemoryLimit())) {
+        if ($this->memoryManager->memoryExceeded($config->getMemoryLimit())) {
             $this->stop(12);
         }
-    }
-
-    /**
-     * Determine if the memory limit has been exceeded.
-     */
-    protected function memoryExceeded(int $memoryLimit = null): bool
-    {
-        return $memoryLimit && (memory_get_usage(true) / 1024 / 1024) >= $memoryLimit;
     }
 
     /**

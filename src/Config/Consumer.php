@@ -35,7 +35,7 @@ class Consumer extends AbstractConfig
     protected $consumerHandler;
 
     /**
-     * The maximum amount of RAM the ConsumerRunner may consume.
+     * The maximum amount of RAM in megabytes the ConsumerRunner may consume.
      *
      * @var int
      */

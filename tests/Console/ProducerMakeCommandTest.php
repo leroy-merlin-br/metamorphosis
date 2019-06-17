@@ -7,6 +7,7 @@ class ProducerMakeCommandTest extends LaravelTestCase
 {
     public function testItShouldGenerateProducerHandler()
     {
+        $this->markTestSkipped();
         $command = 'make:kafka-producer';
         $parameters = [
             'name' => str_random(8),

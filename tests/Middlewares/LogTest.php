@@ -12,7 +12,6 @@ class LogTest extends LaravelTestCase
 {
     public function testItShouldLogMessage()
     {
-        $this->markTestSkipped();
         $log = $this->createMock(LoggerInterface::class);
 
         $middleware = new Log($log);
@@ -39,6 +38,7 @@ class LogTest extends LaravelTestCase
                         'key' => null,
                         'offset' => null,
                         'timestamp' => null,
+                        'headers' => null,
                     ],
                 ])
             );

@@ -14,8 +14,6 @@ before_install:
   - sudo make && sudo make install
   - cd ../
   - pecl install rdkafka
-# removed as the pecl install already enable the module.
-#  - echo "extension = rdkafka.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_script:
   - composer install --no-interaction

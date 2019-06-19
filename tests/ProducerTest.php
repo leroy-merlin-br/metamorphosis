@@ -62,7 +62,7 @@ class ProducerTest extends LaravelTestCase
         $producer->produce($producerHandler);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

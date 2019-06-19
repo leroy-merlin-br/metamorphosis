@@ -10,7 +10,7 @@ use Tests\LaravelTestCase;
 
 class ConsumerTest extends LaravelTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

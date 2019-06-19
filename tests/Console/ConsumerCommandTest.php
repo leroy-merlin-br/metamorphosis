@@ -11,7 +11,7 @@ use Tests\LaravelTestCase;
 
 class ConsumerCommandTest extends LaravelTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

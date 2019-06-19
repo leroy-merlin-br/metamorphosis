@@ -10,7 +10,7 @@ use Tests\LaravelTestCase;
 
 class ConnectorFactoryTest extends LaravelTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

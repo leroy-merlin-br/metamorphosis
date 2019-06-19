@@ -9,7 +9,7 @@ use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

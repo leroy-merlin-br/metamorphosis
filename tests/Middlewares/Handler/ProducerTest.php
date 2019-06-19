@@ -29,7 +29,7 @@ class ProducerTest extends LaravelTestCase
         $this->assertNull($producerHandler->process($record, $middlewareHandler));
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -6,7 +6,7 @@ use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

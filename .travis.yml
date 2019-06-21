@@ -4,7 +4,6 @@ php:
   - 7.1
   - 7.2
   - 7.3
-  - nightly
 
 sudo: required
 
@@ -15,7 +14,6 @@ before_install:
   - sudo make && sudo make install
   - cd ../
   - pecl install rdkafka
-  - echo "extension = rdkafka.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_script:
   - composer install --no-interaction
@@ -23,7 +21,7 @@ before_script:
 script:
   - mkdir -p build/logs
   - vendor/bin/phpcs
-  - phpunit -c phpunit.xml.dist && make coverage
+  - vendor/bin/phpunit -c phpunit.xml.dist && make coverage
 
 after_script:
   - php vendor/bin/coveralls -v

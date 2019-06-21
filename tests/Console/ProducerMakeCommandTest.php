@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Console;
 
+use Illuminate\Support\Facades\Artisan;
 use Tests\LaravelTestCase;
 
 class ProducerMakeCommandTest extends LaravelTestCase
@@ -12,7 +13,7 @@ class ProducerMakeCommandTest extends LaravelTestCase
             'name' => str_random(8),
         ];
 
-        $statusCode = $this->artisan($command, $parameters);
+        $statusCode = Artisan::call($command, $parameters);
 
         $this->assertSame(0, $statusCode);
     }

@@ -1,5 +1,6 @@
 {
     "name": "leroy-merlin-br/metamorphosis",
+    "license": "MIT",
     "type": "library",
     "keywords": [
         "kafka"

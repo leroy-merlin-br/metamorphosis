@@ -1,6 +1,6 @@
 # Metamorphosis
 
-> Easy and flexible Kafka Library for Laravel and PHP 7.
+> Easy and flexible Kafka Library for Laravel and PHP 7.2.
 
 ![Metamorphosis](./docs/logo.png)
 

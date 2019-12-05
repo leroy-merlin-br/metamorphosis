@@ -14,6 +14,7 @@ return [
     'brokers' => [
         'default' => [
             'connections' => '',
+            'schemaUri' => '',
             'auth' => [
                 'protocol' => 'ssl',
                 'ca' => storage_path('ca.pem'),
@@ -60,6 +61,7 @@ return [
         'default' => [
             'topic' => 'default',
             'broker' => 'default',
+            'isAvroSchema' => false,
             'consumer-groups' => [
                 'default' => [
                     'offset-reset' => 'largest',

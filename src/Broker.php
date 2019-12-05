@@ -17,10 +17,16 @@ class Broker
      */
     protected $authentication;
 
-    public function __construct($connections, array $authentication = null)
+    /**
+     * @var string
+     */
+    private $schemaUri;
+
+    public function __construct($connections, array $authentication = null, string $schemaUri = null)
     {
         $this->setConnections($connections);
         $this->setAuthentication($authentication);
+        $this->schemaUri = $schemaUri;
     }
 
     public function authenticate(Conf $conf): void
@@ -36,6 +42,11 @@ class Broker
     public function getAuthentication(): Authentication
     {
         return $this->authentication;
+    }
+
+    public function getSchemaUri(): ?string
+    {
+        return $this->schemaUri;
     }
 
     protected function setConnections($connections): void

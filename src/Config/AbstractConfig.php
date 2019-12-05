@@ -66,7 +66,11 @@ abstract class AbstractConfig
             throw new ConfigurationException("Broker '{$brokerKey}' configuration not found");
         }
 
-        $this->broker = new Broker($brokerConfig['connections'], $brokerConfig['auth'] ?? null);
+        $this->broker = new Broker(
+            $brokerConfig['connections'],
+            $brokerConfig['auth'] ?? null,
+            $brokerConfig['schemaUri'] ?? null
+        );
     }
 
     protected function setTopic(array $topicConfig): void

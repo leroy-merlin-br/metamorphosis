@@ -34,6 +34,11 @@ class Consumer extends AbstractConfig
      */
     protected $consumerHandler;
 
+    /**
+     * @var bool
+     */
+    protected $isAvroSchema;
+
     public function __construct(
         string $topic,
         string $consumerGroupId = null,
@@ -71,6 +76,11 @@ class Consumer extends AbstractConfig
         return $this->consumerPartition;
     }
 
+    public function isAvroSchema(): bool
+    {
+        return $this->isAvroSchema;
+    }
+
     private function setConsumerGroup(
         array $topicConfig,
         string $consumerGroupId = null,
@@ -94,6 +104,8 @@ class Consumer extends AbstractConfig
         $this->consumerOffsetReset = $consumerConfig['offset-reset'] ?? 'largest';
         $this->consumerOffset = !is_null($offset) ? $offset : $consumerConfig['offset'];
         $this->consumerHandler = app($consumerConfig['consumer']);
+
+        $this->isAvroSchema = $topicConfig['isAvroSchema'] ?? false;
 
         $this->setMiddlewares($consumerConfig['middlewares'] ?? []);
     }

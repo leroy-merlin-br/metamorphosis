@@ -5,6 +5,7 @@ use Illuminate\Console\Command as BaseCommand;
 use Metamorphosis\Config\Consumer as ConsumerConfig;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\ConsumerRunner;
+use Metamorphosis\RunnerFactory;
 use RuntimeException;
 
 class ConsumerCommand extends BaseCommand
@@ -30,7 +31,7 @@ class ConsumerCommand extends BaseCommand
         {--broker= : Override broker connection from config.}
         {--timeout= : Sets timeout for consumer.}';
 
-    public function handle(ConsumerRunner $runner)
+    public function handle(RunnerFactory $runnerFactory)
     {
         if (!is_null($this->getIntOption('offset')) && is_null($this->getIntOption('partition'))) {
             throw new RuntimeException('Not enough options ("partition" is required when "offset" is supplied).');
@@ -50,12 +51,9 @@ class ConsumerCommand extends BaseCommand
 
         $this->writeConnectingBroker($config);
 
-        if ($timeout = $this->option('timeout')) {
-            $runner->setTimeout($timeout);
-        }
-
         $this->output->writeln('Running consumer..');
-        $runner->run($config, $connector->getConsumer());
+        $runner = $runnerFactory->make($config, $connector->getConsumer(), $this->option('timeout'));
+        $runner->run();
     }
 
     protected function getIntOption(string $option): ?int

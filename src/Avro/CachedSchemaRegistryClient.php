@@ -7,10 +7,13 @@ use RuntimeException;
 
 class CachedSchemaRegistryClient
 {
+    /**
+     * @var Client
+     */
     private $client;
 
-    /* Schemas by Ids */
-    /**
+    /** Schemas by Ids
+     *
      * @var SplObjectStorage[]|int[][]
      */
     private $subjectToSchemaIds = [];
@@ -25,8 +28,8 @@ class CachedSchemaRegistryClient
      */
     private $subjectToSchemaVersions = [];
 
-    /* Schemas by Version */
-    /**
+    /** Schemas by Version
+     *
      * @var AvroSchema[][]
      */
     private $subjectVersionToSchema = [];

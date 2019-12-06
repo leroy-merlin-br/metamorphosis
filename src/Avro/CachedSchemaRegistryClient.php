@@ -64,7 +64,7 @@ class CachedSchemaRegistryClient
         }
 
         $url = sprintf('/subjects/%s/versions', $subject.'-value');
-        [$status, $response] = $this->sendRequest($url, 'POST', json_encode(['schema' => (string) $schema]));
+        [$status, $response] = $this->sendRequest($url, 'post', json_encode(['schema' => (string) $schema]));
 
         if (409 === $status) {
             throw new RuntimeException('Incompatible Avro schema');
@@ -127,7 +127,7 @@ class CachedSchemaRegistryClient
         }
 
         $url = sprintf('/schemas/ids/%d', $schemaId);
-        [$status, $response] = $this->sendRequest($url, 'GET');
+        [$status, $response] = $this->sendRequest($url, 'get');
 
         if (404 === $status) {
             throw new RuntimeException('Schema not found');
@@ -149,7 +149,7 @@ class CachedSchemaRegistryClient
         }
 
         $url = sprintf('/subjects/%s/versions/%d', $subject, $version);
-        [$status, $response] = $this->sendRequest($url, 'GET');
+        [$status, $response] = $this->sendRequest($url, 'get');
 
         if (404 === $status) {
             throw new RuntimeException('Schema not found');
@@ -172,7 +172,7 @@ class CachedSchemaRegistryClient
     protected function cacheSchemaDetails($subject, AvroSchema $schema)
     {
         $url = sprintf('/subjects/%s', $subject);
-        [$status, $response] = $this->sendRequest($url, 'POST', json_encode(['schema' => (string) $schema]));
+        [$status, $response] = $this->sendRequest($url, 'post', json_encode(['schema' => (string) $schema]));
         if (!($status >= 200 || $status < 300)) {
             throw new RuntimeException('Unable to get schema details. Error code: '.$status);
         }
@@ -182,7 +182,7 @@ class CachedSchemaRegistryClient
         $this->cacheSchema($response['schema'], $response['id'], $response['subject'], $response['version']);
     }
 
-    private function sendRequest($url, $method = 'GET', $body = null, $headers = null)
+    private function sendRequest($url, $method = 'get', $body = null, $headers = null)
     {
         $headers = (array) $headers;
         $headers['Accept'] = 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json';
@@ -192,16 +192,16 @@ class CachedSchemaRegistryClient
         }
 
         switch ($method) {
-            case 'GET':
+            case 'get':
                 $response = $this->client->get($url, $headers);
                 break;
-            case 'POST':
+            case 'post':
                 $response = $this->client->post($url, $headers, $body);
                 break;
-            case 'PUT':
+            case 'put':
                 $response = $this->client->put($url, $headers, $body);
                 break;
-            case 'DELETE':
+            case 'delete':
                 $response = $this->client->delete($url, $headers);
                 break;
             default:

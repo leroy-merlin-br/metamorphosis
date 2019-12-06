@@ -7,8 +7,6 @@ use RuntimeException;
 
 class CachedSchemaRegistryClient
 {
-    private $maxSchemasPerSubject;
-
     private $client;
 
     /* Schemas by Ids */
@@ -33,14 +31,8 @@ class CachedSchemaRegistryClient
      */
     private $subjectVersionToSchema = [];
 
-    /**
-     * @param string $url
-     * @param int    $maxSchemasPerSubject
-     */
-    public function __construct($url, $maxSchemasPerSubject = 1000)
+    public function __construct(string $url)
     {
-        $this->maxSchemasPerSubject = $maxSchemasPerSubject;
-
         $this->client = app(Client::class, ['base_uri' => $url, 'timeout' => 40000]);
     }
 

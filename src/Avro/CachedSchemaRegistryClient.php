@@ -41,7 +41,7 @@ class CachedSchemaRegistryClient
     {
         $this->maxSchemasPerSubject = $maxSchemasPerSubject;
 
-        $this->client = new Client(['base_uri' => $url, 'timeout' => 40000]);
+        $this->client = app(Client::class, ['base_uri' => $url, 'timeout' => 40000]);
     }
 
     /**
@@ -118,24 +118,6 @@ class CachedSchemaRegistryClient
     }
 
     /**
-     * Fetch and caches the details of a schema
-     *
-     * @param string $subject
-     */
-    protected function cacheSchemaDetails($subject, AvroSchema $schema)
-    {
-        $url = sprintf('/subjects/%s', $subject);
-        [$status, $response] = $this->sendRequest($url, 'POST', json_encode(['schema' => (string) $schema]));
-        if (!($status >= 200 || $status < 300)) {
-            throw new RuntimeException('Unable to get schema details. Error code: '.$status);
-        }
-
-        $response['schema'] = $schema;
-
-        $this->cacheSchema($response['schema'], $response['id'], $response['subject'], $response['version']);
-    }
-
-    /**
      * GET /schemas/ids/{int: id}
      * Retrieve a parsed avro schema by id or None if not found
      *
@@ -185,6 +167,24 @@ class CachedSchemaRegistryClient
         $this->cacheSchemaDetails($subject, $schema);
 
         return $schema;
+    }
+
+    /**
+     * Fetch and caches the details of a schema
+     *
+     * @param string $subject
+     */
+    protected function cacheSchemaDetails($subject, AvroSchema $schema)
+    {
+        $url = sprintf('/subjects/%s', $subject);
+        [$status, $response] = $this->sendRequest($url, 'POST', json_encode(['schema' => (string) $schema]));
+        if (!($status >= 200 || $status < 300)) {
+            throw new RuntimeException('Unable to get schema details. Error code: '.$status);
+        }
+
+        $response['schema'] = $schema;
+
+        $this->cacheSchema($response['schema'], $response['id'], $response['subject'], $response['version']);
     }
 
     private function sendRequest($url, $method = 'GET', $body = null, $headers = null)

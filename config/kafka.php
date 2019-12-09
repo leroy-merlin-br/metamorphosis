@@ -52,7 +52,7 @@ return [
     |       You can use a positive integer or any of the constants: RD_KAFKA_OFFSET_BEGINNING,
     |       RD_KAFKA_OFFSET_END, RD_KAFKA_OFFSET_STORED.
     | 'consumer-groups.*.partition': the partition to consume. It can be null, if you don't wish do specify one.
-    | 'consumer-groups.*.consumer': a consumer class that implements ConsumerTopicHandler
+    | 'consumer-groups.*.handle': a consumer class that implements ConsumerTopicHandler
     | 'consumer-groups.*.middlewares': an array of middlewares applied only for this consumer-group
     |
     */
@@ -67,7 +67,8 @@ return [
                     'offset-reset' => 'largest',
                     'offset' => 0,
                     'partition' => null,
-                    'consumer' => '\App\Kafka\Consumers\ConsumerExample',
+                    'handle' => '\App\Kafka\Consumers\ConsumerExample',
+                    'timeout' => 20000,
                 ],
             ],
             'producer' => [

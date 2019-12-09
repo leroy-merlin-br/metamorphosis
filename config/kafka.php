@@ -13,7 +13,7 @@ return [
 
     'brokers' => [
         'default' => [
-            'connections' => '',
+            'connections' => 'kafka:6680',
             'schemaUri' => '',
             'auth' => [
                 'protocol' => 'ssl',

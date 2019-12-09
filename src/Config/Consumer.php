@@ -113,6 +113,6 @@ class Consumer extends AbstractConfig
     protected function setGlobalMiddlewares(): void
     {
         parent::setGlobalMiddlewares();
-        $this->setMiddlewares(config('kafka.middlewares.consumer', []));
+        $this->setMiddlewares(config('kafka.middlewares.handle', []));
     }
 }

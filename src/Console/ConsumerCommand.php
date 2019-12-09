@@ -3,6 +3,7 @@ namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
 use Metamorphosis\Config\Consumer as ConsumerConfig;
+use Metamorphosis\Config\Validate;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\ConsumerRunner;
 use Metamorphosis\RunnerFactory;

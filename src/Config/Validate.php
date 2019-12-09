@@ -3,7 +3,6 @@ namespace Metamorphosis\Config;
 
 use Illuminate\Support\Facades\Validator;
 use Metamorphosis\Exceptions\ConfigurationException;
-use RuntimeException;
 
 class Validate
 {
@@ -23,22 +22,13 @@ class Validate
 
     public function setOptionConfig($options, $arguments): void
     {
-        if (!is_null($options['offset']) && is_null($options['partition'])) {
-            throw new RuntimeException('Not enough options ("partition" is required when "offset" is supplied).');
-        }
-
         $topicConfig = $this->getTopicConfig($arguments['topic']);
         $consumerConfig = $this->getConsumerConfig($arguments['consumer-group'], $topicConfig);
         $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
-
         $config = array_merge($topicConfig, $brokerConfig, $consumerConfig, $options, $arguments);
 
-        $validator = Validator::make($config, $this->rules);
-        if (!$validator->errors()->isEmpty()) {
-            throw new ConfigurationException($validator->errors()->toJson());
-        }
-
-        config(['kafka.runtime' => $config]);
+        $this->validateConfig($config);
+        $this->setConfigRuntime($config);
     }
 
     private function getTopicConfig($topicId): array
@@ -75,5 +65,18 @@ class Validate
         }
 
         return $brokerConfig;
+    }
+
+    private function validateConfig(array $config): void
+    {
+        $validator = Validator::make($config, $this->rules);
+        if (!$validator->errors()->isEmpty()) {
+            throw new ConfigurationException($validator->errors()->toJson());
+        }
+    }
+
+    private function setConfigRuntime(array $config): void
+    {
+        config(['kafka.runtime' => $config]);
     }
 }

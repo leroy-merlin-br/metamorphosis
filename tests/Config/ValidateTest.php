@@ -2,6 +2,7 @@
 namespace Tests\Config;
 
 use Metamorphosis\Config\Validate;
+use Metamorphosis\Exceptions\ConfigurationException;
 use Tests\LaravelTestCase;
 
 class ValidateTest extends LaravelTestCase
@@ -10,12 +11,12 @@ class ValidateTest extends LaravelTestCase
     {
         // Set
         $validate = new Validate();
-        $option = [
+        $options = [
             'partition' => 0,
             'offset' => 0,
             'broker' => 'default',
         ];
-        $argument = [
+        $arguments = [
             'topic' => 'default',
             'consumer-group' => 'default'
         ];
@@ -40,9 +41,54 @@ class ValidateTest extends LaravelTestCase
         ];
 
         // Actions
-        $validate->setOptionConfig($option, $argument);
+        $validate->setOptionConfig($options, $arguments);
 
         // Assertions
         $this->assertArraySubset($expected, config('kafka.runtime'));
+    }
+
+    public function testShouldNotSetRuntimeConfigWhenOptionsIsInvalid()
+    {
+        // Set
+        $validate = new Validate();
+        $options = [
+            'partition' => 'one',
+            'offset' => 0,
+            'broker' => 'default',
+        ];
+        $arguments = [
+            'topic' => 'default',
+            'consumer-group' => 'default'
+        ];
+
+        // Actions
+        $this->expectException(ConfigurationException::class);
+        $validate->setOptionConfig($options, $arguments);
+
+        // Assertions
+        $this->assertEmpty(config('kafka.runtime'));
+    }
+
+    public function testShouldNotSetRuntimeConfigWhenKafkaConfigIsInvalid()
+    {
+        // Set
+        config(['kafka.brokers.default.connections' => null]);
+        $validate = new Validate();
+        $options = [
+            'partition' => 0,
+            'offset' => 0,
+            'broker' => 'default',
+        ];
+        $arguments = [
+            'topic' => 'default',
+            'consumer-group' => 'default'
+        ];
+
+        // Actions
+        $this->expectException(ConfigurationException::class);
+        $validate->setOptionConfig($options, $arguments);
+
+        // Assertions
+        $this->assertEmpty(config('kafka.runtime'));
     }
 }

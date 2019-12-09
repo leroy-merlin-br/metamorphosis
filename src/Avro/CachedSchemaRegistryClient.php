@@ -155,7 +155,7 @@ class CachedSchemaRegistryClient
 
         if (404 === $status) {
             throw new RuntimeException('Schema not found');
-        } elseif (!($status >= 200 || $status < 300)) {
+        } elseif (!($status >= 200 && $status < 300)) {
             throw new RuntimeException('Unable to get schema for the specific ID: '.$status);
         }
 

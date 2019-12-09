@@ -32,6 +32,27 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $this->assertSame('123', $result);
     }
 
+    public function testRegisterShouldHitCache(): void
+    {
+        // Set
+        $url = 'some-url';
+        $httpClient = $this->instance(Client::class, m::mock(Client::class));
+        $client = app(CachedSchemaRegistryClient::class, compact('url'));
+        $schema = m::mock(AvroSchema::class);
+        $response = ['id' => '123'];
+        $status = 200;
+
+        // Expectations
+        $httpClient->expects()
+            ->post('/subjects/some-kafka-topic-value/versions', compact('schema'))
+            ->once()
+            ->andReturn([$status, $response]);
+
+        // Actions
+        $client->register('some-kafka-topic', $schema);
+        $client->register('some-kafka-topic', $schema);
+    }
+
     public function testRegisterWithIncompatibleAvroSchema(): void
     {
         // Set
@@ -106,7 +127,7 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
             'id' => '123',
             'version' => '1.2',
         ];
-        $status = 199;
+        $status = 200;
 
         // Expectations
         $httpClient->expects()
@@ -132,7 +153,7 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
             'id' => '123',
             'version' => '1.2',
         ];
-        $status = 199;
+        $status = 200;
 
         // Expectations
         $httpClient->expects()
@@ -159,7 +180,7 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
             'id' => '123',
             'version' => '1.2',
         ];
-        $status = 199;
+        $status = 200;
 
         // Expectations
         $httpClient->expects()
@@ -185,7 +206,7 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
             'id' => '123',
             'version' => '1.2',
         ];
-        $status = 199;
+        $status = 200;
 
         // Expectations
         $httpClient->expects()
@@ -343,6 +364,70 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
 
         // Assertions
         $this->assertEquals($parsedSchema, $result);
+    }
+
+    public function testGetBySubjectAndVersionWithNotFoundSchema(): void
+    {
+        // Set
+        $url = 'some-url';
+        $httpClient = $this->instance(Client::class, m::mock(Client::class));
+        $client = app(CachedSchemaRegistryClient::class, compact('url'));
+        $schemaString = $this->getSchemaTest();
+        $parsedSchema = AvroSchema::parse($schemaString);
+
+        $response = [
+            'schema' => $schemaString,
+            'id' => '123',
+            'version' => '1.2',
+            'subject' => 'some-kafka-topic',
+        ];
+        $status = 404;
+
+        // Expectations
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Schema not found');
+        $httpClient->expects()
+            ->get('/subjects/some-kafka-topic/versions/1')
+            ->andReturn([$status, $response]);
+
+        $httpClient->expects()
+            ->post('/subjects/some-kafka-topic', ['schema' => $parsedSchema])
+            ->never();
+
+        // Actions
+        $client->getBySubjectAndVersion('some-kafka-topic', '1.2');
+    }
+
+    public function testGetBySubjectAndVersionMayReturnErrors(): void
+    {
+        // Set
+        $url = 'some-url';
+        $httpClient = $this->instance(Client::class, m::mock(Client::class));
+        $client = app(CachedSchemaRegistryClient::class, compact('url'));
+        $schemaString = $this->getSchemaTest();
+        $parsedSchema = AvroSchema::parse($schemaString);
+
+        $response = [
+            'schema' => $schemaString,
+            'id' => '123',
+            'version' => '1.2',
+            'subject' => 'some-kafka-topic',
+        ];
+        $status = 199;
+
+        // Expectations
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("Unable to get schema for the specific ID: {$status}");
+        $httpClient->expects()
+            ->get('/subjects/some-kafka-topic/versions/1')
+            ->andReturn([$status, $response]);
+
+        $httpClient->expects()
+            ->post('/subjects/some-kafka-topic', ['schema' => $parsedSchema])
+            ->never();
+
+        // Actions
+        $client->getBySubjectAndVersion('some-kafka-topic', '1.2');
     }
 
     public function testGetBySubjectAndVersionShouldHitCache(): void

@@ -2,8 +2,8 @@
 namespace Metamorphosis\Avro;
 
 use AvroSchema;
-use GuzzleHttp\Client;
 use RuntimeException;
+use SplObjectStorage;
 
 class CachedSchemaRegistryClient
 {
@@ -12,7 +12,9 @@ class CachedSchemaRegistryClient
      */
     private $client;
 
-    /** Schemas by Ids
+    /**
+     * In the first time we register an schema and receive a schema
+     * Id, we will cache it to new requests.
      *
      * @var SplObjectStorage[]|int[][]
      */
@@ -36,7 +38,7 @@ class CachedSchemaRegistryClient
 
     public function __construct(string $url)
     {
-        $this->client = app(Client::class, ['base_uri' => $url, 'timeout' => 40000]);
+        $this->client = app(Client::class, compact('url'));
     }
 
     /**
@@ -63,14 +65,14 @@ class CachedSchemaRegistryClient
             }
         }
 
-        $url = sprintf('/subjects/%s/versions', $subject.'-value');
-        [$status, $response] = $this->sendRequest($url, 'post', json_encode(['schema' => (string) $schema]));
+        $url = sprintf('/subjects/%s-value/versions', $subject);
+        [$status, $response] = $this->client->post($url, ['schema' => (string) $schema]);
 
         if (409 === $status) {
             throw new RuntimeException('Incompatible Avro schema');
         } elseif (422 === $status) {
             throw new RuntimeException('Invalid Avro schema');
-        } elseif (!($status >= 200 || $status < 300)) {
+        } elseif (!($status >= 200 && $status < 300)) {
             throw new RuntimeException('Unable to register schema. Error code: '.$status);
         }
 
@@ -127,11 +129,11 @@ class CachedSchemaRegistryClient
         }
 
         $url = sprintf('/schemas/ids/%d', $schemaId);
-        [$status, $response] = $this->sendRequest($url, 'get');
+        [$status, $response] = $this->client->get($url);
 
         if (404 === $status) {
             throw new RuntimeException('Schema not found');
-        } elseif (!($status >= 200 || $status < 300)) {
+        } elseif (!($status >= 200 && $status < 300)) {
             throw new RuntimeException('Unable to get schema for the specific ID: '.$status);
         }
 
@@ -149,7 +151,7 @@ class CachedSchemaRegistryClient
         }
 
         $url = sprintf('/subjects/%s/versions/%d', $subject, $version);
-        [$status, $response] = $this->sendRequest($url, 'get');
+        [$status, $response] = $this->client->get($url);
 
         if (404 === $status) {
             throw new RuntimeException('Schema not found');
@@ -172,8 +174,8 @@ class CachedSchemaRegistryClient
     protected function cacheSchemaDetails($subject, AvroSchema $schema)
     {
         $url = sprintf('/subjects/%s', $subject);
-        [$status, $response] = $this->sendRequest($url, 'post', json_encode(['schema' => (string) $schema]));
-        if (!($status >= 200 || $status < 300)) {
+        [$status, $response] = $this->client->post($url, ['schema' => (string) $schema]);
+        if (!($status >= 200 && $status < 300)) {
             throw new RuntimeException('Unable to get schema details. Error code: '.$status);
         }
 
@@ -182,41 +184,7 @@ class CachedSchemaRegistryClient
         $this->cacheSchema($response['schema'], $response['id'], $response['subject'], $response['version']);
     }
 
-    private function sendRequest($url, $method = 'get', $body = null, $headers = null)
-    {
-        $headers = (array) $headers;
-        $headers['Accept'] = 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json';
-
-        if ($body) {
-            $headers['Content-Type'] = 'application/vnd.schemaregistry.v1+json';
-        }
-
-        switch ($method) {
-            case 'get':
-                $response = $this->client->get($url, $headers);
-                break;
-            case 'post':
-                $response = $this->client->post($url, $headers, $body);
-                break;
-            case 'put':
-                $response = $this->client->put($url, $headers, $body);
-                break;
-            case 'delete':
-                $response = $this->client->delete($url, $headers);
-                break;
-            default:
-                throw new RuntimeException('Invalid HTTP method');
-        }
-
-        return [$response->getStatusCode(), json_decode($response->getBody(true), true)];
-    }
-
-    /**
-     * @param int         $schemaId
-     * @param string|null $subject
-     * @param string|null $version
-     */
-    private function cacheSchema(AvroSchema $schema, $schemaId, $subject = null, $version = null)
+    private function cacheSchema(AvroSchema $schema, string $schemaId, string $subject = null, string $version = null): void
     {
         if (isset($this->idToSchema[$schemaId])) {
             $schema = $this->idToSchema[$schemaId];
@@ -225,7 +193,7 @@ class CachedSchemaRegistryClient
         }
 
         if ($subject) {
-            $this->addToCache($this->subjectToSchemaIds, $subject, $schema, $schemaId);
+            $this->addSchemaIdsToCache($subject, $schema, $schemaId);
 
             if ($version) {
                 if (!isset($this->subjectVersionToSchema[$subject])) {
@@ -233,23 +201,26 @@ class CachedSchemaRegistryClient
                 }
 
                 $this->subjectVersionToSchema[$subject][$version] = $schema;
-
-                $this->addToCache($this->subjectToSchemaVersions, $subject, $schema, $version);
+                $this->addSchemaVersionToCache($subject, $schema, $version);
             }
         }
     }
 
-    /**
-     * @param \SplObjectStorage[] $cache
-     * @param string              $subject
-     * @param string              $value
-     */
-    private function addToCache(&$cache, $subject, AvroSchema $schema, $value)
+    private function addSchemaIdsToCache(string $subject, AvroSchema $schema, string $schemaId): void
     {
-        if (!isset($cache[$subject])) {
-            $cache[$subject] = new SplObjectStorage();
+        if (!isset($this->subjectToSchemaIds[$subject])) {
+            $this->subjectToSchemaIds[$subject] = new SplObjectStorage();
         }
 
-        $cache[$subject][$schema] = $value;
+        $this->subjectToSchemaIds[$subject][$schema] = $schemaId;
+    }
+
+    private function addSchemaVersionToCache(string $subject, AvroSchema $schema, string $version): void
+    {
+        if (!isset($this->subjectToSchemaVersions[$subject])) {
+            $this->subjectToSchemaVersions[$subject] = new SplObjectStorage();
+        }
+
+        $this->subjectToSchemaVersions[$subject][$schema] = $version;
     }
 }

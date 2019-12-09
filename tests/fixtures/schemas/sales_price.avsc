@@ -1,0 +1,161 @@
+{
+  "type": "record",
+  "name": "SalesPrice",
+  "namespace": "br.com.leroymerlin.avro.salesPrice",
+  "doc": "Object representing Sales Pricing and Margin Conditions for a Product in a Store.",
+  "fields": [
+    {
+      "name": "businessUnitCode",
+      "type": "int",
+      "doc": "NOT NULL NUMBER(3)"
+    },
+    {
+      "name": "distributionChannelCode",
+      "type": "string",
+      "doc": "NOT NULL VARCHAR2(2)"
+    },
+    {
+      "name": "materialCode",
+      "type": "string",
+      "doc": "NOT NULL VARCHAR2(18)"
+    },
+    {
+      "name": "plantCode",
+      "type": "string",
+      "doc": "NOT NULL VARCHAR2(4)"
+    },
+    {
+      "name": "salesPackagingBarcodeNumber",
+      "type": "string",
+      "doc": "NOT NULL VARCHAR2(18)"
+    },
+    {
+      "name": "salesPackagingCode",
+      "type": "string",
+      "doc": "NOT NULL VARCHAR2(3)"
+    },
+    {
+      "name": "salesPackagingQuantity",
+      "type": "float"
+    },
+    {
+      "name": "salesOrganizationCode",
+      "type": "string",
+      "doc": "NOT NULL VARCHAR2(4)"
+    },
+    {
+      "name": "salesPriceCondition",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "salesPriceCondition_record",
+          "fields": [
+            {
+              "name": "grossSalesPriceCondition",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "grossSalesPriceCondition_record",
+                  "fields": [
+                    {
+                      "name": "materialSalesPriceUnitAmount",
+                      "type": "float"
+                    },
+                    {
+                      "name": "salesPriceConditionType",
+                      "type": "string",
+                      "doc": "NOT NULL VARCHAR2(4)"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "logicalDeletedSalesPriceIndicator",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            {
+              "name": "netSalesPriceCondition",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "netSalesPriceCondition_record",
+                  "fields": [
+                    {
+                      "name": "materialSalesPriceUnitAmount",
+                      "type": "float"
+                    },
+                    {
+                      "name": "salesPriceConditionType",
+                      "type": "string",
+                      "doc": "NOT NULL VARCHAR2(4)"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "grossMarginCondition",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "grossMarginCondition_record",
+                  "fields": [
+                    {
+                      "name": "materialMarginUnitAmount",
+                      "type": "float"
+                    },
+                    {
+                      "name": "marginConditionType",
+                      "type": "string",
+                      "doc": "NOT NULL VARCHAR2(4)"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "salesPriceConditionEndDate",
+              "type": "string",
+              "doc": "Date in string format (yyyy-MM-dd)"
+            },
+            {
+              "name": "salesPriceConditionStartDate",
+              "type": "string",
+              "doc": "Date in string format (yyyy-MM-dd)"
+            },
+            {
+              "name": "specialPriceReasonCode",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "salesPriceCurrencyCode",
+      "type": "string",
+      "doc": "NOT NULL VARCHAR2(5)"
+    },
+    {
+      "name": "transactionId",
+      "type": "string",
+      "doc": "NOT NULL VARCHAR2(22)"
+    },
+    {
+      "name": "transactionTimestamp",
+      "type": "string",
+      "doc": "Timestamp in string format (yyyy-MM-dd HH:mm:ss.SSS)"
+    }
+  ]
+}

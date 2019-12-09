@@ -49,6 +49,7 @@ class Validate
 
         $consumerGroupId = $consumerGroupId ?? 'default';
         $consumerConfig = $topicConfig['consumer-groups'][$consumerGroupId] ?? null;
+        $consumerConfig['consumerGroupId'] = $consumerGroupId;
 
         if (!$consumerConfig) {
             throw new ConfigurationException("Consumer group '{$consumerGroupId}' not found");

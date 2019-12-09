@@ -30,6 +30,7 @@ class ValidateTest extends LaravelTestCase
             'partition' => 0,
             'handle' => '\App\Kafka\Consumers\ConsumerExample',
             'timeout' => 20000,
+            'consumerGroupId' => 'default',
             'connections' => 'kafka:6680',
             'schemaUri' => '',
             'auth' => [

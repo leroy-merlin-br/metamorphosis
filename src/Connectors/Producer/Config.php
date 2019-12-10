@@ -1,37 +1,37 @@
 <?php
-namespace Metamorphosis\Config;
+namespace Metamorphosis\Connectors\Consumer;
 
 use Illuminate\Support\Facades\Validator;
 use Metamorphosis\Exceptions\ConfigurationException;
 
-class Validate
+class Config
 {
     protected $rules = [
         'topic' => 'required',
         'broker' => 'required',
-        'isAvroSchema' => 'boolean',
-        'offset-reset' => 'required',
-        'offset' => 'required|integer',
-        'partition' => 'required|integer',
-        'handle' => 'required|string',
+        'offset-reset' => 'required', // latest, earliest, none
+        'offset' => 'required_with:partition|integer',
+        'partition' => 'required_with:offset|integer',
+        'handler' => 'required|string',
         'timeout' => 'required|integer',
+        'consumerGroupId' => 'required|string',
         'connections' => 'required|string',
         'schemaUri' => 'string',
         'auth' => 'array',
     ];
 
-    public function setOptionConfig($options, $arguments): void
+    public function setOptionConfig(array $options, array $arguments): void
     {
         $topicConfig = $this->getTopicConfig($arguments['topic']);
-        $consumerConfig = $this->getConsumerConfig($arguments['consumer-group'], $topicConfig);
+        $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer-group']);
         $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
-        $config = array_merge($topicConfig, $brokerConfig, $consumerConfig, $options, $arguments);
+        $config = array_merge($topicConfig, $brokerConfig, $consumerConfig, array_filter($options), array_filter($arguments));
 
         $this->validateConfig($config);
         $this->setConfigRuntime($config);
     }
 
-    private function getTopicConfig($topicId): array
+    private function getTopicConfig(string $topicId): array
     {
         $topicConfig = config('kafka.topics.' . $topicId);
         if (!$topicConfig) {
@@ -41,7 +41,7 @@ class Validate
         return $topicConfig;
     }
 
-    private function getConsumerConfig(string $consumerGroupId, array $topicConfig): array
+    private function getConsumerConfig(array $topicConfig, string $consumerGroupId = null): array
     {
         if (!$consumerGroupId && 1 === count($topicConfig['consumer-groups'])) {
             $consumerGroupId = current(array_keys($topicConfig['consumer-groups']));

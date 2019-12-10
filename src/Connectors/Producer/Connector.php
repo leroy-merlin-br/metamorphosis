@@ -2,7 +2,7 @@
 namespace Metamorphosis\Connectors\Producer;
 
 use Exception;
-use Metamorphosis\Config\Producer;
+use Metamorphosis\Authentication\Factory;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use RdKafka\Conf;
@@ -25,30 +25,28 @@ class Connector
     /**
      * @var int Timeout in seconds for the queue when getting messages from the broker for responses
      */
-    private $timeoutInSeconds;
+    private $timeout;
 
     public function setHandler(HandlerInterface $handler)
     {
         $this->handler = $handler;
     }
 
-    public function getProducerTopic(Producer $config): ProducerTopic
+    public function getProducerTopic(): ProducerTopic
     {
-        $broker = $config->getBrokerConfig();
-
         $conf = resolve(Conf::class);
 
-        $conf->set('metadata.broker.list', $broker->getConnections());
+        $conf->set('metadata.broker.list', config('kafka.runtime.connections'));
 
         $this->setCallbackResponses($conf);
 
-        $broker->authenticate($conf);
+        Factory::authenticate($conf);
 
         $producer = app(KafkaProducer::class, compact('conf'));
 
-        $this->prepareQueueCallbackResponse($config, $producer);
+        $this->prepareQueueCallbackResponse($producer);
 
-        return $producer->newTopic($config->getTopic());
+        return $producer->newTopic(config('kafka.runtime.topic'));
     }
 
     public function handleResponsesFromBroker(): void
@@ -61,7 +59,7 @@ class Connector
             throw new Exception('Cannot handle responses from broker without implementing '.HandleableResponseInterface::class);
         }
 
-        $this->queue->poll($this->timeoutInSeconds);
+        $this->queue->poll($this->timeout);
     }
 
     private function setCallbackResponses(Conf $conf)
@@ -79,14 +77,14 @@ class Connector
         });
     }
 
-    private function prepareQueueCallbackResponse(Producer $config, KafkaProducer $producer)
+    private function prepareQueueCallbackResponse(KafkaProducer $producer)
     {
         if (!$this->canHandleResponse()) {
             return;
         }
 
         $this->queue = app(Queue::class, compact('producer'));
-        $this->timeoutInSeconds = $config->getTimeoutResponse();
+        $this->timeout = config('kafka.runtime.timeout');
     }
 
     private function canHandleResponse(): bool

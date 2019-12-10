@@ -12,21 +12,21 @@ use Tests\LaravelTestCase;
 
 class ConnectorTest extends LaravelTestCase
 {
-    public function testItShouldMakeSetup()
+    public function testItShouldMakeSetup(): void
     {
-        $config = $this->createMock(Producer::class);
-
+        // Set
         $connector = new Connector();
 
-        $producer = $connector->getProducerTopic($config);
+        // Actions
+        $result = $connector->getProducerTopic();
 
-        $this->assertInstanceOf(ProducerTopic::class, $producer);
+        // Assertions
+        $this->assertInstanceOf(ProducerTopic::class, $result);
     }
 
-    public function testItShouldMakeSetupWithTopicHandler()
+    public function testItShouldMakeSetupWithTopicHandler(): void
     {
-        $config = $this->createMock(Producer::class);
-
+        // Set
         $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
             public function success(Message $message): void
             {
@@ -41,15 +41,17 @@ class ConnectorTest extends LaravelTestCase
 
         $connector->setHandler($handler);
 
-        $producer = $connector->getProducerTopic($config);
+        // Actions
+        $result = $connector->getProducerTopic();
 
-        $this->assertInstanceOf(ProducerTopic::class, $producer);
+        // Assertions
+        $this->assertInstanceOf(ProducerTopic::class, $result);
     }
 
-    public function testItShouldHandleResponseFromBroker()
+    public function testItShouldHandleResponseFromBroker(): void
     {
-        $config = $this->createMock(Producer::class);
-
+        // Set
+        config(['kafka.runtime.timeout' => 61]);
         $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
             public function success(Message $message): void
             {
@@ -60,26 +62,23 @@ class ConnectorTest extends LaravelTestCase
             }
         };
 
-        $config->expects($this->once())
-            ->method('getTimeoutResponse')
-            ->willReturn(50);
-
         $connector = new Connector();
 
         $connector->setHandler($handler);
 
-        $producer = $connector->getProducerTopic($config);
+        $producer = $connector->getProducerTopic();
 
-        $nullReturn = $connector->handleResponsesFromBroker();
+        // Actions
+        $result = $connector->handleResponsesFromBroker();
 
-        $this->assertNull($nullReturn);
+        // Assertions
+        $this->assertNull($result);
         $this->assertInstanceOf(ProducerTopic::class, $producer);
     }
 
-    public function testItShouldNotHandleResponseFromBroker()
+    public function testItShouldNotHandleResponseFromBroker(): void
     {
-        $config = $this->createMock(Producer::class);
-
+        // Set
         $handler = new class('record', 'some-topic') extends AbstractHandler {
             public function success(Message $message): void
             {
@@ -94,15 +93,18 @@ class ConnectorTest extends LaravelTestCase
 
         $connector->setHandler($handler);
 
-        $connector->getProducerTopic($config);
+        $connector->getProducerTopic();
 
-        $nullReturn = $connector->handleResponsesFromBroker();
+        // Actions
+        $result = $connector->handleResponsesFromBroker();
 
-        $this->assertNull($nullReturn);
+        // Assertions
+        $this->assertNull($result);
     }
 
-    public function testItShouldThrowExceptionWhenHandleResponseFromBroker()
+    public function testItShouldThrowExceptionWhenHandleResponseFromBroker(): void
     {
+        // Set
         $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
             public function success(Message $message): void
             {
@@ -118,6 +120,8 @@ class ConnectorTest extends LaravelTestCase
         $connector->setHandler($handler);
 
         $this->expectException(Exception::class);
+
+        // Actions
         $connector->handleResponsesFromBroker();
     }
 }

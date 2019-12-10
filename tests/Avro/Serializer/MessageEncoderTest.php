@@ -3,9 +3,8 @@ namespace Tests\Avro\Serializer;
 
 use AvroSchema;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
-use Metamorphosis\Avro\Serializer\Decoders\DecoderFactory;
-use Metamorphosis\Avro\Serializer\SchemaFormats;
 use Metamorphosis\Avro\Serializer\MessageEncoder;
+use Metamorphosis\Avro\Serializer\SchemaFormats;
 use Mockery as m;
 use RuntimeException;
 use Tests\LaravelTestCase;
@@ -28,7 +27,7 @@ class MessageEncoderTest extends LaravelTestCase
             ->andReturn($id);
 
         // Actions
-        $result = $serializer->encodeRecordWithSchema($topic, $schema, $record);
+        $result = $serializer->encodeMessage($topic, $schema, $record);
 
         // Assertions
         $this->assertSame("\x00\x00\x00\x00\x03\x00", $result);
@@ -50,14 +49,11 @@ class MessageEncoderTest extends LaravelTestCase
             ->andThrow(new RuntimeException());
 
         $registry->expects()
-            ->register("{$topic}-key", $schema);
-
-        $registry->expects()
-            ->getSchemaId("{$topic}-key", $schema)
+            ->register("{$topic}-key", $schema)
             ->andReturn($id);
 
         // Actions
-        $result = $serializer->encodeRecordWithSchema($topic, $schema, $record, true, SchemaFormats::MAGIC_BYTE_SCHEMAID);
+        $result = $serializer->encodeMessage($topic, $schema, $record, true, SchemaFormats::MAGIC_BYTE_SCHEMAID);
 
         // Assertions
         $this->assertSame("\x00\x00\x00\x00\x03\x00", $result);
@@ -81,7 +77,7 @@ class MessageEncoderTest extends LaravelTestCase
         $this->expectExceptionMessage('Whoops');
 
         // Actions
-        $serializer->encodeRecordWithSchema($topic, $schema, $record, true, SchemaFormats::MAGIC_BYTE_SCHEMAID);
+        $serializer->encodeMessage($topic, $schema, $record, true, SchemaFormats::MAGIC_BYTE_SCHEMAID);
     }
 
     public function testShouldNotEncodeRecordWithInvalidFormat()
@@ -98,7 +94,7 @@ class MessageEncoderTest extends LaravelTestCase
         $this->expectExceptionMessage('Unsuported format: 2');
 
         // Actions
-        $serializer->encodeRecordWithSchema($topic, $schema, $record, true, 2);
+        $serializer->encodeMessage($topic, $schema, $record, true, 2);
     }
 
     public function testShouldEncodeRecordWithSubjectAndVersion()
@@ -117,7 +113,7 @@ class MessageEncoderTest extends LaravelTestCase
             ->andReturn($version);
 
         // Actions
-        $result = $serializer->encodeRecordWithSchema($topic, $schema, $record, false, SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION);
+        $result = $serializer->encodeMessage($topic, $schema, $record, false, SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION);
 
         // Assertions
         $this->assertSame("\x01\x00\x00\x00\x0Emy-topic-value\x00\x00\x00\x05\x00", $result);
@@ -147,7 +143,7 @@ class MessageEncoderTest extends LaravelTestCase
             ->andReturn($version);
 
         // Actions
-        $result = $serializer->encodeRecordWithSchema($topic, $schema, $record, true, SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION);
+        $result = $serializer->encodeMessage($topic, $schema, $record, true, SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION);
 
         // Assertions
         $this->assertSame("\x01\x00\x00\x00\fmy-topic-key\x00\x00\x00\x05\$my awesome message", $result);
@@ -171,6 +167,6 @@ class MessageEncoderTest extends LaravelTestCase
         $this->expectExceptionMessage('Whoops');
 
         // Actions
-        $serializer->encodeRecordWithSchema($topic, $schema, $record, true, SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION);
+        $serializer->encodeMessage($topic, $schema, $record, true, SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION);
     }
 }

@@ -1,26 +1,22 @@
 <?php
 namespace Metamorphosis\Avro\Serializer;
 
-use AvroIO;
-use AvroIOBinaryDecoder;
-use AvroIODatumReader;
 use AvroStringIO;
-use Closure;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Metamorphosis\Avro\Serializer\Decoders\DecoderInterface;
+use Metamorphosis\Avro\Serializer\Decoders\SchemaId;
+use Metamorphosis\Avro\Serializer\Decoders\SchemaSubjectAndVersion;
 use RuntimeException;
 
 class MessageDecoder
 {
-
     /**
-     * @var array
+     * @var array [int Magic Byte => string Schema Decoder Class]
      */
-    private $idToDecoderFunc = [];
-
-    /**
-     * @var array
-     */
-    private $subjectVersionToDecoderFunc = [];
+    private $decoders = [
+        SchemaFormats::MAGIC_BYTE_SCHEMAID => SchemaId::class,
+        SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION => SchemaSubjectAndVersion::class,
+    ];
 
     /**
      * @var CachedSchemaRegistryClient
@@ -37,8 +33,8 @@ class MessageDecoder
      *
      * @param string $message
      *
-     * @return mixed
      * @throws \AvroIOException
+     * @return mixed
      */
     public function decodeMessage(string $message)
     {
@@ -48,70 +44,22 @@ class MessageDecoder
 
         $io = new AvroStringIO($message);
 
+        if (!$decoder = $this->getDecoder($io)) {
+            return $message;
+        }
+
+        return $decoder->decode($io);
+    }
+
+    private function getDecoder(AvroStringIO $io): ?DecoderInterface
+    {
         $magicByte = unpack('C', $io->read(1));
         $magicByte = $magicByte[1];
 
-        if ($magicByte === Schemas::MAGIC_BYTE_SCHEMAID) {
-            $id = unpack('N', $io->read(4));
-            $id = $id[1];
-
-            $decoder = $this->getDecoderById($id);
-
-            return $decoder($io);
+        if (!$class = $this->decoders[$magicByte] ?? null) {
+            return null;
         }
 
-        if ($magicByte === Schemas::MAGIC_BYTE_SUBJECT_VERSION) {
-            $size = $io->read(4);
-            $subjectSize = unpack('N', $size);
-            $subjectBytes = unpack('C*', $io->read($subjectSize[1]));
-            $version = unpack('N', $io->read(4));
-
-            $version = $version[1];
-
-            $subject = '';
-            foreach ($subjectBytes as $subjectByte) {
-                $subject .= chr($subjectByte);
-            }
-
-            $decoder = $this->getDecoderBySubjectAndVersion($subject, $version);
-
-            return $decoder($io);
-        }
-
-        return $message;
-    }
-
-    private function getDecoderById(int $schemaId): Closure
-    {
-        if (!isset($this->idToDecoderFunc[$schemaId])) {
-            $schema = $this->registry->getById($schemaId);
-
-            $reader = new AvroIODatumReader($schema);
-
-            $this->idToDecoderFunc[$schemaId] = function (AvroIO $io) use ($reader) {
-                return $reader->read(new AvroIOBinaryDecoder($io));
-            };
-        }
-
-        return $this->idToDecoderFunc[$schemaId];
-    }
-
-    private function getDecoderBySubjectAndVersion(string $subject, int $version): Closure
-    {
-        if (!isset($this->subjectVersionToDecoderFunc[$subject][$version])) {
-            $schema = $this->registry->getBySubjectAndVersion($subject, $version);
-
-            $reader = new AvroIODatumReader($schema);
-
-            if (!isset($this->subjectVersionToDecoderFunc[$subject])) {
-                $this->subjectVersionToDecoderFunc[$subject] = [];
-            }
-
-            $this->subjectVersionToDecoderFunc[$subject][$version] = function (AvroIO $io) use ($reader) {
-                return $reader->read(new AvroIOBinaryDecoder($io));
-            };
-        }
-
-        return $this->subjectVersionToDecoderFunc[$subject][$version];
+        return app($class, ['registry' => $this->registry]);
     }
 }

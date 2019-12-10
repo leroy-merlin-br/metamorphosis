@@ -55,7 +55,6 @@ class MessageDecoderTest extends LaravelTestCase
             ->andReturn($decoder);
 
         // Actions
-        $serializer->decodeMessage($message); // calling twice to assert that cache works
         $result = $serializer->decodeMessage($message);
 
         // Assertions
@@ -77,7 +76,6 @@ class MessageDecoderTest extends LaravelTestCase
             ->andReturn($decoder);
 
         // Actions
-        $serializer->decodeMessage($message); // calling twice to assert that cache works
         $result = $serializer->decodeMessage($message);
 
         // Assertions

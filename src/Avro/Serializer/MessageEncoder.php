@@ -6,6 +6,7 @@ use AvroIODatumWriter;
 use AvroSchema;
 use AvroStringIO;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Metamorphosis\Avro\Serializer\Decoders\DecoderFactory;
 use RuntimeException;
 
 class MessageEncoder
@@ -40,7 +41,7 @@ class MessageEncoder
         $this->registry = $registry;
 
         $this->registerMissingSchemas = $options['register_missing_schemas'] ?? false;
-        $this->defaultEncodingFormat = $options['default_encoding_format'] ?? Schemas::MAGIC_BYTE_SCHEMAID;
+        $this->defaultEncodingFormat = $options['default_encoding_format'] ?? SchemaFormats::MAGIC_BYTE_SCHEMAID;
     }
 
     /**
@@ -68,7 +69,7 @@ class MessageEncoder
 
         $format = $format ?? $this->defaultEncodingFormat;
 
-        if ($format === Schemas::MAGIC_BYTE_SUBJECT_VERSION) {
+        if ($format === SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION) {
             try {
                 $version = $this->registry->getSchemaVersion($subject, $schema);
             } catch (RuntimeException $e) {
@@ -85,7 +86,7 @@ class MessageEncoder
             return $this->encodeRecordWithSubjectAndVersion($subject, $version, $record);
         }
 
-        if ($format === Schemas::MAGIC_BYTE_SCHEMAID) {
+        if ($format === SchemaFormats::MAGIC_BYTE_SCHEMAID) {
             try {
                 $id = $this->registry->getSchemaId($subject, $schema);
             } catch (RuntimeException $e) {
@@ -122,7 +123,7 @@ class MessageEncoder
         // write the header
 
         // magic byte
-        $io->write(pack('C', Schemas::MAGIC_BYTE_SCHEMAID));
+        $io->write(pack('C', SchemaFormats::MAGIC_BYTE_SCHEMAID));
 
         // write the schema ID in network byte order (big end)
         $io->write(pack('N', $schemaId));
@@ -155,7 +156,7 @@ class MessageEncoder
         // write the header
 
         // magic byte
-        $io->write(pack('C', Schemas::MAGIC_BYTE_SUBJECT_VERSION));
+        $io->write(pack('C', SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION));
 
         // write the subject length in network byte order (big end)
         $io->write(pack('N', strlen($subject)));

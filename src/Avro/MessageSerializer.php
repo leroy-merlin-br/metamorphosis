@@ -50,104 +50,17 @@ class MessageSerializer
     }
 
     /**
-     * Encode a record with a given schema id.
-     *
-     * @param int   $schemaId
-     * @param array $record   A data to serialize
-     * @param bool  $isKey    If the record is a key
-     *
-     * @return AvroIODatumWriter encoder object
-     */
-    public function encodeRecordWithSchemaId($schemaId, array $record, $isKey = false)
-    {
-        if (!isset($this->idToWriters[$schemaId])) {
-            $schema = $this->registry->getById($schemaId);
-
-            $this->idToWriters[$schemaId] = new AvroIODatumWriter($schema);
-        }
-
-        $writer = $this->idToWriters[$schemaId];
-
-        $io = new AvroStringIO();
-
-        // write the header
-
-        // magic byte
-        $io->write(pack('C', static::MAGIC_BYTE_SCHEMAID));
-
-        // write the schema ID in network byte order (big end)
-        $io->write(pack('N', $schemaId));
-
-        // write the record to the rest of it
-        // Create an encoder that we'll write to
-        $encoder = new AvroIOBinaryEncoder($io);
-
-        // write the object in 'obj' as Avro to the fake file...
-        $writer->write($record, $encoder);
-
-        return $io->string();
-    }
-
-    /**
-     * Encode a record with a given schema id.
-     *
-     * @param string $subject
-     * @param int    $version
-     * @param array  $record  A data to serialize
-     * @param bool   $isKey   If the record is a key
-     *
-     * @return AvroIODatumWriter encoder object
-     */
-    public function encodeRecordWithSubjectAndVersion($subject, $version, array $record, $isKey = false)
-    {
-        if (!isset($this->subjectVersionToWriters[$subject][$version])) {
-            $schema = $this->registry->getBySubjectAndVersion($subject, $version);
-
-            $this->subjectVersionToWriters[$subject][$version] = new AvroIODatumWriter($schema);
-        }
-
-        $writer = $this->subjectVersionToWriters[$subject][$version];
-
-        $io = new AvroStringIO();
-
-        // write the header
-
-        // magic byte
-        $io->write(pack('C', static::MAGIC_BYTE_SUBJECT_VERSION));
-
-        // write the subject length in network byte order (big end)
-        $io->write(pack('N', strlen($subject)));
-
-        // then the subject
-        foreach (str_split($subject) as $letter) {
-            $io->write(pack('C', ord($letter)));
-        }
-
-        // and finally the version
-        $io->write(pack('N', $version));
-
-        // write the record to the rest of it
-        // Create an encoder that we'll write to
-        $encoder = new AvroIOBinaryEncoder($io);
-
-        // write the object in 'obj' as Avro to the fake file...
-        $writer->write($record, $encoder);
-
-        return $io->string();
-    }
-
-    /**
      * Given a parsed avro schema, encode a record for the given topic.
      * The schema is registered with the subject of 'topic-value'
      *
      * @param string     $topic  Topic name
      * @param AvroSchema $schema Avro Schema
-     * @param array      $record An object to serialize
+     * @param mixed      $record An object to serialize
      * @param bool       $isKey  If the record is a key
      *
      * @return string Encoded record with schema ID as bytes
      */
-    public function encodeRecordWithSchema($topic, AvroSchema $schema, array $record, $isKey = false, $format = null)
+    public function encodeRecordWithSchema($topic, AvroSchema $schema, $record, $isKey = false, $format = null)
     {
         $suffix = $isKey ? '-key' : '-value';
         $subject = $topic.$suffix;
@@ -190,6 +103,81 @@ class MessageSerializer
             default:
                 throw new RuntimeException('Unsuported format: '.$format);
         }
+    }
+
+    /**
+     * Encode a record with a given schema id.
+     *
+     * @param int   $schemaId
+     * @param array $record   A data to serialize
+     * @param bool  $isKey    If the record is a key
+     *
+     * @return AvroIODatumWriter encoder object
+     */
+    private function encodeRecordWithSchemaId($schemaId, array $record, $isKey = false)
+    {
+        $writer = $this->idToWriters[$schemaId];
+
+        $io = new AvroStringIO();
+
+        // write the header
+
+        // magic byte
+        $io->write(pack('C', static::MAGIC_BYTE_SCHEMAID));
+
+        // write the schema ID in network byte order (big end)
+        $io->write(pack('N', $schemaId));
+
+        // write the record to the rest of it
+        // Create an encoder that we'll write to
+        $encoder = new AvroIOBinaryEncoder($io);
+
+        // write the object in 'obj' as Avro to the fake file...
+        $writer->write($record, $encoder);
+
+        return $io->string();
+    }
+
+    /**
+     * Encode a record with a given schema id.
+     *
+     * @param string $subject
+     * @param int    $version
+     * @param array  $record  A data to serialize
+     * @param bool   $isKey   If the record is a key
+     *
+     * @return AvroIODatumWriter encoder object
+     */
+    private function encodeRecordWithSubjectAndVersion($subject, $version, $record, $isKey = false)
+    {
+        $writer = $this->subjectVersionToWriters[$subject][$version];
+
+        $io = new AvroStringIO();
+
+        // write the header
+
+        // magic byte
+        $io->write(pack('C', static::MAGIC_BYTE_SUBJECT_VERSION));
+
+        // write the subject length in network byte order (big end)
+        $io->write(pack('N', strlen($subject)));
+
+        // then the subject
+        foreach (str_split($subject) as $letter) {
+            $io->write(pack('C', ord($letter)));
+        }
+
+        // and finally the version
+        $io->write(pack('N', $version));
+
+        // write the record to the rest of it
+        // Create an encoder that we'll write to
+        $encoder = new AvroIOBinaryEncoder($io);
+
+        // write the object in 'obj' as Avro to the fake file...
+        $writer->write($record, $encoder);
+
+        return $io->string();
     }
 
     /**

@@ -2,11 +2,8 @@
 namespace Tests\Console;
 
 use Metamorphosis\ConsumerRunner;
-use Metamorphosis\Consumers\HighLevel;
-use Metamorphosis\Consumers\LowLevel;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Mockery as m;
-use RuntimeException;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
 
@@ -54,21 +51,28 @@ class ConsumerCommandTest extends LaravelTestCase
         $this->artisan($command, $parameters);
     }
 
-    public function testItCallsCommandWithOffsetWithoutPartition()
+    public function testItCallsCommandWithOffsetWithoutPartition(): void
     {
+        // Set
+        $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'some-topic',
             '--offset' => 1,
         ];
 
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Not enough options ("partition" is required when "offset" is supplied).');
+        // Expectations
+        $runner->expects()
+            ->run()
+            ->never();
 
+        $this->expectException(ConfigurationException::class);
+
+        // Actions
         $this->artisan($command, $parameters);
     }
 
-    public function testItCallsWithHighLevelConsumer()
+    public function testItCallsWithHighLevelConsumer(): void
     {
         // Set
         $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
@@ -87,17 +91,10 @@ class ConsumerCommandTest extends LaravelTestCase
         $this->artisan($command, $parameters);
     }
 
-    public function testItCallsWithLowLevelConsumer()
+    public function testItCallsWithLowLevelConsumer(): void
     {
-        $runner = $this->createMock(ConsumerRunner::class);
-        $this->instance(ConsumerRunner::class, $runner);
-
-        $runner->expects($this->once())
-            ->method('run')
-            ->with($this->anything(), $this->callback(function ($subject) {
-                return $subject instanceof LowLevel;
-            }));
-
+        // Set
+        $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'topic-key',
@@ -105,31 +102,37 @@ class ConsumerCommandTest extends LaravelTestCase
             '--offset' => 5,
         ];
 
+        // Expectations
+        $runner->expects()
+            ->run()
+            ->once();
+
+        // Actions
         $this->artisan($command, $parameters);
     }
 
-    public function testItAcceptsTimeoutWhenCallingCommand()
+    public function testItAcceptsTimeoutWhenCallingCommand(): void
     {
-        $runner = $this->createMock(ConsumerRunner::class);
-        $this->instance(ConsumerRunner::class, $runner);
-
-        $runner->expects($this->once())
-            ->method('run')
-            ->with($this->anything(), $this->callback(function ($subject) {
-                return $subject instanceof HighLevel;
-            }));
-
+        // Set
+        $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'topic-key',
             '--timeout' => 1,
         ];
 
+        // Expectations
+        $runner->expects()
+            ->run()
+            ->once();
+
+        // Actions
         $this->artisan($command, $parameters);
     }
 
-    public function testItOverridesBrokerConnectionWhenCallingCommand()
+    public function testItOverridesBrokerConnectionWhenCallingCommand(): void
     {
+        // Set
         config([
             'kafka.brokers.some-broker' => [
                 'connections' => '',
@@ -137,21 +140,18 @@ class ConsumerCommandTest extends LaravelTestCase
             ],
         ]);
 
-        $runner = $this->createMock(ConsumerRunner::class);
-        $this->instance(ConsumerRunner::class, $runner);
-
-        $runner->expects($this->once())
-            ->method('run')
-            ->with($this->anything(), $this->callback(function ($subject) {
-                return $subject instanceof HighLevel;
-            }));
-
+        $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'topic-key',
             '--timeout' => 1,
             '--broker' => 'some-broker',
         ];
+
+        // Expectations
+        $runner->expects()
+            ->run()
+            ->once();
 
         $this->artisan($command, $parameters);
     }

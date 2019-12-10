@@ -11,9 +11,6 @@ use RuntimeException;
 
 class MessageDecoder
 {
-    const MAGIC_BYTE_SCHEMAID = 0;
-
-    const MAGIC_BYTE_SUBJECT_VERSION = 1;
 
     /**
      * @var array
@@ -54,7 +51,7 @@ class MessageDecoder
         $magicByte = unpack('C', $io->read(1));
         $magicByte = $magicByte[1];
 
-        if ($magicByte === static::MAGIC_BYTE_SCHEMAID) {
+        if ($magicByte === Schemas::MAGIC_BYTE_SCHEMAID) {
             $id = unpack('N', $io->read(4));
             $id = $id[1];
 
@@ -63,7 +60,7 @@ class MessageDecoder
             return $decoder($io);
         }
 
-        if ($magicByte === static::MAGIC_BYTE_SUBJECT_VERSION) {
+        if ($magicByte === Schemas::MAGIC_BYTE_SUBJECT_VERSION) {
             $size = $io->read(4);
             $subjectSize = unpack('N', $size);
             $subjectBytes = unpack('C*', $io->read($subjectSize[1]));

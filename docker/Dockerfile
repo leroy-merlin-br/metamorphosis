@@ -1,16 +1,20 @@
-FROM phpdockerio/php72-cli:latest
-WORKDIR "/application"
+FROM leroymerlinbr/php:7.2
+LABEL maintainer="boitata@leroymerlin.com.br"
 
-ARG DEBIAN_FRONTEND=noninteractive
+USER root:root
 
-RUN apt-get update \
-    && apt-get -y install git build-essential vim php-pear php7.2-dev \
-    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+RUN cd /tmp \
+  && git clone https://github.com/edenhill/librdkafka.git \
+  && cd librdkafka \
+  && ./configure \
+  && make \
+  && make install \
+  && rm -rf /tmp/*
 
-RUN cd /tmp && mkdir librdkafka &&  cd librdkafka \
-    && git clone https://github.com/edenhill/librdkafka.git . \
-    && ./configure \
-    && make \
-    && make install
+RUN pecl install rdkafka \
+  && docker-php-ext-enable \
+    rdkafka \
+    xdebug \
+  && rm -rf /tmp/*
 
-RUN pecl install rdkafka
+USER www-data:www-data

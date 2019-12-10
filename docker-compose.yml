@@ -1,9 +1,7 @@
-version: "3.1"
+version: '3.1'
+
 services:
     php:
       build: docker
-      container_name: kafka-php
-      working_dir: /application
       volumes:
-        - .:/application
-        - ./docker/php-ini-overrides.ini:/etc/php/7.2/cli/conf.d/99-overrides.ini
+        - .:/var/www/html

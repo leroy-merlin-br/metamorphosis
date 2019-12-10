@@ -1,7 +1,6 @@
 language: php
 
 php:
-  - 7.1
   - 7.2
   - 7.3
 
@@ -19,9 +18,8 @@ before_script:
   - composer install --no-interaction
 
 script:
-  - mkdir -p build/logs
   - vendor/bin/phpcs
-  - vendor/bin/phpunit -c phpunit.xml.dist && make coverage
+  - vendor/bin/phpunit
 
 after_script:
   - php vendor/bin/coveralls -v

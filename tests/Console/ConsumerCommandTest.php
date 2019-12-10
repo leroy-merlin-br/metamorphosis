@@ -5,6 +5,7 @@ use Metamorphosis\ConsumerRunner;
 use Metamorphosis\Consumers\HighLevel;
 use Metamorphosis\Consumers\LowLevel;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Mockery as m;
 use RuntimeException;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
@@ -19,7 +20,7 @@ class ConsumerCommandTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'connections' => '',
+                        'connections' => 'test-kafka:6680',
                         'auth' => [],
                     ],
                 ],
@@ -29,8 +30,9 @@ class ConsumerCommandTest extends LaravelTestCase
                         'broker' => 'default',
                         'consumer-groups' => [
                             'default' => [
-                                'offset' => 'initial',
-                                'consumer' => ConsumerHandlerDummy::class,
+                                'offset-reset' => 'earliest',
+                                'handler' => ConsumerHandlerDummy::class,
+                                'timeout' => 123,
                             ],
                         ],
                     ],
@@ -68,21 +70,20 @@ class ConsumerCommandTest extends LaravelTestCase
 
     public function testItCallsWithHighLevelConsumer()
     {
-        $runner = $this->createMock(ConsumerRunner::class);
-
-        $this->instance(ConsumerRunner::class, $runner);
-
-        $runner->expects($this->once())
-            ->method('run')
-            ->with($this->anything(), $this->callback(function ($subject) {
-                return $subject instanceof HighLevel;
-            }));
-
+        // Set
+        $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'topic-key',
+            'consumer-group' => 'default'
         ];
 
+        // Expectations
+        $runner->expects()
+            ->run()
+            ->once();
+
+        // Actions
         $this->artisan($command, $parameters);
     }
 

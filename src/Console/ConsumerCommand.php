@@ -2,12 +2,8 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
-use Metamorphosis\Config\Consumer as ConsumerConfig;
 use Metamorphosis\Config\Validate;
-use Metamorphosis\Connectors\Consumer\ConnectorFactory;
-use Metamorphosis\ConsumerRunner;
 use Metamorphosis\RunnerFactory;
-use RuntimeException;
 
 class ConsumerCommand extends BaseCommand
 {
@@ -32,48 +28,23 @@ class ConsumerCommand extends BaseCommand
         {--broker= : Override broker connection from config.}
         {--timeout= : Sets timeout for consumer.}';
 
-    public function handle(RunnerFactory $runnerFactory)
+    public function handle(RunnerFactory $runnerFactory, Validate $validate)
     {
-        if (!is_null($this->getIntOption('offset')) && is_null($this->getIntOption('partition'))) {
-            throw new RuntimeException('Not enough options ("partition" is required when "offset" is supplied).');
-        }
+        $validate->setOptionConfig($this->option(), $this->argument());
 
-        $config = new ConsumerConfig(
-            $this->argument('topic'),
-            $this->argument('consumer-group'),
-            $this->getIntOption('partition'),
-            $this->getIntOption('offset'),
-            $this->option('broker')
-        );
+        $this->writeStartingConsumer();
 
-        $this->writeStartingConsumer($config);
-
-        $connector = ConnectorFactory::make($config);
-
-        $this->writeConnectingBroker($config);
-
-        $this->output->writeln('Running consumer..');
-        $runner = $runnerFactory->make($config, $connector->getConsumer(), $this->option('timeout'));
+        $runner = $runnerFactory->make();
         $runner->run();
     }
 
-    protected function getIntOption(string $option): ?int
+    private function writeStartingConsumer()
     {
-        return !is_null($this->option($option))
-            ? (int) $this->option($option)
-            : null;
-    }
-
-    private function writeStartingConsumer(ConsumerConfig $config)
-    {
-        $text = 'Starting consumer for topic: '.$config->getTopic();
-        $text .= ' on consumer group: '.$config->getConsumerGroupId();
+        $text = 'Starting consumer for topic: '.config('kafka.runtime.topic');
+        $text .= ' on consumer group: '.config('kafka.runtime.consumerGroupId');
+        $text .= 'Connecting in '.config('kafka.runtime.connections');
+        $text .= 'Running consumer..';
 
         $this->output->writeln($text);
-    }
-
-    private function writeConnectingBroker(ConsumerConfig $config)
-    {
-        $this->output->writeln('Connecting in '.$config->getBrokerConfig()->getConnections());
     }
 }

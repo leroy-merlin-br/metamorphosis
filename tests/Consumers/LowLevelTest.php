@@ -1,33 +1,35 @@
 <?php
 namespace Tests\Consumers;
 
-use Metamorphosis\Config\Consumer;
 use Metamorphosis\Consumers\LowLevel;
+use Mockery as m;
 use RdKafka\ConsumerTopic;
 use RdKafka\Message;
 use Tests\LaravelTestCase;
 
 class LowLevelTest extends LaravelTestCase
 {
-    public function testItShouldConsume()
+    public function testItShouldConsume(): void
     {
-        $config = $this->createMock(Consumer::class);
-        $consumerTopic = $this->createMock(ConsumerTopic::class);
+        // Set
+        $timeout = 2;
+        $partition = 3;
+        config(['kafka.runtime' => compact('timeout', 'partition')]);
+
+        $consumerTopic = m::mock(ConsumerTopic::class);
         $message = new Message();
 
-        $config->expects($this->exactly(1))
-            ->method('getConsumerPartition')
-            ->willReturn(1);
+        $lowLevelConsumer = new LowLevel($consumerTopic);
 
-        $consumerTopic->expects($this->exactly(1))
-            ->method('consume')
-            ->with($this->equalTo(1))
-            ->willReturn($message);
+        // Expectations
+        $consumerTopic->expects()
+            ->consume($partition, $timeout)
+            ->andReturn($message);
 
-        $lowLevelConsumer = new LowLevel($config, $consumerTopic);
+        // Actions
+        $message = $lowLevelConsumer->consume();
 
-        $message = $lowLevelConsumer->consume(1);
-
+        // Assertions
         $this->assertInstanceOf(Message::class, $message);
     }
 }

@@ -2,26 +2,30 @@
 namespace Tests\Consumers;
 
 use Metamorphosis\Consumers\HighLevel;
+use Mockery as m;
 use RdKafka\KafkaConsumer;
 use RdKafka\Message;
 use Tests\LaravelTestCase;
 
 class HighLevelTest extends LaravelTestCase
 {
-    public function testItShouldConsume()
+    public function testItShouldConsume(): void
     {
-        $kafkaConsumer = $this->createMock(KafkaConsumer::class);
+        // Set
+        config(['kafka.runtime.timeout' => 1]);
+        $kafkaConsumer = m::mock(KafkaConsumer::class);
         $message = new Message();
-
-        $kafkaConsumer->expects($this->exactly(1))
-            ->method('consume')
-            ->with($this->equalTo(1))
-            ->will($this->returnValue($message));
-
         $highLevelConsumer = new HighLevel($kafkaConsumer);
 
-        $message = $highLevelConsumer->consume(1);
+        // Expectations
+        $kafkaConsumer->expects()
+            ->consume(1)
+            ->andReturn($message);
 
+        // Actions
+        $message = $highLevelConsumer->consume();
+
+        // Assertions
         $this->assertInstanceOf(Message::class, $message);
     }
 }

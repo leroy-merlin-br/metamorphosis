@@ -5,5 +5,5 @@ use RdKafka\Message;
 
 interface ConsumerInterface
 {
-    public function consume(int $timeout): Message;
+    public function consume(): Message;
 }

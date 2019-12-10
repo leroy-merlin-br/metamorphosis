@@ -1,10 +1,10 @@
 <?php
-namespace Metamorphosis\Config;
+namespace Metamorphosis\Connectors\Consumer;
 
 use Illuminate\Support\Facades\Validator;
 use Metamorphosis\Exceptions\ConfigurationException;
 
-class Validate
+class Config
 {
     protected $rules = [
         'topic' => 'required',
@@ -14,10 +14,11 @@ class Validate
         'partition' => 'required_with:offset|integer',
         'handler' => 'required|string',
         'timeout' => 'required|integer',
-        'consumerGroupId' => 'required|string',
+        'consumer-group' => 'required|string',
         'connections' => 'required|string',
         'schemaUri' => 'string',
         'auth' => 'array',
+        'middlewares' => 'array',
     ];
 
     public function setOptionConfig(array $options, array $arguments): void
@@ -38,6 +39,8 @@ class Validate
             throw new ConfigurationException("Topic '{$topicId}' not found");
         }
 
+        $topicConfig['middlewares'] = $this->getMiddlewares($topicConfig);
+
         return $topicConfig;
     }
 
@@ -49,7 +52,7 @@ class Validate
 
         $consumerGroupId = $consumerGroupId ?? 'default';
         $consumerConfig = $topicConfig['consumer-groups'][$consumerGroupId] ?? null;
-        $consumerConfig['consumerGroupId'] = $consumerGroupId;
+        $consumerConfig['consumer-group'] = $consumerGroupId;
 
         if (!$consumerConfig) {
             throw new ConfigurationException("Consumer group '{$consumerGroupId}' not found");
@@ -79,5 +82,13 @@ class Validate
     private function setConfigRuntime(array $config): void
     {
         config(['kafka.runtime' => $config]);
+    }
+
+    private function getMiddlewares(array $topicConfig): array
+    {
+        return array_merge(
+            config('kafka.middlewares.consumer', []),
+            $topicConfig['middlewares'] ?? []
+        );
     }
 }

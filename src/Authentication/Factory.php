@@ -2,20 +2,27 @@
 namespace Metamorphosis\Authentication;
 
 use Metamorphosis\Exceptions\AuthenticationException;
+use RdKafka\Conf;
 
 class Factory
 {
-    const SSL_PROTOCOL = 'ssl';
+    const TYPE_SSL = 'ssl';
 
-    public static function make(array $authentication = null): Authentication
+    const TYPE_NONE = 'none';
+
+    public static function authenticate(Conf $conf): void
     {
-        if (!$authentication) {
-            return new NoAuthentication();
-        }
+        $type = config('kafka.runtime.auth.type');
+        switch ($type) {
+            case null:
+            case self::TYPE_NONE:
+                app(NoAuthentication::class);
 
-        switch ($authentication['protocol'] ?? []) {
-            case self::SSL_PROTOCOL:
-                return new SSLAuthentication($authentication);
+                break;
+            case self::TYPE_SSL:
+                app(SSLAuthentication::class, compact('conf'));
+
+                break;
             default:
                 throw new AuthenticationException('Invalid Protocol Configuration.');
         }

@@ -27,8 +27,7 @@ class Producer
     {
         $this->producerHandler = $producerHandler;
 
-        $config = new ProducerConfig($producerHandler->getTopic());
-        $this->setMiddlewareDispatcher($config->getMiddlewares());
+        $this->setMiddlewareDispatcher(config('kafka.runtime.middlewares.producer', []));
 
         $record = $producerHandler->getRecord();
 

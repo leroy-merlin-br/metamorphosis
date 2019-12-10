@@ -2,7 +2,6 @@
 namespace Metamorphosis;
 
 use Exception;
-use Metamorphosis\Config\Consumer as ConsumerConfig;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
@@ -12,11 +11,6 @@ use Metamorphosis\TopicHandler\Consumer\Handler;
 
 abstract class AbstractConsumerRunner
 {
-    /**
-     * @var int
-     */
-    public $timeout;
-
     /**
      * @var Dispatcher
      */
@@ -28,52 +22,40 @@ abstract class AbstractConsumerRunner
     protected $handler;
 
     /**
-     * @var ConsumerConfig
-     */
-    private $config;
-
-    /**
      * @var ConsumerInterface
      */
     private $consumer;
 
-    public function __construct(ConsumerConfig $config, ConsumerInterface $consumer, int $timeout)
+    public function __construct(ConsumerInterface $consumer)
     {
-        $this->config = $config;
         $this->consumer = $consumer;
-        $this->timeout = $timeout;
     }
 
     public function run(): void
     {
-        $this->handler = $this->config->getConsumerHandler();
+        $handler = app(config('kafka.runtime.handler'));
 
-        $this->setMiddlewareDispatcher($this->config->getMiddlewares());
+        $this->setMiddlewareDispatcher($handler, config('kafka.runtime.middlewares', []));
 
         while (true) {
-            $response = $this->consumer->consume($this->timeout);
+            $response = $this->consumer->consume();
 
             try {
                 $record = $this->handleConsumerResponse($response);
                 $this->middlewareDispatcher->handle($record);
             } catch (ResponseWarningException $exception) {
-                $this->handler->warning($exception);
+                $handler->warning($exception);
             } catch (Exception $exception) {
-                $this->handler->failed($exception);
+                $handler->failed($exception);
             }
         }
     }
 
     abstract protected function handleConsumerResponse($record): RecordInterface;
 
-    protected function setMiddlewareDispatcher(array $middlewares): void
+    protected function setMiddlewareDispatcher($handler, array $middlewares): void
     {
-        $middlewares[] = new ConsumerMiddleware($this->handler);
+        $middlewares[] = new ConsumerMiddleware($handler);
         $this->middlewareDispatcher = new Dispatcher($middlewares);
-    }
-
-    protected function getConfig(): ConsumerConfig
-    {
-        return $this->config;
     }
 }

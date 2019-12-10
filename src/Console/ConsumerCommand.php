@@ -2,7 +2,7 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
-use Metamorphosis\Config\Validate;
+use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\RunnerFactory;
 
 class ConsumerCommand extends BaseCommand
@@ -28,9 +28,9 @@ class ConsumerCommand extends BaseCommand
         {--broker= : Override broker connection from config.}
         {--timeout= : Sets timeout for consumer.}';
 
-    public function handle(RunnerFactory $runnerFactory, Validate $validate)
+    public function handle(RunnerFactory $runnerFactory, Config $config)
     {
-        $validate->setOptionConfig($this->option(), $this->argument());
+        $config->setOptionConfig($this->option(), $this->argument());
 
         $this->writeStartingConsumer();
 
@@ -41,7 +41,7 @@ class ConsumerCommand extends BaseCommand
     private function writeStartingConsumer()
     {
         $text = 'Starting consumer for topic: '.config('kafka.runtime.topic');
-        $text .= ' on consumer group: '.config('kafka.runtime.consumerGroupId');
+        $text .= ' on consumer group: '.config('kafka.runtime.consumer-group');
         $text .= 'Connecting in '.config('kafka.runtime.connections');
         $text .= 'Running consumer..';
 

@@ -1,21 +1,17 @@
 <?php
 namespace Metamorphosis;
 
-use Metamorphosis\Config\Consumer as ConsumerConfig;
-use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 
 class RunnerFactory
 {
-    public function make(ConsumerConfig $config, ConsumerInterface $consumer, int $timeout = null): AbstractConsumerRunner
+    public function make(): AbstractConsumerRunner
     {
-        if (!$timeout) {
-            $timeout = 2000000;
+        $consumer = ConnectorFactory::make()->getConsumer();
+        if (config('kafka.runtime.isAvroSchema')) {
+            return app(AvroConsumerRunner::class, compact('consumer'));
         }
 
-        if ($config->isAvroSchema()) {
-            return new AvroConsumerRunner($config, $consumer, $timeout);
-        }
-
-        return new ConsumerRunner($config, $consumer, $timeout);
+        return app(ConsumerRunner::class, compact('consumer'));
     }
 }

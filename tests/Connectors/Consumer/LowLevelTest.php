@@ -1,40 +1,31 @@
 <?php
 namespace Test;
 
-use Metamorphosis\Broker;
-use Metamorphosis\Config\Consumer;
 use Metamorphosis\Connectors\Consumer\LowLevel;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
-use RdKafka\ConsumerTopic;
 use Tests\LaravelTestCase;
 
 class LowLevelTest extends LaravelTestCase
 {
-    public function testItShouldMakeConnectorSetup()
+    public function testItShouldMakeConnectorSetup(): void
     {
-        $config = $this->createMock(Consumer::class);
-        $this->app->instance(ConsumerTopic::class, $this->createMock(ConsumerTopic::class));
+        // Set
+        config([
+            'kafka.runtime' => [
+                'connections' => 'kafka:123',
+                'consumer-group' => 'some-group',
+                'topic' => 'some-topic',
+                'offset-reset' => 'earliest',
+                'offset' => 0,
+                'partition' => 1,
+            ],
+        ]);
+        $connector = new LowLevel();
 
-        $connector = new LowLevel($config);
-
-        $config->expects($this->once())
-            ->method('getBrokerConfig')
-            ->will($this->returnValue($this->createMock(Broker::class)));
-
-        $config->expects($this->once())
-            ->method('getConsumerGroupId')
-            ->will($this->returnValue('group.id'));
-
-        $config->expects($this->once())
-            ->method('getConsumerOffsetReset')
-            ->will($this->returnValue('smallest'));
-
-        $config->expects($this->once())
-            ->method('getTopic')
-            ->will($this->returnValue('some.topic'));
-
+        // Actions
         $result = $connector->getConsumer();
 
+        // Assertions
         $this->assertInstanceOf(LowLevelConsumer::class, $result);
     }
 }

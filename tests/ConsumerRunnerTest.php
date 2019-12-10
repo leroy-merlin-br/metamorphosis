@@ -2,107 +2,74 @@
 namespace Tests;
 
 use Exception;
-use Metamorphosis\Config\Consumer;
 use Metamorphosis\ConsumerRunner;
 use Metamorphosis\Consumers\ConsumerInterface;
+use Mockery as m;
 use RdKafka\Message as KafkaMessage;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\Dummies\MiddlewareDummy;
 
 class ConsumerRunnerTest extends LaravelTestCase
 {
-    /**
-     * @var int Counter for mocking infinite loop.
-     */
-    protected $messageCount = 0;
-
     public function testItShouldRun()
     {
+        // Set
         config([
-            'kafka' => [
-                'brokers' => [
-                    'default' => [
-                        'connections' => '',
-                    ],
+            'kafka.runtime' => [
+                'connections' => 'kafka:2019',
+                'topic' => 'topic-key',
+                'broker' => 'default',
+                'offset-reset' => 'earliest',
+                'offset' => 0,
+                'timeout' => 30,
+                'handler' => ConsumerHandlerDummy::class,
+                'middlewares' =>  [
+                    MiddlewareDummy::class,
                 ],
-                'topics' => [
-                    'topic-key' => [
-                        'topic' => 'topic-name',
-                        'broker' => 'default',
-                        'consumer-groups' => [
-                            'default' => [
-                                'offset-reset' => 'earliest',
-                                'offset' => 0,
-                                'consumer' => ConsumerHandlerDummy::class,
-                            ],
-                            'consumer-id' => [
-                                'offset-reset' => 'earliest',
-                                'offset' => 0,
-                                'consumer' => ConsumerHandlerDummy::class,
-                            ],
-                        ],
-                    ],
-                ],
-                'middlewares' => [
-                    'consumer' => [
-                        MiddlewareDummy::class,
-                    ],
-                ],
+                'consumer-group' => 'consumer-id',
             ],
         ]);
 
-        $topicKey = 'topic-key';
-        $consumerGroup = 'consumer-id';
-        $config = new Consumer($topicKey, $consumerGroup);
+        $middleware = $this->instance(MiddlewareDummy::class, m::mock(MiddlewareDummy::class));
+        $consumerInterface = m::mock(ConsumerInterface::class);
 
-        $middleware = $this->createMock(MiddlewareDummy::class);
-        $this->app->instance(MiddlewareDummy::class, $middleware);
+        $runner = new ConsumerRunner($consumerInterface);
 
-        $consumerInterface = $this->createMock(ConsumerInterface::class);
-        $runner = new ConsumerRunner();
-        $runner->setTimeout(30);
+        $kafkaMessage1 = new KafkaMessage();
+        $kafkaMessage1->payload = 'original message';
+        $kafkaMessage1->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $consumerInterface->expects($this->exactly(4))
-            ->method('consume')
-            ->with($this->equalTo(30))
-            ->will($this->returnCallback([$this, 'consumeMockDataProvider']));
+        $kafkaMessage2 = new KafkaMessage();
+        $kafkaMessage2->payload = 'warning message';
+        $kafkaMessage2->err = RD_KAFKA_RESP_ERR__PARTITION_EOF;
+
+        $kafkaMessage3 = new KafkaMessage();
+        $kafkaMessage3->payload = 'error message';
+        $kafkaMessage3->err = RD_KAFKA_RESP_ERR_INVALID_MSG;
+
+        $messages = [$kafkaMessage1, $kafkaMessage2, $kafkaMessage3];
+        $count = 0;
+
+        // Expectations
+        $consumerInterface->shouldReceive('consume')
+            ->times(4)
+            ->andReturnUsing(function() use ($messages, &$count) {
+                $message = $messages[$count] ?? null;
+                if (!$message) {
+                    throw new Exception('Error when consuming.');
+                }
+                $count++;
+
+                return $message;
+            });
 
         // Ensure that one message went through the middleware stack
-        $middleware->expects($this->once())
-            ->method('process');
+        $middleware->shouldReceive('process')
+            ->withAnyArgs();
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Error when consuming.');
 
-        $runner->run($config, $consumerInterface);
-    }
-
-    public function consumeMockDataProvider()
-    {
-        switch ($this->messageCount++) {
-            case 0:
-                $kafkaMessage = new KafkaMessage();
-                $kafkaMessage->payload = 'original message';
-                $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
-
-                return $kafkaMessage;
-
-            case 1:
-                $kafkaMessage = new KafkaMessage();
-                $kafkaMessage->payload = 'warning message';
-                $kafkaMessage->err = RD_KAFKA_RESP_ERR__PARTITION_EOF;
-
-                return $kafkaMessage;
-
-            case 2:
-                $kafkaMessage = new KafkaMessage();
-                $kafkaMessage->payload = 'error message';
-                $kafkaMessage->err = RD_KAFKA_RESP_ERR_INVALID_MSG;
-
-                return $kafkaMessage;
-
-            case 3:
-                throw new Exception('Error when consuming.');
-        }
+        $runner->run();
     }
 }

@@ -1,11 +1,6 @@
 <?php
 namespace Metamorphosis\Authentication;
 
-use RdKafka\Conf;
-
-class NoAuthentication implements Authentication
+class NoAuthentication implements AuthenticationInterface
 {
-    public function authenticate(Conf $conf)
-    {
-    }
 }

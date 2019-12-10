@@ -1,16 +1,16 @@
 <?php
-namespace Tests\Config;
+namespace Tests\Connectors\Consumer;
 
-use Metamorphosis\Config\Validate;
+use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Tests\LaravelTestCase;
 
-class ValidateTest extends LaravelTestCase
+class ConfigTest extends LaravelTestCase
 {
     public function testShouldValidateConsumerConfig()
     {
         // Set
-        $validate = new Validate();
+        $validate = new Config();
         $options = [
             'partition' => 0,
             'offset' => 0,
@@ -24,17 +24,16 @@ class ValidateTest extends LaravelTestCase
         $expected = [
             'topic' => 'default',
             'broker' => 'default',
-            'isAvroSchema' => false,
             'offset-reset' => 'largest',
             'offset' => 0,
             'partition' => 0,
-            'handle' => '\App\Kafka\Consumers\ConsumerExample',
+            'handler' => '\App\Kafka\Consumers\ConsumerExample',
             'timeout' => 20000,
             'consumerGroupId' => 'default',
             'connections' => 'kafka:6680',
             'schemaUri' => '',
             'auth' => [
-                'protocol' => 'ssl',
+                'type' => 'ssl',
                 'ca' => '/application/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/ca.pem',
                 'certificate' => '/application/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/kafka.cert',
                 'key' => '/application/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/kafka.key',
@@ -51,7 +50,7 @@ class ValidateTest extends LaravelTestCase
     public function testShouldNotSetRuntimeConfigWhenOptionsIsInvalid()
     {
         // Set
-        $validate = new Validate();
+        $validate = new Config();
         $options = [
             'partition' => 'one',
             'offset' => 0,
@@ -74,7 +73,7 @@ class ValidateTest extends LaravelTestCase
     {
         // Set
         config(['kafka.brokers.default.connections' => null]);
-        $validate = new Validate();
+        $validate = new Config();
         $options = [
             'partition' => 0,
             'offset' => 0,

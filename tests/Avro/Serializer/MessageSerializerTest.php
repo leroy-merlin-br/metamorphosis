@@ -1,9 +1,9 @@
 <?php
-namespace Tests\Avro;
+namespace Tests\Avro\Serializer;
 
 use AvroSchema;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
-use Metamorphosis\Avro\MessageSerializer;
+use Metamorphosis\Avro\Serializer\MessageSerializer;
 use Mockery as m;
 use RuntimeException;
 use Tests\LaravelTestCase;

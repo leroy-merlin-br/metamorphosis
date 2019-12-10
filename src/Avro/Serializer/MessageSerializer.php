@@ -1,5 +1,5 @@
 <?php
-namespace Metamorphosis\Avro;
+namespace Metamorphosis\Avro\Serializer;
 
 use AvroIO;
 use AvroIOBinaryDecoder;
@@ -9,6 +9,7 @@ use AvroIODatumWriter;
 use AvroSchema;
 use AvroStringIO;
 use Closure;
+use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use RuntimeException;
 
 class MessageSerializer

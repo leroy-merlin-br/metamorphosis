@@ -2,7 +2,7 @@
 namespace Metamorphosis;
 
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
-use Metamorphosis\Avro\MessageSerializer;
+use Metamorphosis\Avro\Serializer\MessageSerializer;
 use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\Record\RecordInterface;
 
@@ -12,8 +12,7 @@ class AvroConsumerRunner extends AbstractConsumerRunner
     {
         $record = new ConsumerRecord($response);
         $this->serializer = new MessageSerializer(new CachedSchemaRegistryClient(
-            $this->getConfig()->getBrokerConfig()->getSchemaUri()),
-            []
+            $this->getConfig()->getBrokerConfig()->getSchemaUri())
         );
 
         $record->setPayload($this->serializer->decodeMessage($record->getPayload()));

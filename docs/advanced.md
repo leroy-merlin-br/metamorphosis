@@ -17,23 +17,23 @@ This is possible by filling the `auth` key in the broker config:
 
 ``` php
 'brokers' => [
-      'price-brokers' => [
+      'price_brokers' => [
           'connections' => 'localhost:8091,localhost:8092',
           'auth' => [
-              'protocol' => 'ssl',
+              'type' => 'ssl',
               'ca' => storage_path('ca.pem'),
               'certificate' => storage_path('kafka.cert'),
               'key' => storage_path('kafka.key'),
           ],
       ],
-      'stock-brokers' => [
+      'stock_brokers' => [
           'connections' => ['localhost:8091', 'localhost:8092'],
           'auth' => [], // can be an empty array or even don't have this key in the broker config
       ],
   ],
 ```
 
-If the protocol key is set to `ssl`, it will make a SSL Authentication, and it will need some extra fields along with protocol.
+If the type key is set to `ssl`, it will make a SSL Authentication, and it will need some extra fields along with type.
 The fields are `ca` with the `ca.pem` file, `certificate` with the `.cert` file and the `.key` file
 
 If the broker do not need any authentication to connect, you can leave the `auth` key as a empty `array` or even delete it.
@@ -51,7 +51,6 @@ After that, they delegate the proccess back to the `MiddlewareHandler`. They can
 
 This package comes with the following middlewares:
 
-- `\Metamorphosis\Middlewares\AvroDecode`
 - `\Metamorphosis\Middlewares\JsonDecode`
 - `\Metamorphosis\Middlewares\Log`
 
@@ -117,13 +116,13 @@ If you wish, you may set a middleware to run of a topic level or a consumer grou
 
 ```php
 'topics' => [
-    'price-update' => [
+    'price_update' => [
         'topic' => 'products.price.update',
-        'broker' => 'price-brokers',
+        'broker' => 'price_brokers',
         'consumer_groups' => [
             'default' => [
-                'offset' => 'initial',
-                'consumer' => '\App\Kafka\Consumers\PriceUpdateConsumer',
+                'offset' => 0,
+                'handler' => '\App\Kafka\Consumers\PriceUpdateHandler',
                 'middlewares' => [
                     \App\Kafka\Middlewares\ConsumerGroupMiddlewareExample::class,
                 ],
@@ -136,7 +135,7 @@ If you wish, you may set a middleware to run of a topic level or a consumer grou
 ],
 ```
 
-The order matters here, they'll be execute as queue, from the most global scope to the most specific (global scope > topic scope > group-consumers scope).
+The order matters here, they'll be execute as queue, from the most global scope to the most specific (global scope > topic scope > group_consumers scope).
 
 
 <a name="commands"></a>
@@ -147,7 +146,7 @@ There's a few commands to help automate the creation of classes and to run the c
 #### Creating Consumer
 You can create a consumer class, that will handle all records received from the topic using the follow command:
 ```bash
-$ php artisan make:kafka-consumer PriceUpdateConsumer
+$ php artisan make:kafka-consumer PriceUpdateHandler
 ```
 This will create a KafkaConsumer class inside the application, on the `app/Kafka/Consumers/` directory.
 
@@ -164,7 +163,7 @@ use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
-class PriceUpdateConsumer extends AbstractHandler
+class PriceUpdateHandler extends AbstractHandler
 {
     public $repository;
 

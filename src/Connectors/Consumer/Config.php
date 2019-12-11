@@ -30,7 +30,13 @@ class Config
         $topicConfig = $this->getTopicConfig($arguments['topic']);
         $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer-group']);
         $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
-        $config = array_merge($topicConfig, $brokerConfig, $consumerConfig, array_filter($options), array_filter($arguments));
+        $config = array_merge(
+            $topicConfig,
+            $brokerConfig,
+            $consumerConfig,
+            $this->filterValues($options),
+            $this->filterValues($arguments)
+        );
 
         $this->validateConfig($config);
         $this->setConfigRuntime($config);
@@ -94,5 +100,12 @@ class Config
             config('kafka.middlewares.consumer', []),
             $topicConfig['middlewares'] ?? []
         );
+    }
+
+    private function filterValues(array $options = []): array
+    {
+        return array_filter($options, function ($value) {
+            return !is_null($value);
+        });
     }
 }

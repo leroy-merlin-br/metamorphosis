@@ -13,8 +13,8 @@ class Config
         'topic' => 'required',
         'broker' => 'required',
         'offset-reset' => 'required', // latest, earliest, none
-        'offset' => 'integer',
-        'partition' => 'required_with:offset|integer',
+        'offset' => 'required_with:partition|integer',
+        'partition' => 'integer',
         'handler' => 'required|string',
         'timeout' => 'required|integer',
         'consumer-group' => 'required|string',

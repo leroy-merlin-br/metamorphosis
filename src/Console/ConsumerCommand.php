@@ -40,9 +40,9 @@ class ConsumerCommand extends BaseCommand
 
     private function writeStartingConsumer()
     {
-        $text = 'Starting consumer for topic: '.config('kafka.runtime.topic');
-        $text .= ' on consumer group: '.config('kafka.runtime.consumer-group');
-        $text .= 'Connecting in '.config('kafka.runtime.connections');
+        $text = 'Starting consumer for topic: '.config('kafka.runtime.topic').PHP_EOL;
+        $text .= ' on consumer group: '.config('kafka.runtime.consumer-group').PHP_EOL;
+        $text .= 'Connecting in '.config('kafka.runtime.connections').PHP_EOL;
         $text .= 'Running consumer..';
 
         $this->output->writeln($text);

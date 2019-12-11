@@ -10,7 +10,7 @@ class Config
         'topic' => 'required',
         'broker' => 'required',
         'offset-reset' => 'required', // latest, earliest, none
-        'offset' => 'required_with:partition|integer',
+        'offset' => 'integer',
         'partition' => 'required_with:offset|integer',
         'handler' => 'required|string',
         'timeout' => 'required|integer',

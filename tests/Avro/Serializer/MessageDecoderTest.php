@@ -10,7 +10,7 @@ use Tests\LaravelTestCase;
 
 class MessageDecoderTest extends LaravelTestCase
 {
-    public function testDecodeMessageShouldFallbackToGivenMessageIfMessageIsStrange()
+    public function testDecodeMessageShouldFallbackToGivenMessageIfMessageIsStrange(): void
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
@@ -25,7 +25,7 @@ class MessageDecoderTest extends LaravelTestCase
         $this->assertSame($expected, $result);
     }
 
-    public function testShouldNotDecodeEmptyMessage()
+    public function testShouldNotDecodeEmptyMessage(): void
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
@@ -40,7 +40,7 @@ class MessageDecoderTest extends LaravelTestCase
         $serializer->decodeMessage($message);
     }
 
-    public function testShouldDecodeMessageUsingSchemaId()
+    public function testShouldDecodeMessageUsingSchemaId(): void
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
@@ -61,7 +61,7 @@ class MessageDecoderTest extends LaravelTestCase
         $this->assertSame($expected, $result);
     }
 
-    public function testShouldDecodeMessageUsingSchemaSubjectAndVersion()
+    public function testShouldDecodeMessageUsingSchemaSubjectAndVersion(): void
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);

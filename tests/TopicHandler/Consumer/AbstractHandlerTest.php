@@ -9,29 +9,35 @@ use Tests\LaravelTestCase;
 
 class AbstractHandlerTest extends LaravelTestCase
 {
-    public function testItShouldHandleWarningConsumer()
+    public function testItShouldHandleWarningConsumer(): void
     {
+        // Set
         $consumerHandler = new class() extends AbstractHandler {
             public function handle(RecordInterface $record): void
             {
             }
         };
 
-        $voidReturn = $consumerHandler->warning(new ResponseWarningException());
+        // Actions
+        $result = $consumerHandler->warning(new ResponseWarningException());
 
-        $this->assertNull($voidReturn);
+        // Assertions
+        $this->assertNull($result);
     }
 
-    public function testItShouldHandleFailedConsumer()
+    public function testItShouldHandleFailedConsumer(): void
     {
+        // Set
         $consumerHandler = new class() extends AbstractHandler {
             public function handle(RecordInterface $record): void
             {
             }
         };
 
-        $voidReturn = $consumerHandler->failed(new Exception());
+        // Actions
+        $result = $consumerHandler->failed(new Exception());
 
-        $this->assertNull($voidReturn);
+        // Assertions
+        $this->assertNull($result);
     }
 }

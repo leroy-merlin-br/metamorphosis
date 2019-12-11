@@ -36,7 +36,7 @@ class ProducerTest extends LaravelTestCase
         ]);
     }
 
-    public function testItShouldProcess()
+    public function testItShouldProcess(): void
     {
         // Set
         $config = m::mock(Config::class);

@@ -38,16 +38,19 @@ class ConsumerCommandTest extends LaravelTestCase
         ]);
     }
 
-    public function testItCallsCommandWithInvalidTopic()
+    public function testItCallsCommandWithInvalidTopic(): void
     {
+        // Set
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'some-topic',
         ];
 
+        // Expectations
         $this->expectException(ConfigurationException::class);
         $this->expectExceptionMessage('Topic \'some-topic\' not found');
 
+        // Actions
         $this->artisan($command, $parameters);
     }
 

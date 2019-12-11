@@ -9,8 +9,9 @@ use Tests\LaravelTestCase;
 
 class DispatcherTest extends LaravelTestCase
 {
-    public function testItShouldCreateIteratorInstanceAndStartIt()
+    public function testItShouldCreateIteratorInstanceAndStartIt(): void
     {
+        // Set
         $middleware = $this->createMock(MiddlewareInterface::class);
 
         $queue = [$middleware];
@@ -22,10 +23,12 @@ class DispatcherTest extends LaravelTestCase
 
         $record = new Record($kafkaMessage);
 
+        // Expectations
         $middleware->expects($this->once())
             ->method('process')
             ->with($this->equalTo($record));
 
+        // Actions
         $dispatcher->handle($record);
     }
 }

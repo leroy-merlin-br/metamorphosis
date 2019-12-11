@@ -61,6 +61,7 @@ class ProducerTest extends LaravelTestCase
 
     public function testItShouldProduceRecordAsStringThroughMiddlewareQueue(): void
     {
+        // Set
         $record = json_encode(['message' => 'some message']);
         $topic = 'some-topic';
         $this->app->instance(ProducerMiddleware::class, $this->createMock(ProducerMiddleware::class));
@@ -73,11 +74,16 @@ class ProducerTest extends LaravelTestCase
             }
         };
 
-        $this->assertNull($producer->produce($producerHandler));
+        // Actions
+        $result = $producer->produce($producerHandler);
+
+        // Assertions
+        $this->assertNull($result);
     }
 
     public function testItShouldThrowJsonExceptionWhenPassingMalFormattedArray(): void
     {
+        // Set
         $record = ["\xB1\x31"];
         $topic = 'some-topic';
         $this->app->instance(ProducerMiddleware::class, $this->createMock(ProducerMiddleware::class));
@@ -90,8 +96,10 @@ class ProducerTest extends LaravelTestCase
             }
         };
 
+        // Expectations
         $this->expectException(JsonException::class);
 
+        // Actions
         $producer->produce($producerHandler);
     }
 }

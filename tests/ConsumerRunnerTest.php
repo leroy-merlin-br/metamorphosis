@@ -11,7 +11,7 @@ use Tests\Dummies\MiddlewareDummy;
 
 class ConsumerRunnerTest extends LaravelTestCase
 {
-    public function testItShouldRun()
+    public function testItShouldRun(): void
     {
         // Set
         config([
@@ -70,6 +70,7 @@ class ConsumerRunnerTest extends LaravelTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Error when consuming.');
 
+        // Actions
         $runner->run();
     }
 }

@@ -10,8 +10,9 @@ use Tests\LaravelTestCase;
 
 class ConsumerTest extends LaravelTestCase
 {
-    public function testItShouldCallHandleMethodOfConsumerTopicHandler()
+    public function testItShouldCallHandleMethodOfConsumerTopicHandler(): void
     {
+        // Set
         $consumerTopicHandler = $this->createMock(ConsumerTopicHandler::class);
         $middlewareHandler = $this->createMock(MiddlewareHandlerInterface::class);
 
@@ -22,10 +23,12 @@ class ConsumerTest extends LaravelTestCase
         $record = new Record($kafkaMessage);
         $middleware = new Consumer($consumerTopicHandler);
 
+        // Expectations
         $consumerTopicHandler->expects($this->once())
             ->method('handle')
             ->with($this->equalTo($record));
 
+        // Actions
         $middleware->process($record, $middlewareHandler);
     }
 }

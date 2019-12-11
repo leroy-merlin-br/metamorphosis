@@ -10,8 +10,9 @@ use Tests\LaravelTestCase;
 
 class LogTest extends LaravelTestCase
 {
-    public function testItShouldLogMessage()
+    public function testItShouldLogMessage(): void
     {
+        // Set
         $log = $this->createMock(LoggerInterface::class);
 
         $middleware = new Log($log);
@@ -24,6 +25,7 @@ class LogTest extends LaravelTestCase
 
         $handler = $this->createMock(Iterator::class);
 
+        // Expectations
         $log->expects($this->once())
             ->method('info')
             ->with(
@@ -47,6 +49,7 @@ class LogTest extends LaravelTestCase
             ->method('handle')
             ->with($this->equalTo($record));
 
+        // Actions
         $middleware->process($record, $handler);
     }
 }

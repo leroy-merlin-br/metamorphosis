@@ -9,8 +9,9 @@ use Tests\LaravelTestCase;
 
 class IteratorTest extends LaravelTestCase
 {
-    public function testItShouldProcessCurrentMiddlewareAndAdvanceQueuePointer()
+    public function testItShouldProcessCurrentMiddlewareAndAdvanceQueuePointer(): void
     {
+        // Set
         $middleware = $this->createMock(MiddlewareInterface::class);
 
         $queue = [$middleware];
@@ -22,6 +23,7 @@ class IteratorTest extends LaravelTestCase
 
         $record = new Record($kafkaMessage);
 
+        // Expectations
         $middleware->expects($this->once())
             ->method('process')
             ->with(
@@ -29,6 +31,7 @@ class IteratorTest extends LaravelTestCase
                 $this->equalTo($iterator)
             );
 
+        // Actions
         $iterator->handle($record);
     }
 }

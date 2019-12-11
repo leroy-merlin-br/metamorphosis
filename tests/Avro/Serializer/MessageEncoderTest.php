@@ -11,7 +11,7 @@ use Tests\LaravelTestCase;
 
 class MessageEncoderTest extends LaravelTestCase
 {
-    public function testShouldEncodeRecordWithSchemaId()
+    public function testShouldEncodeRecordWithSchemaId(): void
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
@@ -33,7 +33,7 @@ class MessageEncoderTest extends LaravelTestCase
         $this->assertSame("\x00\x00\x00\x00\x03\x00", $result);
     }
 
-    public function testShouldEncodeRecordWithSchemaIdRegisteringMissingSchemas()
+    public function testShouldEncodeRecordWithSchemaIdRegisteringMissingSchemas(): void
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
@@ -59,7 +59,7 @@ class MessageEncoderTest extends LaravelTestCase
         $this->assertSame("\x00\x00\x00\x00\x03\x00", $result);
     }
 
-    public function testShouldNotEncodeRecordWhenSchemaIsMissing()
+    public function testShouldNotEncodeRecordWhenSchemaIsMissing(): void
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
@@ -80,7 +80,7 @@ class MessageEncoderTest extends LaravelTestCase
         $serializer->encodeMessage($topic, $schema, $record, true, SchemaFormats::MAGIC_BYTE_SCHEMAID);
     }
 
-    public function testShouldNotEncodeRecordWithInvalidFormat()
+    public function testShouldNotEncodeRecordWithInvalidFormat(): void
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
@@ -97,7 +97,7 @@ class MessageEncoderTest extends LaravelTestCase
         $serializer->encodeMessage($topic, $schema, $record, true, 2);
     }
 
-    public function testShouldEncodeRecordWithSubjectAndVersion()
+    public function testShouldEncodeRecordWithSubjectAndVersion(): void
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
@@ -120,7 +120,7 @@ class MessageEncoderTest extends LaravelTestCase
     }
 
 
-    public function testShouldEncodeRecordWithSubjectAndVersionRegisteringMissingSchemas()
+    public function testShouldEncodeRecordWithSubjectAndVersionRegisteringMissingSchemas(): void
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
@@ -149,7 +149,7 @@ class MessageEncoderTest extends LaravelTestCase
         $this->assertSame("\x01\x00\x00\x00\fmy-topic-key\x00\x00\x00\x05\$my awesome message", $result);
     }
 
-    public function testShouldNotEncodeRecordWithSubjectAndVersionWhenSchemaIsMissing()
+    public function testShouldNotEncodeRecordWithSubjectAndVersionWhenSchemaIsMissing(): void
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);

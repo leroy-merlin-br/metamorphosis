@@ -7,7 +7,7 @@ use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase
 {
-    public function testShouldValidateConsumerConfig()
+    public function testShouldValidateConsumerConfig(): void
     {
         // Set
         $validate = new Config();
@@ -47,7 +47,7 @@ class ConfigTest extends LaravelTestCase
         $this->assertArraySubset($expected, config('kafka.runtime'));
     }
 
-    public function testShouldNotSetRuntimeConfigWhenOptionsIsInvalid()
+    public function testShouldNotSetRuntimeConfigWhenOptionsIsInvalid(): void
     {
         // Set
         $validate = new Config();
@@ -69,7 +69,7 @@ class ConfigTest extends LaravelTestCase
         $this->assertEmpty(config('kafka.runtime'));
     }
 
-    public function testShouldNotSetRuntimeConfigWhenKafkaConfigIsInvalid()
+    public function testShouldNotSetRuntimeConfigWhenKafkaConfigIsInvalid(): void
     {
         // Set
         config(['kafka.brokers.default.connections' => null]);

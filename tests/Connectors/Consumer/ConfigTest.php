@@ -23,6 +23,7 @@ class ConfigTest extends LaravelTestCase
 
         $expected = [
             'topic' => 'default',
+            'topic_id' => 'SOME-TOPIC-KAFKA-ID',
             'broker' => 'default',
             'offset-reset' => 'largest',
             'offset' => 0,

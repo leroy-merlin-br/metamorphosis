@@ -59,7 +59,7 @@ return [
 
     'topics' => [
         'default' => [
-            'topic_id' => 'default',
+            'topic_id' => 'SOME-TOPIC-KAFKA-ID',
             'broker' => 'default',
             'isAvroSchema' => false,
             'consumer-groups' => [

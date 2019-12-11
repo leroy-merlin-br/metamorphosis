@@ -21,16 +21,16 @@ To quickly start using, we can focus in two sections:
 
     ```php
       'brokers' => [
-          'price-brokers' => [
+          'price_brokers' => [
               'connections' => 'localhost:8091,localhost:8092',
               'auth' => [
-                  'protocol' => 'ssl',
+                  'type' => 'ssl',
                   'ca' => storage_path('ca.pem'),
                   'certificate' => storage_path('kafka.cert'),
                   'key' => storage_path('kafka.key'),
               ],
           ],
-          'stock-brokers' => [
+          'stock_brokers' => [
               'connections' => ['localhost:8091', 'localhost:8092'],
               'auth' => [], // can be an empty array or even don't have this key in the broker config
           ],
@@ -42,17 +42,17 @@ To quickly start using, we can focus in two sections:
     An array of topics configuration, such as the topic name, which broker connection should use, consumer groups and middlewares.
 
     Here we can specify the group consumers, each topic can have multiple groups,
-    and each group holds the configuration for which consumer, offset-reset (for setting initial offset) and middleware it must use.
+    and each group holds the configuration for which consumer, offset_reset (for setting initial offset) and middleware it must use.
 
     ```php
       'topics' => [
-          'price-update' => [
+          'price_update' => [
               'topic' => 'products.price.update',
-              'broker' => 'price-brokers',
+              'broker' => 'price_brokers',
               'consumer_groups' => [
                   'default' => [
-                      'offset-reset' => 'smallest',
-                      'consumer' => '\App\Kafka\Consumers\PriceUpdateConsumer',
+                      'offset_reset' => 'smallest',
+                      'handler' => '\App\Kafka\Consumers\PriceUpdateConsumer',
                   ],
               ],
           ],

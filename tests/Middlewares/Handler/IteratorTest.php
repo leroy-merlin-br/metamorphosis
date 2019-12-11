@@ -4,6 +4,7 @@ namespace Tests\Middlewares\Handler;
 use Metamorphosis\Middlewares\Handler\Iterator;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\ConsumerRecord as Record;
+use Mockery as m;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
 
@@ -12,7 +13,7 @@ class IteratorTest extends LaravelTestCase
     public function testItShouldProcessCurrentMiddlewareAndAdvanceQueuePointer(): void
     {
         // Set
-        $middleware = $this->createMock(MiddlewareInterface::class);
+        $middleware = m::mock(MiddlewareInterface::class);
 
         $queue = [$middleware];
         $iterator = new Iterator($queue);
@@ -24,12 +25,8 @@ class IteratorTest extends LaravelTestCase
         $record = new Record($kafkaMessage);
 
         // Expectations
-        $middleware->expects($this->once())
-            ->method('process')
-            ->with(
-                $this->equalTo($record),
-                $this->equalTo($iterator)
-            );
+        $middleware->expects()
+            ->process($record, $iterator);
 
         // Actions
         $iterator->handle($record);

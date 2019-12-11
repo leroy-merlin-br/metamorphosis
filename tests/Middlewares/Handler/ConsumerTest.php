@@ -5,6 +5,7 @@ use Metamorphosis\Middlewares\Handler\Consumer;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Record\ConsumerRecord as Record;
 use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
+use Mockery as m;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
 
@@ -13,8 +14,8 @@ class ConsumerTest extends LaravelTestCase
     public function testItShouldCallHandleMethodOfConsumerTopicHandler(): void
     {
         // Set
-        $consumerTopicHandler = $this->createMock(ConsumerTopicHandler::class);
-        $middlewareHandler = $this->createMock(MiddlewareHandlerInterface::class);
+        $consumerTopicHandler = m::mock(ConsumerTopicHandler::class);
+        $middlewareHandler = m::mock(MiddlewareHandlerInterface::class);
 
         $kafkaMessage = new KafkaMessage();
         $kafkaMessage->payload = 'original message';
@@ -24,9 +25,8 @@ class ConsumerTest extends LaravelTestCase
         $middleware = new Consumer($consumerTopicHandler);
 
         // Expectations
-        $consumerTopicHandler->expects($this->once())
-            ->method('handle')
-            ->with($this->equalTo($record));
+        $consumerTopicHandler->expects()
+            ->handle($record);
 
         // Actions
         $middleware->process($record, $middlewareHandler);

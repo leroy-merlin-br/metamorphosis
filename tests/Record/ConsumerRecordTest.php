@@ -4,6 +4,7 @@ namespace Tests\Record;
 use Metamorphosis\Exceptions\ResponseErrorException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Record\ConsumerRecord as Record;
+use Mockery as m;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
 
@@ -12,13 +13,14 @@ class ConsumerRecordTest extends LaravelTestCase
     public function testItShouldThrowExceptionWhenBaseMessageHasErrors(): void
     {
         // Set
-        $kafkaMessage = $this->createMock(KafkaMessage::class);
+        $kafkaMessage = m::mock(KafkaMessage::class);
         $kafkaMessage->payload = '';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_INVALID_MSG;
 
         // Expectations
-        $kafkaMessage->method('errstr')
-             ->willReturn('Invalid Message');
+        $kafkaMessage->expects()
+            ->errstr()
+            ->andReturn('Invalid Message');
 
         $this->expectException(ResponseErrorException::class);
         $this->expectExceptionMessage('Error response: Invalid Message');
@@ -31,13 +33,14 @@ class ConsumerRecordTest extends LaravelTestCase
     public function testItShouldThrowWarningException(): void
     {
         // Set
-        $kafkaMessage = $this->createMock(KafkaMessage::class);
+        $kafkaMessage = m::mock(KafkaMessage::class);
         $kafkaMessage->payload = '';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR__PARTITION_EOF;
 
         // Expectations
-        $kafkaMessage->method('errstr')
-             ->willReturn('Partition EOF');
+        $kafkaMessage->expects()
+            ->errstr()
+            ->andReturn('Partition EOF');
 
         $this->expectException(ResponseWarningException::class);
         $this->expectExceptionMessage('Invalid response: Partition EOF');

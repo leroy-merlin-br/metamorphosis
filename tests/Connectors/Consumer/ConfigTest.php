@@ -34,9 +34,9 @@ class ConfigTest extends LaravelTestCase
             'schemaUri' => '',
             'auth' => [
                 'type' => 'ssl',
-                'ca' => '/application/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/ca.pem',
-                'certificate' => '/application/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/kafka.cert',
-                'key' => '/application/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/kafka.key',
+                'ca' => storage_path('ca.pem'),
+                'certificate' => storage_path('kafka.cert'),
+                'key' => storage_path('kafka.key'),
             ],
         ];
 

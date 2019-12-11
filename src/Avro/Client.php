@@ -73,7 +73,7 @@ class Client
     private function getHeaders(bool $shouldIncludeContentType = false): array
     {
         $headers = [
-            'Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json'
+            'Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json',
         ];
 
         return $shouldIncludeContentType

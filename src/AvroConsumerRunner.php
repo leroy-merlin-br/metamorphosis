@@ -12,8 +12,8 @@ class AvroConsumerRunner extends AbstractConsumerRunner
     {
         $record = new ConsumerRecord($response);
         $this->serializer = new MessageDecoder(new CachedSchemaRegistryClient(
-            $this->getConfig()->getBrokerConfig()->getSchemaUri())
-        );
+            $this->getConfig()->getBrokerConfig()->getSchemaUri()
+        ));
 
         $record->setPayload($this->serializer->decodeMessage($record->getPayload()));
 

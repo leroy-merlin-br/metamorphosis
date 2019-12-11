@@ -1,12 +1,11 @@
 <?php
 namespace Metamorphosis\Avro\Serializer;
 
-use AvroIODatumWriter;
 use AvroSchema;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Metamorphosis\Avro\Serializer\Encoders\EncoderInterface;
 use Metamorphosis\Avro\Serializer\Encoders\SchemaId;
 use Metamorphosis\Avro\Serializer\Encoders\SchemaSubjectAndVersion;
-use Metamorphosis\Avro\Serializer\Encoders\EncoderInterface;
 use RuntimeException;
 
 class MessageEncoder
@@ -53,6 +52,7 @@ class MessageEncoder
      * @param int|null   $format  Encoding Format
      *
      * @throws \AvroIOException
+     *
      * @return string Encoded record with schema ID as bytes
      */
     public function encodeMessage(

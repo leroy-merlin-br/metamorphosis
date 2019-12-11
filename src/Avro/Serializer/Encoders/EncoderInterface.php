@@ -12,7 +12,6 @@ interface EncoderInterface
      * @param string     $subject Subject name
      * @param AvroSchema $schema  Avro Schema
      * @param mixed      $message An record (object, array, string, etc) to serialize
-     * @param bool       $registerMissingSchemas
      *
      * @return string Encoded record with schema ID as bytes
      */

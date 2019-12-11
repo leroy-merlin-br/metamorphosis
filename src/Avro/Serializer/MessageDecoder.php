@@ -31,9 +31,8 @@ class MessageDecoder
     /**
      * Decode a message from kafka that has been encoded for use with the schema registry.
      *
-     * @param string $message
-     *
      * @throws \AvroIOException
+     *
      * @return mixed
      */
     public function decodeMessage(string $message)

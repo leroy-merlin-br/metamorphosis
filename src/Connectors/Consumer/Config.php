@@ -35,7 +35,7 @@ class Config
 
     private function getTopicConfig(string $topicId): array
     {
-        $topicConfig = config('kafka.topics.' . $topicId);
+        $topicConfig = config('kafka.topics.'.$topicId);
         if (!$topicConfig) {
             throw new ConfigurationException("Topic '{$topicId}' not found");
         }

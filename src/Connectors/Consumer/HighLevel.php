@@ -27,7 +27,7 @@ class HighLevel implements ConnectorInterface
         $conf = resolve(Conf::class);
         Factory::authenticate($conf);
 
-        $conf->set('metadata.broker.list',config('kafka.runtime.connections'));
+        $conf->set('metadata.broker.list', config('kafka.runtime.connections'));
 
         return $conf;
     }

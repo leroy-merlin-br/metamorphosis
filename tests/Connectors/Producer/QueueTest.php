@@ -1,8 +1,8 @@
 <?php
 namespace Tests\Connectors\Producer;
 
-use Mockery as m;
 use Metamorphosis\Connectors\Producer\Queue;
+use Mockery as m;
 use RdKafka\Producer;
 use Tests\LaravelTestCase;
 

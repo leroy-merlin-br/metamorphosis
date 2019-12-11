@@ -11,12 +11,14 @@ class FactoryTest extends LaravelTestCase
     public function testItMakesSslAuthenticationClass(): void
     {
         // Set
-        config(['kafka.runtime.auth' => [
-            'type' => 'ssl',
-            'ca' => 'path/to/ca',
-            'certificate' => 'path/to/certificate',
-            'key' => 'path/to/key',
-        ]]);
+        config([
+            'kafka.runtime.auth' => [
+                'type' => 'ssl',
+                'ca' => 'path/to/ca',
+                'certificate' => 'path/to/certificate',
+                'key' => 'path/to/key',
+            ],
+        ]);
         $conf = new Conf();
         $expected = [
             'security.protocol' => 'ssl',

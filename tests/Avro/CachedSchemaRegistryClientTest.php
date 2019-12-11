@@ -2,10 +2,10 @@
 namespace Tests\Avro;
 
 use AvroSchema;
-use RuntimeException;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\Client;
 use Mockery as m;
+use RuntimeException;
 use Tests\LaravelTestCase;
 
 class CachedSchemaRegistryClientTest extends LaravelTestCase
@@ -467,6 +467,6 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
 
     private function getSchemaTest(): string
     {
-        return file_get_contents(__DIR__."/../fixtures/schemas/sales_price.avsc");
+        return file_get_contents(__DIR__.'/../fixtures/schemas/sales_price.avsc');
     }
 }

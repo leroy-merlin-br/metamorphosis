@@ -6,6 +6,9 @@ use Metamorphosis\Exceptions\ConfigurationException;
 
 class Config
 {
+    /**
+     * @var array
+     */
     protected $rules = [
         'topic' => 'required',
         'broker' => 'required',

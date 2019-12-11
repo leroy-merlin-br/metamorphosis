@@ -2,7 +2,6 @@
 namespace Tests\Middlewares\Handler;
 
 use Metamorphosis\Middlewares\Handler\Dispatcher;
-use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\ConsumerRecord as Record;
 use Mockery as m;

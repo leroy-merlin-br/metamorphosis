@@ -23,7 +23,7 @@ class ConsumerRunnerTest extends LaravelTestCase
                 'offset' => 0,
                 'timeout' => 30,
                 'handler' => ConsumerHandlerDummy::class,
-                'middlewares' =>  [
+                'middlewares' => [
                     MiddlewareDummy::class,
                 ],
                 'consumer-group' => 'consumer-id',
@@ -53,7 +53,7 @@ class ConsumerRunnerTest extends LaravelTestCase
         // Expectations
         $consumerInterface->shouldReceive('consume')
             ->times(4)
-            ->andReturnUsing(function() use ($messages, &$count) {
+            ->andReturnUsing(function () use ($messages, &$count) {
                 $message = $messages[$count] ?? null;
                 if (!$message) {
                     throw new Exception('Error when consuming.');

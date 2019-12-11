@@ -2,7 +2,6 @@
 namespace Tests\Connectors\Producer;
 
 use Exception;
-use Metamorphosis\Config\Producer;
 use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;

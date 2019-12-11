@@ -18,7 +18,7 @@ class ConfigTest extends LaravelTestCase
         ];
         $arguments = [
             'topic' => 'default',
-            'consumer-group' => 'default'
+            'consumer-group' => 'default',
         ];
 
         $expected = [
@@ -58,7 +58,7 @@ class ConfigTest extends LaravelTestCase
         ];
         $arguments = [
             'topic' => 'default',
-            'consumer-group' => 'default'
+            'consumer-group' => 'default',
         ];
 
         // Actions
@@ -81,7 +81,7 @@ class ConfigTest extends LaravelTestCase
         ];
         $arguments = [
             'topic' => 'default',
-            'consumer-group' => 'default'
+            'consumer-group' => 'default',
         ];
 
         // Actions

@@ -7,7 +7,6 @@ use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Record\ProducerRecord;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
-use Metamorphosis\TopicHandler\Producer\HandlerInterface as ProducerHandler;
 use Mockery as m;
 use RdKafka\ProducerTopic;
 use Tests\LaravelTestCase;

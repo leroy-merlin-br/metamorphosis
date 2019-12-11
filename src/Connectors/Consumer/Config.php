@@ -17,9 +17,9 @@ class Config
         'partition' => 'integer',
         'handler' => 'required|string',
         'timeout' => 'required|integer',
-        'consumer-group' => 'required|string',
+        'consumer_group' => 'required|string',
         'connections' => 'required|string',
-        'schemaUri' => 'string',
+        'schema_uri' => 'string',
         'use_avro_schema' => 'boolean',
         'auth' => 'array',
         'middlewares' => 'array',
@@ -28,7 +28,7 @@ class Config
     public function setOptionConfig(array $options, array $arguments): void
     {
         $topicConfig = $this->getTopicConfig($arguments['topic']);
-        $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer-group']);
+        $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer_group']);
         $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
         $config = array_merge(
             $topicConfig,
@@ -62,7 +62,7 @@ class Config
 
         $consumerGroupId = $consumerGroupId ?? 'default';
         $consumerConfig = $topicConfig['consumer_groups'][$consumerGroupId] ?? null;
-        $consumerConfig['consumer-group'] = $consumerGroupId;
+        $consumerConfig['consumer_group'] = $consumerGroupId;
 
         if (!$consumerConfig) {
             throw new ConfigurationException("Consumer group '{$consumerGroupId}' not found");

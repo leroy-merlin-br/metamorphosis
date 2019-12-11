@@ -12,7 +12,7 @@ class AvroConsumerRunner extends AbstractConsumerRunner
     {
         $record = new ConsumerRecord($response);
         $this->serializer = new MessageDecoder(new CachedSchemaRegistryClient(
-            config('kafka.runtime.schemaUri')
+            config('kafka.runtime.schema_uri')
         ));
 
         $record->setPayload($this->serializer->decodeMessage($record->getPayload()));

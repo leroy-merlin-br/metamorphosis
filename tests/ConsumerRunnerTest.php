@@ -26,7 +26,7 @@ class ConsumerRunnerTest extends LaravelTestCase
                 'middlewares' => [
                     MiddlewareDummy::class,
                 ],
-                'consumer-group' => 'consumer-id',
+                'consumer_group' => 'consumer-id',
             ],
         ]);
 

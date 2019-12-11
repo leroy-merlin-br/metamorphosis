@@ -13,7 +13,7 @@ class LowLevelTest extends LaravelTestCase
         config([
             'kafka.runtime' => [
                 'connections' => 'kafka:123',
-                'consumer-group' => 'some-group',
+                'consumer_group' => 'some-group',
                 'topic' => 'some-topic',
                 'offset_reset' => 'earliest',
                 'offset' => 0,

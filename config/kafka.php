@@ -14,7 +14,7 @@ return [
     'brokers' => [
         'default' => [
             'connections' => 'kafka:6680',
-            'schemaUri' => '',
+            'schema_uri' => '',
             'auth' => [
                 'type' => 'ssl', // ssl and none
                 'ca' => storage_path('ca.pem'),

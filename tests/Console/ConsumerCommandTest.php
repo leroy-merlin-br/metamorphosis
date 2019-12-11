@@ -82,7 +82,7 @@ class ConsumerCommandTest extends LaravelTestCase
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'topic-key',
-            'consumer-group' => 'default',
+            'consumer_group' => 'default',
         ];
 
         // Expectations

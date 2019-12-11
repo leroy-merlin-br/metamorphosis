@@ -18,7 +18,7 @@ class ConfigTest extends LaravelTestCase
         ];
         $arguments = [
             'topic' => 'default',
-            'consumer-group' => 'default',
+            'consumer_group' => 'default',
         ];
 
         $expected = [
@@ -30,9 +30,9 @@ class ConfigTest extends LaravelTestCase
             'partition' => 0,
             'handler' => '\App\Kafka\Consumers\ConsumerExample',
             'timeout' => 20000,
-            'consumer-group' => 'default',
+            'consumer_group' => 'default',
             'connections' => 'kafka:6680',
-            'schemaUri' => '',
+            'schema_uri' => '',
             'auth' => [
                 'type' => 'ssl',
                 'ca' => storage_path('ca.pem'),
@@ -59,7 +59,7 @@ class ConfigTest extends LaravelTestCase
         ];
         $arguments = [
             'topic' => 'default',
-            'consumer-group' => 'default',
+            'consumer_group' => 'default',
         ];
 
         // Actions
@@ -82,7 +82,7 @@ class ConfigTest extends LaravelTestCase
         ];
         $arguments = [
             'topic' => 'default',
-            'consumer-group' => 'default',
+            'consumer_group' => 'default',
         ];
 
         // Actions

@@ -17,6 +17,7 @@ class Config
         'consumer-group' => 'required|string',
         'connections' => 'required|string',
         'schemaUri' => 'string',
+        'isAvroSchema' => 'boolean',
         'auth' => 'array',
         'middlewares' => 'array',
     ];

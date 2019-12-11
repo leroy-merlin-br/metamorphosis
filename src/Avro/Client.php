@@ -36,7 +36,6 @@ class Client
 
     public function post(string $url, array $body = []): array
     {
-
         $url = $this->buildUrl($url);
         $headers = $this->getHeaders(true);
 
@@ -50,7 +49,6 @@ class Client
 
     public function put(string $url, array $body = []): array
     {
-
         $url = $this->buildUrl($url);
         $headers = $this->getHeaders(true);
 
@@ -64,7 +62,6 @@ class Client
 
     public function delete(string $url): array
     {
-
         $url = $this->buildUrl($url);
         $headers = $this->getHeaders();
 

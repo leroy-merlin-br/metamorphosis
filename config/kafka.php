@@ -61,6 +61,7 @@ return [
         'default' => [
             'topic' => 'default',
             'broker' => 'default',
+            'isAvroSchema' => false,
             'consumer-groups' => [
                 'default' => [
                     'offset-reset' => 'largest',

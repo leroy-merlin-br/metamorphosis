@@ -17,13 +17,13 @@ class ConsumerCommandTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'connections' => 'test-kafka:6680',
+                        'connections' => 'test_kafka:6680',
                         'auth' => [],
                     ],
                 ],
                 'topics' => [
-                    'topic-key' => [
-                        'topic' => 'topic-name',
+                    'topic_key' => [
+                        'topic_id' => 'topic_name',
                         'broker' => 'default',
                         'consumer_groups' => [
                             'default' => [
@@ -43,12 +43,12 @@ class ConsumerCommandTest extends LaravelTestCase
         // Set
         $command = 'kafka:consume';
         $parameters = [
-            'topic' => 'some-topic',
+            'topic' => 'some_topic',
         ];
 
         // Expectations
         $this->expectException(ConfigurationException::class);
-        $this->expectExceptionMessage('Topic \'some-topic\' not found');
+        $this->expectExceptionMessage('Topic \'some_topic\' not found');
 
         // Actions
         $this->artisan($command, $parameters);
@@ -60,7 +60,7 @@ class ConsumerCommandTest extends LaravelTestCase
         $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
         $command = 'kafka:consume';
         $parameters = [
-            'topic' => 'some-topic',
+            'topic' => 'some_topic',
             '--offset' => 1,
         ];
 
@@ -81,7 +81,7 @@ class ConsumerCommandTest extends LaravelTestCase
         $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
         $command = 'kafka:consume';
         $parameters = [
-            'topic' => 'topic-key',
+            'topic' => 'topic_key',
             'consumer_group' => 'default',
         ];
 
@@ -100,7 +100,7 @@ class ConsumerCommandTest extends LaravelTestCase
         $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
         $command = 'kafka:consume';
         $parameters = [
-            'topic' => 'topic-key',
+            'topic' => 'topic_key',
             '--partition' => 1,
             '--offset' => 5,
         ];
@@ -120,7 +120,7 @@ class ConsumerCommandTest extends LaravelTestCase
         $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
         $command = 'kafka:consume';
         $parameters = [
-            'topic' => 'topic-key',
+            'topic' => 'topic_key',
             '--timeout' => 1,
         ];
 
@@ -146,7 +146,7 @@ class ConsumerCommandTest extends LaravelTestCase
         $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
         $command = 'kafka:consume';
         $parameters = [
-            'topic' => 'topic-key',
+            'topic' => 'topic_key',
             '--timeout' => 1,
             '--broker' => 'some-broker',
         ];

@@ -53,7 +53,7 @@ return [
     |       RD_KAFKA_OFFSET_END, RD_KAFKA_OFFSET_STORED.
     | 'consumer_groups.*.partition': the partition to consume. It can be null, if you don't wish do specify one.
     | 'consumer_groups.*.handler': a consumer class that implements ConsumerTopicHandler
-    | 'consumer_groups.*.middlewares': an array of middlewares applied only for this consumer-group
+    | 'consumer_groups.*.middlewares': an array of middlewares applied only for this consumer_group
     |
     */
 
@@ -66,7 +66,6 @@ return [
                 'default' => [
                     'offset_reset' => 'largest',
                     'offset' => 0,
-                    'partition' => 0,
                     'handler' => '\App\Kafka\Consumers\ConsumerExample',
                     'timeout' => 20000,
                     'middlewares' => [],

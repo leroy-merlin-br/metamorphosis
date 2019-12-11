@@ -13,7 +13,7 @@ class LowLevel implements ConnectorInterface
     public function getConsumer(): ConsumerInterface
     {
         $conf = $this->getConf();
-        $conf->set('group.id', config('kafka.runtime.consumer-group'));
+        $conf->set('group.id', config('kafka.runtime.consumer_group'));
         Factory::authenticate($conf);
 
         $consumer = new Consumer($conf);

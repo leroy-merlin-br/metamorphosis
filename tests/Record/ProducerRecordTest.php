@@ -10,7 +10,7 @@ class ProducerRecordTest extends LaravelTestCase
     {
         // Set
         $message = json_encode(['message' => 'original record']);
-        $topicName = 'some-topic';
+        $topicName = 'some_topic';
 
         // Actions
         $record = new Record($message, $topicName);
@@ -23,7 +23,7 @@ class ProducerRecordTest extends LaravelTestCase
     {
         // Set
         $message = json_encode(['message' => 'original record']);
-        $topicName = 'some-topic';
+        $topicName = 'some_topic';
 
         // Actions
         $record = new Record($message, $topicName);
@@ -36,7 +36,7 @@ class ProducerRecordTest extends LaravelTestCase
     {
         // Set
         $message = json_encode(['message' => 'original record']);
-        $topicName = 'some-topic';
+        $topicName = 'some_topic';
 
         // Actions
         $record = new Record($message, $topicName);
@@ -49,7 +49,7 @@ class ProducerRecordTest extends LaravelTestCase
     {
         // Set
         $message = json_encode(['message' => 'original record']);
-        $topicName = 'some-topic';
+        $topicName = 'some_topic';
         $partition = 0;
 
         // Actions
@@ -63,7 +63,7 @@ class ProducerRecordTest extends LaravelTestCase
     {
         // Set
         $message = json_encode(['message' => 'original record']);
-        $topicName = 'some-topic';
+        $topicName = 'some_topic';
         $partition = 0;
         $key = 'message-key';
 
@@ -79,7 +79,7 @@ class ProducerRecordTest extends LaravelTestCase
         // Set
         $originalMessage = json_encode(['message' => 'original record']);
         $changedMessage = json_encode(['message' => 'changed record']);
-        $topicName = 'some-topic';
+        $topicName = 'some_topic';
 
         // Actions
         $record = new Record($originalMessage, $topicName);

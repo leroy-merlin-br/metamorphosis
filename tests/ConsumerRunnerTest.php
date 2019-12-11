@@ -17,7 +17,7 @@ class ConsumerRunnerTest extends LaravelTestCase
         config([
             'kafka.runtime' => [
                 'connections' => 'kafka:2019',
-                'topic' => 'topic-key',
+                'topic' => 'topic_key',
                 'broker' => 'default',
                 'offset_reset' => 'earliest',
                 'offset' => 0,

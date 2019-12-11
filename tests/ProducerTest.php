@@ -22,8 +22,8 @@ class ProducerTest extends LaravelTestCase
                     ],
                 ],
                 'topics' => [
-                    'some-topic' => [
-                        'topic' => 'topic-name',
+                    'some_topic' => [
+                        'topic_id' => 'topic_name',
                         'broker' => 'default',
                     ],
                 ],
@@ -35,7 +35,7 @@ class ProducerTest extends LaravelTestCase
     {
         // Set
         $record = ['message' => 'some message'];
-        $topic = 'some-topic';
+        $topic = 'some_topic';
         $producerMiddleware = $this->instance(
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)
@@ -66,7 +66,7 @@ class ProducerTest extends LaravelTestCase
     {
         // Set
         $record = json_encode(['message' => 'some message']);
-        $topic = 'some-topic';
+        $topic = 'some_topic';
         $producerMiddleware = $this->app->instance(
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)
@@ -99,7 +99,7 @@ class ProducerTest extends LaravelTestCase
     {
         // Set
         $record = ["\xB1\x31"];
-        $topic = 'some-topic';
+        $topic = 'some_topic';
         $producerMiddleware = $this->app->instance(
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)

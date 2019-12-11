@@ -26,8 +26,8 @@ class ProducerTest extends LaravelTestCase
                     ],
                 ],
                 'topics' => [
-                    'topic-key' => [
-                        'topic' => 'topic-name',
+                    'topic_key' => [
+                        'topic_id' => 'topic_name',
                         'broker' => 'default',
                     ],
                 ],
@@ -48,11 +48,11 @@ class ProducerTest extends LaravelTestCase
         $producerHandler->setProducerHandler($handler);
 
         $record = json_encode(['message' => 'original record']);
-        $record = new ProducerRecord($record, 'topic-key');
+        $record = new ProducerRecord($record, 'topic_key');
 
         // Expectations
         $config->expects()
-            ->setOptionConfig('topic-key');
+            ->setOptionConfig('topic_key');
 
         $connector->expects()
             ->setHandler($handler);

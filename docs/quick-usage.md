@@ -49,7 +49,7 @@ To quickly start using, we can focus in two sections:
           'price-update' => [
               'topic' => 'products.price.update',
               'broker' => 'price-brokers',
-              'consumer-groups' => [
+              'consumer_groups' => [
                   'default' => [
                       'offset-reset' => 'smallest',
                       'consumer' => '\App\Kafka\Consumers\PriceUpdateConsumer',

@@ -120,7 +120,7 @@ If you wish, you may set a middleware to run of a topic level or a consumer grou
     'price-update' => [
         'topic' => 'products.price.update',
         'broker' => 'price-brokers',
-        'consumer-groups' => [
+        'consumer_groups' => [
             'default' => [
                 'offset' => 'initial',
                 'consumer' => '\App\Kafka\Consumers\PriceUpdateConsumer',

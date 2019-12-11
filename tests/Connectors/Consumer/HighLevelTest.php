@@ -14,7 +14,7 @@ class HighLevelTest extends LaravelTestCase
             'kafka.runtime' => [
                 'connections' => 'kafka:123',
                 'consumer_group' => 'some-group',
-                'topic' => 'some-topic',
+                'topic_id' => 'some_topic',
                 'offset_reset' => 'earliest',
             ],
         ]);

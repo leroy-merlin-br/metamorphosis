@@ -22,7 +22,7 @@ class ConsumerCommand extends BaseCommand
      */
     protected $signature = 'kafka:consume
         {topic : topic.}
-        {consumer-group? : consumer group name.}
+        {consumer_group? : consumer group name.}
         {--offset= : Sets the offset at which to start consumption.}
         {--partition= : Sets the partition to consume.}
         {--broker= : Override broker connection from config.}
@@ -41,7 +41,7 @@ class ConsumerCommand extends BaseCommand
     private function writeStartingConsumer()
     {
         $text = 'Starting consumer for topic: '.config('kafka.runtime.topic').PHP_EOL;
-        $text .= ' on consumer group: '.config('kafka.runtime.consumer-group').PHP_EOL;
+        $text .= ' on consumer group: '.config('kafka.runtime.consumer_group').PHP_EOL;
         $text .= 'Connecting in '.config('kafka.runtime.connections').PHP_EOL;
         $text .= 'Running consumer..';
 

@@ -13,7 +13,7 @@ class HighLevel implements ConnectorInterface
     {
         $conf = $this->getConf();
 
-        $conf->set('group.id', config('kafka.runtime.consumer-group'));
+        $conf->set('group.id', config('kafka.runtime.consumer_group'));
         $conf->set('auto.offset.reset', config('kafka.runtime.offset_reset'));
 
         $consumer = app(KafkaConsumer::class, ['conf' => $conf]);

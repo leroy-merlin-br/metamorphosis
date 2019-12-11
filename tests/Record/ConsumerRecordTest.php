@@ -83,14 +83,14 @@ class ConsumerRecordTest extends LaravelTestCase
     {
         // Set
         $kafkaMessage = new KafkaMessage();
-        $kafkaMessage->topic_name = 'topic-name';
+        $kafkaMessage->topic_name = 'topic_name';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
         // Actions
         $record = new Record($kafkaMessage);
 
         // Expectations
-        $this->assertSame('topic-name', $record->getTopicName());
+        $this->assertSame('topic_name', $record->getTopicName());
     }
 
     public function testItShouldGetPartition(): void

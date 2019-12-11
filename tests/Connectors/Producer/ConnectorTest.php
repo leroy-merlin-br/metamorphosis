@@ -26,7 +26,7 @@ class ConnectorTest extends LaravelTestCase
     public function testItShouldMakeSetupWithTopicHandler(): void
     {
         // Set
-        $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
+        $handler = new class('record', 'some_topic') extends AbstractHandler implements HandleableResponseInterface {
             public function success(Message $message): void
             {
             }
@@ -51,7 +51,7 @@ class ConnectorTest extends LaravelTestCase
     {
         // Set
         config(['kafka.runtime.timeout' => 61]);
-        $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
+        $handler = new class('record', 'some_topic') extends AbstractHandler implements HandleableResponseInterface {
             public function success(Message $message): void
             {
             }
@@ -78,7 +78,7 @@ class ConnectorTest extends LaravelTestCase
     public function testItShouldNotHandleResponseFromBroker(): void
     {
         // Set
-        $handler = new class('record', 'some-topic') extends AbstractHandler {
+        $handler = new class('record', 'some_topic') extends AbstractHandler {
             public function success(Message $message): void
             {
             }
@@ -104,7 +104,7 @@ class ConnectorTest extends LaravelTestCase
     public function testItShouldThrowExceptionWhenHandleResponseFromBroker(): void
     {
         // Set
-        $handler = new class('record', 'some-topic') extends AbstractHandler implements HandleableResponseInterface {
+        $handler = new class('record', 'some_topic') extends AbstractHandler implements HandleableResponseInterface {
             public function success(Message $message): void
             {
             }

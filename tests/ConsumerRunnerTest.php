@@ -19,7 +19,7 @@ class ConsumerRunnerTest extends LaravelTestCase
                 'connections' => 'kafka:2019',
                 'topic' => 'topic-key',
                 'broker' => 'default',
-                'offset-reset' => 'earliest',
+                'offset_reset' => 'earliest',
                 'offset' => 0,
                 'timeout' => 30,
                 'handler' => ConsumerHandlerDummy::class,

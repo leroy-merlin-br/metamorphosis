@@ -15,7 +15,7 @@ class LowLevelTest extends LaravelTestCase
                 'connections' => 'kafka:123',
                 'consumer-group' => 'some-group',
                 'topic' => 'some-topic',
-                'offset-reset' => 'earliest',
+                'offset_reset' => 'earliest',
                 'offset' => 0,
                 'partition' => 1,
             ],

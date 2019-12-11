@@ -25,9 +25,9 @@ class ConsumerCommandTest extends LaravelTestCase
                     'topic-key' => [
                         'topic' => 'topic-name',
                         'broker' => 'default',
-                        'consumer-groups' => [
+                        'consumer_groups' => [
                             'default' => [
-                                'offset-reset' => 'earliest',
+                                'offset_reset' => 'earliest',
                                 'handler' => ConsumerHandlerDummy::class,
                                 'timeout' => 123,
                             ],

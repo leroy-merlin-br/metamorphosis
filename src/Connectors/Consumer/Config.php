@@ -12,7 +12,7 @@ class Config
     protected $rules = [
         'topic' => 'required',
         'broker' => 'required',
-        'offset-reset' => 'required', // latest, earliest, none
+        'offset_reset' => 'required', // latest, earliest, none
         'offset' => 'required_with:partition|integer',
         'partition' => 'integer',
         'handler' => 'required|string',
@@ -20,7 +20,7 @@ class Config
         'consumer-group' => 'required|string',
         'connections' => 'required|string',
         'schemaUri' => 'string',
-        'isAvroSchema' => 'boolean',
+        'use_avro_schema' => 'boolean',
         'auth' => 'array',
         'middlewares' => 'array',
     ];
@@ -50,12 +50,12 @@ class Config
 
     private function getConsumerConfig(array $topicConfig, string $consumerGroupId = null): array
     {
-        if (!$consumerGroupId && 1 === count($topicConfig['consumer-groups'])) {
-            $consumerGroupId = current(array_keys($topicConfig['consumer-groups']));
+        if (!$consumerGroupId && 1 === count($topicConfig['consumer_groups'])) {
+            $consumerGroupId = current(array_keys($topicConfig['consumer_groups']));
         }
 
         $consumerGroupId = $consumerGroupId ?? 'default';
-        $consumerConfig = $topicConfig['consumer-groups'][$consumerGroupId] ?? null;
+        $consumerConfig = $topicConfig['consumer_groups'][$consumerGroupId] ?? null;
         $consumerConfig['consumer-group'] = $consumerGroupId;
 
         if (!$consumerConfig) {

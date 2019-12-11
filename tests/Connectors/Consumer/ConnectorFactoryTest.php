@@ -25,15 +25,15 @@ class ConnectorFactoryTest extends LaravelTestCase
                     'topic-key' => [
                         'topic' => 'topic-name',
                         'broker' => 'default',
-                        'consumer-groups' => [
+                        'consumer_groups' => [
                             'with-partition' => [
-                                'offset-reset' => 'earliest',
+                                'offset_reset' => 'earliest',
                                 'offset' => 0,
                                 'partition' => 0,
                                 'handler' => ConsumerHandlerDummy::class,
                             ],
                             'without-partition' => [
-                                'offset-reset' => 'earliest',
+                                'offset_reset' => 'earliest',
                                 'handler' => ConsumerHandlerDummy::class,
                             ],
                         ],

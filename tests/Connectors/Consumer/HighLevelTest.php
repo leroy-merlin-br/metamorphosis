@@ -15,7 +15,7 @@ class HighLevelTest extends LaravelTestCase
                 'connections' => 'kafka:123',
                 'consumer-group' => 'some-group',
                 'topic' => 'some-topic',
-                'offset-reset' => 'earliest',
+                'offset_reset' => 'earliest',
             ],
         ]);
         $connector = new HighLevel();

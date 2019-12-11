@@ -36,7 +36,7 @@ return [
     |
     | For every topic you may define the following properties:
     |
-    | 'topic': The topic name to subscribe to
+    | 'topic_id': The topic name to subscribe to
     | 'broker': The broker identification key
     | 'middlewares': an array of middlewares applied for this topic and all consumer-groups inside
     | 'consumer-groups': You may define more than one consumer group per topic.
@@ -59,7 +59,7 @@ return [
 
     'topics' => [
         'default' => [
-            'topic' => 'default',
+            'topic_id' => 'default',
             'broker' => 'default',
             'isAvroSchema' => false,
             'consumer-groups' => [

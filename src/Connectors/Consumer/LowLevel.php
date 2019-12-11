@@ -19,7 +19,7 @@ class LowLevel implements ConnectorInterface
         $consumer = new Consumer($conf);
         $consumer->addBrokers(config('kafka.runtime.connections'));
 
-        $topicConsumer = $consumer->newTopic(config('kafka.runtime.topic'), $this->getTopicConfigs());
+        $topicConsumer = $consumer->newTopic(config('kafka.runtime.topic_id'), $this->getTopicConfigs());
 
         $topicConsumer->consumeStart(config('kafka.runtime.partition'), config('kafka.runtime.offset'));
 

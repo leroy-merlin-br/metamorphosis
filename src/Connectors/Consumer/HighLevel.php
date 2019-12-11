@@ -17,7 +17,7 @@ class HighLevel implements ConnectorInterface
         $conf->set('auto.offset.reset', config('kafka.runtime.offset-reset'));
 
         $consumer = app(KafkaConsumer::class, ['conf' => $conf]);
-        $consumer->subscribe([config('kafka.runtime.topic')]);
+        $consumer->subscribe([config('kafka.runtime.topic_id')]);
 
         return app(HighLevelConsumer::class, compact('consumer'));
     }

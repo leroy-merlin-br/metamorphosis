@@ -36,8 +36,11 @@ class ProducerTest extends LaravelTestCase
         // Set
         $record = ['message' => 'some message'];
         $topic = 'some-topic';
+        $producerMiddleware = $this->instance(
+            ProducerMiddleware::class,
+            m::mock(ProducerMiddleware::class)
+        );
 
-        $producerMiddleware = $this->instance(ProducerMiddleware::class, m::mock(ProducerMiddleware::class));
         $producerHandler = new class($record, $topic) extends AbstractHandler {
             public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
             {
@@ -64,7 +67,10 @@ class ProducerTest extends LaravelTestCase
         // Set
         $record = json_encode(['message' => 'some message']);
         $topic = 'some-topic';
-        $this->app->instance(ProducerMiddleware::class, m::mock(ProducerMiddleware::class));
+        $producerMiddleware = $this->app->instance(
+            ProducerMiddleware::class,
+            m::mock(ProducerMiddleware::class)
+        );
         $producer = new Producer();
         $producerHandler = new class($record, $topic) extends AbstractHandler {
             public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
@@ -73,6 +79,14 @@ class ProducerTest extends LaravelTestCase
                 $this->topic = $topic;
             }
         };
+
+        // Expectations
+        $producerMiddleware->expects()
+            ->setProducerHandler($producerHandler);
+
+        $producerMiddleware->expects()
+            ->process()
+            ->withAnyArgs();
 
         // Actions
         $result = $producer->produce($producerHandler);
@@ -86,7 +100,10 @@ class ProducerTest extends LaravelTestCase
         // Set
         $record = ["\xB1\x31"];
         $topic = 'some-topic';
-        $this->app->instance(ProducerMiddleware::class, m::mock(ProducerMiddleware::class));
+        $producerMiddleware = $this->app->instance(
+            ProducerMiddleware::class,
+            m::mock(ProducerMiddleware::class)
+        );
         $producer = new Producer();
         $producerHandler = new class($record, $topic) extends AbstractHandler {
             public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
@@ -97,6 +114,13 @@ class ProducerTest extends LaravelTestCase
         };
 
         // Expectations
+        $producerMiddleware->expects()
+            ->setProducerHandler($producerHandler);
+
+        $producerMiddleware->expects()
+            ->process()
+            ->never();
+
         $this->expectException(JsonException::class);
 
         // Actions

@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis;
 
-use Metamorphosis\Config\Producer as ProducerConfig;
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;

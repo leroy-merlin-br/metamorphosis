@@ -13,9 +13,10 @@ return [
 
     'brokers' => [
         'default' => [
-            'connections' => '',
+            'connections' => 'kafka:6680',
+            'schema_uri' => '',
             'auth' => [
-                'protocol' => 'ssl',
+                'type' => 'ssl', // ssl and none
                 'ca' => storage_path('ca.pem'),
                 'certificate' => storage_path('kafka.cert'),
                 'key' => storage_path('kafka.key'),
@@ -35,42 +36,44 @@ return [
     |
     | For every topic you may define the following properties:
     |
-    | 'topic': The topic name to subscribe to
+    | 'topic_id': The topic name to subscribe to
     | 'broker': The broker identification key
-    | 'middlewares': an array of middlewares applied for this topic and all consumer-groups inside
-    | 'consumer-groups': You may define more than one consumer group per topic.
+    | 'middlewares': an array of middlewares applied for this topic and all consumer_groups inside
+    | 'consumer_groups': You may define more than one consumer group per topic.
     |       If there is just one defined, it will be used by default,
     |       otherwise, you may pass which consumer group should be used
     |       when using the consumer command.
     |       For every consumer group, you may define:
-    | 'consumer-groups.*.offset-reset': action to take when there is no initial
+    | 'consumer_groups.*.offset_reset': action to take when there is no initial
     |       offset in offset store or the desired offset is out of range.
     |       This config will be passed to 'auto.offset.reset'.
     |       The valid options are: smallest, earliest, beginning, largest, latest, end, error.
-    | 'consumer-groups.*.offset': the offset at which to start consumption. This only applies if partition is set.
+    | 'consumer_groups.*.offset': the offset at which to start consumption. This only applies if partition is set.
     |       You can use a positive integer or any of the constants: RD_KAFKA_OFFSET_BEGINNING,
     |       RD_KAFKA_OFFSET_END, RD_KAFKA_OFFSET_STORED.
-    | 'consumer-groups.*.partition': the partition to consume. It can be null, if you don't wish do specify one.
-    | 'consumer-groups.*.consumer': a consumer class that implements ConsumerTopicHandler
-    | 'consumer-groups.*.middlewares': an array of middlewares applied only for this consumer-group
+    | 'consumer_groups.*.partition': the partition to consume. It can be null, if you don't wish do specify one.
+    | 'consumer_groups.*.handler': a consumer class that implements ConsumerTopicHandler
+    | 'consumer_groups.*.middlewares': an array of middlewares applied only for this consumer_group
     |
     */
 
     'topics' => [
         'default' => [
-            'topic' => 'default',
+            'topic_id' => 'SOME-TOPIC-KAFKA-ID',
             'broker' => 'default',
-            'consumer-groups' => [
+            'use_avro_schema' => false,
+            'consumer_groups' => [
                 'default' => [
-                    'offset-reset' => 'largest',
+                    'offset_reset' => 'largest',
                     'offset' => 0,
-                    'partition' => null,
-                    'consumer' => '\App\Kafka\Consumers\ConsumerExample',
+                    'handler' => '\App\Kafka\Consumers\ConsumerExample',
+                    'timeout' => 20000,
+                    'middlewares' => [],
                 ],
             ],
             'producer' => [
                 'middlewares' => [],
-                'timeout-responses' => 50,
+                'timeout_responses' => 50,
             ],
         ],
     ],

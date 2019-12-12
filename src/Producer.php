@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis;
 
-use Metamorphosis\Config\Producer as ProducerConfig;
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
@@ -27,8 +26,7 @@ class Producer
     {
         $this->producerHandler = $producerHandler;
 
-        $config = new ProducerConfig($producerHandler->getTopic());
-        $this->setMiddlewareDispatcher($config->getMiddlewares());
+        $this->setMiddlewareDispatcher(config('kafka.runtime.middlewares.producer', []));
 
         $record = $producerHandler->getRecord();
 

@@ -2,53 +2,47 @@
 namespace Tests\Authentication;
 
 use Metamorphosis\Authentication\Factory;
-use Metamorphosis\Authentication\NoAuthentication;
-use Metamorphosis\Authentication\SSLAuthentication;
 use Metamorphosis\Exceptions\AuthenticationException;
+use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
 class FactoryTest extends LaravelTestCase
 {
-    public function testItMakesSslAuthenticationClass()
+    public function testItMakesSslAuthenticationClass(): void
     {
-        $authenticationConfig = [
-            'protocol' => 'ssl',
-            'ca' => 'path/to/ca',
-            'certificate' => 'path/to/certificate',
-            'key' => 'path/to/key',
+        // Set
+        config([
+            'kafka.runtime.auth' => [
+                'type' => 'ssl',
+                'ca' => 'path/to/ca',
+                'certificate' => 'path/to/certificate',
+                'key' => 'path/to/key',
+            ],
+        ]);
+        $conf = new Conf();
+        $expected = [
+            'security.protocol' => 'ssl',
+            'ssl.ca.location' => 'path/to/ca',
+            'ssl.certificate.location' => 'path/to/certificate',
+            'ssl.key.location' => 'path/to/key',
         ];
 
-        $authenticationClass = Factory::make($authenticationConfig);
+        // Actions
+        Factory::authenticate($conf);
 
-        $this->assertInstanceOf(SSLAuthentication::class, $authenticationClass);
+        // Assertions
+        $this->assertArraySubset($expected, $conf->dump());
     }
 
-    public function testItMakesNoAuthenticationClass()
+    public function testItThrowsExceptionWhenInvalidProtocolIsPassed(): void
     {
-        $this->assertInstanceOf(NoAuthentication::class, Factory::make([]));
-        $this->assertInstanceOf(NoAuthentication::class, Factory::make(null));
-    }
-
-    public function testItThrowsExceptionWhenInvalidProtocolIsPassed()
-    {
-        $authenticationConfig = [
-            'protocol' => 'some-invalid-protocol',
-        ];
+        // Set
+        config(['kafka.runtime.auth' => ['type' => 'some-invalid-type']]);
+        $conf = new Conf();
 
         $this->expectException(AuthenticationException::class);
 
-        Factory::make($authenticationConfig);
-    }
-
-    public function testItThrowsExceptionWhenAuthenticationIsPassedWithoutProtocolKey()
-    {
-        $authenticationConfig = [
-            'foo' => 'some-invalid-protocol',
-            'bar' => [],
-        ];
-
-        $this->expectException(AuthenticationException::class);
-
-        Factory::make($authenticationConfig);
+        // Actions
+        Factory::authenticate($conf);
     }
 }

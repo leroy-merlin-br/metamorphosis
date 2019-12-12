@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Connectors\Consumer;
 
-use Metamorphosis\Config\Consumer;
+use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\Connectors\Consumer\HighLevel;
 use Metamorphosis\Connectors\Consumer\LowLevel;
@@ -18,24 +18,23 @@ class ConnectorFactoryTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'connections' => '',
+                        'connections' => 'kafka:123',
                     ],
                 ],
                 'topics' => [
-                    'topic-key' => [
-                        'topic' => 'topic-name',
+                    'topic_key' => [
+                        'topic_id' => 'topic_name',
                         'broker' => 'default',
-                        'consumer-groups' => [
+                        'consumer_groups' => [
                             'with-partition' => [
-                                'offset-reset' => 'earliest',
+                                'offset_reset' => 'earliest',
                                 'offset' => 0,
                                 'partition' => 0,
-                                'consumer' => ConsumerHandlerDummy::class,
+                                'handler' => ConsumerHandlerDummy::class,
                             ],
                             'without-partition' => [
-                                'offset-reset' => 'earliest',
-                                'offset' => 0,
-                                'consumer' => ConsumerHandlerDummy::class,
+                                'offset_reset' => 'earliest',
+                                'handler' => ConsumerHandlerDummy::class,
                             ],
                         ],
                     ],
@@ -44,21 +43,25 @@ class ConnectorFactoryTest extends LaravelTestCase
         ]);
     }
 
-    public function testItMakesLowLevelClass()
+    public function testItMakesLowLevelClass(): void
     {
-        $config = new Consumer('topic-key', 'with-partition', 3, 0);
+        // Set
+        $config = new Config();
+        $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
+        $lowLevelConnector = ConnectorFactory::make();
 
-        $lowLevelConnector = ConnectorFactory::make($config);
-
+        // Assertions
         $this->assertInstanceOf(LowLevel::class, $lowLevelConnector);
     }
 
-    public function testItMakesHighLevelClass()
+    public function testItMakesHighLevelClass(): void
     {
-        $config = new Consumer('topic-key', 'without-partition');
+        // Set
+        $config = new Config();
+        $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'without-partition']);
+        $highLevelConnector = ConnectorFactory::make();
 
-        $highLevelConnector = ConnectorFactory::make($config);
-
+        // Assertions
         $this->assertInstanceOf(HighLevel::class, $highLevelConnector);
     }
 }

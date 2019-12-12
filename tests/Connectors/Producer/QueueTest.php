@@ -2,26 +2,34 @@
 namespace Tests\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Queue;
+use Mockery as m;
 use RdKafka\Producer;
 use Tests\LaravelTestCase;
 
 class QueueTest extends LaravelTestCase
 {
-    public function testItShouldPoll()
+    public function testItShouldPoll(): void
     {
-        $producer = $this->createMock(Producer::class);
+        // Set
+        $producer = m::mock(Producer::class);
         $queue = new Queue($producer);
 
-        $producer->expects($this->exactly(2))
-            ->method('getOutQLen')
-            ->willReturnOnConsecutiveCalls([1, 0]);
+        // Expectations
+        $producer->expects()
+            ->getOutQLen()
+            ->andReturn(1);
 
-        $producer->expects($this->once())
-            ->method('poll')
-            ->with(50);
+        $producer->expects()
+            ->getOutQLen()
+            ->andReturn(0);
 
-        $voidReturn = $queue->poll(50);
+        $producer->expects()
+            ->poll(50);
 
-        $this->assertNull($voidReturn);
+        // Actions
+        $result = $queue->poll(50);
+
+        // Assertions
+        $this->assertNull($result);
     }
 }

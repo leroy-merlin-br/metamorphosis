@@ -30,11 +30,10 @@ class ConsumerRecord implements RecordInterface
      * @throws \Metamorphosis\Exceptions\ResponseErrorException
      * @throws \Metamorphosis\Exceptions\ResponseWarningException
      */
-    public function __construct(Message $original)
+    public function __construct(Message $response)
     {
-        $this->original = $original;
-
-        $this->setPayload($original->payload);
+        $this->original = $response;
+        $this->setPayload($response->payload);
 
         if ($this->hasError()) {
             $this->throwResponseErrorException();

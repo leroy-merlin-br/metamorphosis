@@ -1,21 +1,19 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\Config\Consumer;
-
 class ConnectorFactory
 {
-    public static function make(Consumer $config): ConnectorInterface
+    public static function make(): ConnectorInterface
     {
-        if (self::requiresPartition($config)) {
-            return new LowLevel($config);
+        if (self::requiresPartition()) {
+            return app(LowLevel::class);
         }
 
-        return new HighLevel($config);
+        return app(HighLevel::class);
     }
 
-    protected static function requiresPartition(Consumer $config): bool
+    protected static function requiresPartition(): bool
     {
-        return !is_null($config->getConsumerPartition());
+        return !is_null(config('kafka.runtime.partition'));
     }
 }

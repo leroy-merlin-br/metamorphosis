@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\Config\Producer as ProducerConfig;
+use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\RecordInterface;
@@ -19,19 +19,23 @@ class Producer implements MiddlewareInterface
      */
     private $producerHandler;
 
-    public function __construct(Connector $connector)
+    /**
+     * @var Config
+     */
+    private $config;
+
+    public function __construct(Connector $connector, Config $config)
     {
         $this->connector = $connector;
+        $this->config = $config;
     }
 
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
-        $config = app(ProducerConfig::class, ['topic' => $record->getTopicName()]);
-
+        $this->config->setOption($record->getTopicName());
         $this->connector->setHandler($this->producerHandler);
 
-        $producer = $this->connector->getProducerTopic($config);
-
+        $producer = $this->connector->getProducerTopic();
         $producer->produce($record->getPartition(), 0, $record->getPayload(), $record->getKey());
 
         $this->connector->handleResponsesFromBroker();

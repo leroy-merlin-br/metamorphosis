@@ -2,36 +2,34 @@
 namespace Tests\Authentication;
 
 use Metamorphosis\Authentication\SSLAuthentication;
-use Metamorphosis\Exceptions\AuthenticationException;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
 class SSLAuthenticationTest extends LaravelTestCase
 {
-    public function testItShouldValidateAuthenticationConfigurations()
+    public function testItShouldValidateAuthenticationConfigurations(): void
     {
-        $authConfig = [
-            'ca' => 'path/to/ca',
-            'certificate' => 'path/to/certificate',
-            'key' => 'path/to/key',
+        // Set
+        config([
+            'kafka.runtime.auth' => [
+                'type' => 'ssl',
+                'ca' => 'path/to/ca',
+                'certificate' => 'path/to/certificate',
+                'key' => 'path/to/key',
+            ],
+        ]);
+        $conf = new Conf();
+        $expected = [
+            'security.protocol' => 'ssl',
+            'ssl.ca.location' => 'path/to/ca',
+            'ssl.certificate.location' => 'path/to/certificate',
+            'ssl.key.location' => 'path/to/key',
         ];
 
-        $sslAuthentication = new SSLAuthentication($authConfig);
+        // Actions
+        new SSLAuthentication($conf);
 
-        $this->assertNull($sslAuthentication->authenticate(new Conf()));
-    }
-
-    public function testItShouldThrowsExceptionWhenInvalidAuthenticationConfigurations()
-    {
-        $authConfig = [
-            'certificate' => 'path/to/certificate',
-            'key' => 'path/to/key',
-        ];
-
-        $sslAuthentication = new SSLAuthentication($authConfig);
-
-        $this->expectException(AuthenticationException::class);
-
-        $sslAuthentication->authenticate(new Conf());
+        // Assertions
+        $this->assertArraySubset($expected, $conf->dump());
     }
 }

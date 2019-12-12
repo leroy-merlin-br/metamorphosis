@@ -11,13 +11,20 @@ class HighLevel implements ConsumerInterface
      */
     protected $consumer;
 
+    /**
+     * @var int
+     */
+    private $timeout;
+
     public function __construct(KafkaConsumer $consumer)
     {
         $this->consumer = $consumer;
+
+        $this->timeout = config('kafka.runtime.timeout');
     }
 
-    public function consume(int $timeout): Message
+    public function consume(): Message
     {
-        return $this->consumer->consume($timeout);
+        return $this->consumer->consume($this->timeout);
     }
 }

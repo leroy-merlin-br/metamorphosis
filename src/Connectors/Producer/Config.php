@@ -21,7 +21,10 @@ class Config
     public function setOptionConfig(string $topicId): void
     {
         $topicConfig = $this->getTopicConfig($topicId);
-        $topicConfig['middlewares'] = array_merge(config('kafka.middlewares.producer'), $topicConfig['middlewares']);
+        $topicConfig['middlewares'] = array_merge(
+            config('kafka.middlewares.producer', []),
+            $topicConfig['middlewares'] ?? []
+        );
         $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
         $config = array_merge($topicConfig, $brokerConfig);
 
@@ -31,7 +34,7 @@ class Config
 
     private function getTopicConfig(string $topicId): array
     {
-        $topicConfig = config('kafka.topics.'.$topicId.'.producer');
+        $topicConfig = config('kafka.topics.'.$topicId);
         if (!$topicConfig) {
             throw new ConfigurationException("Topic '{$topicId}' not found");
         }

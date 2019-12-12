@@ -38,7 +38,7 @@ class Config
             $this->filterValues($arguments)
         );
 
-        $this->validateConfig($config);
+        $this->validate($config);
         $this->setConfigRuntime($config);
     }
 
@@ -81,7 +81,7 @@ class Config
         return $brokerConfig;
     }
 
-    private function validateConfig(array $config): void
+    private function validate(array $config): void
     {
         $validator = Validator::make($config, $this->rules);
         if (!$validator->errors()->isEmpty()) {

@@ -55,7 +55,7 @@ class CachedSchemaRegistryClient
      *
      * @return int
      */
-    public function register($subject, AvroSchema $schema)
+    public function register(string $subject, AvroSchema $schema)
     {
         if (isset($this->subjectToSchemaIds[$subject])) {
             $schemasToId = $this->subjectToSchemaIds[$subject];

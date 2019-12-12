@@ -30,7 +30,7 @@ class ConsumerCommand extends BaseCommand
 
     public function handle(RunnerFactory $runnerFactory, Config $config)
     {
-        $config->setOptionConfig($this->option(), $this->argument());
+        $config->setOption($this->option(), $this->argument());
 
         $this->writeStartingConsumer();
 

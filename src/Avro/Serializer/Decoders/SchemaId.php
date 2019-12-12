@@ -24,7 +24,6 @@ class SchemaId implements DecoderInterface
         $id = $id[1];
 
         $schema = $this->registry->getById($id);
-
         $reader = new AvroIODatumReader($schema);
 
         return $reader->read(new AvroIOBinaryDecoder($io));

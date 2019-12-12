@@ -18,7 +18,7 @@ class Config
         'middlewares' => 'array',
     ];
 
-    public function setOptionConfig(string $topicId): void
+    public function setOption(string $topicId): void
     {
         $topicConfig = $this->getTopicConfig($topicId);
         $topicConfig['middlewares'] = array_merge(

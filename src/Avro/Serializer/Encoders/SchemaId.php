@@ -25,12 +25,8 @@ class SchemaId implements EncoderInterface
     {
         try {
             $schemaId = $this->registry->getSchemaId($subject, $schema);
-        } catch (RuntimeException $e) {
-            if ($registerMissingSchemas) {
-                $schemaId = $this->registry->register($subject, $schema);
-            } else {
-                throw $e;
-            }
+        } catch (RuntimeException $exception) {
+            $schemaId = $this->registerMissingSchemas($subject, $schema, $registerMissingSchemas, $exception);
         }
 
         $writer = new AvroIODatumWriter($schema);
@@ -52,5 +48,16 @@ class SchemaId implements EncoderInterface
         $writer->write($message, $encoder);
 
         return $io->string();
+    }
+
+    private function registerMissingSchemas(string $subject, AvroSchema $schema, bool $registerMissingSchemas, $exception): int
+    {
+        if ($registerMissingSchemas) {
+            $schemaId = $this->registry->register($subject, $schema);
+        } else {
+            throw $exception;
+        }
+
+        return $schemaId;
     }
 }

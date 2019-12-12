@@ -32,11 +32,10 @@ class Producer implements MiddlewareInterface
 
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
-        $this->config->setOptionConfig($record->getTopicName());
+        $this->config->setOption($record->getTopicName());
         $this->connector->setHandler($this->producerHandler);
 
         $producer = $this->connector->getProducerTopic();
-
         $producer->produce($record->getPartition(), 0, $record->getPayload(), $record->getKey());
 
         $this->connector->handleResponsesFromBroker();

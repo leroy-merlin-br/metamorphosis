@@ -33,7 +33,6 @@ class ConsumerRecord implements RecordInterface
     public function __construct(Message $response)
     {
         $this->original = $response;
-
         $this->setPayload($response->payload);
 
         if ($this->hasError()) {

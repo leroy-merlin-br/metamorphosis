@@ -52,7 +52,7 @@ class ProducerTest extends LaravelTestCase
 
         // Expectations
         $config->expects()
-            ->setOptionConfig('topic_key');
+            ->setOption('topic_key');
 
         $connector->expects()
             ->setHandler($handler);

@@ -25,12 +25,12 @@ class SchemaSubjectAndVersion implements EncoderInterface
     {
         try {
             $version = $this->registry->getSchemaVersion($subject, $schema);
-        } catch (RuntimeException $e) {
+        } catch (RuntimeException $exception) {
             if ($registerMissingSchemas) {
                 $this->registry->register($subject, $schema);
                 $version = $this->registry->getSchemaVersion($subject, $schema);
             } else {
-                throw $e;
+                throw $exception;
             }
         }
 

@@ -42,7 +42,7 @@ class ConfigTest extends LaravelTestCase
         ];
 
         // Actions
-        $validate->setOptionConfig($options, $arguments);
+        $validate->setOption($options, $arguments);
 
         // Assertions
         $this->assertArraySubset($expected, config('kafka.runtime'));
@@ -64,7 +64,7 @@ class ConfigTest extends LaravelTestCase
 
         // Actions
         $this->expectException(ConfigurationException::class);
-        $validate->setOptionConfig($options, $arguments);
+        $validate->setOption($options, $arguments);
 
         // Assertions
         $this->assertEmpty(config('kafka.runtime'));
@@ -87,7 +87,7 @@ class ConfigTest extends LaravelTestCase
 
         // Actions
         $this->expectException(ConfigurationException::class);
-        $validate->setOptionConfig($options, $arguments);
+        $validate->setOption($options, $arguments);
 
         // Assertions
         $this->assertEmpty(config('kafka.runtime'));

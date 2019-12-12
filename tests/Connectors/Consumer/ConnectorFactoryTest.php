@@ -47,7 +47,7 @@ class ConnectorFactoryTest extends LaravelTestCase
     {
         // Set
         $config = new Config();
-        $config->setOptionConfig(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
+        $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
         $lowLevelConnector = ConnectorFactory::make();
 
         // Assertions
@@ -58,7 +58,7 @@ class ConnectorFactoryTest extends LaravelTestCase
     {
         // Set
         $config = new Config();
-        $config->setOptionConfig(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'without-partition']);
+        $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'without-partition']);
         $highLevelConnector = ConnectorFactory::make();
 
         // Assertions

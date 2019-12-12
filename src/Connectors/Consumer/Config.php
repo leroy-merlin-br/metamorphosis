@@ -25,7 +25,7 @@ class Config
         'middlewares' => 'array',
     ];
 
-    public function setOptionConfig(array $options, array $arguments): void
+    public function setOption(array $options, array $arguments): void
     {
         $topicConfig = $this->getTopicConfig($arguments['topic']);
         $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer_group']);

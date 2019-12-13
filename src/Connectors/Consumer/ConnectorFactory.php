@@ -1,6 +1,11 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
+/**
+ * This factory will determine what kind of connector will be used.
+ * Basically, if the user pass --partition and --offset as argument
+ * means that we will use the low level approach.
+ */
 class ConnectorFactory
 {
     public static function make(): ConnectorInterface

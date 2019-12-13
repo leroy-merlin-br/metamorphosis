@@ -4,7 +4,16 @@ namespace Metamorphosis\Connectors\Consumer;
 use Illuminate\Support\Facades\Validator;
 use Metamorphosis\Exceptions\ConfigurationException;
 
-class Config
+/**
+ * This class is responsible for handling all configuration made on the
+ * kafka config file as well as the override config passed as argument
+ * on kafka:consume command.
+ *
+ * It will generate a `runtime` configuration that will be used in all
+ * classes. The config will be `kafka.runtime.*`.
+ *
+ */
+class Config extends AbstractConfig
 {
     /**
      * @var array
@@ -102,6 +111,13 @@ class Config
         );
     }
 
+    /**
+     * Sometimes that user may pass `--partition=0` as argument.
+     * So if we just use array_filter here, this option will
+     * be removed.
+     *
+     * This code makes sure that only null values will be removed.
+     */
     private function filterValues(array $options = []): array
     {
         return array_filter($options, function ($value) {

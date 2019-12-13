@@ -26,9 +26,15 @@ abstract class AbstractConsumerRunner
      */
     private $consumer;
 
-    public function __construct(ConsumerInterface $consumer)
+    /**
+     * @var null
+     */
+    protected $cachedSchema;
+
+    public function __construct(ConsumerInterface $consumer, $cachedSchema = null)
     {
         $this->consumer = $consumer;
+        $this->cachedSchema = $cachedSchema;
     }
 
     public function run(): void

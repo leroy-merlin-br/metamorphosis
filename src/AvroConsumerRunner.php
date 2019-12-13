@@ -11,9 +11,7 @@ class AvroConsumerRunner extends AbstractConsumerRunner
     protected function handleConsumerResponse($response): RecordInterface
     {
         $record = new ConsumerRecord($response);
-        $this->serializer = new MessageDecoder(new CachedSchemaRegistryClient(
-            config('kafka.runtime.schema_uri')
-        ));
+        $this->serializer = new MessageDecoder($this->cachedSchema);
 
         $record->setPayload($this->serializer->decodeMessage($record->getPayload()));
 

@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Illuminate\Support\Facades\Validator;
 use Metamorphosis\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
 
@@ -12,7 +11,6 @@ use Metamorphosis\Exceptions\ConfigurationException;
  *
  * It will generate a `runtime` configuration that will be used in all
  * classes. The config will be `kafka.runtime.*`.
- *
  */
 class Config extends AbstractConfig
 {

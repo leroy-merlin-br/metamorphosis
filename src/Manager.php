@@ -18,7 +18,7 @@ class Manager
      */
     static function get(string $key)
     {
-        return self::$setting[$key] ?? null;
+        return array_get(self::$setting, $key);
     }
 
     static function set(array $config): void

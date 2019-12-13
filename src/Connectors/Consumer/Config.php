@@ -28,7 +28,6 @@ class Config extends AbstractConfig
         'consumer_group' => 'required|string',
         'connections' => 'required|string',
         'schema_uri' => 'string',
-        'use_avro_schema' => 'boolean',
         'auth' => 'array',
         'middlewares' => 'array',
     ];

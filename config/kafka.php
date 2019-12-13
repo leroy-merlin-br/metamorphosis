@@ -61,7 +61,6 @@ return [
         'default' => [
             'topic_id' => 'SOME-TOPIC-KAFKA-ID',
             'broker' => 'default',
-            'use_avro_schema' => false,
             'consumer_groups' => [
                 'default' => [
                     'offset_reset' => 'largest',

@@ -10,7 +10,7 @@ use Metamorphosis\Exceptions\ConfigurationException;
  * on kafka:consume command.
  *
  * It will generate a `runtime` configuration that will be used in all
- * classes. The config will be `kafka.runtime.*`.
+ * classes. The config will be on Manager singleton class.
  */
 class Config extends AbstractConfig
 {

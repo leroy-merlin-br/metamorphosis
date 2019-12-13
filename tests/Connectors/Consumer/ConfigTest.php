@@ -3,6 +3,7 @@ namespace Tests\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Metamorphosis\Manager;
 use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase
@@ -45,7 +46,7 @@ class ConfigTest extends LaravelTestCase
         $validate->setOption($options, $arguments);
 
         // Assertions
-        $this->assertArraySubset($expected, config('kafka.runtime'));
+        $this->assertArraySubset($expected, Manager::get());
     }
 
     public function testShouldNotSetRuntimeConfigWhenOptionsIsInvalid(): void
@@ -67,7 +68,7 @@ class ConfigTest extends LaravelTestCase
         $validate->setOption($options, $arguments);
 
         // Assertions
-        $this->assertEmpty(config('kafka.runtime'));
+        $this->assertEmpty(Manager::get());
     }
 
     public function testShouldNotSetRuntimeConfigWhenKafkaConfigIsInvalid(): void
@@ -90,6 +91,6 @@ class ConfigTest extends LaravelTestCase
         $validate->setOption($options, $arguments);
 
         // Assertions
-        $this->assertEmpty(config('kafka.runtime'));
+        $this->assertEmpty(Manager::get());
     }
 }

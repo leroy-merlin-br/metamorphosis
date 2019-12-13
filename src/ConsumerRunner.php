@@ -41,7 +41,7 @@ class ConsumerRunner
     {
         $handler = app(Manager::get('handler'));
 
-        $this->setMiddlewareDispatcher($handler, Manager::get('middlewares'));
+        $this->setMiddlewareDispatcher($handler, Manager::middlewares());
 
         while (true) {
             $response = $this->consumer->consume();

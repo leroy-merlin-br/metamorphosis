@@ -2,6 +2,7 @@
 namespace Tests\Consumers;
 
 use Metamorphosis\Consumers\LowLevel;
+use Metamorphosis\Manager;
 use Mockery as m;
 use RdKafka\ConsumerTopic;
 use RdKafka\Message;
@@ -14,7 +15,7 @@ class LowLevelTest extends LaravelTestCase
         // Set
         $timeout = 2;
         $partition = 3;
-        config(['kafka.runtime' => compact('timeout', 'partition')]);
+        Manager::set(compact('timeout', 'partition'));
 
         $consumerTopic = m::mock(ConsumerTopic::class);
         $message = new Message();

@@ -26,7 +26,7 @@ class Producer
     {
         $this->producerHandler = $producerHandler;
 
-        $this->setMiddlewareDispatcher(Manager::get('middlewares'));
+        $this->setMiddlewareDispatcher(Manager::middlewares());
 
         $record = $producerHandler->getRecord();
 

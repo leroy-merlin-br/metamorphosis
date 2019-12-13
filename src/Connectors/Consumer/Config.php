@@ -2,6 +2,7 @@
 namespace Metamorphosis\Connectors\Consumer;
 
 use Illuminate\Support\Facades\Validator;
+use Metamorphosis\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
 
 /**
@@ -78,29 +79,6 @@ class Config extends AbstractConfig
         }
 
         return $consumerConfig;
-    }
-
-    private function getBrokerConfig(string $brokerId): array
-    {
-        $brokerConfig = config("kafka.brokers.{$brokerId}");
-        if (!$brokerConfig) {
-            throw new ConfigurationException("Broker '{$brokerId}' configuration not found");
-        }
-
-        return $brokerConfig;
-    }
-
-    private function validate(array $config): void
-    {
-        $validator = Validator::make($config, $this->rules);
-        if (!$validator->errors()->isEmpty()) {
-            throw new ConfigurationException($validator->errors()->toJson());
-        }
-    }
-
-    private function setConfigRuntime(array $config): void
-    {
-        config(['kafka.runtime' => $config]);
     }
 
     private function getMiddlewares(array $topicConfig): array

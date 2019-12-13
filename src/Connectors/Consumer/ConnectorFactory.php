@@ -1,6 +1,8 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
+use Metamorphosis\Manager;
+
 /**
  * This factory will determine what kind of connector will be used.
  * Basically, if the user pass --partition and --offset as argument
@@ -19,6 +21,6 @@ class ConnectorFactory
 
     protected static function requiresPartition(): bool
     {
-        return !is_null(config('kafka.runtime.partition'));
+        return !is_null(Manager::get('partition'));
     }
 }

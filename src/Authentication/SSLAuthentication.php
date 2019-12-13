@@ -19,9 +19,9 @@ class SSLAuthentication implements AuthenticationInterface
 
     private function authenticate(): void
     {
-        $this->conf->set('security.protocol', config('kafka.runtime.auth.type'));
-        $this->conf->set('ssl.ca.location', config('kafka.runtime.auth.ca'));
-        $this->conf->set('ssl.certificate.location', config('kafka.runtime.auth.certificate'));
-        $this->conf->set('ssl.key.location', config('kafka.runtime.auth.key'));
+        $this->conf->set('security.protocol', Manager::get('auth.type'));
+        $this->conf->set('ssl.ca.location', Manager::get('auth.ca'));
+        $this->conf->set('ssl.certificate.location', Manager::get('auth.certificate'));
+        $this->conf->set('ssl.key.location', Manager::get('auth.key'));
     }
 }

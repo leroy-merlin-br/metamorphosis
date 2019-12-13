@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis\Consumers;
 
+use Metamorphosis\Manager;
 use RdKafka\KafkaConsumer;
 use RdKafka\Message;
 
@@ -20,7 +21,7 @@ class HighLevel implements ConsumerInterface
     {
         $this->consumer = $consumer;
 
-        $this->timeout = config('kafka.runtime.timeout');
+        $this->timeout = Manager::get('timeout');
     }
 
     public function consume(): Message

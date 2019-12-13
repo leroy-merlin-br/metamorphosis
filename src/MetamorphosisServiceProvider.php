@@ -31,5 +31,9 @@ class MetamorphosisServiceProvider extends ServiceProvider
         App::bind('metamorphosis', function () {
             return new Producer();
         });
+
+        $this->app->singleton('manager', function ($app) {
+            return new Manager();
+        });
     }
 }

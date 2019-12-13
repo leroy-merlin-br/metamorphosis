@@ -12,7 +12,7 @@ class Factory
 
     public static function authenticate(Conf $conf): void
     {
-        $type = config('kafka.runtime.auth.type');
+        $type = Manager::get('auth.type');
         switch ($type) {
             case null:
             case self::TYPE_NONE:

@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\AbstractConfig;
+use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
 
 /**

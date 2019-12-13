@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Connectors\Producer;
 
-use Metamorphosis\AbstractConfig;
+use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
 
 class Config extends AbstractConfig

@@ -2,6 +2,7 @@
 namespace Tests\Authentication;
 
 use Metamorphosis\Authentication\SSLAuthentication;
+use Metamorphosis\Facades\Manager;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
@@ -10,8 +11,8 @@ class SSLAuthenticationTest extends LaravelTestCase
     public function testItShouldValidateAuthenticationConfigurations(): void
     {
         // Set
-        config([
-            'kafka.runtime.auth' => [
+        Manager::set([
+            'auth' => [
                 'type' => 'ssl',
                 'ca' => 'path/to/ca',
                 'certificate' => 'path/to/certificate',

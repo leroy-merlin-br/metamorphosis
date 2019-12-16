@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\AbstractConfig;
+use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
 
 /**
@@ -10,7 +10,7 @@ use Metamorphosis\Exceptions\ConfigurationException;
  * on kafka:consume command.
  *
  * It will generate a `runtime` configuration that will be used in all
- * classes. The config will be `kafka.runtime.*`.
+ * classes. The config will be on Manager singleton class.
  */
 class Config extends AbstractConfig
 {
@@ -28,7 +28,6 @@ class Config extends AbstractConfig
         'consumer_group' => 'required|string',
         'connections' => 'required|string',
         'schema_uri' => 'string',
-        'use_avro_schema' => 'boolean',
         'auth' => 'array',
         'middlewares' => 'array',
     ];

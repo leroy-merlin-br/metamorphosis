@@ -3,6 +3,7 @@ namespace Metamorphosis\Connectors\Producer;
 
 use Exception;
 use Metamorphosis\Authentication\Factory;
+use Metamorphosis\Facades\Manager;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use RdKafka\Conf;
@@ -36,7 +37,7 @@ class Connector
     {
         $conf = resolve(Conf::class);
 
-        $conf->set('metadata.broker.list', config('kafka.runtime.connections'));
+        $conf->set('metadata.broker.list', Manager::get('connections'));
 
         $this->setCallbackResponses($conf);
 
@@ -46,7 +47,7 @@ class Connector
 
         $this->prepareQueueCallbackResponse($producer);
 
-        return $producer->newTopic(config('kafka.runtime.topic'));
+        return $producer->newTopic(Manager::get('topic'));
     }
 
     public function handleResponsesFromBroker(): void
@@ -84,7 +85,7 @@ class Connector
         }
 
         $this->queue = app(Queue::class, compact('producer'));
-        $this->timeout = config('kafka.runtime.timeout');
+        $this->timeout = Manager::get('timeout');
     }
 
     private function canHandleResponse(): bool

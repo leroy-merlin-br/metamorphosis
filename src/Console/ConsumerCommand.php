@@ -3,7 +3,9 @@ namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
 use Metamorphosis\Connectors\Consumer\Config;
-use Metamorphosis\RunnerFactory;
+use Metamorphosis\Connectors\Consumer\ConnectorFactory;
+use Metamorphosis\Consumers\Runner;
+use Metamorphosis\Facades\Manager;
 
 class ConsumerCommand extends BaseCommand
 {
@@ -28,21 +30,23 @@ class ConsumerCommand extends BaseCommand
         {--broker= : Override broker connection from config.}
         {--timeout= : Sets timeout for consumer.}';
 
-    public function handle(RunnerFactory $runnerFactory, Config $config)
+    public function handle(Config $config)
     {
         $config->setOption($this->option(), $this->argument());
 
         $this->writeStartingConsumer();
 
-        $runner = $runnerFactory->make();
+        $consumer = ConnectorFactory::make()->getConsumer();
+
+        $runner = app(Runner::class, compact('consumer'));
         $runner->run();
     }
 
     private function writeStartingConsumer()
     {
-        $text = 'Starting consumer for topic: '.config('kafka.runtime.topic').PHP_EOL;
-        $text .= ' on consumer group: '.config('kafka.runtime.consumer_group').PHP_EOL;
-        $text .= 'Connecting in '.config('kafka.runtime.connections').PHP_EOL;
+        $text = 'Starting consumer for topic: '.Manager::get('topic').PHP_EOL;
+        $text .= ' on consumer group: '.Manager::get('consumer_group').PHP_EOL;
+        $text .= 'Connecting in '.Manager::get('connections').PHP_EOL;
         $text .= 'Running consumer..';
 
         $this->output->writeln($text);

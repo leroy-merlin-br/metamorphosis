@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis\Consumers;
 
+use Metamorphosis\Facades\Manager;
 use RdKafka\ConsumerTopic;
 use RdKafka\Message;
 
@@ -25,8 +26,8 @@ class LowLevel implements ConsumerInterface
     {
         $this->consumer = $consumer;
 
-        $this->partition = config('kafka.runtime.partition');
-        $this->timeout = config('kafka.runtime.timeout');
+        $this->partition = Manager::get('partition');
+        $this->timeout = Manager::get('timeout');
     }
 
     public function consume(): Message

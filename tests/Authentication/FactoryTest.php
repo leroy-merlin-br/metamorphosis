@@ -3,6 +3,7 @@ namespace Tests\Authentication;
 
 use Metamorphosis\Authentication\Factory;
 use Metamorphosis\Exceptions\AuthenticationException;
+use Metamorphosis\Facades\Manager;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
@@ -11,8 +12,8 @@ class FactoryTest extends LaravelTestCase
     public function testItMakesSslAuthenticationClass(): void
     {
         // Set
-        config([
-            'kafka.runtime.auth' => [
+        Manager::set([
+            'auth' => [
                 'type' => 'ssl',
                 'ca' => 'path/to/ca',
                 'certificate' => 'path/to/certificate',
@@ -37,7 +38,7 @@ class FactoryTest extends LaravelTestCase
     public function testItThrowsExceptionWhenInvalidProtocolIsPassed(): void
     {
         // Set
-        config(['kafka.runtime.auth' => ['type' => 'some-invalid-type']]);
+        Manager::set(['auth' => ['type' => 'some-invalid-type']]);
         $conf = new Conf();
 
         $this->expectException(AuthenticationException::class);

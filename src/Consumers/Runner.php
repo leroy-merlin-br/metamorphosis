@@ -1,15 +1,15 @@
 <?php
-namespace Metamorphosis;
+namespace Metamorphosis\Consumers;
 
 use Exception;
-use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseWarningException;
+use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
-use Metamorphosis\Record\RecordInterface;
+use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\TopicHandler\Consumer\Handler;
 
-abstract class AbstractConsumerRunner
+class Runner
 {
     /**
      * @var Dispatcher
@@ -33,15 +33,15 @@ abstract class AbstractConsumerRunner
 
     public function run(): void
     {
-        $handler = app(config('kafka.runtime.handler'));
+        $handler = app(Manager::get('handler'));
 
-        $this->setMiddlewareDispatcher($handler, config('kafka.runtime.middlewares', []));
+        $this->setMiddlewareDispatcher($handler, Manager::middlewares());
 
         while (true) {
             $response = $this->consumer->consume();
 
             try {
-                $record = $this->handleConsumerResponse($response);
+                $record = app(ConsumerRecord::class, compact('response'));
                 $this->middlewareDispatcher->handle($record);
             } catch (ResponseWarningException $exception) {
                 $handler->warning($exception);
@@ -50,8 +50,6 @@ abstract class AbstractConsumerRunner
             }
         }
     }
-
-    abstract protected function handleConsumerResponse($record): RecordInterface;
 
     protected function setMiddlewareDispatcher($handler, array $middlewares): void
     {

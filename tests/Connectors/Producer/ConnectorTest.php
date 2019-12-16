@@ -3,6 +3,7 @@ namespace Tests\Connectors\Producer;
 
 use Exception;
 use Metamorphosis\Connectors\Producer\Connector;
+use Metamorphosis\Facades\Manager;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use RdKafka\Message;
@@ -50,7 +51,7 @@ class ConnectorTest extends LaravelTestCase
     public function testItShouldHandleResponseFromBroker(): void
     {
         // Set
-        config(['kafka.runtime.timeout' => 61]);
+        Manager::set(['timeout' => 61]);
         $handler = new class('record', 'some_topic') extends AbstractHandler implements HandleableResponseInterface {
             public function success(Message $message): void
             {

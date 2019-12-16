@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Console;
 
-use Metamorphosis\ConsumerRunner;
+use Metamorphosis\Consumers\Runner;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Mockery as m;
 use Tests\Dummies\ConsumerHandlerDummy;
@@ -57,7 +57,7 @@ class ConsumerCommandTest extends LaravelTestCase
     public function testItCallsCommandWithOffsetWithoutPartition(): void
     {
         // Set
-        $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
+        $runner = $this->instance(Runner::class, m::mock(Runner::class));
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'some_topic',
@@ -78,7 +78,7 @@ class ConsumerCommandTest extends LaravelTestCase
     public function testItCallsWithHighLevelConsumer(): void
     {
         // Set
-        $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
+        $runner = $this->instance(Runner::class, m::mock(Runner::class));
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'topic_key',
@@ -97,7 +97,7 @@ class ConsumerCommandTest extends LaravelTestCase
     public function testItCallsWithLowLevelConsumer(): void
     {
         // Set
-        $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
+        $runner = $this->instance(Runner::class, m::mock(Runner::class));
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'topic_key',
@@ -117,7 +117,7 @@ class ConsumerCommandTest extends LaravelTestCase
     public function testItAcceptsTimeoutWhenCallingCommand(): void
     {
         // Set
-        $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
+        $runner = $this->instance(Runner::class, m::mock(Runner::class));
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'topic_key',
@@ -143,7 +143,7 @@ class ConsumerCommandTest extends LaravelTestCase
             ],
         ]);
 
-        $runner = $this->instance(ConsumerRunner::class, m::mock(ConsumerRunner::class));
+        $runner = $this->instance(Runner::class, m::mock(Runner::class));
         $command = 'kafka:consume';
         $parameters = [
             'topic' => 'topic_key',

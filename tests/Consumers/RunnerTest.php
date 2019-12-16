@@ -2,38 +2,37 @@
 namespace Tests;
 
 use Exception;
-use Metamorphosis\ConsumerRunner;
 use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\Consumers\Runner;
+use Metamorphosis\Facades\Manager;
 use Mockery as m;
 use RdKafka\Message as KafkaMessage;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\Dummies\MiddlewareDummy;
 
-class ConsumerRunnerTest extends LaravelTestCase
+class RunnerTest extends LaravelTestCase
 {
     public function testItShouldRun(): void
     {
         // Set
-        config([
-            'kafka.runtime' => [
-                'connections' => 'kafka:2019',
-                'topic' => 'topic_key',
-                'broker' => 'default',
-                'offset_reset' => 'earliest',
-                'offset' => 0,
-                'timeout' => 30,
-                'handler' => ConsumerHandlerDummy::class,
-                'middlewares' => [
-                    MiddlewareDummy::class,
-                ],
-                'consumer_group' => 'consumer-id',
+        Manager::set([
+            'connections' => 'kafka:2019',
+            'topic' => 'topic_key',
+            'broker' => 'default',
+            'offset_reset' => 'earliest',
+            'offset' => 0,
+            'timeout' => 30,
+            'handler' => ConsumerHandlerDummy::class,
+            'middlewares' => [
+                MiddlewareDummy::class,
             ],
+            'consumer_group' => 'consumer-id',
         ]);
 
         $middleware = $this->instance(MiddlewareDummy::class, m::mock(MiddlewareDummy::class));
         $consumerInterface = m::mock(ConsumerInterface::class);
 
-        $runner = new ConsumerRunner($consumerInterface);
+        $runner = new Runner($consumerInterface);
 
         $kafkaMessage1 = new KafkaMessage();
         $kafkaMessage1->payload = 'original message';

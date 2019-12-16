@@ -1,8 +1,9 @@
 <?php
-namespace Metamorphosis;
+namespace Metamorphosis\Connectors;
 
 use Illuminate\Support\Facades\Validator;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Metamorphosis\Facades\Manager;
 
 abstract class AbstractConfig
 {
@@ -26,6 +27,6 @@ abstract class AbstractConfig
 
     protected function setConfigRuntime(array $config): void
     {
-        config(['kafka.runtime' => $config]);
+        Manager::set($config);
     }
 }

@@ -3,7 +3,7 @@ namespace Metamorphosis\Connectors\Producer;
 
 use Exception;
 use Metamorphosis\Authentication\Factory;
-use Metamorphosis\Manager;
+use Metamorphosis\Facades\Manager;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use RdKafka\Conf;

@@ -6,39 +6,39 @@ class Manager
     /**
      * @var array
      */
-    private static $setting = [];
+    private $setting = [];
 
     /**
      * @var array
      */
-    private static $middlewares = [];
+    private $middlewares = [];
 
     /**
      * @return mixed
      */
-    public static function get(string $key = null)
+    public function get(string $key = null)
     {
         if (!$key) {
-            return self::$setting;
+            return $this->setting;
         }
 
-        return array_get(self::$setting, $key);
+        return array_get($this->setting, $key);
     }
 
-    public static function set(array $config): void
+    public function set(array $config): void
     {
         $middlewares = $config['middlewares'] ?? [];
         unset($config['middlewares']);
 
-        self::$setting = $config;
+        $this->setting = $config;
 
         foreach ($middlewares as $middleware) {
-            self::$middlewares[] = is_string($middleware) ? app($middleware) : $middleware;
+            $this->middlewares[] = is_string($middleware) ? app($middleware) : $middleware;
         }
     }
 
-    public static function middlewares(): array
+    public function middlewares(): array
     {
-        return self::$middlewares;
+        return $this->middlewares;
     }
 }

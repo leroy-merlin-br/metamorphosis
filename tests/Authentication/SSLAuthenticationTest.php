@@ -2,7 +2,7 @@
 namespace Tests\Authentication;
 
 use Metamorphosis\Authentication\SSLAuthentication;
-use Metamorphosis\Manager;
+use Metamorphosis\Facades\Manager;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 

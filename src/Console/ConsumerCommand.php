@@ -5,7 +5,7 @@ use Illuminate\Console\Command as BaseCommand;
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\ConsumerRunner;
-use Metamorphosis\Manager;
+use Metamorphosis\Facades\Manager;
 
 class ConsumerCommand extends BaseCommand
 {

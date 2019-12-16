@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis;
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 use Metamorphosis\Console\ConsumerCommand;
 use Metamorphosis\Console\ConsumerMakeCommand;
@@ -28,11 +27,11 @@ class MetamorphosisServiceProvider extends ServiceProvider
             ProducerMakeCommand::class,
         ]);
 
-        App::bind('metamorphosis', function () {
+        $this->app->bind('metamorphosis', function () {
             return new Producer();
         });
 
-        $this->app->singleton('manager', function ($app) {
+        $this->app->singleton('manager', function () {
             return new Manager();
         });
     }

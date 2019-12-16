@@ -4,7 +4,7 @@ namespace Metamorphosis\Middlewares;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\Serializer\Decoders\DecoderInterface;
 use Metamorphosis\Avro\Serializer\MessageDecoder;
-use Metamorphosis\Manager;
+use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Record\RecordInterface;
 

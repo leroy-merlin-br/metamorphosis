@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\Manager;
+use Metamorphosis\Facades\Manager;
 
 /**
  * This factory will determine what kind of connector will be used.

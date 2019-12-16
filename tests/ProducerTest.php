@@ -2,7 +2,7 @@
 namespace Tests;
 
 use Metamorphosis\Exceptions\JsonException;
-use Metamorphosis\Manager;
+use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;

@@ -4,7 +4,7 @@ namespace Tests;
 use Exception;
 use Metamorphosis\ConsumerRunner;
 use Metamorphosis\Consumers\ConsumerInterface;
-use Metamorphosis\Manager;
+use Metamorphosis\Facades\Manager;
 use Mockery as m;
 use RdKafka\Message as KafkaMessage;
 use Tests\Dummies\ConsumerHandlerDummy;

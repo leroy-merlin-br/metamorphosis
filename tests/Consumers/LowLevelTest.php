@@ -2,7 +2,7 @@
 namespace Tests\Consumers;
 
 use Metamorphosis\Consumers\LowLevel;
-use Metamorphosis\Manager;
+use Metamorphosis\Facades\Manager;
 use Mockery as m;
 use RdKafka\ConsumerTopic;
 use RdKafka\Message;

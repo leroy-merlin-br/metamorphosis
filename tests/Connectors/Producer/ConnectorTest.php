@@ -3,7 +3,7 @@ namespace Tests\Connectors\Producer;
 
 use Exception;
 use Metamorphosis\Connectors\Producer\Connector;
-use Metamorphosis\Manager;
+use Metamorphosis\Facades\Manager;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use RdKafka\Message;

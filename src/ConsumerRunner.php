@@ -4,6 +4,7 @@ namespace Metamorphosis;
 use Exception;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseWarningException;
+use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Record\ConsumerRecord;

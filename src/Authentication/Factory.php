@@ -2,7 +2,7 @@
 namespace Metamorphosis\Authentication;
 
 use Metamorphosis\Exceptions\AuthenticationException;
-use Metamorphosis\Manager;
+use Metamorphosis\Facades\Manager;
 use RdKafka\Conf;
 
 class Factory

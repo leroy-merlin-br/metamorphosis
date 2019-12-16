@@ -29,7 +29,7 @@ class Config extends AbstractConfig
         'connections' => 'required|string',
         'url' => 'string',
         'auth' => 'array',
-        'authorization' => 'array',
+        'request_options' => 'array',
         'middlewares' => 'array',
     ];
 

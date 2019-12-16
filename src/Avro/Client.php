@@ -2,6 +2,7 @@
 namespace Metamorphosis\Avro;
 
 use GuzzleHttp\Client as GuzzleHttp;
+use Metamorphosis\Facades\Manager;
 use Psr\Http\Message\ResponseInterface;
 
 class Client
@@ -21,7 +22,7 @@ class Client
         // Construct is temporary as we will
         // put everything on the service provider.
         $this->baseUrl = $url;
-        $this->client = app(GuzzleHttp::class, ['config' => ['timeout' => 40000]]);
+        $this->client = $this->getClient();
     }
 
     public function get(string $url): array
@@ -89,5 +90,22 @@ class Client
     private function buildUrl(string $url): string
     {
         return $this->baseUrl.$url;
+    }
+
+    /**
+     * @return \Illuminate\Foundation\Application|mixed
+     */
+    private function getClient()
+    {
+        return app(
+            GuzzleHttp::class,
+            [
+                'config' => [
+                    'timeout' => Manager::get('timeout'),
+                    'ssl_key' => Manager::get('auth.ca'),
+                    'cert' => Manager::get('auth.certificate'),
+                ],
+            ]
+        );
     }
 }

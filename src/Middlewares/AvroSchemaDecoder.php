@@ -17,7 +17,15 @@ class AvroSchemaDecoder implements MiddlewareInterface
 
     public function __construct()
     {
-        $cachedSchema = new CachedSchemaRegistryClient(Manager::get('schema_uri'));
+        $options = [
+            'url' => Manager::get('url'),
+            'timeout' => Manager::get('timeout'),
+            'authorization' => Manager::get('authorization.type'),
+            'username' => Manager::get('authorization.username'),
+            'password' => Manager::get('authorization.password'),
+        ];
+
+        $cachedSchema = new CachedSchemaRegistryClient($options);
 
         $this->decoder = new MessageDecoder($cachedSchema);
     }

@@ -3,6 +3,26 @@
 return [
     /*
     |--------------------------------------------------------------------------
+    | Avro Schemas
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the schema details configured on topic's broker key.
+    |
+    */
+
+    'avro_schemas' => [
+        'default' => [
+            'url' => '',
+            'authorization' => [
+                'type' => 'basic',
+                'username' => env('AVRO_SCHEMA_USERNAME'),
+                'password' => env('AVRO_SCHEMA_PASSWORD'),
+            ],
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Brokers
     |--------------------------------------------------------------------------
     |
@@ -14,7 +34,6 @@ return [
     'brokers' => [
         'default' => [
             'connections' => 'kafka:6680',
-            'schema_uri' => '',
             'auth' => [
                 'type' => 'ssl', // ssl and none
                 'ca' => storage_path('ca.pem'),

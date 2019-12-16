@@ -17,11 +17,17 @@ class Client
      */
     private $client;
 
-    public function __construct(string $url)
+    /**
+     * @var array
+     */
+    private $options;
+
+    public function __construct(array $options)
     {
         // Construct is temporary as we will
         // put everything on the service provider.
-        $this->baseUrl = $url;
+        $this->baseUrl = $options['url'];
+        $this->options = $options;
         $this->client = $this->getClient();
     }
 
@@ -73,8 +79,13 @@ class Client
 
     private function getHeaders(bool $shouldIncludeContentType = false): array
     {
+        $username = $this->options['username'];
+        $password = $this->options['password'];
+
+        $credentials = base64_encode($username.':'.$password);
         $headers = [
             'Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json',
+            'Authorization' => ['Basic '.$credentials]
         ];
 
         return $shouldIncludeContentType
@@ -97,15 +108,6 @@ class Client
      */
     private function getClient()
     {
-        return app(
-            GuzzleHttp::class,
-            [
-                'config' => [
-                    'timeout' => Manager::get('timeout'),
-                    'ssl_key' => Manager::get('auth.ca'),
-                    'cert' => Manager::get('auth.certificate'),
-                ],
-            ]
-        );
+        return app(GuzzleHttp::class, ['config' => ['timeout' => Manager::get('timeout')]]);
     }
 }

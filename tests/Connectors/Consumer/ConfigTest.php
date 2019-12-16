@@ -33,7 +33,6 @@ class ConfigTest extends LaravelTestCase
             'timeout' => 20000,
             'consumer_group' => 'default',
             'connections' => 'kafka:6680',
-            'schema_uri' => '',
             'auth' => [
                 'type' => 'ssl',
                 'ca' => storage_path('ca.pem'),

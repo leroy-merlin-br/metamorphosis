@@ -21,6 +21,6 @@ class ConnectorFactory
 
     protected static function requiresPartition(): bool
     {
-        return !is_null(Manager::get('partition'));
+        return Manager::has('partition');
     }
 }

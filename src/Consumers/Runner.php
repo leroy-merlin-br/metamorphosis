@@ -1,8 +1,7 @@
 <?php
-namespace Metamorphosis;
+namespace Metamorphosis\Consumers;
 
 use Exception;
-use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
@@ -10,7 +9,7 @@ use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\TopicHandler\Consumer\Handler;
 
-class ConsumerRunner
+class Runner
 {
     /**
      * @var Dispatcher
@@ -27,15 +26,9 @@ class ConsumerRunner
      */
     private $consumer;
 
-    /**
-     * @var null
-     */
-    protected $cachedSchema;
-
-    public function __construct(ConsumerInterface $consumer, $cachedSchema = null)
+    public function __construct(ConsumerInterface $consumer)
     {
         $this->consumer = $consumer;
-        $this->cachedSchema = $cachedSchema;
     }
 
     public function run(): void

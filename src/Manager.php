@@ -37,6 +37,11 @@ class Manager
         }
     }
 
+    public function has(string $key): bool
+    {
+        return !is_null($this->get($key));
+    }
+
     public function middlewares(): array
     {
         return $this->middlewares;

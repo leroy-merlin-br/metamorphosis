@@ -79,18 +79,11 @@ class Client
 
     private function getHeaders(bool $shouldIncludeContentType = false): array
     {
-        $username = $this->options['username'];
-        $password = $this->options['password'];
-
-        $credentials = base64_encode($username.':'.$password);
-        $headers = [
-            'Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json',
-            'Authorization' => ['Basic '.$credentials]
-        ];
-
-        return $shouldIncludeContentType
-            ? array_merge($headers, ['Content-Type' => 'application/vnd.schemaregistry.v1+json'])
-            : $headers;
+        return array_merge(
+            ['Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json'],
+            $this->getIncludeContentType($shouldIncludeContentType),
+            $this->options['headers'] ?? []
+        );
     }
 
     private function parseResponse(ResponseInterface $response): array
@@ -109,5 +102,12 @@ class Client
     private function getClient()
     {
         return app(GuzzleHttp::class, ['config' => ['timeout' => Manager::get('timeout')]]);
+    }
+
+    private function getIncludeContentType(bool $shouldIncludeContentType): array
+    {
+        return $shouldIncludeContentType
+            ? ['Content-Type' => 'application/vnd.schemaregistry.v1+json']
+            : [];
     }
 }

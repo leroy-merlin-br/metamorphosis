@@ -13,10 +13,12 @@ return [
     'avro_schemas' => [
         'default' => [
             'url' => '',
-            'authorization' => [
-                'type' => 'basic',
-                'username' => env('AVRO_SCHEMA_USERNAME'),
-                'password' => env('AVRO_SCHEMA_PASSWORD'),
+            'request_options' => [
+                'headers' => [
+                    'Authorization' => 'Basic '.base64_encode(
+                        env('AVRO_SCHEMA_USERNAME').':'.env('AVRO_SCHEMA_PASSWORD')
+                    ),
+                ],
             ],
         ],
     ],

@@ -5,7 +5,6 @@ use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\Connectors\Consumer\HighLevel;
 use Metamorphosis\Connectors\Consumer\LowLevel;
-use Metamorphosis\Manager;
 use Tests\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
 

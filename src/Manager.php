@@ -6,17 +6,17 @@ class Manager
     /**
      * @var array
      */
-    static private $setting = [];
+    private static $setting = [];
 
     /**
      * @var array
      */
-    static private $middlewares = [];
+    private static $middlewares = [];
 
     /**
      * @return mixed
      */
-    static function get(string $key = null)
+    public static function get(string $key = null)
     {
         if (!$key) {
             return self::$setting;
@@ -25,7 +25,7 @@ class Manager
         return array_get(self::$setting, $key);
     }
 
-    static function set(array $config): void
+    public static function set(array $config): void
     {
         $middlewares = $config['middlewares'] ?? [];
         unset($config['middlewares']);
@@ -37,7 +37,7 @@ class Manager
         }
     }
 
-    static function middlewares(): array
+    public static function middlewares(): array
     {
         return self::$middlewares;
     }

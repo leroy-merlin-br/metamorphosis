@@ -17,7 +17,7 @@ class SSLAuthenticationTest extends LaravelTestCase
                 'ca' => 'path/to/ca',
                 'certificate' => 'path/to/certificate',
                 'key' => 'path/to/key',
-            ]
+            ],
         ]);
         $conf = new Conf();
         $expected = [

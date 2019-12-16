@@ -4,7 +4,6 @@ namespace Tests;
 use Metamorphosis\Manager;
 use Metamorphosis\Middlewares\JsonDecode;
 use Metamorphosis\Middlewares\Log;
-use Mockery as m;
 
 class ManagerTest extends LaravelTestCase
 {

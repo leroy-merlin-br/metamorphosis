@@ -27,7 +27,7 @@ class Client
         // Construct is temporary as we will
         // put everything on the service provider.
         $this->baseUrl = $options['url'];
-        $this->options = $options;
+        $this->options = $options['request_options'];
         $this->client = $this->getClient();
     }
 

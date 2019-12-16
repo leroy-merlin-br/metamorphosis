@@ -15,9 +15,11 @@ return [
             'url' => '',
             'request_options' => [
                 'headers' => [
-                    'Authorization' => 'Basic '.base64_encode(
-                        env('AVRO_SCHEMA_USERNAME').':'.env('AVRO_SCHEMA_PASSWORD')
-                    ),
+                    'Authorization' => [
+                        'Basic '.base64_encode(
+                            env('AVRO_SCHEMA_USERNAME').':'.env('AVRO_SCHEMA_PASSWORD')
+                        ),
+                    ],
                 ],
             ],
         ],

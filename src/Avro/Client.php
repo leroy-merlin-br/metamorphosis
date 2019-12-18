@@ -2,6 +2,7 @@
 namespace Metamorphosis\Avro;
 
 use GuzzleHttp\Client as GuzzleHttp;
+use Metamorphosis\Facades\Manager;
 use Psr\Http\Message\ResponseInterface;
 
 class Client
@@ -16,12 +17,18 @@ class Client
      */
     private $client;
 
-    public function __construct(string $url)
+    /**
+     * @var array
+     */
+    private $options;
+
+    public function __construct(array $options)
     {
         // Construct is temporary as we will
         // put everything on the service provider.
-        $this->baseUrl = $url;
-        $this->client = app(GuzzleHttp::class, ['config' => ['timeout' => 40000]]);
+        $this->baseUrl = $options['url'];
+        $this->options = $options['request_options'] ?? [];
+        $this->client = $this->getClient();
     }
 
     public function get(string $url): array
@@ -72,13 +79,11 @@ class Client
 
     private function getHeaders(bool $shouldIncludeContentType = false): array
     {
-        $headers = [
-            'Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json',
-        ];
-
-        return $shouldIncludeContentType
-            ? array_merge($headers, ['Content-Type' => 'application/vnd.schemaregistry.v1+json'])
-            : $headers;
+        return array_merge(
+            ['Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json'],
+            $this->getIncludeContentType($shouldIncludeContentType),
+            $this->options['headers'] ?? []
+        );
     }
 
     private function parseResponse(ResponseInterface $response): array
@@ -89,5 +94,20 @@ class Client
     private function buildUrl(string $url): string
     {
         return $this->baseUrl.$url;
+    }
+
+    /**
+     * @return \Illuminate\Foundation\Application|mixed
+     */
+    private function getClient()
+    {
+        return app(GuzzleHttp::class, ['config' => ['timeout' => Manager::get('timeout')]]);
+    }
+
+    private function getIncludeContentType(bool $shouldIncludeContentType): array
+    {
+        return $shouldIncludeContentType
+            ? ['Content-Type' => 'application/vnd.schemaregistry.v1+json']
+            : [];
     }
 }

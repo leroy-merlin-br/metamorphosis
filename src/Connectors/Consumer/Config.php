@@ -27,8 +27,9 @@ class Config extends AbstractConfig
         'timeout' => 'required|integer',
         'consumer_group' => 'required|string',
         'connections' => 'required|string',
-        'schema_uri' => 'string',
+        'url' => 'string',
         'auth' => 'array',
+        'request_options' => 'array',
         'middlewares' => 'array',
     ];
 
@@ -37,12 +38,14 @@ class Config extends AbstractConfig
         $topicConfig = $this->getTopicConfig($arguments['topic']);
         $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer_group']);
         $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
+        $schemaConfig = $this->getSchemaConfig($arguments['topic']);
         $config = array_merge(
             $topicConfig,
             $brokerConfig,
             $consumerConfig,
             $this->filterValues($options),
-            $this->filterValues($arguments)
+            $this->filterValues($arguments),
+            $schemaConfig
         );
 
         $this->validate($config);
@@ -98,5 +101,10 @@ class Config extends AbstractConfig
         return array_filter($options, function ($value) {
             return !is_null($value);
         });
+    }
+
+    private function getSchemaConfig(string $topicId): array
+    {
+        return config('kafka.avro_schemas.'.$topicId, []);
     }
 }

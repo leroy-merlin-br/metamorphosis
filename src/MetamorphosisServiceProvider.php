@@ -62,7 +62,7 @@ class MetamorphosisServiceProvider extends ServiceProvider
     private function getDefaultHeaders(): array
     {
         return [
-            'Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json'
+            'Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json',
         ];
     }
 

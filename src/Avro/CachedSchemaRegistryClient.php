@@ -36,9 +36,9 @@ class CachedSchemaRegistryClient
      */
     private $subjectVersionToSchema = [];
 
-    public function __construct(array $options)
+    public function __construct(Client $client)
     {
-        $this->client = app(Client::class, compact('options'));
+        $this->client = $client;
     }
 
     /**

@@ -13,9 +13,9 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testRegister(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        config(['kafka.avro_schemas.default.url' => 'http://test.com']);
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $response = ['id' => '123'];
         $status = 200;
@@ -35,9 +35,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testRegisterShouldHitCache(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $response = ['id' => '123'];
         $status = 200;
@@ -56,9 +55,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testRegisterWithIncompatibleAvroSchema(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $response = ['id' => '123'];
         $status = 409;
@@ -76,9 +74,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testRegisterWithInvalidAvroSchema(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $response = ['id' => '123'];
         $status = 422;
@@ -97,9 +94,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testRegisterMayBeUnableToRegisterSchema(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $response = ['id' => '123'];
         $status = 199;
@@ -118,9 +114,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetSchemaVersion(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $response = [
             'subject' => 'some-kafka-topic',
@@ -144,9 +139,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetSchemaVersionShouldHitCache(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $response = [
             'subject' => 'some-kafka-topic',
@@ -171,9 +165,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetSchemaId(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $response = [
             'subject' => 'some-kafka-topic',
@@ -197,9 +190,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetSchemaIdShouldHitCache(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $response = [
             'subject' => 'some-kafka-topic',
@@ -224,9 +216,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetById(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $schemaString = $this->getSchemaTest();
         $parsedSchema = AvroSchema::parse($this->getSchemaTest());
@@ -253,9 +244,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetByIdShouldHitCache(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $schemaString = $this->getSchemaTest();
 
@@ -282,9 +272,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetByIdWithoutSchemas(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $schemaString = $this->getSchemaTest();
 
@@ -309,9 +298,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetByIdMayReturnErrors(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(AvroSchema::class);
         $schemaString = $this->getSchemaTest();
 
@@ -336,9 +324,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetBySubjectAndVersion(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schemaString = $this->getSchemaTest();
         $parsedSchema = AvroSchema::parse($schemaString);
 
@@ -369,9 +356,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetBySubjectAndVersionWithNotFoundSchema(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schemaString = $this->getSchemaTest();
         $parsedSchema = AvroSchema::parse($schemaString);
 
@@ -401,9 +387,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetBySubjectAndVersionMayReturnErrors(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schemaString = $this->getSchemaTest();
         $parsedSchema = AvroSchema::parse($schemaString);
 
@@ -433,9 +418,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
     public function testGetBySubjectAndVersionShouldHitCache(): void
     {
         // Set
-        $options = ['url' => 'some-url'];
-        $httpClient = $this->instance(Client::class, m::mock(Client::class));
-        $client = app(CachedSchemaRegistryClient::class, compact('options'));
+        $httpClient = m::mock(Client::class);
+        $client = new CachedSchemaRegistryClient($httpClient);
         $schemaString = $this->getSchemaTest();
         $parsedSchema = AvroSchema::parse($schemaString);
 

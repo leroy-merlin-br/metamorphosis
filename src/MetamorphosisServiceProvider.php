@@ -49,12 +49,13 @@ class MetamorphosisServiceProvider extends ServiceProvider
 
     private function getGuzzleHttpClient(Manager $manager): GuzzleClient
     {
-        $this->validateManager($manager);
-
         $options = $manager->get('request_options') ?: [];
         $options['timeout'] = $manager->get('timeout');
         $options['base_uri'] = $manager->get('url');
-        $options['headers'][] = $this->getDefaultHeaders();
+        $options['headers'] = array_merge(
+            $this->getDefaultHeaders(),
+            $options['headers']
+        );
 
         return new GuzzleClient($options);
     }

@@ -66,11 +66,4 @@ class MetamorphosisServiceProvider extends ServiceProvider
             'Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json',
         ];
     }
-
-    private function validateManager(Manager $manager): void
-    {
-        if (!$manager->get('url')) {
-            throw new ConfigurationException("Avro schema url not found, it's required to use AvroSchemaDecoder Middleware");
-        }
-    }
 }

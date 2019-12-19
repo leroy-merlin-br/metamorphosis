@@ -9,7 +9,6 @@ use Metamorphosis\Console\ConsumerCommand;
 use Metamorphosis\Console\ConsumerMakeCommand;
 use Metamorphosis\Console\MiddlewareMakeCommand;
 use Metamorphosis\Console\ProducerMakeCommand;
-use Metamorphosis\Exceptions\ConfigurationException;
 
 class MetamorphosisServiceProvider extends ServiceProvider
 {

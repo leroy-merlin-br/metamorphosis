@@ -16,7 +16,7 @@ class Config extends AbstractConfig
         'timeout' => 'int',
         'auth' => 'array',
         'isASync' => 'bool',
-        'requiredAcknowledgment' => 'bool',
+        'requiredAcknowledgment' => 'int',
         'middlewares' => 'array',
     ];
 

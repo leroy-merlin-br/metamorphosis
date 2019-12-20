@@ -41,7 +41,7 @@ class Producer implements MiddlewareInterface
         $config->setMetadataRefreshIntervalMs(10000);
         $config->setMetadataBrokerList(Manager::get('connections'));
         $config->setBrokerVersion('1.0.0');
-        $config->setRequiredAck(1);
+        $config->setRequiredAck(Manager::get('requiredAcknowledgment'));
         $config->setIsAsyn(Manager::get('isASync'));
         $config->setProduceInterval(500);
 
@@ -49,7 +49,7 @@ class Producer implements MiddlewareInterface
             function() use ($record) {
                 return [
                     [
-                        'topic' => Manager::get('topic'),
+                        'topic' => Manager::get('topic_id'),
                         'value' => $record->getPayload(),
                         'key' => $record->getKey(),
                     ],

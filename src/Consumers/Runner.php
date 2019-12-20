@@ -8,6 +8,7 @@ use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\TopicHandler\Consumer\Handler;
+use Kafka\Consumer;
 
 class Runner
 {
@@ -22,11 +23,11 @@ class Runner
     protected $handler;
 
     /**
-     * @var ConsumerInterface
+     * @var Consumer
      */
     private $consumer;
 
-    public function __construct(ConsumerInterface $consumer)
+    public function __construct(Consumer $consumer)
     {
         $this->consumer = $consumer;
     }
@@ -37,18 +38,16 @@ class Runner
 
         $this->setMiddlewareDispatcher($handler, Manager::middlewares());
 
-        while (true) {
-            $response = $this->consumer->consume();
-
+        $this->consumer->start(function ($topic, $part, $message) use ($handler): void {
             try {
-                $record = app(ConsumerRecord::class, compact('response'));
+                $record = app(ConsumerRecord::class, compact('message'));
                 $this->middlewareDispatcher->handle($record);
             } catch (ResponseWarningException $exception) {
                 $handler->warning($exception);
             } catch (Exception $exception) {
                 $handler->failed($exception);
             }
-        }
+        });
     }
 
     protected function setMiddlewareDispatcher($handler, array $middlewares): void

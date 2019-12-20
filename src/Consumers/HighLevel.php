@@ -2,8 +2,7 @@
 namespace Metamorphosis\Consumers;
 
 use Metamorphosis\Facades\Manager;
-use RdKafka\KafkaConsumer;
-use RdKafka\Message;
+use Kafka\Consumer;
 
 class HighLevel implements ConsumerInterface
 {
@@ -17,7 +16,7 @@ class HighLevel implements ConsumerInterface
      */
     private $timeout;
 
-    public function __construct(KafkaConsumer $consumer)
+    public function __construct(Consumer $consumer)
     {
         $this->consumer = $consumer;
 

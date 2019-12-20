@@ -7,7 +7,7 @@
     ],
     "description": "Kafka package for laravel applications",
     "require": {
-        "nmred/kafka-php": "0.2.*",
+        "nmred/kafka-php": "dev-master",
         "ext-json": "*",
         "guzzlehttp/guzzle": "6.5.0",
         "illuminate/support": "~5.5.0||~5.6.0||~5.7.0",

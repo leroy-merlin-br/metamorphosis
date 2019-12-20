@@ -2,8 +2,8 @@
 namespace Metamorphosis\Middlewares\Handler;
 
 use Kafka\ProducerConfig;
+use Kafka\Producer as KafkaProducer;
 use Metamorphosis\Connectors\Producer\Config;
-use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\RecordInterface;
@@ -12,11 +12,6 @@ use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
 class Producer implements MiddlewareInterface
 {
-    /**
-     * @var Connector
-     */
-    private $connector;
-
     /**
      * @var HandlerInterface
      */
@@ -27,9 +22,8 @@ class Producer implements MiddlewareInterface
      */
     private $config;
 
-    public function __construct(Connector $connector, Config $config)
+    public function __construct(Config $config)
     {
-        $this->connector = $connector;
         $this->config = $config;
     }
 
@@ -41,21 +35,23 @@ class Producer implements MiddlewareInterface
         $config->setMetadataRefreshIntervalMs(10000);
         $config->setMetadataBrokerList(Manager::get('connections'));
         $config->setBrokerVersion('1.0.0');
-        $config->setRequiredAck(Manager::get('requiredAcknowledgment'));
-        $config->setIsAsyn(Manager::get('isASync'));
+        $config->setRequiredAck(Manager::get('requiredAcknowledgment') ?: 1);
+        $config->setIsAsyn(Manager::get('isASync') ?: false);
         $config->setProduceInterval(500);
 
-        $producer = new \Kafka\Producer(
-            function() use ($record) {
-                return [
-                    [
-                        'topic' => Manager::get('topic_id'),
-                        'value' => $record->getPayload(),
-                        'key' => $record->getKey(),
-                    ],
-                ];
-            }
-        );
+        $producer = app(KafkaProducer::class , [
+            'producer' => (
+                function() use ($record) {
+                    return [
+                        [
+                            'topic' => Manager::get('topic_id'),
+                            'value' => $record->getPayload(),
+                            'key' => $record->getKey(),
+                        ],
+                    ];
+                }
+            )
+        ]);
 
         if ($this->canHandleResponse($this->producerHandler) ) {
             $producer->success(function ($result) {

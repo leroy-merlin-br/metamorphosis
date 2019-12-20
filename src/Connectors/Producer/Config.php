@@ -15,6 +15,8 @@ class Config extends AbstractConfig
         'connections' => 'required|string',
         'timeout' => 'int',
         'auth' => 'array',
+        'isASync' => 'bool',
+        'requiredAcknowledgment' => 'bool',
         'middlewares' => 'array',
     ];
 

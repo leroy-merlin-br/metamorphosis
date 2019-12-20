@@ -93,10 +93,12 @@ return [
                     'middlewares' => [],
                 ],
             ],
-            'producer' => [
-                'middlewares' => [],
-                'timeout_responses' => 50,
-            ],
+        ],
+        'producer' => [
+            'requiredAcknowledgment' => true,
+            'isASync' => false,
+            'middlewares' => [],
+            'timeout_responses' => 50,
         ],
     ],
 

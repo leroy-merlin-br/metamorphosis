@@ -3,6 +3,7 @@
 - [Authentication](#authentication)
 - [Middlewares](#middlewares)
 - [Brokers](#brokers)
+- [Schemas](#schemas)
 - [Commands](#commands)
    - [Creating Consumer](#commands-consumer)
    - [Creating Middleware](#commands-middleware)
@@ -137,6 +138,34 @@ If you wish, you may set a middleware to run of a topic level or a consumer grou
 
 The order matters here, they'll be execute as queue, from the most global scope to the most specific (global scope > topic scope > group_consumers scope).
 
+
+<a name="schemas"></a>
+### Schemas
+When using Avro decoder middleware, you may have to request an API to get the Avro Schema in order to handle
+the encoded message received.
+
+A Schema is basically an Avro template telling us how to handle a record received. It will be used both to
+receive and produce a message.
+
+As a schema may have a different authentication than a broker, to provide flexibility on how to handle the authentication, we created a `request_options` key on config.
+This field will be constructed along with the GuzzleHttp library. So Any options here will be injected on GuzzleHttp.
+
+```php
+'avro_schemas' => [
+    'default' => [
+        'url' => '',
+        'request_options' => [
+            'headers' => [
+                'Authorization' => [
+                    'Basic '.base64_encode(
+                        env('AVRO_SCHEMA_USERNAME').':'.env('AVRO_SCHEMA_PASSWORD')
+                    ),
+                ],
+            ],
+        ],
+    ],
+],
+```
 
 <a name="commands"></a>
 ### Commands

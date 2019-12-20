@@ -24,6 +24,8 @@
 
 Metamorphosis provides a simple, straight-forward implementation for working with Kafka inside Laravel applications.
 
+Prefer to read in other language? [Português](readme.pt.md) 
+
 <a name="requirements"></a>
 ## Requirements
 

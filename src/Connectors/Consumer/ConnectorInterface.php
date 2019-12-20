@@ -1,9 +1,9 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\Consumers\ConsumerInterface;
+use Kafka\Consumer;
 
 interface ConnectorInterface
 {
-    public function getConsumer(): ConsumerInterface;
+    public function getConsumer(): Consumer;
 }

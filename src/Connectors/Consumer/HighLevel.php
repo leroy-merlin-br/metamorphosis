@@ -4,12 +4,11 @@ namespace Metamorphosis\Connectors\Consumer;
 use Kafka\Consumer;
 use Kafka\ConsumerConfig;
 use Metamorphosis\Authentication\Factory;
-use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Facades\Manager;
 
 class HighLevel implements ConnectorInterface
 {
-    public function getConsumer(): ConsumerInterface
+    public function getConsumer(): Consumer
     {
         $config = ConsumerConfig::getInstance();
         $config->setMetadataRefreshIntervalMs(10000);

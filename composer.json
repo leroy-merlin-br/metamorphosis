@@ -7,7 +7,7 @@
     ],
     "description": "Kafka package for laravel applications",
     "require": {
-        "ext-rdkafka": "*",
+        "nmred/kafka-php": "0.2.*",
         "ext-json": "*",
         "guzzlehttp/guzzle": "6.5.0",
         "illuminate/support": "~5.5.0||~5.6.0||~5.7.0",
@@ -20,7 +20,6 @@
         "leroy-merlin-br/coding-standard": "^0.1.0",
         "phpunit/phpunit": "^7.3",
         "mockery/mockery": "^1.3.0",
-        "kwn/php-rdkafka-stubs": "~1.1.0",
         "orchestra/testbench": "~3.5.0||~3.6.0||~3.7.0",
         "satooshi/php-coveralls": "^1.0"
     },

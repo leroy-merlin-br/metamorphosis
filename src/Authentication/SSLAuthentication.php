@@ -2,27 +2,27 @@
 namespace Metamorphosis\Authentication;
 
 use Metamorphosis\Facades\Manager;
-use RdKafka\Conf;
+use Kafka\Config;
 
 class SSLAuthentication implements AuthenticationInterface
 {
     /**
-     * @var Conf
+     * @var Config
      */
-    private $conf;
+    private $config;
 
-    public function __construct(Conf $conf)
+    public function __construct(Config $config)
     {
-        $this->conf = $conf;
+        $this->config = $config;
 
         $this->authenticate();
     }
 
     private function authenticate(): void
     {
-        $this->conf->set('security.protocol', Manager::get('auth.type'));
-        $this->conf->set('ssl.ca.location', Manager::get('auth.ca'));
-        $this->conf->set('ssl.certificate.location', Manager::get('auth.certificate'));
-        $this->conf->set('ssl.key.location', Manager::get('auth.key'));
+        $this->config->setSecurityProtocol(Config::SECURITY_PROTOCOL_SSL);
+        $this->config->setSslLocalCert(Manager::get('auth.certificate'));
+        $this->config->setSslCafile(Manager::get('auth.ca'));
+        $this->config->setSslLocalPk(Manager::get('auth.key'));
     }
 }

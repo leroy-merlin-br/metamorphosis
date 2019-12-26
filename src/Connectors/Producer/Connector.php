@@ -47,7 +47,7 @@ class Connector
 
         $this->prepareQueueCallbackResponse($producer);
 
-        return $producer->newTopic(Manager::get('topic'));
+        return $producer->newTopic(Manager::get('topic_id'));
     }
 
     public function handleResponsesFromBroker(): void

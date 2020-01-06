@@ -3,6 +3,7 @@ namespace Metamorphosis\Middlewares\Handler;
 
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Connectors\Producer\Connector;
+use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
@@ -36,8 +37,11 @@ class Producer implements MiddlewareInterface
         $this->connector->setHandler($this->producerHandler);
 
         $producer = $this->connector->getProducerTopic();
-        $producer->produce($record->getPartition(), 0, $record->getPayload(), $record->getKey());
 
+        $topic = $producer->newTopic(Manager::get('topic_id'));
+        $topic->produce($record->getPartition(), 0, $record->getPayload(), $record->getKey());
+
+        $producer->flush(Manager::get('timeout'));
         $this->connector->handleResponsesFromBroker();
     }
 

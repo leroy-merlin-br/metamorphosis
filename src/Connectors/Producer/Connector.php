@@ -33,7 +33,7 @@ class Connector
         $this->handler = $handler;
     }
 
-    public function getProducerTopic(): ProducerTopic
+    public function getProducerTopic(): KafkaProducer
     {
         $conf = resolve(Conf::class);
 
@@ -47,7 +47,7 @@ class Connector
 
         $this->prepareQueueCallbackResponse($producer);
 
-        return $producer->newTopic(Manager::get('topic_id'));
+        return $producer;
     }
 
     public function handleResponsesFromBroker(): void

@@ -25,9 +25,7 @@ class Producer
      */
     public function produce(HandlerInterface $producerHandler): void
     {
-        $this->producerHandler = $producerHandler;
-
-        $this->setMiddlewareDispatcher(Manager::middlewares());
+        $middlewareDispatcher = $this->build($producerHandler);
 
         $record = $producerHandler->getRecord();
 
@@ -40,16 +38,15 @@ class Producer
         $key = $producerHandler->getKey();
 
         $record = new ProducerRecord($record, $topic, $partition, $key);
-        $this->middlewareDispatcher->handle($record);
+        $middlewareDispatcher->handle($record);
     }
 
-    protected function setMiddlewareDispatcher(array $middlewares)
+    public function build(HandlerInterface $producerHandler): Dispatcher
     {
-        $producerMiddleware = app(ProducerMiddleware::class);
-        $producerMiddleware->setProducerHandler($this->producerHandler);
-        $middlewares[] = $producerMiddleware;
+        $middlewares = Manager::middlewares();
+        $middlewares[] = app(ProducerMiddleware::class, ['producerHandler' => $producerHandler]);
 
-        $this->middlewareDispatcher = new Dispatcher($middlewares);
+        return new Dispatcher($middlewares);
     }
 
     private function encodeRecord(array $record): string

@@ -34,14 +34,17 @@ class Producer implements MiddlewareInterface
      */
     private $producer;
 
-    public function __construct(Connector $connector, Config $config)
+    public function __construct(Connector $connector, Config $config, HandlerInterface $producerHandler)
     {
         $this->connector = $connector;
         $this->config = $config;
+        $this->producerHandler = $producerHandler;
+
         $this->config->setOption($this->producerHandler->getTopic());
         $this->producer = $this->connector->getProducerTopic($this->producerHandler);
         $this->topic = $this->producer->produce->newTopic(Manager::get('topic_id'));
         $this->connector->handleResponsesFromBroker();
+
     }
 
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void

@@ -5,6 +5,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\ServiceProvider;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\Client;
+use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Console\ConsumerCommand;
 use Metamorphosis\Console\ConsumerMakeCommand;
 use Metamorphosis\Console\MiddlewareMakeCommand;
@@ -30,8 +31,8 @@ class MetamorphosisServiceProvider extends ServiceProvider
             ProducerMakeCommand::class,
         ]);
 
-        $this->app->bind('metamorphosis', function () {
-            return new Producer();
+        $this->app->bind('metamorphosis', function ($app) {
+            return $app->make(Producer::class);
         });
 
         $this->app->singleton('manager', function () {

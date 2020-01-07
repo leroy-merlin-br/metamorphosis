@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis;
 
+use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
@@ -10,15 +11,10 @@ use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
 class Producer
 {
-    /**
-     * @var Dispatcher
-     */
-    public $middlewareDispatcher;
-
-    /**
-     * @var HandlerInterface
-     */
-    private $producerHandler;
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+    }
 
     /**
      * @throws JsonException When an array is passed and something wrong happens while encoding it into json
@@ -27,36 +23,15 @@ class Producer
     {
         $middlewareDispatcher = $this->build($producerHandler);
 
-        $record = $producerHandler->getRecord();
-
-        if (is_array($record)) {
-            $record = $this->encodeRecord($record);
-        }
-
-        $topic = $producerHandler->getTopic();
-        $partition = $producerHandler->getPartition();
-        $key = $producerHandler->getKey();
-
-        $record = new ProducerRecord($record, $topic, $partition, $key);
-        $middlewareDispatcher->handle($record);
+        $middlewareDispatcher->handle($producerHandler->createRecord());
     }
 
     public function build(HandlerInterface $producerHandler): Dispatcher
     {
+        $this->config->setOption($producerHandler->getTopic());
         $middlewares = Manager::middlewares();
         $middlewares[] = app(ProducerMiddleware::class, ['producerHandler' => $producerHandler]);
 
         return new Dispatcher($middlewares);
-    }
-
-    private function encodeRecord(array $record): string
-    {
-        $record = json_encode($record);
-
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new JsonException('Cannot convert data into a valid JSON. Reason: '.json_last_error_msg());
-        }
-
-        return $record;
     }
 }

@@ -25,31 +25,35 @@ class Producer implements MiddlewareInterface
     private $producerHandler;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @var \RdKafka\Producer
      */
     private $producer;
 
-    public function __construct(Connector $connector, Config $config, HandlerInterface $producerHandler)
+    private $processMessageCount = 0;
+
+    public function __construct(Connector $connector, HandlerInterface $producerHandler)
     {
         $this->connector = $connector;
-        $this->config = $config;
         $this->producerHandler = $producerHandler;
 
-        $this->config->setOption($this->producerHandler->getTopic());
         $this->producer = $this->connector->getProducerTopic($this->producerHandler);
         $this->topic = $this->producer->produce->newTopic(Manager::get('topic_id'));
         $this->connector->handleResponsesFromBroker();
-
     }
 
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
         $this->topic->produce($record->getPartition(), 0, $record->getPayload(), $record->getKey());
+        $this->processMessageCount++;
+
+        if ($this->processMessageCount % self::MAX_POLL_RECORDS === 0) {
+            $this->pollResponse();
+        }
+    }
+
+    public function __destruct()
+    {
+        $this->producer->flush(Manager::get('timeout'));
     }
 
     public function pollResponse(): void
@@ -57,15 +61,5 @@ class Producer implements MiddlewareInterface
         while ($this->producer->getOutQLen() > 0) {
             $this->producer->poll(Manager::get('timeout'));
         }
-    }
-
-    public function terminateProducer(): void
-    {
-        $this->producer->flush(Manager::get('timeout'));
-    }
-
-    private function canHandleResponse(): bool
-    {
-        return $this->handler instanceof HandleableResponseInterface;
     }
 }

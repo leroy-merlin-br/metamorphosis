@@ -1,13 +1,10 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
-use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Connectors\Producer\Connector;
-use Metamorphosis\Connectors\Producer\Queue;
 use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\RecordInterface;
-use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
 class Producer implements MiddlewareInterface
@@ -37,8 +34,7 @@ class Producer implements MiddlewareInterface
         $this->producerHandler = $producerHandler;
 
         $this->producer = $this->connector->getProducerTopic($this->producerHandler);
-        $this->topic = $this->producer->produce->newTopic(Manager::get('topic_id'));
-        $this->connector->handleResponsesFromBroker();
+        $this->topic = $this->producer->newTopic(Manager::get('topic_id'));
     }
 
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void

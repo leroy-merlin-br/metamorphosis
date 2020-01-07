@@ -6,7 +6,6 @@ use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
-use Metamorphosis\Record\ProducerRecord;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
 class Producer

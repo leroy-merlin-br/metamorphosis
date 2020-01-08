@@ -22,7 +22,7 @@ class ProducerTest extends LaravelTestCase
         Manager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
-            'is_async' => false,
+            'is_async' => true,
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'required_acknowledgment' => true,
@@ -104,7 +104,7 @@ class ProducerTest extends LaravelTestCase
         Manager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
-            'is_async' => false,
+            'is_async' => true,
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'required_acknowledgment' => false,
@@ -145,7 +145,7 @@ class ProducerTest extends LaravelTestCase
         Manager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
-            'is_async' => false,
+            'is_async' => true,
             'max_poll_records' => 2,
             'flush_attempts' => 1,
             'required_acknowledgment' => false,
@@ -199,7 +199,7 @@ class ProducerTest extends LaravelTestCase
         Manager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
-            'is_async' => true,
+            'is_async' => false,
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'required_acknowledgment' => true,

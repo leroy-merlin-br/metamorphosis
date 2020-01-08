@@ -54,7 +54,7 @@ class Producer implements MiddlewareInterface
     {
         $this->processMessageCount++;
 
-        if (Manager::get('is_async')) {
+        if (!Manager::get('is_async')) {
             $this->flushMessage();
 
             return;

@@ -96,7 +96,7 @@ return [
         ],
         'producer' => [
             'required_acknowledgment' => true,
-            'is_async' => false,
+            'is_async' => true,
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'middlewares' => [],

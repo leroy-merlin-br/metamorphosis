@@ -49,13 +49,17 @@ class Producer implements MiddlewareInterface
 
     public function __destruct()
     {
-        $this->producer->flush(Manager::get('timeout'));
+        $result = $this->producer->flush(Manager::get('timeout'));
+
+        // @TODO handle errors
     }
 
     public function pollResponse(): void
     {
         while ($this->producer->getOutQLen() > 0) {
-            $this->producer->poll(Manager::get('timeout'));
+            $result = $this->producer->poll(Manager::get('timeout'));
+
+            // @TODO handle errors
         }
     }
 }

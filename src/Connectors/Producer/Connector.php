@@ -3,17 +3,19 @@ namespace Metamorphosis\Connectors\Producer;
 
 use Metamorphosis\Authentication\Factory;
 use Metamorphosis\Facades\Manager;
+use Metamorphosis\TopicHandler\Producer\HandlerInterface;
+use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use RdKafka\Conf;
 use RdKafka\Message;
 use RdKafka\Producer as KafkaProducer;
 
 class Connector
 {
-    public function getProducerTopic($handler = null): KafkaProducer
+    public function getProducerTopic(HandlerInterface $handler): KafkaProducer
     {
         $conf = resolve(Conf::class);
 
-        if ($handler) {
+        if ($this->canHandleResponse($handler)) {
             $conf->setDrMsgCb(function ($kafka, Message $message) use ($handler) {
                 if ($message->err) {
                     $handler->failed($message);
@@ -28,5 +30,10 @@ class Connector
         Factory::authenticate($conf);
 
         return app(KafkaProducer::class, compact('conf'));
+    }
+
+    private function canHandleResponse(HandlerInterface $handler): bool
+    {
+        return $handler instanceof HandleableResponseInterface;
     }
 }

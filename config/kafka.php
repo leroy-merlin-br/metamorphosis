@@ -95,12 +95,11 @@ return [
             ],
         ],
         'producer' => [
-            'requiredAcknowledgment' => true,
-            'isASync' => true,
-            'maxPollRecords' => 500,
-            'flushAttempts' => 10,
+            'required_acknowledgment' => true,
+            'is_async' => false,
+            'max_poll_records' => 500,
+            'flush_attempts' => 10,
             'middlewares' => [],
-            'timeout_responses' => 50,
         ],
     ],
 

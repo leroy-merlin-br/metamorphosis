@@ -22,10 +22,10 @@ class ProducerTest extends LaravelTestCase
         Manager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
-            'isAsync' => false,
-            'maxPollRecords' => 500,
-            'flushAttempts' => 10,
-            'requiredAcknowledgment' => true,
+            'is_async' => false,
+            'max_poll_records' => 500,
+            'flush_attempts' => 10,
+            'required_acknowledgment' => true,
         ]);
     }
 
@@ -104,10 +104,10 @@ class ProducerTest extends LaravelTestCase
         Manager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
-            'isAsync' => false,
-            'maxPollRecords' => 500,
-            'flushAttempts' => 10,
-            'requiredAcknowledgment' => false,
+            'is_async' => false,
+            'max_poll_records' => 500,
+            'flush_attempts' => 10,
+            'required_acknowledgment' => false,
         ]);
 
         $handler = m::mock(HandlerInterface::class);
@@ -145,10 +145,10 @@ class ProducerTest extends LaravelTestCase
         Manager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
-            'isAsync' => false,
-            'maxPollRecords' => 2,
-            'flushAttempts' => 1,
-            'requiredAcknowledgment' => false,
+            'is_async' => false,
+            'max_poll_records' => 2,
+            'flush_attempts' => 1,
+            'required_acknowledgment' => false,
         ]);
 
         $handler = m::mock(HandlerInterface::class);
@@ -199,10 +199,10 @@ class ProducerTest extends LaravelTestCase
         Manager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
-            'isAsync' => true,
-            'maxPollRecords' => 500,
-            'flushAttempts' => 10,
-            'requiredAcknowledgment' => true,
+            'is_async' => true,
+            'max_poll_records' => 500,
+            'flush_attempts' => 10,
+            'required_acknowledgment' => true,
         ]);
 
         $handler = m::mock(HandlerInterface::class);

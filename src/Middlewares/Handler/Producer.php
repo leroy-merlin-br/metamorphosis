@@ -54,24 +54,24 @@ class Producer implements MiddlewareInterface
     {
         $this->processMessageCount++;
 
-        if (Manager::get('isAsync')) {
+        if (Manager::get('is_async')) {
             $this->flushMessage();
 
             return;
         }
 
-        if (0 === ($this->processMessageCount % Manager::get('maxPollRecords'))) {
+        if (0 === ($this->processMessageCount % Manager::get('max_poll_records'))) {
             $this->pollResponse();
         }
     }
 
     private function flushMessage(): void
     {
-        if (!Manager::get('requiredAcknowledgment')) {
+        if (!Manager::get('required_acknowledgment')) {
             return;
         }
 
-        for ($flushAttempts = 0; $flushAttempts < Manager::get('flushAttempts'); $flushAttempts++) {
+        for ($flushAttempts = 0; $flushAttempts < Manager::get('flush_attempts'); $flushAttempts++) {
             $result = $this->producer->flush(Manager::get('timeout'));
             if (RD_KAFKA_RESP_ERR_NO_ERROR === $result) {
                 return;

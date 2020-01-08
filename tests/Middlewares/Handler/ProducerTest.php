@@ -10,6 +10,7 @@ use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Record\ProducerRecord;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use Mockery as m;
+use RuntimeException;
 use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase
@@ -24,7 +25,7 @@ class ProducerTest extends LaravelTestCase
         ]);
     }
 
-    public function testItShouldProcess(): void
+    public function testItShouldSendMessageToKafkaBroker(): void
     {
         // Set
         $handler = m::mock(HandlerInterface::class);
@@ -46,10 +47,47 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->flush(4000);
+            ->flush(4000)
+            ->andReturn(RD_KAFKA_RESP_ERR_NO_ERROR);
 
         $producerTopic->expects()
             ->produce(null, 0, $record->getPayload(), null);
+
+        // Actions
+        $producerHandler = new Producer($connector, $handler);
+        $producerHandler->process($record, $middlewareHandler);
+    }
+
+    public function testShouldThrowExceptionWhenFlushFailed(): void
+    {
+        // Set
+        $handler = m::mock(HandlerInterface::class);
+        $middlewareHandler = m::mock(MiddlewareHandlerInterface::class);
+        $kafkaProducer = m::mock(KafkaProducer::class);
+        $producerTopic = m::mock(KafkaTopicProducer::class);
+        $connector = m::mock(Connector::class);
+
+        $record = json_encode(['message' => 'original record']);
+        $record = new ProducerRecord($record, 'topic_key');
+
+        // Expectations
+        $connector->expects()
+            ->getProducerTopic($handler)
+            ->andReturn($kafkaProducer);
+
+        $kafkaProducer->expects()
+            ->newTopic('topic_name')
+            ->andReturn($producerTopic);
+
+        $kafkaProducer->expects()
+            ->flush(4000)
+            ->times(Producer::FLUSH_ATTEMPTS)
+            ->andReturn('error');
+
+        $producerTopic->expects()
+            ->produce(null, 0, $record->getPayload(), null);
+
+        $this->expectException(RuntimeException::class);
 
         // Actions
         $producerHandler = new Producer($connector, $handler);

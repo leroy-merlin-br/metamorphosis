@@ -6,10 +6,13 @@ use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
+use RuntimeException;
 
 class Producer implements MiddlewareInterface
 {
     const MAX_POLL_RECORDS = 500;
+
+    const FLUSH_ATTEMPTS = 10;
 
     /**
      * @var Connector
@@ -49,17 +52,20 @@ class Producer implements MiddlewareInterface
 
     public function __destruct()
     {
-        $result = $this->producer->flush(Manager::get('timeout'));
+        for ($flushAttempts = 0; $flushAttempts < self::FLUSH_ATTEMPTS; $flushAttempts++) {
+            $result = $this->producer->flush(Manager::get('timeout'));
+            if (RD_KAFKA_RESP_ERR_NO_ERROR === $result) {
+                return;
+            }
+        }
 
-        // @TODO handle errors
+        throw new RuntimeException('Was unable to flush, messages might be lost!');
     }
 
     public function pollResponse(): void
     {
         while ($this->producer->getOutQLen() > 0) {
-            $result = $this->producer->poll(Manager::get('timeout'));
-
-            // @TODO handle errors
+            $this->producer->poll(Manager::get('timeout'));
         }
     }
 }

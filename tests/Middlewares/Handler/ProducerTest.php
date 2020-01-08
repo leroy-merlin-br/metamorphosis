@@ -1,14 +1,15 @@
 <?php
 namespace Tests\Middlewares\Handler;
 
-use Metamorphosis\Connectors\Producer\Config;
+use Metamorphosis\Facades\Manager;
+use RdKafka\Producer as KafkaProducer;
+use RdKafka\ProducerTopic as KafkaTopicProducer;
 use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Record\ProducerRecord;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use Mockery as m;
-use RdKafka\ProducerTopic;
 use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase
@@ -17,57 +18,41 @@ class ProducerTest extends LaravelTestCase
     {
         parent::setUp();
 
-        config([
-            'kafka' => [
-                'brokers' => [
-                    'default' => [
-                        'connections' => '',
-                        'auth' => [],
-                    ],
-                ],
-                'topics' => [
-                    'topic_key' => [
-                        'topic_id' => 'topic_name',
-                        'broker' => 'default',
-                    ],
-                ],
-            ],
+        Manager::set([
+            'topic_id' => 'topic_name',
+            'timeout' => 4000,
         ]);
     }
 
     public function testItShouldProcess(): void
     {
         // Set
-        $config = m::mock(Config::class);
         $handler = m::mock(HandlerInterface::class);
         $middlewareHandler = m::mock(MiddlewareHandlerInterface::class);
-        $producerTopic = m::mock(ProducerTopic::class);
-        $connector = $this->app->instance(Connector::class, m::mock(Connector::class));
-
-        $producerHandler = new Producer($connector, $config);
-        $producerHandler->setProducerHandler($handler);
+        $kafkaProducer = m::mock(KafkaProducer::class);
+        $producerTopic = m::mock(KafkaTopicProducer::class);
+        $connector = m::mock(Connector::class);
 
         $record = json_encode(['message' => 'original record']);
         $record = new ProducerRecord($record, 'topic_key');
 
         // Expectations
-        $config->expects()
-            ->setOption('topic_key');
-
         $connector->expects()
-            ->setHandler($handler);
+            ->getProducerTopic($handler)
+            ->andReturn($kafkaProducer);
 
-        $connector->expects()
-            ->getProducerTopic()
+        $kafkaProducer->expects()
+            ->newTopic('topic_name')
             ->andReturn($producerTopic);
 
-        $connector->expects()
-            ->handleResponsesFromBroker();
+        $kafkaProducer->expects()
+            ->flush(4000);
 
         $producerTopic->expects()
             ->produce(null, 0, $record->getPayload(), null);
 
         // Actions
+        $producerHandler = new Producer($connector, $handler);
         $producerHandler->process($record, $middlewareHandler);
     }
 }

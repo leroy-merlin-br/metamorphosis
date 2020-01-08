@@ -33,7 +33,7 @@ class Producer implements MiddlewareInterface
         $this->connector = $connector;
         $this->producerHandler = $producerHandler;
 
-        $this->producer = $this->connector->getProducerTopic($this->producerHandler);
+        $this->producer = $this->connector->getProducerTopic($producerHandler);
         $this->topic = $this->producer->newTopic(Manager::get('topic_id'));
     }
 

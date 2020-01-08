@@ -3,7 +3,6 @@ namespace Metamorphosis\TopicHandler\Consumer;
 
 use Exception;
 use Metamorphosis\Exceptions\ResponseWarningException;
-use Metamorphosis\Record\ProducerRecord;
 
 abstract class AbstractHandler implements Handler
 {

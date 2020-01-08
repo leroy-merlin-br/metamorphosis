@@ -1,15 +1,15 @@
 <?php
 namespace Tests\Middlewares\Handler;
 
-use Metamorphosis\Facades\Manager;
-use RdKafka\Producer as KafkaProducer;
-use RdKafka\ProducerTopic as KafkaTopicProducer;
 use Metamorphosis\Connectors\Producer\Connector;
+use Metamorphosis\Facades\Manager;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Record\ProducerRecord;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use Mockery as m;
+use RdKafka\Producer as KafkaProducer;
+use RdKafka\ProducerTopic as KafkaTopicProducer;
 use RuntimeException;
 use Tests\LaravelTestCase;
 

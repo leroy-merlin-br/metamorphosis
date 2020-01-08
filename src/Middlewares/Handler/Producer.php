@@ -29,6 +29,9 @@ class Producer implements MiddlewareInterface
      */
     private $producer;
 
+    /**
+     * @var int
+     */
     private $processMessageCount = 0;
 
     public function __construct(Connector $connector, HandlerInterface $producerHandler)
@@ -61,7 +64,7 @@ class Producer implements MiddlewareInterface
             return;
         }
 
-        if ($this->processMessageCount % self::MAX_POLL_RECORDS === 0) {
+        if (0 === ($this->processMessageCount % self::MAX_POLL_RECORDS)) {
             $this->pollResponse();
         }
     }

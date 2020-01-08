@@ -43,15 +43,35 @@ class Producer implements MiddlewareInterface
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
         $this->topic->produce($record->getPartition(), 0, $record->getPayload(), $record->getKey());
+        $this->handleResponse();
+    }
+
+    public function __destruct()
+    {
+        $this->flushMessage();
+    }
+
+    private function handleResponse(): void
+    {
         $this->processMessageCount++;
+
+        if (Manager::get('isAsync')) {
+            $this->flushMessage();
+
+            return;
+        }
 
         if ($this->processMessageCount % self::MAX_POLL_RECORDS === 0) {
             $this->pollResponse();
         }
     }
 
-    public function __destruct()
+    private function flushMessage(): void
     {
+        if (!Manager::get('requiredAcknowledgment')) {
+            return;
+        }
+
         for ($flushAttempts = 0; $flushAttempts < self::FLUSH_ATTEMPTS; $flushAttempts++) {
             $result = $this->producer->flush(Manager::get('timeout'));
             if (RD_KAFKA_RESP_ERR_NO_ERROR === $result) {
@@ -62,7 +82,7 @@ class Producer implements MiddlewareInterface
         throw new RuntimeException('Was unable to flush, messages might be lost!');
     }
 
-    public function pollResponse(): void
+    private function pollResponse(): void
     {
         while ($this->producer->getOutQLen() > 0) {
             $this->producer->poll(Manager::get('timeout'));

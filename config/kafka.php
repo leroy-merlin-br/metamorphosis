@@ -95,8 +95,8 @@ return [
             ],
         ],
         'producer' => [
-            'requiredAcknowledgment' => 1,
-            'isASync' => false,
+            'requiredAcknowledgment' => true,
+            'isASync' => true,
             'middlewares' => [],
             'timeout_responses' => 50,
         ],

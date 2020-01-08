@@ -22,6 +22,10 @@ class ProducerTest extends LaravelTestCase
         Manager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
+            'isAsync' => false,
+            'maxPollRecords' => 500,
+            'flushAttempts' => 10,
+            'requiredAcknowledgment' => true,
         ]);
     }
 
@@ -81,7 +85,7 @@ class ProducerTest extends LaravelTestCase
 
         $kafkaProducer->expects()
             ->flush(4000)
-            ->times(Producer::FLUSH_ATTEMPTS)
+            ->times(10)
             ->andReturn('error');
 
         $producerTopic->expects()
@@ -91,6 +95,146 @@ class ProducerTest extends LaravelTestCase
 
         // Actions
         $producerHandler = new Producer($connector, $handler);
+        $producerHandler->process($record, $middlewareHandler);
+    }
+
+    public function testItShouldSendMessageToKafkaBrokerWithoutAcknowledgment(): void
+    {
+        // Set
+        Manager::set([
+            'topic_id' => 'topic_name',
+            'timeout' => 4000,
+            'isAsync' => false,
+            'maxPollRecords' => 500,
+            'flushAttempts' => 10,
+            'requiredAcknowledgment' => false,
+        ]);
+
+        $handler = m::mock(HandlerInterface::class);
+        $middlewareHandler = m::mock(MiddlewareHandlerInterface::class);
+        $kafkaProducer = m::mock(KafkaProducer::class);
+        $producerTopic = m::mock(KafkaTopicProducer::class);
+        $connector = m::mock(Connector::class);
+
+        $record = json_encode(['message' => 'original record']);
+        $record = new ProducerRecord($record, 'topic_key');
+
+        // Expectations
+        $connector->expects()
+            ->getProducerTopic($handler)
+            ->andReturn($kafkaProducer);
+
+        $kafkaProducer->expects()
+            ->newTopic('topic_name')
+            ->andReturn($producerTopic);
+
+        $kafkaProducer->shouldReceive('flush')
+            ->never();
+
+        $producerTopic->expects()
+            ->produce(null, 0, $record->getPayload(), null);
+
+        // Actions
+        $producerHandler = new Producer($connector, $handler);
+        $producerHandler->process($record, $middlewareHandler);
+    }
+
+    public function testItShouldPollBrokerResponseEveryMaxPollRecordsIsReached(): void
+    {
+        // Set
+        Manager::set([
+            'topic_id' => 'topic_name',
+            'timeout' => 4000,
+            'isAsync' => false,
+            'maxPollRecords' => 2,
+            'flushAttempts' => 1,
+            'requiredAcknowledgment' => false,
+        ]);
+
+        $handler = m::mock(HandlerInterface::class);
+        $middlewareHandler = m::mock(MiddlewareHandlerInterface::class);
+        $kafkaProducer = m::mock(KafkaProducer::class);
+        $producerTopic = m::mock(KafkaTopicProducer::class);
+        $connector = m::mock(Connector::class);
+
+        $record = json_encode(['message' => 'original record']);
+        $record = new ProducerRecord($record, 'topic_key');
+
+        // Expectations
+        $connector->expects()
+            ->getProducerTopic($handler)
+            ->andReturn($kafkaProducer);
+
+        $kafkaProducer->expects()
+            ->newTopic('topic_name')
+            ->andReturn($producerTopic);
+
+        $kafkaProducer->shouldReceive('flush')
+            ->never();
+
+        $kafkaProducer->expects()
+            ->getOutQLen()
+            ->andReturn(1);
+
+        $kafkaProducer->expects()
+            ->getOutQLen()
+            ->andReturn(0);
+
+        $kafkaProducer->expects()
+            ->poll(4000);
+
+        $producerTopic->expects()
+            ->produce(null, 0, $record->getPayload(), null)
+            ->twice();
+
+        // Actions
+        $producerHandler = new Producer($connector, $handler);
+        $producerHandler->process($record, $middlewareHandler);
+        $producerHandler->process($record, $middlewareHandler);
+    }
+
+    public function testItShouldHandleResponseEveryTimeWhenAsyncModeIsTrue(): void
+    {
+        // Set
+        Manager::set([
+            'topic_id' => 'topic_name',
+            'timeout' => 4000,
+            'isAsync' => true,
+            'maxPollRecords' => 500,
+            'flushAttempts' => 10,
+            'requiredAcknowledgment' => true,
+        ]);
+
+        $handler = m::mock(HandlerInterface::class);
+        $middlewareHandler = m::mock(MiddlewareHandlerInterface::class);
+        $kafkaProducer = m::mock(KafkaProducer::class);
+        $producerTopic = m::mock(KafkaTopicProducer::class);
+        $connector = m::mock(Connector::class);
+
+        $record = json_encode(['message' => 'original record']);
+        $record = new ProducerRecord($record, 'topic_key');
+
+        // Expectations
+        $connector->expects()
+            ->getProducerTopic($handler)
+            ->andReturn($kafkaProducer);
+
+        $kafkaProducer->expects()
+            ->newTopic('topic_name')
+            ->andReturn($producerTopic);
+
+        $kafkaProducer->expects()
+            ->flush(4000)
+            ->times(3)
+            ->andReturn(RD_KAFKA_RESP_ERR_NO_ERROR);
+
+        $producerTopic->expects()
+            ->produce(null, 0, $record->getPayload(), null)
+            ->twice();
+
+        // Actions
+        $producerHandler = new Producer($connector, $handler);
+        $producerHandler->process($record, $middlewareHandler);
         $producerHandler->process($record, $middlewareHandler);
     }
 }

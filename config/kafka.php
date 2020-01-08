@@ -97,6 +97,8 @@ return [
         'producer' => [
             'requiredAcknowledgment' => true,
             'isASync' => true,
+            'maxPollRecords' => 500,
+            'flushAttempts' => 10,
             'middlewares' => [],
             'timeout_responses' => 50,
         ],

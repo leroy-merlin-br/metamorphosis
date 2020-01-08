@@ -10,10 +10,6 @@ use RuntimeException;
 
 class Producer implements MiddlewareInterface
 {
-    const MAX_POLL_RECORDS = 500;
-
-    const FLUSH_ATTEMPTS = 10;
-
     /**
      * @var Connector
      */
@@ -64,7 +60,7 @@ class Producer implements MiddlewareInterface
             return;
         }
 
-        if (0 === ($this->processMessageCount % self::MAX_POLL_RECORDS)) {
+        if (0 === ($this->processMessageCount % Manager::get('maxPollRecords'))) {
             $this->pollResponse();
         }
     }
@@ -75,7 +71,7 @@ class Producer implements MiddlewareInterface
             return;
         }
 
-        for ($flushAttempts = 0; $flushAttempts < self::FLUSH_ATTEMPTS; $flushAttempts++) {
+        for ($flushAttempts = 0; $flushAttempts < Manager::get('flushAttempts'); $flushAttempts++) {
             $result = $this->producer->flush(Manager::get('timeout'));
             if (RD_KAFKA_RESP_ERR_NO_ERROR === $result) {
                 return;

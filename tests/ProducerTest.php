@@ -1,7 +1,9 @@
 <?php
 namespace Tests;
 
+use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Exceptions\JsonException;
+use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
@@ -17,7 +19,7 @@ class ProducerTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'connections' => '',
+                        'connections' => 'kafka:9092',
                         'auth' => [],
                     ],
                 ],
@@ -40,6 +42,7 @@ class ProducerTest extends LaravelTestCase
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)
         );
+        $config = $this->app->make(Config::class);
 
         $producerHandler = new class($record, $topic) extends AbstractHandler {
             public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
@@ -48,12 +51,9 @@ class ProducerTest extends LaravelTestCase
                 $this->topic = $topic;
             }
         };
-        $producer = new Producer();
+        $producer = new Producer($config);
 
         // Expectations
-        $producerMiddleware->expects()
-            ->setProducerHandler($producerHandler);
-
         $producerMiddleware->expects()
             ->process()
             ->withAnyArgs();
@@ -67,11 +67,12 @@ class ProducerTest extends LaravelTestCase
         // Set
         $record = json_encode(['message' => 'some message']);
         $topic = 'some_topic';
-        $producerMiddleware = $this->app->instance(
+        $producerMiddleware = $this->instance(
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)
         );
-        $producer = new Producer();
+        $config = $this->app->make(Config::class);
+        $producer = new Producer($config);
         $producerHandler = new class($record, $topic) extends AbstractHandler {
             public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
             {
@@ -81,9 +82,6 @@ class ProducerTest extends LaravelTestCase
         };
 
         // Expectations
-        $producerMiddleware->expects()
-            ->setProducerHandler($producerHandler);
-
         $producerMiddleware->expects()
             ->process()
             ->withAnyArgs();
@@ -104,7 +102,8 @@ class ProducerTest extends LaravelTestCase
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)
         );
-        $producer = new Producer();
+        $config = $this->app->make(Config::class);
+        $producer = new Producer($config);
         $producerHandler = new class($record, $topic) extends AbstractHandler {
             public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
             {
@@ -115,9 +114,6 @@ class ProducerTest extends LaravelTestCase
 
         // Expectations
         $producerMiddleware->expects()
-            ->setProducerHandler($producerHandler);
-
-        $producerMiddleware->expects()
             ->process()
             ->never();
 
@@ -125,5 +121,31 @@ class ProducerTest extends LaravelTestCase
 
         // Actions
         $producer->produce($producerHandler);
+    }
+
+    public function testShouldBuildDispacther(): void
+    {
+        // Set
+        $record = json_encode(['message' => 'some message']);
+        $topic = 'some_topic';
+        $config = $this->instance(Config::class, m::mock(Config::class));
+        $producer = new Producer($config);
+        $producerHandler = new class($record, $topic) extends AbstractHandler {
+            public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
+            {
+                $this->record = $record;
+                $this->topic = $topic;
+            }
+        };
+
+        // Expectations
+        $config->expects()
+            ->setOption('some_topic');
+
+        // Actions
+        $result = $producer->build($producerHandler);
+
+        // Assertions
+        $this->assertInstanceOf(Dispatcher::class, $result);
     }
 }

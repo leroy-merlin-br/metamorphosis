@@ -3,8 +3,8 @@ namespace Metamorphosis\Connectors\Producer;
 
 use Metamorphosis\Authentication\Factory;
 use Metamorphosis\Facades\Manager;
-use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
+use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use RdKafka\Conf;
 use RdKafka\Message;
 use RdKafka\Producer as KafkaProducer;

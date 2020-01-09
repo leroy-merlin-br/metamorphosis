@@ -22,9 +22,10 @@
 <a name="introduction"></a>
 ## Introduction
 
-Metamorphosis provides a simple, straight-forward implementation for working with Kafka inside Laravel applications.
+**Metamorphosis** provides a simple, straight-forward implementation for working with Kafka inside Laravel applications.
 
-Prefer to read in other language? [Português](readme.pt.md) 
+Prefer to read in other language?
+- [Português](readme.pt.md)
 
 <a name="requirements"></a>
 ## Requirements
@@ -56,9 +57,9 @@ For usage instructions, please refer to our [Quick Usage Guide](docs/quick-usage
 <a name="license"></a>
 ## License
 
-Metamorphosis is free software distributed under the terms of the [MIT license](http://opensource.org/licenses/MIT)
+**Metamorphosis** is free software distributed under the terms of the [MIT license](http://opensource.org/licenses/MIT)
 
 <a name="additional_information"></a>
 ## Additional information
 
-Metamorphosis was proudly built by the [Leroy Merlin Brazil](https://github.com/leroy-merlin-br) team. [See all the contributors](https://github.com/leroy-merlin-br/metamorphosis/graphs/contributors).
+**Metamorphosis** was proudly built by the [Leroy Merlin Brazil](https://github.com/leroy-merlin-br) team. [See all the contributors](https://github.com/leroy-merlin-br/metamorphosis/graphs/contributors).

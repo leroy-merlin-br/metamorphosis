@@ -19,20 +19,20 @@ class ConfigTest extends LaravelTestCase
         ];
         $arguments = [
             'topic' => 'default',
-            'consumer_group' => 'default',
+            'consumer_group' => 'test-consumer-group',
         ];
 
         $expected = [
             'topic' => 'default',
-            'topic_id' => 'SOME-TOPIC-KAFKA-ID',
+            'topic_id' => 'kafka-test',
             'broker' => 'default',
             'offset_reset' => 'largest',
             'offset' => 0,
             'partition' => 0,
             'handler' => '\App\Kafka\Consumers\ConsumerExample',
             'timeout' => 20000,
-            'consumer_group' => 'default',
-            'connections' => 'kafka:6680',
+            'consumer_group' => 'test-consumer-group',
+            'connections' => 'kafka:9092',
             'auth' => [
                 'type' => 'ssl',
                 'ca' => storage_path('ca.pem'),

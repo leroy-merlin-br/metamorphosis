@@ -1,6 +1,8 @@
 <?php
 namespace Metamorphosis\TopicHandler\Producer;
 
+use Metamorphosis\Record\ProducerRecord;
+
 interface HandlerInterface
 {
     /**
@@ -24,4 +26,6 @@ interface HandlerInterface
     public function getPartition(): ?int;
 
     public function getKey(): ?string;
+
+    public function createRecord(): ProducerRecord;
 }

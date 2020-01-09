@@ -93,10 +93,14 @@ return [
                     'middlewares' => [],
                 ],
             ],
-            'producer' => [
-                'middlewares' => [],
-                'timeout_responses' => 50,
-            ],
+        ],
+        'producer' => [
+            'broker' => 'default',
+            'required_acknowledgment' => true,
+            'is_async' => true,
+            'max_poll_records' => 500,
+            'flush_attempts' => 10,
+            'middlewares' => [],
         ],
     ],
 

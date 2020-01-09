@@ -30,8 +30,8 @@ class MetamorphosisServiceProvider extends ServiceProvider
             ProducerMakeCommand::class,
         ]);
 
-        $this->app->bind('metamorphosis', function () {
-            return new Producer();
+        $this->app->bind('metamorphosis', function ($app) {
+            return $app->make(Producer::class);
         });
 
         $this->app->singleton('manager', function () {

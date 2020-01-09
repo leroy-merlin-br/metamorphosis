@@ -78,6 +78,6 @@ class Producer implements MiddlewareInterface
             }
         }
 
-        throw new RuntimeException('Was unable to flush, messages might be lost!');
+        throw new RuntimeException('Unable to flush, messages might be lost!');
     }
 }

@@ -1,10 +1,12 @@
 version: '3.1'
 
 services:
-    php:
-      build: docker
-      volumes:
-        - .:/var/www/html:rw
+    app:
+        image: leroymerlinbr/web-app:beta
+        volumes:
+            - ./:/var/www/html
+            - ./.docker/logs/nginx:/var/log/nginx
+            - ./.docker/logs/laravel:/var/www/html/storage/logs
 
     zookeeper:
         image: 'bitnami/zookeeper:latest'

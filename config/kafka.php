@@ -37,7 +37,7 @@ return [
 
     'brokers' => [
         'default' => [
-            'connections' => 'kafka:6680',
+            'connections' => 'kafka:9092',
             'auth' => [
                 'type' => 'ssl', // ssl and none
                 'ca' => storage_path('ca.pem'),
@@ -82,10 +82,10 @@ return [
 
     'topics' => [
         'default' => [
-            'topic_id' => 'SOME-TOPIC-KAFKA-ID',
+            'topic_id' => 'kafka-test',
             'broker' => 'default',
             'consumer_groups' => [
-                'default' => [
+                'test-consumer-group' => [
                     'offset_reset' => 'largest',
                     'offset' => 0,
                     'handler' => '\App\Kafka\Consumers\ConsumerExample',
@@ -113,6 +113,7 @@ return [
     | consumed topic. Middlewares work between the received data from broker and
     | before being passed into consumers.
     | Available middlewares: log, avro-decode
+    |
     */
 
     'middlewares' => [

@@ -22,6 +22,17 @@ class Config extends AbstractConfig
         'middlewares' => 'array',
     ];
 
+    /**
+     * @var array
+     */
+    protected $default = [
+        'timeout' => 1000,
+        'is_async' => true,
+        'required_acknowledgment' => true,
+        'max_poll_records' => 500,
+        'flush_attempts' => 10,
+    ];
+
     public function setOption(string $topicId): void
     {
         $topicConfig = $this->getTopicConfig($topicId);
@@ -33,6 +44,7 @@ class Config extends AbstractConfig
         $config = array_merge($topicConfig, $brokerConfig);
 
         $this->validate($config);
+        $config = array_merge($this->default, $config);
         $this->setConfigRuntime($config);
     }
 

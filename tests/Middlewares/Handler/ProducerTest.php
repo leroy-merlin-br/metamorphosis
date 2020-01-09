@@ -172,9 +172,6 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer->shouldReceive('flush')
             ->never();
 
-        $kafkaProducer->expects()
-            ->poll(4000);
-
         $producerTopic->expects()
             ->produce(null, 0, $record->getPayload(), null)
             ->twice();

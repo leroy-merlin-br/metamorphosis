@@ -61,7 +61,7 @@ class Producer implements MiddlewareInterface
         }
 
         if (0 === ($this->processMessageCount % Manager::get('max_poll_records'))) {
-            $this->pollResponse();
+            $this->flushMessage();
         }
     }
 
@@ -79,10 +79,5 @@ class Producer implements MiddlewareInterface
         }
 
         throw new RuntimeException('Was unable to flush, messages might be lost!');
-    }
-
-    private function pollResponse(): void
-    {
-        $this->producer->poll(Manager::get('timeout'));
     }
 }

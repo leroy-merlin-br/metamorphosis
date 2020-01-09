@@ -95,6 +95,7 @@ return [
             ],
         ],
         'producer' => [
+            'broker' => 'default',
             'required_acknowledgment' => true,
             'is_async' => true,
             'max_poll_records' => 500,

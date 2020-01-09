@@ -2,6 +2,7 @@
 namespace Tests\Integration;
 
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Metamorphosis\Facades\Metamorphosis;
 use Tests\Integration\Dummies\ProductConsumer;
 use Tests\Integration\Dummies\ProductHasChanged;
@@ -23,8 +24,12 @@ class ProducerTest extends LaravelTestCase
         $producer = app(ProductHasChanged::class, compact('record'));
 
         // Expectations
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage($record);
+        Log::shouldReceive('info')
+            ->withAnyArgs();
+
+        Log::shouldReceive('alert')
+            ->with($record)
+            ->twice();
 
         // Actions
         Metamorphosis::produce($producer);
@@ -33,6 +38,7 @@ class ProducerTest extends LaravelTestCase
             '--timeout' => 20000,
             '--offset' => 0,
             '--partition' => 0,
+            '--times' => 2,
         ]);
     }
 }

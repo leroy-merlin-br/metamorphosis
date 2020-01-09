@@ -4,6 +4,7 @@ namespace Tests\Integration\Dummies;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Metamorphosis\Exceptions\ResponseWarningException;
+use Metamorphosis\Facades\Manager;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
@@ -13,7 +14,7 @@ class ProductConsumer extends AbstractHandler
     {
         $priceUpdate = $record->getPayload();
 
-        throw new Exception($priceUpdate);
+        Log::alert($priceUpdate);
     }
 
     public function warning(ResponseWarningException $exception): void
@@ -28,7 +29,5 @@ class ProductConsumer extends AbstractHandler
         Log::error('Failed to handle kafka record for sku.', [
             'exception' => $exception,
         ]);
-
-        throw new Exception($exception);
     }
 }

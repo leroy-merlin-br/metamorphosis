@@ -37,6 +37,23 @@ class Runner
 
         $this->setMiddlewareDispatcher($handler, Manager::middlewares());
 
+        if ($times = Manager::get('times')) {
+            for ($i = 0; $i < $times; $i++) {
+                $response = $this->consumer->consume();
+
+                try {
+                    $record = app(ConsumerRecord::class, compact('response'));
+                    $this->middlewareDispatcher->handle($record);
+                } catch (ResponseWarningException $exception) {
+                    $handler->warning($exception);
+                } catch (Exception $exception) {
+                    $handler->failed($exception);
+                }
+            }
+
+            return;
+        }
+
         while (true) {
             $response = $this->consumer->consume();
 

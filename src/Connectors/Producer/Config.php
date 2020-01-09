@@ -14,6 +14,10 @@ class Config extends AbstractConfig
         'broker' => 'required',
         'connections' => 'required|string',
         'timeout' => 'int',
+        'is_async' => 'bool',
+        'required_acknowledgment' => 'bool',
+        'max_poll_records' => 'int',
+        'flush_attempts' => 'int',
         'auth' => 'array',
         'middlewares' => 'array',
     ];

@@ -173,14 +173,6 @@ class ProducerTest extends LaravelTestCase
             ->never();
 
         $kafkaProducer->expects()
-            ->getOutQLen()
-            ->andReturn(1);
-
-        $kafkaProducer->expects()
-            ->getOutQLen()
-            ->andReturn(0);
-
-        $kafkaProducer->expects()
             ->poll(4000);
 
         $producerTopic->expects()

@@ -83,8 +83,6 @@ class Producer implements MiddlewareInterface
 
     private function pollResponse(): void
     {
-        while ($this->producer->getOutQLen() > 0) {
-            $this->producer->poll(Manager::get('timeout'));
-        }
+        $this->producer->poll(Manager::get('timeout'));
     }
 }

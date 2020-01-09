@@ -93,6 +93,12 @@ return [
                     'middlewares' => [],
                 ],
             ],
+            'required_acknowledgment' => true,
+            'is_async' => true,
+            'max_poll_records' => 500,
+            'flush_attempts' => 10,
+            'middlewares' => [],
+            'timeout' => 20000,
         ],
         'producer' => [
             'broker' => 'default',

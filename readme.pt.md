@@ -52,7 +52,7 @@ Publique o arquivo de configuração básico:
 $ php artisan vendor:publish --provider="Metamorphosis\MetamorphosisServiceProvider"
 ```
 
-Para instruções de uso, dê uma olhada em nosso [Guia rápido](docs/quick-usage.md).
+Para instruções de uso, dê uma olhada em nosso [Guia rápido](docs/quick-usage.pt.md).
 
 <a name="license"></a>
 ## Licença

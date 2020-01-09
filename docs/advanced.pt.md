@@ -1,18 +1,18 @@
-## Advanced Guide
+## Guia Avançado
 
 - [Autenticação](#authentication)
 - [Middlewares](#middlewares)
 - [Brokers](#brokers)
 - [Schemas](#schemas)
-- [Commands](#commands)
+- [Comandos](#commands)
    - [Criando um Consumer](#commands-consumer)
    - [Criando um Middleware](#commands-middleware)
-   - [Rodando um Consumer](#commands-running-consumer)
+   - [Executando um Consumer](#commands-running-consumer)
         - [Parâmetros](#options)
 
 <a name="authentication"></a>
 ### Autenticação
-Você pode configurar que tipo de autenticação cada broker precisa para se conectar.
+Você pode configurar qual tipo de autenticação cada broker precisa para se conectar.
 
 Para isso, basta preencher a chave `auth` nas configurações do broker:
 
@@ -34,42 +34,41 @@ Para isso, basta preencher a chave `auth` nas configurações do broker:
   ],
 ```
 
-Se a chave `type` for configurada para `ssl`, ele ira fazer uma Autenticação SSL e você precisará fornecer alguns campos extras junto com o tipo.
+Se a chave `type` for configurada para `ssl`, uma **Autenticação SSL** será utilizada e você precisará fornecer alguns campos extras junto com o tipo.
 Os campos são: `ca` com o arquivo `ca.pem`, `certificate` com o arquivo `.cert` e `key` com o arquivo `.key`.
 
-Se um broker não precisa de nenhuma autenticação para se conectar, você pode deixar a chave `auth` com uma array vazia ou até mesmo deleta-la. 
+Se um broker não precisar de nenhuma autenticação para se conectar, você pode deixar a chave `auth` com uma *array* vazia ou até mesmo a omitir.
 
 ---
 
 <a name="middlewares"></a>
 ### Middlewares
 
-Middlewares work between the received data from broker and before being handled by consumers.
-Middlewares trabalham entre o dado recebido do Broker e retornam uma resposta para o Consumer.
+*Middlewares* trabalham entre o dado recebido do *broker* e antes de o mesmo ser manipulado pelos *consumers*.
 
-They behave similar to [PSR-15](https://www.php-fig.org/psr/psr-15/) middlewares. The main difference is that instead
-Eles se comportam parecido com os middlewares da [PSR-15](https://www.php-fig.org/psr/psr-15/). A principal diferença é que em vez
-de retornar uma `Response`, eles são usados para transformar, validar ou qualquer outra manipulação no payload.
-Depois disso, eles delegam o processo devolta para o `MiddlewareHandler`. Eles podem evitar o dado chegar ao consumer lançando Exceptions no código.
+Eles se comportam de modo similar aos [PSR-15](https://www.php-fig.org/psr/psr-15/) *middlewares*. A principal diferença é que ao invés de retornar uma `Response`, eles são usados para transformar, validar ou fazer qualquer tipo de manipulação no `payload` do registro.
 
-Essa library vem com alguns middlewares:
+Depois disso, o processo é delegado de volta para o `MiddlewareHandler`. Pode-se evitar que o dado chegue ao *consumer* lançando uma `Exception`.
+
+Essa biblioteca vem com os seguintes *middlewares*:
 
 - `\Metamorphosis\Middlewares\JsonDecode`
 - `\Metamorphosis\Middlewares\Log`
 - `\Metamorphosis\Middlewares\AvroSchemaDecoder`
 
-Você pode criar seu próprio middleware usando o comando `php artisan make:kafka-middleware`.
+Você pode criar o seu próprio *middleware* usando o comando `php artisan make:kafka-middleware`.
 
 Exemplo:
 
-Vamos supor que todas as mensagens que você consome do Kafka são json serializados. Você pode usar um middleware to desserializa-los.
-Para criar o comando basta digitar:
+Vamos supor que todas as mensagens que você consome do Kafka são formatados em `JSON`. Você pode usar um *middleware* para decodificá-las.
+
+Para criar o comando, basta executar:
 
 ```bash
 $ php artisan make:kafka-middleware JsonDeserializer
 ```
 
-O comando será criado no diretório `app/Kafka/Middlewares` e será parecido com isso:
+O comando criará uma classe em `app/Kafka/Middlewares` parecida com o seguinte:
 
 ```php
 <?php
@@ -91,7 +90,7 @@ class JsonDeserializer implements MiddlewareInterface
 
 ```
 
-Você pode sobrescrever o payload chamando `$record->setPayload()`:
+Você pode sobrescrever o conteúdo do `payload` chamando `$record->setPayload()`:
 
 ```php
 public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
@@ -104,7 +103,7 @@ public function process(RecordInterface $record, MiddlewareHandlerInterface $han
 }
 ```
 
-Então, você pode configurar seu novo middleware para ser executado para todas as mensagens adcionando-o no arquivo de configuração `config/kafka.php`:
+Então, você poderá configurar seu novo *middleware* para ser executado para todas as mensagens, adicionando-o no arquivo de configuração `config/kafka.php`:
 
 ```php
 // ...
@@ -117,7 +116,7 @@ Então, você pode configurar seu novo middleware para ser executado para todas 
 // ...
 ```
 
-Se preferir, você pode configurar o middleware para rodar a nível de tópico ou a nível de consumer group:
+Se preferir, você pode configurar o *middleware* para rodar no nível do tópico ou no nível do *consumer group*:
 
 ```php
 'topics' => [
@@ -140,20 +139,16 @@ Se preferir, você pode configurar o middleware para rodar a nível de tópico o
 ],
 ```
 
-The order matters here, they'll be execute as queue, from the most global scope to the most specific .
-A ordem importa aqui, eles serão executados como uma fila, para o escopo mais global, até o mais específico (escopo global > escopo de tópico > escopo de consumers_group)
-
+A ordem é importante aqui: os *middlewares* serão executados como uma fila, do escopo mais geral para o mais específico (escopo global > escopo de tópico > escopo de *group_consumers*).
 
 <a name="schemas"></a>
 ### Schemas
-When using Avro decoder middleware, you may have to request an API to get the Avro Schema in order to handle
-the encoded message received.
 
-A Schema is basically an Avro template telling us how to handle a record received. It will be used both to
-receive and produce a message.
+Quando estiver usando o *middleware* **Avro decoder**, você deverá executar uma API para obter o `Avro Scheme`, de modo a tratar a mensagem codificada recebida.
 
-As a schema may have a different authentication than a broker, to provide flexibility on how to handle the authentication, we created a `request_options` key on config.
-This field will be constructed along with the GuzzleHttp library. So Any options here will be injected on GuzzleHttp.
+Um *Schema* é basicamente um *template* Avro, indicando como manipular o registro recebido. Isso deve ser usado tanto para consumir quanto para produzir a mensagem.
+
+Como um *Schema* pode ter uma forma de autenticação diferente do `brocker`, para fornecer flexibilidade em como manipular a autenticação, nós criamos uma chave `request_options` na configuração. Este campo será utilizado através da biblioteca `GuzzleHttp`. Então, quaisquer opções aqui serão enviadas para o `GuzzleHttp`.
 
 ```php
 'avro_schemas' => [
@@ -173,22 +168,28 @@ This field will be constructed along with the GuzzleHttp library. So Any options
 ```
 
 <a name="commands"></a>
-### Commands
-There's a few commands to help automate the creation of classes and to run the consumer.
+### Comandos
+
+Há alguns comandos para ajudar a automatizar a criação de classes e para executar o *consumer*.
 
 <a name="commands-consumer"></a>
 #### Criando um Consumer
-You can create a consumer class, that will handle all records received from the topic using the follow command:
+
+Voce pode criar uma classe *consumer*, que irá manipular todos os registros recebidos do tópico, usando o seguinte comando:
+
 ```bash
 $ php artisan make:kafka-consumer PriceUpdateHandler
 ```
-This will create a KafkaConsumer class inside the application, on the `app/Kafka/Consumers/` directory.
 
-There, you'll have a `handler` method, which will send all records from the topic to the Consumer.
-Methods will be available for handling exceptions:
- - `warning` method will be call whenever something not critical is received from the topic.
-    Like a message informing that there's no more records to consume.
- - `failure` method will be call whenever something critical happens, like an error to decode the record.
+Isto irá criar uma classe `KafkaConsumer` dentro da aplicação, no diretório `app/Kafka/Consumers/`.
+
+Nela, haverá um método `handler`, para o qual serão enviados todos os registros do tópico para o `Consumer`.
+
+Métodos estão disponíveis para manipular exceções:
+
+- `warning`: este método será chamado toda vez que algo não crítico for recebido do tópico.
+    Como, por exemplo, uma mensagem informando que não há mais registros para serem consumidos.
+- `failure`: este método será executado toda vez que algo crítico ocorrer. Por exemplo, um erro na decodificação do registro.
 
 ```php
 use App\Repository;
@@ -240,29 +241,30 @@ class PriceUpdateHandler extends AbstractHandler
 
 <a name="commands-middleware"></a>
 #### Criando um Middleware
-You can create a middleware class, that works between the received data from broker and before being passed into consumers, using the follow command:
+
+Você pode criar uma classe *middleware*, que trabalhará entre os dados recebidos do *broker* e antes dos mesmos serem transmitidos para os *consumers*, usando o seguinte comando:
 
 ```bash
 $ php artisan make:kafka-middleware PriceTransformerMiddleware
 ```
 
-This will create a PriceTransformerMiddleware class inside the application, on the `app/Kafka/Middlewares/` directory.
-You can configure this inside the `config/kafka.php` file, putting in one of the three levels, depending on how generic or specific is the middleware.
+Este comando criará uma classe `PriceTransformerMiddleware` dentro da aplicação, no diretório `app/Kafka/Middlewares/`.
+Você pode configurar seu uso no arquivo `config/kafka.php`, colocando-o em um dos três níveis, dependendo de quão genérico ou específico é o *middleware*.
 
-For more details about middlewares, see [this section](#middlewares).
+Para mais detalhes sobre *middlewares*, veja [this section](#middlewares).
 
 <a name="commands-running-consumer"></a>
 #### Rodando um Consumer
-This command serves to start consuming from kafka and receiving data inside your consumer.
-The most basic usage it's by just using the follow command:
+Este comando serve para iniciar o consumo do kafka e o recebimento dos dados pelos seus `consumers`.
+O uso mais básico é obtido com o comando a seguir:
 
 ```bash
 $ php artisan kafka:consume price-update
 ```
 
-This command will run in a `while true`, that means, it will never stop running.
-But, errors can happen, so we strongly advice you to run this command along with [supervisor](http://supervisord.org/running.html),
-like this example below:
+Este comando irá ser executado em um laço `while true`, isto é, ele não irá parar a execução por conta própria.
+Mas, erros podem ocorrer, então, nós recomendamos fortemente que você execute este comando junto com o [supervisor](http://supervisord.org/running.html), como no exemplo a seguir:
+
 ```bash
 [program:kafka-consumer-price-update]
 process_name=%(program_name)s_%(process_num)02d
@@ -277,31 +279,30 @@ stdout_logfile=/var/log/default/kafka-consumer-price-update.log
 
 ##### Parâmetros
 
-Although you can run this simple command, it provides some options you can pass to make it more flexible to your needs.
+Embora você possa executar este comando simples, ele provê algumas opções que você pode informar para torná-lo mais adequado às suas necessidades.
 
 - `--broker=`
 
-    Sometimes, you may want to change which broker the consumer should connect to (maybe for testing/debug purposes).
-    For that, you just nedd to call the `--broker` option with another broker connection key already set in the `config/kafka.php` file.
-    
+    Algumas vezes, você pode querer indicar ao qual *broker* o *consumer* deverá se conectar (talvez, para fins de teste ou depuração).
+    Para isso, você precisa somente executar o comando com a opção `--broker`, indicando outra chave de conexão que esteja configurada no arquivo `config/kafka.php`.
+
     `$ php artisan kafka:consume price-update --broker='some-other-broker'`
 
 - `--offset=`
 
-    And if you need to start the consumption of a topic in a specific offset (it can be useful for debug purposes)
-    you can pass the `--offset=` option, but for this, it will be required to specify the partition too.
-    
+    E se você precisar iniciar o consumo de um tópico em um ponto específico (isto pode ser útil para fins de depuração), você pode passar a opção `--offset=`. Mas, nesse caso, será necessário também indicar a partição.
+
     `$ php artisan kafka:consume price-update --partition=2 --offset=34`
 
 - `--partition=`
 
-    If you wish do specify in which partition the consumer must be attached, you can set the option `--partition=`.
-    
+    Se você desejar especificar em qual partição o `consumer` deve ser anexado, você pode definir a opção `--partition=`.
+
     `$ php artisan kafka:consume price-update --partition=2 --offset=34`
 
 - `--timeout=`
 
-   You can specify what would be the timeout for the consumer, by using the `--timeout=` option, the time is in milliseconds.
+   Você pode especificar qual o tempo limite de execução do `consumer`, através da opção `--timeout=`. O tempo deve estar em milissegundos.
 
    `$ php artisan kafka:consume price-update --timeout=23000`
 

@@ -1,6 +1,6 @@
 # Metamorphosis
 
-> Uma simples e flexível biblioteca para Laravel e PHP 7.
+> Uma biblioteca Kafka simples e flexível para Laravel e PHP 7.
 
 ![Metamorphosis](./docs/logo.png)
 
@@ -22,21 +22,22 @@
 <a name="introduction"></a>
 ## Introdução
 
-Metamorphosis fornece uma simples e prática implementação para trabalhar com Kafka em aplicações Laravel.
+**Metamorphosis** fornece uma implementação simples e prática para trabalhar com Kafka, em aplicações Laravel.
 
-Prefere ler em outra linguagem? [English](readme.md) 
+Prefere ler em outro idioma?
+- [English](readme.md)
 
 <a name="requirements"></a>
 ## Requisitos
 
 - PHP >= 7.1
-- [Kafka Driver](https://github.com/edenhill/librdkafka)
+- [Driver Kafka](https://github.com/edenhill/librdkafka)
 - [Extensão do Kafka PHP](https://github.com/arnaud-lb/php-rdkafka)
 
 <a name="installation"></a>
 ## Instalação
 
-**Importante:** *Certifiquese de que você já tenha os drivers e a extensão php instalados para o kafka.*
+**Importante:** *Certifique-se de que você já tenha os drivers e a extensão php instalados para o Kafka.*
 
 
 Instalando pelo Composer:
@@ -56,9 +57,9 @@ Para instruções de uso, dê uma olhada em nosso [Guia rápido](docs/quick-usag
 <a name="license"></a>
 ## Licença
 
-Metamorphosis é um software livre distribuído pelos termos [MIT license](http://opensource.org/licenses/MIT)
+**Metamorphosis** é um software livre distribuído pelos termos [MIT license](http://opensource.org/licenses/MIT)
 
 <a name="additional_information"></a>
-## Informações Adicionais
+## Informações adicionais
 
-Metamorphosis foi orgulhosamente desenvolvido por [Leroy Merlin Brazil](https://github.com/leroy-merlin-br) team. [See all the contributors](https://github.com/leroy-merlin-br/metamorphosis/graphs/contributors).
+**Metamorphosis** foi orgulhosamente desenvolvido pelo time [Leroy Merlin Brazil](https://github.com/leroy-merlin-br). [Veja todos os colaboradores](https://github.com/leroy-merlin-br/metamorphosis/graphs/contributors).

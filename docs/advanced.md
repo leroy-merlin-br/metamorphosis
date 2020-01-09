@@ -141,6 +141,7 @@ The order matters here, they'll be execute as queue, from the most global scope 
 
 <a name="schemas"></a>
 ### Schemas
+
 When using Avro decoder middleware, you may have to request an API to get the Avro Schema in order to handle
 the encoded message received.
 
@@ -278,20 +279,20 @@ Although you can run this simple command, it provides some options you can pass 
 
     Sometimes, you may want to change which broker the consumer should connect to (maybe for testing/debug purposes).
     For that, you just nedd to call the `--broker` option with another broker connection key already set in the `config/kafka.php` file.
-    
+
     `$ php artisan kafka:consume price-update --broker='some-other-broker'`
 
 - `--offset=`
 
     And if you need to start the consumption of a topic in a specific offset (it can be useful for debug purposes)
     you can pass the `--offset=` option, but for this, it will be required to specify the partition too.
-    
+
     `$ php artisan kafka:consume price-update --partition=2 --offset=34`
 
 - `--partition=`
 
     If you wish do specify in which partition the consumer must be attached, you can set the option `--partition=`.
-    
+
     `$ php artisan kafka:consume price-update --partition=2 --offset=34`
 
 - `--timeout=`

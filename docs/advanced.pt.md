@@ -29,7 +29,7 @@ Para isso, basta preencher a chave `auth` nas configurações do broker:
       ],
       'stock_brokers' => [
           'connections' => ['localhost:8091', 'localhost:8092'],
-          'auth' => [], // can be an empty array or even don't have this key in the broker config
+          'auth' => [], // pode ser um array vazio ou não adicionar essa chave na configuração do broker
       ],
   ],
 ```
@@ -82,7 +82,7 @@ class JsonDeserializer implements MiddlewareInterface
 {
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
-        // Here you can manipulate your record before handle it in your consumer
+        // Aqui você manipular seu record antes lidar com isso no seu consumer
 
         $handler->handle($record);
     }

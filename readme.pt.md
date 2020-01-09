@@ -13,7 +13,7 @@
 - [Introdução](#introduction)
 - [Requisitos](#requirements)
 - [Instalação](#installation)
-- [Guia rápido](docs/quick-usage.md)
+- [Guia rápido](docs/quick-usage.pt.md)
 - [Guia avançado](docs/advanced.pt.md)
 - [Como contribuir](docs/CONTRIBUTING.pt.md)
 - [Licença](#license)

@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Integration;
 
-use Exception;
 use Illuminate\Support\Facades\Log;
 use Metamorphosis\Facades\Metamorphosis;
 use Tests\Integration\Dummies\ProductConsumer;
@@ -124,16 +123,6 @@ class ProducerTest extends LaravelTestCase
         return $record;
     }
 
-    private function myMessagesHaveBeenLogged(string $recordMessage): void
-    {
-        Log::shouldReceive('info')
-            ->withAnyArgs();
-
-        Log::shouldReceive('alert')
-            ->with($recordMessage)
-            ->twice();
-    }
-
     private function haveTwoMessagesProducedBefore(string $recordMessage): void
     {
         $this->produceRecordMessage($recordMessage);
@@ -157,6 +146,21 @@ class ProducerTest extends LaravelTestCase
 
     private function mySecondMessageHaveBeenLogged(string $secondMessage): void
     {
-        $this->myMessagesHaveBeenLogged($secondMessage);
+        $this->setLogExpectationsFor($secondMessage);
+    }
+
+    private function myMessagesHaveBeenLogged(string $recordMessage): void
+    {
+        $this->setLogExpectationsFor($recordMessage);
+    }
+
+    private function setLogExpectationsFor(string $message): void
+    {
+        Log::shouldReceive('info')
+            ->withAnyArgs();
+
+        Log::shouldReceive('alert')
+            ->with($message)
+            ->twice();
     }
 }

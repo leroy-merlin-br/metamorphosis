@@ -26,7 +26,7 @@ class ConfigTest extends LaravelTestCase
             'topic' => 'default',
             'topic_id' => 'kafka-test',
             'broker' => 'default',
-            'offset_reset' => 'largest',
+            'offset_reset' => 'earliest',
             'offset' => 0,
             'partition' => 0,
             'handler' => '\App\Kafka\Consumers\ConsumerExample',

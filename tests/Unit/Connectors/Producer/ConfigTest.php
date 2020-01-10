@@ -8,20 +8,20 @@ use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase
 {
-    public function testShouldValidateConsumerConfig(): void
+    public function testShouldValidateProducerConfig(): void
     {
         // Set
         $config = new Config();
-        $topicId = 'producer';
+        $topicId = 'default';
 
         $expected = [
-            'timeout' => 1000,
+            'timeout' => 10000,
             'is_async' => true,
             'required_acknowledgment' => true,
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'broker' => 'default',
-            'topic' => 'producer',
+            'topic' => 'default',
             'connections' => 'kafka:9092',
             'auth' => [
                 'type' => 'ssl',
@@ -41,9 +41,9 @@ class ConfigTest extends LaravelTestCase
     public function testShouldNotSetRuntimeConfigWhenKafkaConfigIsInvalid(): void
     {
         // Set
-        config(['kafka.topics.producer.required_acknowledgment' => 3]);
+        config(['kafka.topics.default.producer.required_acknowledgment' => 3]);
         $config = new Config();
-        $topicId = 'producer';
+        $topicId = 'default';
 
         // Actions
         $this->expectException(ConfigurationException::class);
@@ -56,18 +56,18 @@ class ConfigTest extends LaravelTestCase
     public function testShouldNotOverrideDefaultParametersWhenConfigIsSet(): void
     {
         // Set
-        config(['kafka.topics.producer.max_poll_records' => 3000]);
+        config(['kafka.topics.default.producer.max_poll_records' => 3000]);
         $config = new Config();
-        $topicId = 'producer';
+        $topicId = 'default';
 
         $expected = [
-            'timeout' => 1000,
+            'timeout' => 10000,
             'is_async' => true,
             'required_acknowledgment' => true,
             'max_poll_records' => 3000,
             'flush_attempts' => 10,
             'broker' => 'default',
-            'topic' => 'producer',
+            'topic' => 'default',
             'connections' => 'kafka:9092',
             'auth' => [
                 'type' => 'ssl',

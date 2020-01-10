@@ -5,8 +5,8 @@ use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\Connectors\Consumer\HighLevel;
 use Metamorphosis\Connectors\Consumer\LowLevel;
-use Tests\Unit\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
+use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class ConnectorFactoryTest extends LaravelTestCase
 {
@@ -25,16 +25,18 @@ class ConnectorFactoryTest extends LaravelTestCase
                     'topic_key' => [
                         'topic_id' => 'topic_name',
                         'broker' => 'default',
-                        'consumer_groups' => [
-                            'with-partition' => [
-                                'offset_reset' => 'earliest',
-                                'offset' => 0,
-                                'partition' => 0,
-                                'handler' => ConsumerHandlerDummy::class,
-                            ],
-                            'without-partition' => [
-                                'offset_reset' => 'earliest',
-                                'handler' => ConsumerHandlerDummy::class,
+                        'consumer' => [
+                            'consumer_groups' => [
+                                'with-partition' => [
+                                    'offset_reset' => 'earliest',
+                                    'offset' => 0,
+                                    'partition' => 0,
+                                    'handler' => ConsumerHandlerDummy::class,
+                                ],
+                                'without-partition' => [
+                                    'offset_reset' => 'earliest',
+                                    'handler' => ConsumerHandlerDummy::class,
+                                ],
                             ],
                         ],
                     ],

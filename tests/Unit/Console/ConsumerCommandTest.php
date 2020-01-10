@@ -4,8 +4,8 @@ namespace Tests\Unit\Console;
 use Metamorphosis\Consumers\Runner;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Mockery as m;
-use Tests\Unit\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
+use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class ConsumerCommandTest extends LaravelTestCase
 {
@@ -25,11 +25,13 @@ class ConsumerCommandTest extends LaravelTestCase
                     'topic_key' => [
                         'topic_id' => 'topic_name',
                         'broker' => 'default',
-                        'consumer_groups' => [
-                            'default' => [
-                                'offset_reset' => 'earliest',
-                                'handler' => ConsumerHandlerDummy::class,
-                                'timeout' => 123,
+                        'consumer' => [
+                            'consumer_groups' => [
+                                'default' => [
+                                    'offset_reset' => 'earliest',
+                                    'handler' => ConsumerHandlerDummy::class,
+                                    'timeout' => 123,
+                                ],
                             ],
                         ],
                     ],

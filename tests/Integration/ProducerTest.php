@@ -65,7 +65,7 @@ class ProducerTest extends LaravelTestCase
 
     protected function haveAConsumerHandlerConfigured(): void
     {
-        config(['kafka.topics.default.consumer_groups.test-consumer-group.handler' => MessageConsumer::class]);
+        config(['kafka.topics.default.consumer.consumer_groups.test-consumer-group.handler' => MessageConsumer::class]);
     }
 
     protected function runTheConsumer(): void
@@ -89,21 +89,25 @@ class ProducerTest extends LaravelTestCase
                     'low_level' => [
                         'topic_id' => 'low_level',
                         'broker' => 'default',
-                        'consumer_groups' => [
-                            'test-consumer-group' => [
-                                'offset_reset' => 'earliest',
-                                'offset' => 0,
-                                'handler' => MessageConsumer::class,
-                                'timeout' => 20000,
-                                'middlewares' => [],
+                        'consumer' => [
+                            'consumer_groups' => [
+                                'test-consumer-group' => [
+                                    'offset_reset' => 'earliest',
+                                    'offset' => 0,
+                                    'handler' => MessageConsumer::class,
+                                    'timeout' => 20000,
+                                    'middlewares' => [],
+                                ],
                             ],
                         ],
-                        'required_acknowledgment' => true,
-                        'is_async' => true,
-                        'max_poll_records' => 500,
-                        'flush_attempts' => 10,
-                        'middlewares' => [],
-                        'timeout' => 20000,
+                        'producer' => [
+                            'required_acknowledgment' => true,
+                            'is_async' => true,
+                            'max_poll_records' => 500,
+                            'flush_attempts' => 10,
+                            'middlewares' => [],
+                            'timeout' => 20000,
+                        ],
                     ],
                 ],
             ]

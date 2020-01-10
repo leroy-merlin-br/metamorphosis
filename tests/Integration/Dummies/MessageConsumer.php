@@ -7,7 +7,7 @@ use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
-class ProductConsumer extends AbstractHandler
+class MessageConsumer extends AbstractHandler
 {
     public function handle(RecordInterface $record): void
     {

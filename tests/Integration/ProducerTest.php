@@ -3,8 +3,8 @@ namespace Tests\Integration;
 
 use Illuminate\Support\Facades\Log;
 use Metamorphosis\Facades\Metamorphosis;
-use Tests\Integration\Dummies\ProductConsumer;
-use Tests\Integration\Dummies\ProductHasChanged;
+use Tests\Integration\Dummies\MessageConsumer;
+use Tests\Integration\Dummies\MessageProducer;
 use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase
@@ -65,7 +65,7 @@ class ProducerTest extends LaravelTestCase
 
     protected function haveAConsumerHandlerConfigured(): void
     {
-        config(['kafka.topics.default.consumer_groups.test-consumer-group.handler' => ProductConsumer::class]);
+        config(['kafka.topics.default.consumer_groups.test-consumer-group.handler' => MessageConsumer::class]);
     }
 
     protected function runTheConsumer(): void
@@ -93,7 +93,7 @@ class ProducerTest extends LaravelTestCase
                             'test-consumer-group' => [
                                 'offset_reset' => 'earliest',
                                 'offset' => 0,
-                                'handler' => ProductConsumer::class,
+                                'handler' => MessageConsumer::class,
                                 'timeout' => 20000,
                                 'middlewares' => [],
                             ],
@@ -128,7 +128,7 @@ class ProducerTest extends LaravelTestCase
     private function haveSomeRandomMessagesProduced(): void
     {
         $this->highLevelMessage = str_random(10);
-        $producer = app(ProductHasChanged::class, ['record' => $this->highLevelMessage]);
+        $producer = app(MessageProducer::class, ['record' => $this->highLevelMessage]);
 
         Metamorphosis::produce($producer);
         Metamorphosis::produce($producer);
@@ -146,7 +146,7 @@ class ProducerTest extends LaravelTestCase
 
     private function produceRecordMessage(string $record): string
     {
-        $producer = app(ProductHasChanged::class, compact('record'));
+        $producer = app(MessageProducer::class, compact('record'));
         $producer->topic = 'low_level';
 
         Metamorphosis::produce($producer);

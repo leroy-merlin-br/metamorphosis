@@ -6,7 +6,7 @@ use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use RdKafka\Message;
 use RuntimeException;
 
-class ProductHasChanged extends AbstractHandler
+class MessageProducer extends AbstractHandler
 {
     /**
      * @var string

@@ -9,11 +9,11 @@ cache:
 
 before_script:
   - docker-compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g)
-  - docker-compose run --rm php composer install --no-interaction
+  - docker-compose run --rm app composer install --no-interaction
 
 script:
-  - docker-compose run --rm php vendor/bin/phpcs
-  - docker-compose run --rm php vendor/bin/phpunit
+  - docker-compose run --rm app vendor/bin/phpcs
+  - docker-compose run --rm app vendor/bin/phpunit
 
 after_script:
-  - docker-compose run --rm php php vendor/bin/coveralls -v
+  - docker-compose run --rm app php vendor/bin/coveralls -v

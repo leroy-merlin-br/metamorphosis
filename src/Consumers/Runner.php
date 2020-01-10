@@ -39,32 +39,14 @@ class Runner
 
         if ($times = Manager::get('times')) {
             for ($i = 0; $i < $times; $i++) {
-                $response = $this->consumer->consume();
-
-                try {
-                    $record = app(ConsumerRecord::class, compact('response'));
-                    $this->middlewareDispatcher->handle($record);
-                } catch (ResponseWarningException $exception) {
-                    $handler->warning($exception);
-                } catch (Exception $exception) {
-                    $handler->failed($exception);
-                }
+                $this->handleMessage($handler);
             }
 
             return;
         }
 
         while (true) {
-            $response = $this->consumer->consume();
-
-            try {
-                $record = app(ConsumerRecord::class, compact('response'));
-                $this->middlewareDispatcher->handle($record);
-            } catch (ResponseWarningException $exception) {
-                $handler->warning($exception);
-            } catch (Exception $exception) {
-                $handler->failed($exception);
-            }
+            $this->handleMessage($handler);
         }
     }
 
@@ -72,5 +54,19 @@ class Runner
     {
         $middlewares[] = new ConsumerMiddleware($handler);
         $this->middlewareDispatcher = new Dispatcher($middlewares);
+    }
+
+    private function handleMessage(Handler $handler): void
+    {
+        $response = $this->consumer->consume();
+
+        try {
+            $record = app(ConsumerRecord::class, compact('response'));
+            $this->middlewareDispatcher->handle($record);
+        } catch (ResponseWarningException $exception) {
+            $handler->warning($exception);
+        } catch (Exception $exception) {
+            $handler->failed($exception);
+        }
     }
 }

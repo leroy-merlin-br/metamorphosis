@@ -91,8 +91,8 @@ class ProducerTest extends LaravelTestCase
                         'flush_attempts' => 10,
                         'middlewares' => [],
                         'timeout' => 20000,
-                    ]
-                ]
+                    ],
+                ],
             ]
         );
     }

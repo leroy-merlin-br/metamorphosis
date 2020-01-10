@@ -4,7 +4,6 @@ namespace Tests\Integration\Dummies;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Metamorphosis\Exceptions\ResponseWarningException;
-use Metamorphosis\Facades\Manager;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 

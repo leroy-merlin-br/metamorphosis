@@ -22,7 +22,7 @@ class ConfigTest extends LaravelTestCase
             'flush_attempts' => 10,
             'broker' => 'default',
             'topic' => 'producer',
-            'connections' => 'kafka:6680',
+            'connections' => 'kafka:9092',
             'auth' => [
                 'type' => 'ssl',
                 'ca' => '/var/www/html/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/ca.pem',
@@ -68,7 +68,7 @@ class ConfigTest extends LaravelTestCase
             'flush_attempts' => 10,
             'broker' => 'default',
             'topic' => 'producer',
-            'connections' => 'kafka:6680',
+            'connections' => 'kafka:9092',
             'auth' => [
                 'type' => 'ssl',
                 'ca' => '/var/www/html/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/ca.pem',

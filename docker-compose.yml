@@ -1,12 +1,10 @@
 version: '3.1'
 
 services:
-    app:
-        image: leroymerlinbr/web-app:beta
+    php:
+        build: docker
         volumes:
-            - ./:/var/www/html
-            - ./.docker/logs/nginx:/var/log/nginx
-            - ./.docker/logs/laravel:/var/www/html/storage/logs
+            - .:/var/www/html:rw
         depends_on:
             - kafka
 

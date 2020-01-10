@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Connectors\Producer;
+namespace Tests\Unit\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;

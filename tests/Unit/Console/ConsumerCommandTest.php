@@ -4,7 +4,7 @@ namespace Tests\Unit\Console;
 use Metamorphosis\Consumers\Runner;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Mockery as m;
-use Tests\Dummies\ConsumerHandlerDummy;
+use Tests\Unit\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
 
 class ConsumerCommandTest extends LaravelTestCase

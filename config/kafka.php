@@ -127,7 +127,7 @@ return [
 
                 // We need to set a timeout when polling the messages.
                 // That means: how long we'll wait a response from poll
-                'timeout' => 20000,
+                'timeout' => 10000,
             ],
         ],
     ],

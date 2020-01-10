@@ -5,7 +5,7 @@ use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\ConnectorFactory;
 use Metamorphosis\Connectors\Consumer\HighLevel;
 use Metamorphosis\Connectors\Consumer\LowLevel;
-use Tests\Dummies\ConsumerHandlerDummy;
+use Tests\Unit\Dummies\ConsumerHandlerDummy;
 use Tests\LaravelTestCase;
 
 class ConnectorFactoryTest extends LaravelTestCase

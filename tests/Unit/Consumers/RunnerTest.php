@@ -7,9 +7,9 @@ use Metamorphosis\Consumers\Runner;
 use Metamorphosis\Facades\Manager;
 use Mockery as m;
 use RdKafka\Message as KafkaMessage;
+use Tests\LaravelTestCase;
 use Tests\Unit\Dummies\ConsumerHandlerDummy;
 use Tests\Unit\Dummies\MiddlewareDummy;
-use Tests\LaravelTestCase;
 
 class RunnerTest extends LaravelTestCase
 {

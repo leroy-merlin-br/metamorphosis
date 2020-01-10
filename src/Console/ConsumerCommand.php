@@ -21,8 +21,6 @@ class ConsumerCommand extends BaseCommand
 
     /**
      * @var {inheritdoc}
-     *
-     *
      */
     protected $signature = 'kafka:consume
         {topic : topic.}

@@ -9,6 +9,21 @@ use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase
 {
+    /**
+     * @var string
+     */
+    protected $highLevelMessage;
+
+    /**
+     * @var string
+     */
+    protected $firstLowLevelMessage;
+
+    /**
+     * @var string
+     */
+    protected $secondLowLevelMessage;
+
     protected function setUp()
     {
         parent::setUp();
@@ -19,10 +34,10 @@ class ProducerTest extends LaravelTestCase
     {
         // Given That I
         $this->haveAConsumerHandlerConfigured();
-        $recordMessage = $this->haveSomeRandomMessagesProduced();
+        $this->haveSomeRandomMessagesProduced();
 
         // I Expect That
-        $this->myMessagesHaveBeenLogged($recordMessage);
+        $this->myMessagesHaveBeenLogged();
 
         // When I
         $this->runTheConsumer();
@@ -31,15 +46,13 @@ class ProducerTest extends LaravelTestCase
     public function testShouldRunAProducerAndReceiveMessagesWithALowLevelConsumer(): void
     {
         // Given That I
-        $firstMessage = 'First Message';
-        $secondMessage = 'Second Message';
-
+        $this->haveSomeMessagesToBeSent();
         $this->haveALowLevelConsumerConfigured();
-        $this->haveTwoMessagesProducedBefore($firstMessage);
-        $this->andHaveMoreTwoMessagesProducedLater($secondMessage);
+        $this->haveTwoMessagesProducedBefore();
+        $this->andHaveMoreTwoMessagesProducedLater();
 
         // I Expect That
-        $this->mySecondMessageHaveBeenLogged($secondMessage);
+        $this->mySecondMessageHaveBeenLogged();
 
         // When I
         $this->runTheLowLevelConsumer();
@@ -112,25 +125,23 @@ class ProducerTest extends LaravelTestCase
         );
     }
 
-    private function haveSomeRandomMessagesProduced(): string
+    private function haveSomeRandomMessagesProduced(): void
     {
-        $record = str_random(10);
-        $producer = app(ProductHasChanged::class, compact('record'));
+        $this->highLevelMessage = str_random(10);
+        $producer = app(ProductHasChanged::class, ['record' => $this->highLevelMessage]);
 
         Metamorphosis::produce($producer);
         Metamorphosis::produce($producer);
-
-        return $record;
     }
 
-    private function haveTwoMessagesProducedBefore(string $recordMessage): void
+    private function haveTwoMessagesProducedBefore(): void
     {
-        $this->produceRecordMessage($recordMessage);
+        $this->produceRecordMessage($this->firstLowLevelMessage);
     }
 
-    private function andHaveMoreTwoMessagesProducedLater(string $recordMessage): void
+    private function andHaveMoreTwoMessagesProducedLater(): void
     {
-        $this->produceRecordMessage($recordMessage);
+        $this->produceRecordMessage($this->secondLowLevelMessage);
     }
 
     private function produceRecordMessage(string $record): string
@@ -144,14 +155,14 @@ class ProducerTest extends LaravelTestCase
         return $record;
     }
 
-    private function mySecondMessageHaveBeenLogged(string $secondMessage): void
+    private function mySecondMessageHaveBeenLogged(): void
     {
-        $this->setLogExpectationsFor($secondMessage);
+        $this->setLogExpectationsFor($this->secondLowLevelMessage);
     }
 
-    private function myMessagesHaveBeenLogged(string $recordMessage): void
+    private function myMessagesHaveBeenLogged(): void
     {
-        $this->setLogExpectationsFor($recordMessage);
+        $this->setLogExpectationsFor($this->highLevelMessage);
     }
 
     private function setLogExpectationsFor(string $message): void
@@ -162,5 +173,11 @@ class ProducerTest extends LaravelTestCase
         Log::shouldReceive('alert')
             ->with($message)
             ->twice();
+    }
+
+    private function haveSomeMessagesToBeSent()
+    {
+        $this->firstLowLevelMessage = 'First Message';
+        $this->secondLowLevelMessage = 'Second Message';
     }
 }

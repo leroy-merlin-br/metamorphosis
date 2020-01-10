@@ -86,7 +86,7 @@ return [
             'broker' => 'default',
             'consumer_groups' => [
                 'test-consumer-group' => [
-                    'offset_reset' => 'largest',
+                    'offset_reset' => 'earliest',
                     'offset' => 0,
                     'handler' => '\App\Kafka\Consumers\ConsumerExample',
                     'timeout' => 20000,

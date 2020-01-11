@@ -21,7 +21,7 @@ class MessageProducer extends AbstractHandler
 
     public function success(Message $message): void
     {
-        Log::info('Record successfully sent to kafka.', [
+        Log::info('Record successfully sent to broker.', [
             'topic' => $message->topic_name,
             'payload' => $message->payload,
             'key' => $message->key,
@@ -31,7 +31,7 @@ class MessageProducer extends AbstractHandler
 
     public function failed(Message $message): void
     {
-        Log::error('Unable to delivery record into kafka.', [
+        Log::error('Unable to delivery record to broker.', [
             'topic' => $message->topic_name,
             'payload' => $message->payload,
             'key' => $message->key,
@@ -39,6 +39,6 @@ class MessageProducer extends AbstractHandler
             'error' => $message->err,
         ]);
 
-        throw new RuntimeException('error when sending kafka message!');
+        throw new RuntimeException('error sending message!');
     }
 }

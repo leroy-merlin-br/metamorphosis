@@ -48,14 +48,13 @@ class ProducerTest extends LaravelTestCase
         // Given That I
         $this->haveSomeMessagesToBeSent();
         $this->haveALowLevelConsumerConfigured();
-        $this->haveTwoMessagesProducedBefore();
-        $this->andHaveMoreTwoMessagesProducedLater();
+        $this->haveFourProducedMessages();
 
         // I Expect That
-        $this->mySecondMessageHaveBeenLogged();
+        $this->messageThreeAndFourAreConsumed();
 
         // When I
-        $this->runTheLowLevelConsumer();
+        $this->runTheLowLevelConsumerSkippingTheFirstTwoMessagesAndLimitingToTwoMessagesConsumed();
     }
 
     protected function withoutAuthentication(): void
@@ -110,7 +109,7 @@ class ProducerTest extends LaravelTestCase
         );
     }
 
-    protected function runTheLowLevelConsumer(): void
+    protected function runTheLowLevelConsumerSkippingTheFirstTwoMessagesAndLimitingToTwoMessagesConsumed(): void
     {
         $this->artisan(
             'kafka:consume',
@@ -134,16 +133,6 @@ class ProducerTest extends LaravelTestCase
         Metamorphosis::produce($producer);
     }
 
-    private function haveTwoMessagesProducedBefore(): void
-    {
-        $this->produceRecordMessage($this->firstLowLevelMessage);
-    }
-
-    private function andHaveMoreTwoMessagesProducedLater(): void
-    {
-        $this->produceRecordMessage($this->secondLowLevelMessage);
-    }
-
     private function produceRecordMessage(string $record): string
     {
         $producer = app(MessageProducer::class, compact('record'));
@@ -155,7 +144,7 @@ class ProducerTest extends LaravelTestCase
         return $record;
     }
 
-    private function mySecondMessageHaveBeenLogged(): void
+    private function messageThreeAndFourAreConsumed(): void
     {
         $this->setLogExpectationsFor($this->secondLowLevelMessage);
     }
@@ -179,5 +168,11 @@ class ProducerTest extends LaravelTestCase
     {
         $this->firstLowLevelMessage = 'First Message';
         $this->secondLowLevelMessage = 'Second Message';
+    }
+
+    private function haveFourProducedMessages(): void
+    {
+        $this->produceRecordMessage($this->firstLowLevelMessage);
+        $this->produceRecordMessage($this->secondLowLevelMessage);
     }
 }

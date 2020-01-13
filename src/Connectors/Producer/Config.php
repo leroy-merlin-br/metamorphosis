@@ -31,6 +31,7 @@ class Config extends AbstractConfig
         'required_acknowledgment' => true,
         'max_poll_records' => 500,
         'flush_attempts' => 10,
+        'partition' => RD_KAFKA_PARTITION_UA,
     ];
 
     public function setOption(string $topicId): void

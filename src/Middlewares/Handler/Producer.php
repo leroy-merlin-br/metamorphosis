@@ -72,8 +72,7 @@ class Producer implements MiddlewareInterface
         }
 
         for ($flushAttempts = 0; $flushAttempts < Manager::get('flush_attempts'); $flushAttempts++) {
-            $result = $this->producer->flush(Manager::get('timeout'));
-            if (RD_KAFKA_RESP_ERR_NO_ERROR === $result) {
+            if (0 === $this->producer->poll(Manager::get('timeout'))) {
                 return;
             }
         }

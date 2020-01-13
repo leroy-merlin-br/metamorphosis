@@ -58,7 +58,8 @@ class AbstractHandlerTest extends LaravelTestCase
         $topic = 'default';
         $key = 'default_1';
         $partition = null;
-        $handler = new class($record, $topic, $key, $partition) extends AbstractHandler {};
+        $handler = new class($record, $topic, $key, $partition) extends AbstractHandler {
+        };
 
         // Actions
         $result = $handler->createRecord();

@@ -66,12 +66,12 @@ class Config extends AbstractConfig
 
     private function getConsumerConfig(array $topicConfig, string $consumerGroupId = null): array
     {
-        if (!$consumerGroupId && 1 === count($topicConfig['consumer_groups'])) {
-            $consumerGroupId = current(array_keys($topicConfig['consumer_groups']));
+        if (!$consumerGroupId && 1 === count($topicConfig['consumer']['consumer_groups'])) {
+            $consumerGroupId = current(array_keys($topicConfig['consumer']['consumer_groups']));
         }
 
         $consumerGroupId = $consumerGroupId ?? 'default';
-        $consumerConfig = $topicConfig['consumer_groups'][$consumerGroupId] ?? null;
+        $consumerConfig = $topicConfig['consumer']['consumer_groups'][$consumerGroupId] ?? null;
         $consumerConfig['consumer_group'] = $consumerGroupId;
 
         if (!$consumerConfig) {
@@ -85,7 +85,7 @@ class Config extends AbstractConfig
     {
         return array_merge(
             config('kafka.middlewares.consumer', []),
-            $topicConfig['middlewares'] ?? []
+            $topicConfig['consumer']['middlewares'] ?? []
         );
     }
 

@@ -2,6 +2,28 @@ version: '3.1'
 
 services:
     php:
-      build: docker
-      volumes:
-        - .:/var/www/html:rw
+        build: docker
+        volumes:
+            - .:/var/www/html:rw
+        depends_on:
+            - kafka
+
+    zookeeper:
+        image: 'bitnami/zookeeper:latest'
+        ports:
+            - '2181:2181'
+        environment:
+            - ALLOW_ANONYMOUS_LOGIN=yes
+
+    kafka:
+        image: 'bitnami/kafka:latest'
+        hostname: 'kafka'
+        ports:
+            - '9092:9092'
+        depends_on:
+          - zookeeper
+        environment:
+            - KAFKA_LISTENERS=PLAINTEXT://:9092
+            - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+            - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+            - ALLOW_PLAINTEXT_LISTENER=yes

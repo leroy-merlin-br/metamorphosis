@@ -38,7 +38,7 @@ class Config extends AbstractConfig
         $topicConfig = $this->getTopicConfig($topicId);
         $topicConfig['middlewares'] = array_merge(
             config('kafka.middlewares.producer', []),
-            $topicConfig['middlewares'] ?? []
+            $topicConfig['producer']['middlewares'] ?? []
         );
         $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
         $config = array_merge($topicConfig, $brokerConfig);
@@ -50,7 +50,10 @@ class Config extends AbstractConfig
 
     private function getTopicConfig(string $topicId): array
     {
-        $topicConfig = config('kafka.topics.'.$topicId);
+        $topicConfig = array_merge(
+            config('kafka.topics.'.$topicId),
+            config('kafka.topics.'.$topicId.'.producer', [])
+        );
         if (!$topicConfig) {
             throw new ConfigurationException("Topic '{$topicId}' not found");
         }

@@ -3,16 +3,21 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Avro Schemas
+    | AVRO Schemas
     |--------------------------------------------------------------------------
     |
     | Here you may specify the schema details configured on topic's broker key.
+    | Schema are kind of "contract" between the producer and consumer.
+    | For now, we are just decoding AVRO, not encoding.
     |
     */
 
     'avro_schemas' => [
         'default' => [
             'url' => '',
+            // This option will be put directly into a Guzzle http request
+            // Use this to do authorizations or send any headers you want.
+            // Here is a example of basic authentication on AVRO schema.
             'request_options' => [
                 'headers' => [
                     'Authorization' => [
@@ -37,7 +42,11 @@ return [
 
     'brokers' => [
         'default' => [
-            'connections' => 'kafka:6680',
+            'connections' => 'kafka:9092',
+
+            // If your broker doest not have authentication, you can
+            // remove this configuration, or set as empty.
+            // The Authentication types may be "ssl" or "none"
             'auth' => [
                 'type' => 'ssl', // ssl and none
                 'ca' => storage_path('ca.pem'),
@@ -47,60 +56,79 @@ return [
         ],
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Topics
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify the configuration for the topics to be consumed.
-    |
-    | Every topic must have a unique identification key. This key must be passed
-    | as argument when using the command to consume topics.
-    |
-    | For every topic you may define the following properties:
-    |
-    | 'topic_id': The topic name to subscribe to
-    | 'broker': The broker identification key
-    | 'middlewares': an array of middlewares applied for this topic and all consumer_groups inside
-    | 'consumer_groups': You may define more than one consumer group per topic.
-    |       If there is just one defined, it will be used by default,
-    |       otherwise, you may pass which consumer group should be used
-    |       when using the consumer command.
-    |       For every consumer group, you may define:
-    | 'consumer_groups.*.offset_reset': action to take when there is no initial
-    |       offset in offset store or the desired offset is out of range.
-    |       This config will be passed to 'auto.offset.reset'.
-    |       The valid options are: smallest, earliest, beginning, largest, latest, end, error.
-    | 'consumer_groups.*.offset': the offset at which to start consumption. This only applies if partition is set.
-    |       You can use a positive integer or any of the constants: RD_KAFKA_OFFSET_BEGINNING,
-    |       RD_KAFKA_OFFSET_END, RD_KAFKA_OFFSET_STORED.
-    | 'consumer_groups.*.partition': the partition to consume. It can be null, if you don't wish do specify one.
-    | 'consumer_groups.*.handler': a consumer class that implements ConsumerTopicHandler
-    | 'consumer_groups.*.middlewares': an array of middlewares applied only for this consumer_group
-    |
-    */
-
     'topics' => [
+        // This is your topic "keyword" where you will put all configurations needed
+        // on this specific topic.
         'default' => [
-            'topic_id' => 'SOME-TOPIC-KAFKA-ID',
+            // The topic id is where you want to send or consume
+            // your messages from kafka.
+            'topic_id' => 'kafka-test',
+
+            // Here you may point the key of the broker configured above.
             'broker' => 'default',
-            'consumer_groups' => [
-                'default' => [
-                    'offset_reset' => 'largest',
-                    'offset' => 0,
-                    'handler' => '\App\Kafka\Consumers\ConsumerExample',
-                    'timeout' => 20000,
-                    'middlewares' => [],
+
+            // Configurations specific for consumer
+            'consumer' => [
+                // You may define more than one consumer group per topic.
+                // If there is just one defined, it will be used by default,
+                // otherwise, you may pass which consumer group should be used
+                // when using the consumer command.
+                'consumer_groups' => [
+                    'test-consumer-group' => [
+
+                        // Action to take when there is no initial
+                        // offset in offset store or the desired offset is out of range.
+                        // This config will be passed to 'auto.offset.reset'.
+                        // The valid options are: smallest, earliest, beginning, largest, latest, end, error.
+                        'offset_reset' => 'earliest',
+
+                        // The offset at which to start consumption. This only applies if partition is set.
+                        // You can use a positive integer or any of the constants: RD_KAFKA_OFFSET_BEGINNING,
+                        // RD_KAFKA_OFFSET_END, RD_KAFKA_OFFSET_STORED.
+                        'offset' => 0,
+
+                        // The partition to consume. It can be null,
+                        // if you don't wish do specify one.
+                        'partition' => 0,
+
+                        // A consumer class that implements ConsumerTopicHandler
+                        'handler' => '\App\Kafka\Consumers\ConsumerExample',
+
+                        // A Timeout to listen to a message. That means: how much
+                        // time we need to wait until receiving a message?
+                        'timeout' => 20000,
+
+                        // An array of middlewares applied only for this consumer_group
+                        'middlewares' => [],
+                    ],
                 ],
             ],
-        ],
-        'producer' => [
-            'broker' => 'default',
-            'required_acknowledgment' => true,
-            'is_async' => true,
-            'max_poll_records' => 500,
-            'flush_attempts' => 10,
-            'middlewares' => [],
+
+            // Configurations specific for producer
+            'producer' => [
+
+                // Sets to true if you want to know if a message was successfully posted.
+                'required_acknowledgment' => true,
+
+                // Whether if you want to receive the response asynchronously.
+                'is_async' => true,
+
+                // The amount of records to be sent in every iteration
+                // That means that at each 500 messages we check if messages was sent.
+                'max_poll_records' => 500,
+
+                // The amount of attempts we will try to run the flush.
+                // There's no magic number here, it depends on any factor
+                // Try yourself a good number.
+                'flush_attempts' => 10,
+
+                // Middlewares specific for this producer.
+                'middlewares' => [],
+
+                // We need to set a timeout when polling the messages.
+                // That means: how long we'll wait a response from poll
+                'timeout' => 10000,
+            ],
         ],
     ],
 
@@ -113,6 +141,7 @@ return [
     | consumed topic. Middlewares work between the received data from broker and
     | before being passed into consumers.
     | Available middlewares: log, avro-decode
+    |
     */
 
     'middlewares' => [

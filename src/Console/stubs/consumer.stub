@@ -1,8 +1,8 @@
 <?php
 namespace DummyNamespace;
 
-use Metamorphosis\ConsumerHandler\AbstractHandler;
-use Metamorphosis\Record;
+use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
+use Metamorphosis\Record\RecordInterface;
 
 class DummyClass extends AbstractHandler
 {
@@ -19,9 +19,9 @@ class DummyClass extends AbstractHandler
     /**
      * Handle record.
      *
-     * @param Record $record
+     * @param RecordInterface $record
      */
-    public function handle(Record $record): void
+    public function handle(RecordInterface $record): void
     {
         //
     }

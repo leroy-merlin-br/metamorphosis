@@ -28,7 +28,8 @@ class ConsumerCommand extends BaseCommand
         {--offset= : Sets the offset at which to start consumption.}
         {--partition= : Sets the partition to consume.}
         {--broker= : Override broker connection from config.}
-        {--timeout= : Sets timeout for consumer.}';
+        {--timeout= : Sets timeout for consumer.}
+        {--times= : Amount of messages to be consumed.}';
 
     public function handle(Config $config)
     {

@@ -1,10 +1,8 @@
 <?php
 namespace Tests\Unit\TopicHandler\Producer;
 
-use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Facades\Manager;
 use Metamorphosis\Record\ProducerRecord;
-use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use Tests\LaravelTestCase;
 
@@ -18,9 +16,6 @@ class AbstractHandlerTest extends LaravelTestCase
         $key = 'default_1';
         $partition = 1;
         $handler = new class($record, $topic, $key, $partition) extends AbstractHandler {
-            public function handle(RecordInterface $record): void
-            {
-            }
         };
 
         // Actions
@@ -32,7 +27,27 @@ class AbstractHandlerTest extends LaravelTestCase
         $this->assertSame($topic, $result->getTopicName());
         $this->assertSame($record, $result->getPayload());
         $this->assertSame($partition, $result->getPartition());
+    }
 
+    public function testShouldCreateEncodeJsonWhenRecordIsArray(): void
+    {
+        // Set
+        $record = ['number' => 1];
+        $topic = 'default';
+        $key = 'default_1';
+        $partition = 1;
+        $handler = new class($record, $topic, $key, $partition) extends AbstractHandler {
+        };
+
+        // Actions
+        $result = $handler->createRecord();
+
+        // Assertions
+        $this->assertInstanceOf(ProducerRecord::class, $result);
+        $this->assertSame($key, $result->getKey());
+        $this->assertSame($topic, $result->getTopicName());
+        $this->assertSame(json_encode($record), $result->getPayload());
+        $this->assertSame($partition, $result->getPartition());
     }
 
     public function testShouldSetDefaultPartitionWhenIsNull(): void
@@ -43,11 +58,7 @@ class AbstractHandlerTest extends LaravelTestCase
         $topic = 'default';
         $key = 'default_1';
         $partition = null;
-        $handler = new class($record, $topic, $key, $partition) extends AbstractHandler {
-            public function handle(RecordInterface $record): void
-            {
-            }
-        };
+        $handler = new class($record, $topic, $key, $partition) extends AbstractHandler {};
 
         // Actions
         $result = $handler->createRecord();
@@ -58,6 +69,5 @@ class AbstractHandlerTest extends LaravelTestCase
         $this->assertSame($topic, $result->getTopicName());
         $this->assertSame($record, $result->getPayload());
         $this->assertSame(RD_KAFKA_PARTITION_UA, $result->getPartition());
-
     }
 }

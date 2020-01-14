@@ -51,8 +51,8 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->flush(4000)
-            ->andReturn(RD_KAFKA_RESP_ERR_NO_ERROR);
+            ->poll(4000)
+            ->andReturn(0);
 
         $producerTopic->expects()
             ->produce(null, 0, $record->getPayload(), null);
@@ -84,9 +84,9 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->flush(4000)
+            ->poll(4000)
             ->times(10)
-            ->andReturn('error');
+            ->andReturn(1);
 
         $producerTopic->expects()
             ->produce(null, 0, $record->getPayload(), null);
@@ -128,7 +128,7 @@ class ProducerTest extends LaravelTestCase
             ->newTopic('topic_name')
             ->andReturn($producerTopic);
 
-        $kafkaProducer->shouldReceive('flush')
+        $kafkaProducer->shouldReceive('poll')
             ->never();
 
         $producerTopic->expects()
@@ -169,7 +169,7 @@ class ProducerTest extends LaravelTestCase
             ->newTopic('topic_name')
             ->andReturn($producerTopic);
 
-        $kafkaProducer->shouldReceive('flush')
+        $kafkaProducer->shouldReceive('poll')
             ->never();
 
         $producerTopic->expects()
@@ -213,9 +213,9 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->flush(4000)
+            ->poll(4000)
             ->times(3)
-            ->andReturn(RD_KAFKA_RESP_ERR_NO_ERROR);
+            ->andReturn(0);
 
         $producerTopic->expects()
             ->produce(null, 0, $record->getPayload(), null)

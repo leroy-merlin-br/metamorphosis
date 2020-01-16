@@ -27,6 +27,7 @@ class Manager
 
     public function set(array $config): void
     {
+        $this->middlewares = [];
         $middlewares = $config['middlewares'] ?? [];
         unset($config['middlewares']);
 

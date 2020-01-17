@@ -98,6 +98,13 @@ return [
                         // time we need to wait until receiving a message?
                         'timeout' => 20000,
 
+                        // Once you've enabled this, the Kafka consumer will commit the
+                        // offset of the last message received in response to its poll() call
+                        'auto_commit' => false,
+
+                        // If commit_async if false process block until offsets are committed or the commit fails.
+                        'commit_async' => true,
+
                         // An array of middlewares applied only for this consumer_group
                         'middlewares' => [],
                     ],

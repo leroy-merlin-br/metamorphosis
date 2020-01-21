@@ -30,6 +30,11 @@ class Producer implements MiddlewareInterface
      */
     private $processMessageCount = 0;
 
+    /**
+     * @var int
+     */
+    private $partition;
+
     public function __construct(Connector $connector, HandlerInterface $producerHandler)
     {
         $this->connector = $connector;
@@ -37,11 +42,12 @@ class Producer implements MiddlewareInterface
 
         $this->producer = $this->connector->getProducerTopic($producerHandler);
         $this->topic = $this->producer->newTopic(Manager::get('topic_id'));
+        $this->partition = Manager::get('partition');
     }
 
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
-        $this->topic->produce($record->getPartition(), 0, $record->getPayload(), $record->getKey());
+        $this->topic->produce($this->getPartition($record), 0, $record->getPayload(), $record->getKey());
         $this->handleResponse();
     }
 
@@ -78,5 +84,10 @@ class Producer implements MiddlewareInterface
         }
 
         throw new RuntimeException('Unable to flush, messages might be lost!');
+    }
+
+    public function getPartition(RecordInterface $record): int
+    {
+        return $record->getPartition() ?: $this->partition;
     }
 }

@@ -45,7 +45,8 @@ class ProducerTest extends LaravelTestCase
         );
         $config = $this->app->make(Config::class);
 
-        $producerHandler = new class($record, $topic) extends AbstractHandler {};
+        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        };
         $producer = new Producer($config);
 
         // Expectations
@@ -68,7 +69,8 @@ class ProducerTest extends LaravelTestCase
         );
         $config = $this->app->make(Config::class);
         $producer = new Producer($config);
-        $producerHandler = new class($record, $topic) extends AbstractHandler {};
+        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        };
 
         // Expectations
         $producerMiddleware->expects()
@@ -93,7 +95,8 @@ class ProducerTest extends LaravelTestCase
         );
         $config = $this->app->make(Config::class);
         $producer = new Producer($config);
-        $producerHandler = new class($record, $topic) extends AbstractHandler {};
+        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        };
 
         // Expectations
         $producerMiddleware->expects()
@@ -113,7 +116,8 @@ class ProducerTest extends LaravelTestCase
         $topic = 'some_topic';
         $config = $this->instance(Config::class, m::mock(Config::class));
         $producer = new Producer($config);
-        $producerHandler = new class($record, $topic) extends AbstractHandler {};
+        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        };
 
         // Expectations
         $config->expects()

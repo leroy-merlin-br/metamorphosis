@@ -88,6 +88,6 @@ class Producer implements MiddlewareInterface
 
     public function getPartition(RecordInterface $record): int
     {
-        return $record->getPartition() ?: $this->partition;
+        return is_null($record->getPartition()) ? $this->partition : $record->getPartition();
     }
 }

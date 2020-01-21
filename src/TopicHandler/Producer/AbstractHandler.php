@@ -2,7 +2,6 @@
 namespace Metamorphosis\TopicHandler\Producer;
 
 use Metamorphosis\Exceptions\JsonException;
-use Metamorphosis\Facades\Manager;
 use Metamorphosis\Record\ProducerRecord;
 
 abstract class AbstractHandler implements HandlerInterface

@@ -45,13 +45,7 @@ class ProducerTest extends LaravelTestCase
         );
         $config = $this->app->make(Config::class);
 
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
-            public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
-            {
-                $this->record = $record;
-                $this->topic = $topic;
-            }
-        };
+        $producerHandler = new class($record, $topic) extends AbstractHandler {};
         $producer = new Producer($config);
 
         // Expectations
@@ -74,13 +68,7 @@ class ProducerTest extends LaravelTestCase
         );
         $config = $this->app->make(Config::class);
         $producer = new Producer($config);
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
-            public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
-            {
-                $this->record = $record;
-                $this->topic = $topic;
-            }
-        };
+        $producerHandler = new class($record, $topic) extends AbstractHandler {};
 
         // Expectations
         $producerMiddleware->expects()
@@ -105,13 +93,7 @@ class ProducerTest extends LaravelTestCase
         );
         $config = $this->app->make(Config::class);
         $producer = new Producer($config);
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
-            public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
-            {
-                $this->record = $record;
-                $this->topic = $topic;
-            }
-        };
+        $producerHandler = new class($record, $topic) extends AbstractHandler {};
 
         // Expectations
         $producerMiddleware->expects()
@@ -131,13 +113,7 @@ class ProducerTest extends LaravelTestCase
         $topic = 'some_topic';
         $config = $this->instance(Config::class, m::mock(Config::class));
         $producer = new Producer($config);
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
-            public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
-            {
-                $this->record = $record;
-                $this->topic = $topic;
-            }
-        };
+        $producerHandler = new class($record, $topic) extends AbstractHandler {};
 
         // Expectations
         $config->expects()

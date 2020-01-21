@@ -26,6 +26,7 @@ class ProducerTest extends LaravelTestCase
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'required_acknowledgment' => true,
+            'partition' => 0,
         ]);
     }
 
@@ -117,7 +118,7 @@ class ProducerTest extends LaravelTestCase
         $connector = m::mock(Connector::class);
 
         $record = json_encode(['message' => 'original record']);
-        $record = new ProducerRecord($record, 'topic_key');
+        $record = new ProducerRecord($record, 'topic_key', 1);
 
         // Expectations
         $connector->expects()
@@ -132,7 +133,7 @@ class ProducerTest extends LaravelTestCase
             ->never();
 
         $producerTopic->expects()
-            ->produce(null, 0, $record->getPayload(), null);
+            ->produce(1, 0, $record->getPayload(), null);
 
         // Actions
         $producerHandler = new Producer($connector, $handler);
@@ -158,7 +159,7 @@ class ProducerTest extends LaravelTestCase
         $connector = m::mock(Connector::class);
 
         $record = json_encode(['message' => 'original record']);
-        $record = new ProducerRecord($record, 'topic_key');
+        $record = new ProducerRecord($record, 'topic_key', 0);
 
         // Expectations
         $connector->expects()
@@ -173,7 +174,7 @@ class ProducerTest extends LaravelTestCase
             ->never();
 
         $producerTopic->expects()
-            ->produce(null, 0, $record->getPayload(), null)
+            ->produce(0, 0, $record->getPayload(), null)
             ->twice();
 
         // Actions
@@ -192,6 +193,7 @@ class ProducerTest extends LaravelTestCase
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'required_acknowledgment' => true,
+            'partition' => 0,
         ]);
 
         $handler = m::mock(HandlerInterface::class);
@@ -201,7 +203,7 @@ class ProducerTest extends LaravelTestCase
         $connector = m::mock(Connector::class);
 
         $record = json_encode(['message' => 'original record']);
-        $record = new ProducerRecord($record, 'topic_key');
+        $record = new ProducerRecord($record, 'topic_key', 2);
 
         // Expectations
         $connector->expects()
@@ -218,7 +220,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn(0);
 
         $producerTopic->expects()
-            ->produce(null, 0, $record->getPayload(), null)
+            ->produce(2, 0, $record->getPayload(), null)
             ->twice();
 
         // Actions

@@ -46,11 +46,6 @@ class ProducerTest extends LaravelTestCase
         $config = $this->app->make(Config::class);
 
         $producerHandler = new class($record, $topic) extends AbstractHandler {
-            public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
-            {
-                $this->record = $record;
-                $this->topic = $topic;
-            }
         };
         $producer = new Producer($config);
 
@@ -75,11 +70,6 @@ class ProducerTest extends LaravelTestCase
         $config = $this->app->make(Config::class);
         $producer = new Producer($config);
         $producerHandler = new class($record, $topic) extends AbstractHandler {
-            public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
-            {
-                $this->record = $record;
-                $this->topic = $topic;
-            }
         };
 
         // Expectations
@@ -106,11 +96,6 @@ class ProducerTest extends LaravelTestCase
         $config = $this->app->make(Config::class);
         $producer = new Producer($config);
         $producerHandler = new class($record, $topic) extends AbstractHandler {
-            public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
-            {
-                $this->record = $record;
-                $this->topic = $topic;
-            }
         };
 
         // Expectations
@@ -132,11 +117,6 @@ class ProducerTest extends LaravelTestCase
         $config = $this->instance(Config::class, m::mock(Config::class));
         $producer = new Producer($config);
         $producerHandler = new class($record, $topic) extends AbstractHandler {
-            public function __construct($record, string $topic = null, ?string $key = null, ?int $partition = null)
-            {
-                $this->record = $record;
-                $this->topic = $topic;
-            }
         };
 
         // Expectations

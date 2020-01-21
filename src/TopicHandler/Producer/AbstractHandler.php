@@ -2,7 +2,6 @@
 namespace Metamorphosis\TopicHandler\Producer;
 
 use Metamorphosis\Exceptions\JsonException;
-use Metamorphosis\Facades\Manager;
 use Metamorphosis\Record\ProducerRecord;
 
 abstract class AbstractHandler implements HandlerInterface
@@ -32,7 +31,7 @@ abstract class AbstractHandler implements HandlerInterface
         $this->record = $record;
         $this->topic = $topic;
         $this->key = $key;
-        $this->setPartition($partition);
+        $this->partition = $partition;
     }
 
     public function getRecord()
@@ -79,12 +78,5 @@ abstract class AbstractHandler implements HandlerInterface
         }
 
         return $record;
-    }
-
-    private function setPartition(?int $partition): void
-    {
-        $this->partition = is_null($partition)
-            ? Manager::get('partition')
-            : $partition;
     }
 }

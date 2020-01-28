@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool has(string $key)
  * @method static array middlewares()
  */
-class ManagerConfig extends Facade
+class ConfigManager extends Facade
 {
     protected static function getFacadeAccessor()
     {

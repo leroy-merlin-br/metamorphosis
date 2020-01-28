@@ -3,8 +3,10 @@ namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseWarningException;
+use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerHandler;
+use Exception;
 
 class Manager
 {
@@ -18,10 +20,16 @@ class Manager
      */
     private $consumerHandler;
 
-    public function __construct(ConsumerInterface $consumer, ConsumerHandler $consumerHandler)
+    /**
+     * @var Dispatcher
+     */
+    private $dispatcher;
+
+    public function __construct(ConsumerInterface $consumer, ConsumerHandler $consumerHandler, Dispatcher $dispatcher)
     {
         $this->consumer = $consumer;
         $this->consumerHandler = $consumerHandler;
+        $this->dispatcher = $dispatcher;
     }
 
     public function handleMessage(): void
@@ -30,7 +38,7 @@ class Manager
 
         try {
             $record = app(ConsumerRecord::class, compact('response'));
-            $this->middlewareDispatcher->handle($record);
+            $this->dispatcher->handle($record);
         } catch (ResponseWarningException $exception) {
             $this->consumerHandler->warning($exception);
         } catch (Exception $exception) {

@@ -3,7 +3,7 @@ namespace Metamorphosis\Connectors;
 
 use Illuminate\Support\Facades\Validator;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 
 abstract class AbstractConfig
 {

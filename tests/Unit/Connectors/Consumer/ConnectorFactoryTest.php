@@ -2,7 +2,7 @@
 namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\Config;
-use Metamorphosis\Connectors\Consumer\ConnectorFactory;
+use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Connectors\Consumer\HighLevel;
 use Metamorphosis\Connectors\Consumer\LowLevel;
 use Tests\LaravelTestCase;
@@ -50,7 +50,7 @@ class ConnectorFactoryTest extends LaravelTestCase
         // Set
         $config = new Config();
         $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
-        $lowLevelConnector = ConnectorFactory::make();
+        $lowLevelConnector = Factory::make();
 
         // Assertions
         $this->assertInstanceOf(LowLevel::class, $lowLevelConnector);
@@ -61,7 +61,7 @@ class ConnectorFactoryTest extends LaravelTestCase
         // Set
         $config = new Config();
         $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'without-partition']);
-        $highLevelConnector = ConnectorFactory::make();
+        $highLevelConnector = Factory::make();
 
         // Assertions
         $this->assertInstanceOf(HighLevel::class, $highLevelConnector);

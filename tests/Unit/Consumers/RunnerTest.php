@@ -4,7 +4,7 @@ namespace Tests\Unit;
 use Exception;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\Runner;
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 use Mockery as m;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;

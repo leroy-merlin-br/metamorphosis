@@ -3,7 +3,7 @@ namespace Metamorphosis;
 
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Exceptions\JsonException;
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;

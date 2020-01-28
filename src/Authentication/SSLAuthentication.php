@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Authentication;
 
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 use RdKafka\Conf;
 
 class SSLAuthentication implements AuthenticationInterface

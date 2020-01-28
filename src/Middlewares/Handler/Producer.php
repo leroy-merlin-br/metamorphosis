@@ -2,7 +2,7 @@
 namespace Metamorphosis\Middlewares\Handler;
 
 use Metamorphosis\Connectors\Producer\Connector;
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;

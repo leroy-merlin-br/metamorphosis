@@ -4,7 +4,7 @@ namespace Metamorphosis\Connectors\Consumer;
 use Metamorphosis\Authentication\Factory;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 use RdKafka\Conf;
 use RdKafka\Consumer;
 use RdKafka\TopicConf;

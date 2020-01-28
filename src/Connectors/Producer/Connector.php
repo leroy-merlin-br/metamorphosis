@@ -2,7 +2,7 @@
 namespace Metamorphosis\Connectors\Producer;
 
 use Metamorphosis\Authentication\Factory;
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use RdKafka\Conf;

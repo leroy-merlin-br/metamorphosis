@@ -4,7 +4,7 @@ namespace Metamorphosis\Middlewares;
 use Metamorphosis\Avro\Serializer\Decoders\DecoderInterface;
 use Metamorphosis\Avro\Serializer\MessageDecoder;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Record\RecordInterface;
 

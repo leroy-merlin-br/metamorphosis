@@ -3,9 +3,9 @@ namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
 use Metamorphosis\Connectors\Consumer\Config;
-use Metamorphosis\Connectors\Consumer\ConnectorFactory;
+use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Consumers\Runner;
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 
 class ConsumerCommand extends BaseCommand
 {
@@ -37,9 +37,9 @@ class ConsumerCommand extends BaseCommand
 
         $this->writeStartingConsumer();
 
-        $consumerManager = ConnectorFactory::make()->getConsumer();
+        $manager = Factory::make();
 
-        $runner = app(Runner::class, compact('consumerManager'));
+        $runner = app(Runner::class, compact('manager'));
         $runner->run();
     }
 

@@ -2,7 +2,7 @@
 namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\Consumers\ConsumerInterface;
-use Metamorphosis\Facades\Manager as ConfigManager;
+use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 
@@ -11,20 +11,20 @@ use Metamorphosis\Middlewares\Handler\Dispatcher;
  * Basically, if the user pass --partition and --offset as argument
  * means that we will use the low level approach.
  */
-class ConnectorFactory
+class Factory
 {
     public static function make(): Manager
     {
         $consumer = self::getConsumer();
-        $handler = app(ConfigConfigManager::get('handler'));
-        $dispatcher = self::getMiddlewareDispatcher($handler, ConfigConfigManager::middlewares());
+        $handler = app(ConfigManager::get('handler'));
+        $dispatcher = self::getMiddlewareDispatcher($handler, ConfigManager::middlewares());
 
-        return new Manager($consumer, $handler);
+        return new Manager($consumer, $handler, $dispatcher);
     }
 
     protected static function requiresPartition(): bool
     {
-        return ConfigConfigManager::has('partition');
+        return ConfigManager::has('partition');
     }
 
     private static function getConsumer(): ConsumerInterface

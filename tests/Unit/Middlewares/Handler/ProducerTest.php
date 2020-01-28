@@ -2,7 +2,7 @@
 namespace Tests\Unit\Middlewares\Handler;
 
 use Metamorphosis\Connectors\Producer\Connector;
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Record\ProducerRecord;

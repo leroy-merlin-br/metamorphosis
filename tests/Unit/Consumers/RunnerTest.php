@@ -16,7 +16,7 @@ class RunnerTest extends LaravelTestCase
     public function testItShouldRun(): void
     {
         // Set
-        Manager::set([
+        ConfigManager::set([
             'connections' => 'kafka:2019',
             'topic' => 'topic_key',
             'broker' => 'default',

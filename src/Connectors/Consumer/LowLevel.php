@@ -14,15 +14,15 @@ class LowLevel implements ConnectorInterface
     public function getConsumer(): ConsumerInterface
     {
         $conf = $this->getConf();
-        $conf->set('group.id', Manager::get('consumer_group'));
+        $conf->set('group.id', ConfigManager::get('consumer_group'));
         Factory::authenticate($conf);
 
         $consumer = new Consumer($conf);
-        $consumer->addBrokers(Manager::get('connections'));
+        $consumer->addBrokers(ConfigManager::get('connections'));
 
-        $topicConsumer = $consumer->newTopic(Manager::get('topic_id'), $this->getTopicConfigs());
+        $topicConsumer = $consumer->newTopic(ConfigManager::get('topic_id'), $this->getTopicConfigs());
 
-        $topicConsumer->consumeStart(Manager::get('partition'), Manager::get('offset'));
+        $topicConsumer->consumeStart(ConfigManager::get('partition'), ConfigManager::get('offset'));
 
         return new LowLevelConsumer($topicConsumer);
     }
@@ -34,7 +34,7 @@ class LowLevel implements ConnectorInterface
         // Set where to start consuming messages when there is no initial offset in
         // offset store or the desired offset is out of range.
         // 'smallest': start from the beginning
-        $topicConfig->set('auto.offset.reset', Manager::get('offset_reset'));
+        $topicConfig->set('auto.offset.reset', ConfigManager::get('offset_reset'));
 
         return $topicConfig;
     }

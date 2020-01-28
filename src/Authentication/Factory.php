@@ -13,7 +13,7 @@ class Factory
 
     public static function authenticate(Conf $conf): void
     {
-        $type = Manager::get('auth.type');
+        $type = ConfigManager::get('auth.type');
         switch ($type) {
             case null:
             case self::TYPE_NONE:

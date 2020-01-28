@@ -36,7 +36,7 @@ class ConfigTest extends LaravelTestCase
         $config->setOption($topicId);
 
         // Assertions
-        $this->assertArraySubset($expected, Manager::get());
+        $this->assertArraySubset($expected, ConfigManager::get());
     }
 
     public function testShouldNotSetRuntimeConfigWhenKafkaConfigIsInvalid(): void
@@ -51,7 +51,7 @@ class ConfigTest extends LaravelTestCase
         $config->setOption($topicId);
 
         // Assertions
-        $this->assertEmpty(Manager::get());
+        $this->assertEmpty(ConfigManager::get());
     }
 
     public function testShouldNotOverrideDefaultParametersWhenConfigIsSet(): void
@@ -82,6 +82,6 @@ class ConfigTest extends LaravelTestCase
         $config->setOption($topicId);
 
         // Assertions
-        $this->assertArraySubset($expected, Manager::get());
+        $this->assertArraySubset($expected, ConfigManager::get());
     }
 }

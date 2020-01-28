@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis;
 
-class Manager
+class ConfigManager
 {
     /**
      * @var array

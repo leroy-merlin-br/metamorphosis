@@ -25,7 +25,7 @@ class Connector
             });
         }
 
-        $conf->set('metadata.broker.list', Manager::get('connections'));
+        $conf->set('metadata.broker.list', ConfigManager::get('connections'));
 
         Factory::authenticate($conf);
 

@@ -34,8 +34,8 @@ class MetamorphosisServiceProvider extends ServiceProvider
             return $app->make(Producer::class);
         });
 
-        $this->app->singleton('manager', function () {
-            return new Manager();
+        $this->app->singleton('configManager', function () {
+            return new ConfigManager();
         });
 
         $this->app->bind(CachedSchemaRegistryClient::class, function ($app) {
@@ -46,7 +46,7 @@ class MetamorphosisServiceProvider extends ServiceProvider
         });
     }
 
-    private function getGuzzleHttpClient(Manager $manager): GuzzleClient
+    private function getGuzzleHttpClient(ConfigManager $manager): GuzzleClient
     {
         $options = $manager->get('request_options') ?: [];
         $options['timeout'] = $manager->get('timeout');

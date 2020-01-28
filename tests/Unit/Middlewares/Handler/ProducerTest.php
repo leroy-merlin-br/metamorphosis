@@ -19,7 +19,7 @@ class ProducerTest extends LaravelTestCase
     {
         parent::setUp();
 
-        Manager::set([
+        ConfigManager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => true,
@@ -102,7 +102,7 @@ class ProducerTest extends LaravelTestCase
     public function testItShouldSendMessageToKafkaBrokerWithoutAcknowledgment(): void
     {
         // Set
-        Manager::set([
+        ConfigManager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => true,
@@ -143,7 +143,7 @@ class ProducerTest extends LaravelTestCase
     public function testItShouldPollBrokerResponseEveryMaxPollRecordsIsReached(): void
     {
         // Set
-        Manager::set([
+        ConfigManager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => true,
@@ -186,7 +186,7 @@ class ProducerTest extends LaravelTestCase
     public function testItShouldHandleResponseEveryTimeWhenAsyncModeIsTrue(): void
     {
         // Set
-        Manager::set([
+        ConfigManager::set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => false,

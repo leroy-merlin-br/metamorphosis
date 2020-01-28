@@ -27,6 +27,6 @@ abstract class AbstractConfig
 
     protected function setConfigRuntime(array $config): void
     {
-        Manager::set($config);
+        ConfigManager::set($config);
     }
 }

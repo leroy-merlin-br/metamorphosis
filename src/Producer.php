@@ -28,7 +28,7 @@ class Producer
     public function build(HandlerInterface $producerHandler): Dispatcher
     {
         $this->config->setOption($producerHandler->getTopic());
-        $middlewares = Manager::middlewares();
+        $middlewares = ConfigManager::middlewares();
         $middlewares[] = app(ProducerMiddleware::class, ['producerHandler' => $producerHandler]);
 
         return new Dispatcher($middlewares);

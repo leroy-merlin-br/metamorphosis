@@ -21,7 +21,7 @@ class HighLevel implements ConsumerInterface
     {
         $this->consumer = $consumer;
 
-        $this->timeout = Manager::get('timeout');
+        $this->timeout = ConfigManager::get('timeout');
     }
 
     public function consume(): Message

@@ -26,8 +26,8 @@ class LowLevel implements ConsumerInterface
     {
         $this->consumer = $consumer;
 
-        $this->partition = Manager::get('partition');
-        $this->timeout = Manager::get('timeout');
+        $this->partition = ConfigManager::get('partition');
+        $this->timeout = ConfigManager::get('timeout');
     }
 
     public function consume(): Message

@@ -37,17 +37,17 @@ class ConsumerCommand extends BaseCommand
 
         $this->writeStartingConsumer();
 
-        $consumer = ConnectorFactory::make()->getConsumer();
+        $consumerManager = ConnectorFactory::make()->getConsumer();
 
-        $runner = app(Runner::class, compact('consumer'));
+        $runner = app(Runner::class, compact('consumerManager'));
         $runner->run();
     }
 
     private function writeStartingConsumer()
     {
-        $text = 'Starting consumer for topic: '.Manager::get('topic').PHP_EOL;
-        $text .= ' on consumer group: '.Manager::get('consumer_group').PHP_EOL;
-        $text .= 'Connecting in '.Manager::get('connections').PHP_EOL;
+        $text = 'Starting consumer for topic: '.ConfigManager::get('topic').PHP_EOL;
+        $text .= ' on consumer group: '.ConfigManager::get('consumer_group').PHP_EOL;
+        $text .= 'Connecting in '.ConfigManager::get('connections').PHP_EOL;
         $text .= 'Running consumer..';
 
         $this->output->writeln($text);

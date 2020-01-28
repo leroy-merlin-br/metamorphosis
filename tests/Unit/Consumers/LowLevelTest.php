@@ -15,7 +15,7 @@ class LowLevelTest extends LaravelTestCase
         // Set
         $timeout = 2;
         $partition = 3;
-        Manager::set(compact('timeout', 'partition'));
+        ConfigManager::set(compact('timeout', 'partition'));
 
         $consumerTopic = m::mock(ConsumerTopic::class);
         $message = new Message();

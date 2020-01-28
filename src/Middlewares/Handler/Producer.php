@@ -41,8 +41,8 @@ class Producer implements MiddlewareInterface
         $this->producerHandler = $producerHandler;
 
         $this->producer = $this->connector->getProducerTopic($producerHandler);
-        $this->topic = $this->producer->newTopic(Manager::get('topic_id'));
-        $this->partition = Manager::get('partition');
+        $this->topic = $this->producer->newTopic(ConfigManager::get('topic_id'));
+        $this->partition = ConfigManager::get('partition');
     }
 
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
@@ -60,25 +60,25 @@ class Producer implements MiddlewareInterface
     {
         $this->processMessageCount++;
 
-        if (!Manager::get('is_async')) {
+        if (!ConfigManager::get('is_async')) {
             $this->flushMessage();
 
             return;
         }
 
-        if (0 === ($this->processMessageCount % Manager::get('max_poll_records'))) {
+        if (0 === ($this->processMessageCount % ConfigManager::get('max_poll_records'))) {
             $this->flushMessage();
         }
     }
 
     private function flushMessage(): void
     {
-        if (!Manager::get('required_acknowledgment')) {
+        if (!ConfigManager::get('required_acknowledgment')) {
             return;
         }
 
-        for ($flushAttempts = 0; $flushAttempts < Manager::get('flush_attempts'); $flushAttempts++) {
-            if (0 === $this->producer->poll(Manager::get('timeout'))) {
+        for ($flushAttempts = 0; $flushAttempts < ConfigManager::get('flush_attempts'); $flushAttempts++) {
+            if (0 === $this->producer->poll(ConfigManager::get('timeout'))) {
                 return;
             }
         }

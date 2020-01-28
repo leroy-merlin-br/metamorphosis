@@ -17,7 +17,7 @@ class AvroSchemaDecoder implements MiddlewareInterface
 
     public function __construct(MessageDecoder $decoder)
     {
-        if (!Manager::get('url')) {
+        if (!ConfigManager::get('url')) {
             throw new ConfigurationException("Avro schema url not found, it's required to use AvroSchemaDecoder Middleware");
         }
 

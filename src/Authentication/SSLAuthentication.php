@@ -20,9 +20,9 @@ class SSLAuthentication implements AuthenticationInterface
 
     private function authenticate(): void
     {
-        $this->conf->set('security.protocol', Manager::get('auth.type'));
-        $this->conf->set('ssl.ca.location', Manager::get('auth.ca'));
-        $this->conf->set('ssl.certificate.location', Manager::get('auth.certificate'));
-        $this->conf->set('ssl.key.location', Manager::get('auth.key'));
+        $this->conf->set('security.protocol', ConfigManager::get('auth.type'));
+        $this->conf->set('ssl.ca.location', ConfigManager::get('auth.ca'));
+        $this->conf->set('ssl.certificate.location', ConfigManager::get('auth.certificate'));
+        $this->conf->set('ssl.key.location', ConfigManager::get('auth.key'));
     }
 }

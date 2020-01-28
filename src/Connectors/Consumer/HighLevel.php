@@ -14,11 +14,11 @@ class HighLevel implements ConnectorInterface
     {
         $conf = $this->getConf();
 
-        $conf->set('group.id', Manager::get('consumer_group'));
-        $conf->set('auto.offset.reset', Manager::get('offset_reset'));
+        $conf->set('group.id', ConfigManager::get('consumer_group'));
+        $conf->set('auto.offset.reset', ConfigManager::get('offset_reset'));
 
         $consumer = app(KafkaConsumer::class, ['conf' => $conf]);
-        $consumer->subscribe([Manager::get('topic_id')]);
+        $consumer->subscribe([ConfigManager::get('topic_id')]);
 
         return app(HighLevelConsumer::class, compact('consumer'));
     }
@@ -28,7 +28,7 @@ class HighLevel implements ConnectorInterface
         $conf = resolve(Conf::class);
         Factory::authenticate($conf);
 
-        $conf->set('metadata.broker.list', Manager::get('connections'));
+        $conf->set('metadata.broker.list', ConfigManager::get('connections'));
 
         return $conf;
     }

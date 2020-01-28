@@ -11,7 +11,7 @@ class SSLAuthenticationTest extends LaravelTestCase
     public function testItShouldValidateAuthenticationConfigurations(): void
     {
         // Set
-        Manager::set([
+        ConfigManager::set([
             'auth' => [
                 'type' => 'ssl',
                 'ca' => 'path/to/ca',

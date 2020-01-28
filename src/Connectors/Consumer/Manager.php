@@ -1,0 +1,40 @@
+<?php
+namespace Metamorphosis\Connectors\Consumer;
+
+use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\Exceptions\ResponseWarningException;
+use Metamorphosis\Record\ConsumerRecord;
+use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerHandler;
+
+class Manager
+{
+    /**
+     * @var ConsumerInterface
+     */
+    private $consumer;
+
+    /**
+     * @var ConsumerHandler
+     */
+    private $consumerHandler;
+
+    public function __construct(ConsumerInterface $consumer, ConsumerHandler $consumerHandler)
+    {
+        $this->consumer = $consumer;
+        $this->consumerHandler = $consumerHandler;
+    }
+
+    public function handleMessage(): void
+    {
+        $response = $this->consumer->consume();
+
+        try {
+            $record = app(ConsumerRecord::class, compact('response'));
+            $this->middlewareDispatcher->handle($record);
+        } catch (ResponseWarningException $exception) {
+            $this->consumerHandler->warning($exception);
+        } catch (Exception $exception) {
+            $this->consumerHandler->failed($exception);
+        }
+    }
+}

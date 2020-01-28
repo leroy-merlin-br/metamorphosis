@@ -45,4 +45,19 @@ class Manager
             $this->consumerHandler->failed($exception);
         }
     }
+
+    public function handleMessageCommitSync(): void
+    {
+        $response = $this->consumer->consume();
+
+        try {
+            $record = app(ConsumerRecord::class, compact('response'));
+            $this->dispatcher->handle($record);
+            $this->consumer->commit();
+        } catch (ResponseWarningException $exception) {
+            $this->consumerHandler->warning($exception);
+        } catch (Exception $exception) {
+            $this->consumerHandler->failed($exception);
+        }
+    }
 }

@@ -46,11 +46,11 @@ class MetamorphosisServiceProvider extends ServiceProvider
         });
     }
 
-    private function getGuzzleHttpClient(ConfigManager $manager): GuzzleClient
+    private function getGuzzleHttpClient(ConfigManager $configManager): GuzzleClient
     {
-        $options = $manager->get('request_options') ?: [];
-        $options['timeout'] = $manager->get('timeout');
-        $options['base_uri'] = $manager->get('url');
+        $options = $configManager->get('request_options') ?: [];
+        $options['timeout'] = $configManager->get('timeout');
+        $options['base_uri'] = $configManager->get('url');
         $options['headers'] = array_merge(
             $this->getDefaultHeaders(),
             $options['headers']

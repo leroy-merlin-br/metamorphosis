@@ -21,6 +21,7 @@ class Producer implements MiddlewareInterface
      * @var \RdKafka\ProducerTopic
      */
     private $topic;
+
     /**
      * @var Pool
      */

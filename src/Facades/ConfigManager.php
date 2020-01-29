@@ -13,6 +13,6 @@ class ConfigManager extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'managerConfig';
+        return 'configManager';
     }
 }

@@ -2,13 +2,13 @@
 namespace Tests\Unit\Producer;
 
 use Metamorphosis\Facades\ConfigManager;
-use Metamorphosis\Producer\Pool;
+use Metamorphosis\Producer\Poll;
 use Mockery as m;
 use RdKafka\Producer as KafkaProducer;
 use RuntimeException;
 use Tests\LaravelTestCase;
 
-class PoolTest extends LaravelTestCase
+class PollTest extends LaravelTestCase
 {
     public function testItShouldHandleMessageWithoutAcknowledgment(): void
     {
@@ -17,19 +17,19 @@ class PoolTest extends LaravelTestCase
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => true,
-            'max_pool_records' => 500,
+            'max_poll_records' => 500,
             'flush_attempts' => 10,
             'required_acknowledgment' => false,
         ]);
         $kafkaProducer = m::mock(KafkaProducer::class);
-        $pool = new Pool($kafkaProducer);
+        $poll = new Poll($kafkaProducer);
 
         // Expectations
-        $kafkaProducer->shouldReceive('pool')
+        $kafkaProducer->shouldReceive('poll')
             ->never();
 
         // Actions
-        $pool->handleResponse();
+        $poll->handleResponse();
     }
 
     public function testShouldThrowExceptionWhenFlushFailed(): void
@@ -39,25 +39,25 @@ class PoolTest extends LaravelTestCase
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => false,
-            'max_pool_records' => 500,
+            'max_poll_records' => 500,
             'flush_attempts' => 10,
             'required_acknowledgment' => true,
             'partition' => 0,
         ]);
 
         $kafkaProducer = m::mock(KafkaProducer::class);
-        $pool = new Pool($kafkaProducer);
+        $poll = new Poll($kafkaProducer);
 
         // Expectations
         $kafkaProducer->expects()
-            ->pool(4000)
+            ->poll(4000)
             ->times(10)
             ->andReturn(1);
 
         $this->expectException(RuntimeException::class);
 
         // Actions
-        $pool->handleResponse();
+        $poll->handleResponse();
     }
 
     public function testItShouldHandleResponseEveryTimeWhenAsyncModeIsTrue(): void
@@ -67,23 +67,23 @@ class PoolTest extends LaravelTestCase
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => false,
-            'max_pool_records' => 500,
+            'max_poll_records' => 500,
             'flush_attempts' => 10,
             'required_acknowledgment' => true,
             'partition' => 0,
         ]);
         $kafkaProducer = m::mock(KafkaProducer::class);
-        $pool = new Pool($kafkaProducer);
+        $poll = new Poll($kafkaProducer);
 
         // Expectations
         $kafkaProducer->expects()
-            ->pool(4000)
+            ->poll(4000)
             ->times(3)
             ->andReturn(0);
 
         // Actions
-        $pool->handleResponse();
-        $pool->handleResponse();
-        $pool->handleResponse();
+        $poll->handleResponse();
+        $poll->handleResponse();
+        $poll->handleResponse();
     }
 }

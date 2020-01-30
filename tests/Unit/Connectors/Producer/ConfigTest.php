@@ -18,7 +18,7 @@ class ConfigTest extends LaravelTestCase
             'timeout' => 10000,
             'is_async' => true,
             'required_acknowledgment' => true,
-            'max_pool_records' => 500,
+            'max_poll_records' => 500,
             'flush_attempts' => 10,
             'partition' => -1,
             'broker' => 'default',
@@ -57,7 +57,7 @@ class ConfigTest extends LaravelTestCase
     public function testShouldNotOverrideDefaultParametersWhenConfigIsSet(): void
     {
         // Set
-        config(['kafka.topics.default.producer.max_pool_records' => 3000]);
+        config(['kafka.topics.default.producer.max_poll_records' => 3000]);
         $config = new Config();
         $topicId = 'default';
 
@@ -65,7 +65,7 @@ class ConfigTest extends LaravelTestCase
             'timeout' => 10000,
             'is_async' => true,
             'required_acknowledgment' => true,
-            'max_pool_records' => 3000,
+            'max_poll_records' => 3000,
             'flush_attempts' => 10,
             'broker' => 'default',
             'topic' => 'default',

@@ -4,7 +4,7 @@ namespace Tests\Unit\Middlewares\Handler;
 use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Middlewares\Handler\Producer;
-use Metamorphosis\Producer\Pool;
+use Metamorphosis\Producer\Poll;
 use Metamorphosis\Record\ProducerRecord;
 use Mockery as m;
 use RdKafka\Producer as KafkaTopicProducer;
@@ -20,7 +20,7 @@ class ProducerTest extends LaravelTestCase
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => true,
-            'max_pool_records' => 500,
+            'max_poll_records' => 500,
             'flush_attempts' => 10,
             'required_acknowledgment' => true,
             'partition' => 0,
@@ -30,7 +30,7 @@ class ProducerTest extends LaravelTestCase
     public function testItShouldSendMessageToKafkaBroker(): void
     {
         // Set
-        $pool = m::mock(Pool::class);
+        $poll = m::mock(Poll::class);
         $middlewareHandler = m::mock(MiddlewareHandlerInterface::class);
         $producerTopic = m::mock(KafkaTopicProducer::class);
 
@@ -38,17 +38,17 @@ class ProducerTest extends LaravelTestCase
         $record = new ProducerRecord($record, 'topic_key');
 
         // Expectations
-        $pool->expects()
+        $poll->expects()
             ->handleResponse();
 
-        $pool->expects()
+        $poll->expects()
             ->flushMessage();
 
         $producerTopic->expects()
             ->produce(1, 0, $record->getPayload(), null);
 
         // Actions
-        $producerHandler = new Producer($producerTopic, $pool, 1);
+        $producerHandler = new Producer($producerTopic, $poll, 1);
         $producerHandler->process($record, $middlewareHandler);
     }
 }

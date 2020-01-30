@@ -7,7 +7,7 @@ use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
-use Metamorphosis\Producer\Pool;
+use Metamorphosis\Producer\Poll;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
 class Producer
@@ -53,12 +53,12 @@ class Producer
         $producer = $this->connector->getProducerTopic($producerHandler);
 
         $topic = $producer->newTopic(ConfigManager::get('topic_id'));
-        $pool = app(Pool::class, ['producer' => $producer]);
+        $poll = app(Poll::class, ['producer' => $producer]);
         $partition = ConfigManager::get('partition');
 
         return app(ProducerMiddleware::class, [
             'topic' => $topic,
-            'pool' => $pool,
+            'poll' => $poll,
             'partition' => $partition,
         ]);
     }

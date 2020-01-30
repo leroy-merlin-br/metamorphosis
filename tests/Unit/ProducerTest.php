@@ -141,7 +141,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->pool(1000)
+            ->poll(1000)
             ->andReturn(0);
 
         $producerMiddleware->expects()
@@ -180,7 +180,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->pool(1000)
+            ->poll(1000)
             ->andReturn(0);
 
         // Actions

@@ -8,7 +8,7 @@ use Metamorphosis\Connectors\Consumer\LowLevel;
 use Tests\LaravelTestCase;
 use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
-class ConnectorFactoryTest extends LaravelTestCase
+class FactoryTest extends LaravelTestCase
 {
     protected function setUp()
     {

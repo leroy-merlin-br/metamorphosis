@@ -102,7 +102,7 @@ class ProducerTest extends LaravelTestCase
                         'producer' => [
                             'required_acknowledgment' => true,
                             'is_async' => true,
-                            'max_pool_records' => 500,
+                            'max_poll_records' => 500,
                             'flush_attempts' => 10,
                             'middlewares' => [],
                             'timeout' => 20000,

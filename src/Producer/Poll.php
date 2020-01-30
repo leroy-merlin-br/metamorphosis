@@ -5,7 +5,7 @@ use Metamorphosis\Facades\ConfigManager;
 use RdKafka\Producer;
 use RuntimeException;
 
-class Pool
+class Poll
 {
     /**
      * @var int
@@ -20,7 +20,7 @@ class Pool
     /**
      * @var int
      */
-    private $maxPoolRecords;
+    private $maxPollRecords;
 
     /**
      * @var bool
@@ -45,7 +45,7 @@ class Pool
     public function __construct(Producer $producer)
     {
         $this->isAsync = ConfigManager::get('is_async');
-        $this->maxPoolRecords = ConfigManager::get('max_pool_records');
+        $this->maxPollRecords = ConfigManager::get('max_poll_records');
         $this->requiredAcknowledgment = ConfigManager::get('required_acknowledgment');
         $this->maxFlushAttempts = ConfigManager::get('flush_attempts');
         $this->timeout = ConfigManager::get('timeout');
@@ -63,7 +63,7 @@ class Pool
             return;
         }
 
-        if (0 === ($this->processMessageCount % $this->maxPoolRecords)) {
+        if (0 === ($this->processMessageCount % $this->maxPollRecords)) {
             $this->flushMessage();
         }
     }
@@ -75,7 +75,7 @@ class Pool
         }
 
         for ($flushAttempts = 0; $flushAttempts < $this->maxFlushAttempts; $flushAttempts++) {
-            if (0 === $this->producer->pool($this->timeout)) {
+            if (0 === $this->producer->poll($this->timeout)) {
                 return;
             }
         }

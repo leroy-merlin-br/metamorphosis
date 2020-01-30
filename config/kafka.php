@@ -99,7 +99,7 @@ return [
                         'timeout' => 20000,
 
                         // Once you've enabled this, the Kafka consumer will commit the
-                        // offset of the last message received in response to its pool() call
+                        // offset of the last message received in response to its poll() call
                         'auto_commit' => false,
 
                         // If commit_async if false process block until offsets are committed or the commit fails.
@@ -122,7 +122,7 @@ return [
 
                 // The amount of records to be sent in every iteration
                 // That means that at each 500 messages we check if messages was sent.
-                'max_pool_records' => 500,
+                'max_poll_records' => 500,
 
                 // The amount of attempts we will try to run the flush.
                 // There's no magic number here, it depends on any factor
@@ -133,7 +133,7 @@ return [
                 'middlewares' => [],
 
                 // We need to set a timeout when polling the messages.
-                // That means: how long we'll wait a response from pool
+                // That means: how long we'll wait a response from poll
                 'timeout' => 10000,
 
                 // Here you can configure which partition you want to send the message

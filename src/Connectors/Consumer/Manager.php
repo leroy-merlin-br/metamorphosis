@@ -39,9 +39,8 @@ class Manager
 
     public function handleMessage(): void
     {
-        $response = $this->consumer->consume();
-
         try {
+            $response = $this->consumer->consume();
             $record = app(ConsumerRecord::class, compact('response'));
             $this->dispatcher->handle($record);
         } catch (ResponseWarningException $exception) {

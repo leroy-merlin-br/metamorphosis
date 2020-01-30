@@ -1,12 +1,12 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
+use Exception;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerHandler;
-use Exception;
 
 class Manager
 {

@@ -26,7 +26,7 @@ class Runner
         }
 
         while (true) {
-            $this->manager->handleMessage();;
+            $this->manager->handleMessage();
         }
     }
 }

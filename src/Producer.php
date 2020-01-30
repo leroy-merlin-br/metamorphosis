@@ -53,13 +53,13 @@ class Producer
         $producer = $this->connector->getProducerTopic($producerHandler);
 
         $topic = $producer->newTopic(ConfigManager::get('topic_id'));
-        $poll = app(Pool::class, ['producer' => $producer]);
+        $pool = app(Pool::class, ['producer' => $producer]);
         $partition = ConfigManager::get('partition');
 
         return app(ProducerMiddleware::class, [
             'topic' => $topic,
-            'pool' => $poll,
-            'partition' => $partition
+            'pool' => $pool,
+            'partition' => $partition,
         ]);
     }
 }

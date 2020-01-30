@@ -4,6 +4,7 @@ namespace Metamorphosis\Middlewares\Handler;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Producer\Pool;
 use Metamorphosis\Record\RecordInterface;
+use RdKafka\ProducerTopic;
 
 class Producer implements MiddlewareInterface
 {
@@ -15,7 +16,7 @@ class Producer implements MiddlewareInterface
     /**
      * @var Pool
      */
-    private $poll;
+    private $pool;
 
     /**
      * @var \RdKafka\ProducerTopic
@@ -27,7 +28,7 @@ class Producer implements MiddlewareInterface
      */
     private $pool;
 
-    public function __construct(\RdKafka\ProducerTopic $topic, Pool $pool, int $partition)
+    public function __construct(ProducerTopic $topic, Pool $pool, int $partition)
     {
         $this->topic = $topic;
         $this->pool = $pool;
@@ -37,7 +38,8 @@ class Producer implements MiddlewareInterface
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
         $this->topic->produce($this->getPartition($record), 0, $record->getPayload(), $record->getKey());
-        $this->poll->handleResponse();
+
+        $this->pool->handleResponse();
     }
 
     public function __destruct()

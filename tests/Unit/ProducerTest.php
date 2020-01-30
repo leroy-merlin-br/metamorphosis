@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Unit;
 
-use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Exceptions\JsonException;
@@ -142,7 +141,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->poll(1000)
+            ->pool(1000)
             ->andReturn(0);
 
         $producerMiddleware->expects()
@@ -181,7 +180,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->poll(1000)
+            ->pool(1000)
             ->andReturn(0);
 
         // Actions

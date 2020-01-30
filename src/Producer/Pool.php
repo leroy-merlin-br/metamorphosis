@@ -2,6 +2,7 @@
 namespace Metamorphosis\Producer;
 
 use Metamorphosis\Facades\ConfigManager;
+use RdKafka\Producer;
 use RuntimeException;
 
 class Pool
@@ -19,7 +20,7 @@ class Pool
     /**
      * @var int
      */
-    private $maxPollRecords;
+    private $maxPoolRecords;
 
     /**
      * @var bool
@@ -29,7 +30,7 @@ class Pool
     /**
      * @var int
      */
-    private $flushAttempts;
+    private $maxFlushAttempts;
 
     /**
      * @var int
@@ -41,12 +42,12 @@ class Pool
      */
     private $producer;
 
-    public function __construct(\RdKafka\Producer $producer)
+    public function __construct(Producer $producer)
     {
         $this->isAsync = ConfigManager::get('is_async');
-        $this->maxPollRecords = ConfigManager::get('max_poll_records');
+        $this->maxPoolRecords = ConfigManager::get('max_pool_records');
         $this->requiredAcknowledgment = ConfigManager::get('required_acknowledgment');
-        $this->flushAttempts = ConfigManager::get('flush_attempts');
+        $this->maxFlushAttempts = ConfigManager::get('flush_attempts');
         $this->timeout = ConfigManager::get('timeout');
 
         $this->producer = $producer;
@@ -62,7 +63,7 @@ class Pool
             return;
         }
 
-        if (0 === ($this->processMessageCount % $this->maxPollRecords)) {
+        if (0 === ($this->processMessageCount % $this->maxPoolRecords)) {
             $this->flushMessage();
         }
     }
@@ -73,8 +74,8 @@ class Pool
             return;
         }
 
-        for ($flushAttempts = 0; $flushAttempts < $this->flushAttempts; $flushAttempts++) {
-            if (0 === $this->producer->poll($this->timeout)) {
+        for ($flushAttempts = 0; $flushAttempts < $this->maxFlushAttempts; $flushAttempts++) {
+            if (0 === $this->producer->pool($this->timeout)) {
                 return;
             }
         }

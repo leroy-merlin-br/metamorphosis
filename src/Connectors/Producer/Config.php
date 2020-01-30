@@ -16,7 +16,7 @@ class Config extends AbstractConfig
         'timeout' => 'int',
         'is_async' => 'bool',
         'required_acknowledgment' => 'bool',
-        'max_poll_records' => 'int',
+        'max_pool_records' => 'int',
         'flush_attempts' => 'int',
         'auth' => 'array',
         'middlewares' => 'array',
@@ -29,7 +29,7 @@ class Config extends AbstractConfig
         'timeout' => 1000,
         'is_async' => true,
         'required_acknowledgment' => true,
-        'max_poll_records' => 500,
+        'max_pool_records' => 500,
         'flush_attempts' => 10,
         'partition' => RD_KAFKA_PARTITION_UA,
     ];

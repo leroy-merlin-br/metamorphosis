@@ -100,10 +100,11 @@ return [
 
                         // Once you've enabled this, the Kafka consumer will commit the
                         // offset of the last message received in response to its poll() call
-                        'auto_commit' => false,
+                        'auto_commit' => true,
 
                         // If commit_async if false process block until offsets are committed or the commit fails.
-                        'commit_async' => true,
+                        // Only works when auto_commit is false
+                        'commit_async' => false,
 
                         // An array of middlewares applied only for this consumer_group
                         'middlewares' => [],

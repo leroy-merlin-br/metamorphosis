@@ -28,4 +28,14 @@ class HighLevel implements ConsumerInterface
     {
         return $this->consumer->consume($this->timeout);
     }
+
+    public function commit(): void
+    {
+        $this->consumer->commit();
+    }
+
+    public function commitAsync(): void
+    {
+        $this->consumer->commitAsync();
+    }
 }

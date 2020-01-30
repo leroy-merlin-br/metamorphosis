@@ -25,11 +25,28 @@ class Manager
      */
     private $dispatcher;
 
-    public function __construct(ConsumerInterface $consumer, ConsumerHandler $consumerHandler, Dispatcher $dispatcher)
-    {
+    /**
+     * @var bool
+     */
+    private $autoCommit;
+
+    /**
+     * @var bool
+     */
+    private $commitAsync;
+
+    public function __construct(
+        ConsumerInterface $consumer,
+        ConsumerHandler $consumerHandler,
+        Dispatcher $dispatcher,
+        bool $autoCommit,
+        bool $commitAsync
+    ) {
         $this->consumer = $consumer;
         $this->consumerHandler = $consumerHandler;
         $this->dispatcher = $dispatcher;
+        $this->autoCommit = $autoCommit;
+        $this->commitAsync = $commitAsync;
     }
 
     public function getConsumer(): ConsumerInterface
@@ -43,6 +60,7 @@ class Manager
             $response = $this->consumer->consume();
             $record = app(ConsumerRecord::class, compact('response'));
             $this->dispatcher->handle($record);
+            $this->commit();
         } catch (ResponseWarningException $exception) {
             $this->consumerHandler->warning($exception);
         } catch (Exception $exception) {
@@ -50,18 +68,17 @@ class Manager
         }
     }
 
-    public function handleMessageCommitSync(): void
+    private function commit(): void
     {
-        $response = $this->consumer->consume();
-
-        try {
-            $record = app(ConsumerRecord::class, compact('response'));
-            $this->dispatcher->handle($record);
-            $this->consumer->commit();
-        } catch (ResponseWarningException $exception) {
-            $this->consumerHandler->warning($exception);
-        } catch (Exception $exception) {
-            $this->consumerHandler->failed($exception);
+        if ($this->autoCommit) {
+            return;
         }
+
+        if ($this->commitAsync) {
+            $this->consumer->commitAsync();
+            return;
+        }
+
+        $this->consumer->commit();
     }
 }

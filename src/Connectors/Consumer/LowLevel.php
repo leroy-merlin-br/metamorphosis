@@ -20,7 +20,12 @@ class LowLevel implements ConnectorInterface
         $consumer = new Consumer($conf);
         $consumer->addBrokers(ConfigManager::get('connections'));
 
-        $topicConsumer = $consumer->newTopic(ConfigManager::get('topic_id'), $this->getTopicConfigs());
+        $topicConf = $this->getTopicConfigs();
+        if (!ConfigManager::get('auto_commit')) {
+            $topicConf->set('auto.commit.enable', false);
+        }
+
+        $topicConsumer = $consumer->newTopic(ConfigManager::get('topic_id'), $topicConf);
 
         $topicConsumer->consumeStart(ConfigManager::get('partition'), ConfigManager::get('offset'));
 

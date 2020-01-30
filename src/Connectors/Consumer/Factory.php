@@ -30,10 +30,10 @@ class Factory
     private static function getConsumer(): ConsumerInterface
     {
         if (self::requiresPartition()) {
-            return app(LowLevel::class);
+            return app(LowLevel::class)->getConsumer();
         }
 
-        return app(HighLevel::class);
+        return app(HighLevel::class)->getConsumer();
     }
 
     private static function getMiddlewareDispatcher($handler, array $middlewares): Dispatcher

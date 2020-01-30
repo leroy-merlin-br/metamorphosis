@@ -32,6 +32,11 @@ class Manager
         $this->dispatcher = $dispatcher;
     }
 
+    public function getConsumer(): ConsumerInterface
+    {
+        return $this->consumer;
+    }
+
     public function handleMessage(): void
     {
         $response = $this->consumer->consume();

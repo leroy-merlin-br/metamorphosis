@@ -85,11 +85,12 @@ class ConsumerCommandTest extends LaravelTestCase
         $parameters = [
             'topic' => 'topic_key',
             'consumer_group' => 'default',
+            '--times' => 66,
         ];
 
         // Expectations
         $runner->expects()
-            ->run()
+            ->run(66)
             ->once();
 
         // Actions
@@ -109,7 +110,7 @@ class ConsumerCommandTest extends LaravelTestCase
 
         // Expectations
         $runner->expects()
-            ->run()
+            ->run(null)
             ->once();
 
         // Actions
@@ -128,7 +129,7 @@ class ConsumerCommandTest extends LaravelTestCase
 
         // Expectations
         $runner->expects()
-            ->run()
+            ->run(null)
             ->once();
 
         // Actions
@@ -155,7 +156,7 @@ class ConsumerCommandTest extends LaravelTestCase
 
         // Expectations
         $runner->expects()
-            ->run()
+            ->run(null)
             ->once();
 
         $this->artisan($command, $parameters);

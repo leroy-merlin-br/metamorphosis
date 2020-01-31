@@ -5,5 +5,5 @@ use Metamorphosis\Consumers\ConsumerInterface;
 
 interface ConnectorInterface
 {
-    public function getConsumer(): ConsumerInterface;
+    public function getConsumer(bool $autoCommit): ConsumerInterface;
 }

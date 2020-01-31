@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit;
 
-use Metamorphosis\Manager;
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Middlewares\JsonDecode;
 use Metamorphosis\Middlewares\Log;
 use Tests\LaravelTestCase;
@@ -11,7 +11,7 @@ class ManagerTest extends LaravelTestCase
     public function testManagerHandleConfigurations(): void
     {
         // Set
-        $manager = new Manager();
+        $manager = new ConfigManager();
         $manager->set([
             'topic' => 'products',
             'middlewares' => [
@@ -34,7 +34,7 @@ class ManagerTest extends LaravelTestCase
     public function testShouldRemoveOldMiddlewareBeforeAddOthers(): void
     {
         // Set
-        $manager = new Manager();
+        $manager = new ConfigManager();
         $firstConfig = [
             'topic' => 'products',
             'middlewares' => [

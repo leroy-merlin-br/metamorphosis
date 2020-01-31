@@ -2,12 +2,15 @@
 namespace Tests\Unit;
 
 use Metamorphosis\Connectors\Producer\Config;
+use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use Mockery as m;
+use RdKafka\Producer as KafkaProducer;
+use RdKafka\ProducerTopic;
 use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase
@@ -44,12 +47,24 @@ class ProducerTest extends LaravelTestCase
             m::mock(ProducerMiddleware::class)
         );
         $config = $this->app->make(Config::class);
+        $connector = m::mock(Connector::class);
+        $producer = new Producer($config, $connector);
+
+        $kafkaProducer = m::mock(KafkaProducer::class);
+        $producerTopic = m::mock(ProducerTopic::class);
 
         $producerHandler = new class($record, $topic) extends AbstractHandler {
         };
-        $producer = new Producer($config);
 
         // Expectations
+        $connector->expects()
+            ->getProducerTopic($producerHandler)
+            ->andReturn($kafkaProducer);
+
+        $kafkaProducer->expects()
+            ->newTopic('topic_name')
+            ->andReturn($producerTopic);
+
         $producerMiddleware->expects()
             ->process()
             ->withAnyArgs();
@@ -68,11 +83,24 @@ class ProducerTest extends LaravelTestCase
             m::mock(ProducerMiddleware::class)
         );
         $config = $this->app->make(Config::class);
-        $producer = new Producer($config);
+        $connector = m::mock(Connector::class);
+        $producer = new Producer($config, $connector);
+
+        $kafkaProducer = m::mock(KafkaProducer::class);
+        $producerTopic = m::mock(ProducerTopic::class);
+
         $producerHandler = new class($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
+        $connector->expects()
+            ->getProducerTopic($producerHandler)
+            ->andReturn($kafkaProducer);
+
+        $kafkaProducer->expects()
+            ->newTopic('topic_name')
+            ->andReturn($producerTopic);
+
         $producerMiddleware->expects()
             ->process()
             ->withAnyArgs();
@@ -94,11 +122,28 @@ class ProducerTest extends LaravelTestCase
             m::mock(ProducerMiddleware::class)
         );
         $config = $this->app->make(Config::class);
-        $producer = new Producer($config);
+        $connector = m::mock(Connector::class);
+        $producer = new Producer($config, $connector);
+
+        $kafkaProducer = m::mock(KafkaProducer::class);
+        $producerTopic = m::mock(ProducerTopic::class);
+
         $producerHandler = new class($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
+        $connector->expects()
+            ->getProducerTopic($producerHandler)
+            ->andReturn($kafkaProducer);
+
+        $kafkaProducer->expects()
+            ->newTopic('topic_name')
+            ->andReturn($producerTopic);
+
+        $kafkaProducer->expects()
+            ->poll(1000)
+            ->andReturn(0);
+
         $producerMiddleware->expects()
             ->process()
             ->never();
@@ -109,19 +154,34 @@ class ProducerTest extends LaravelTestCase
         $producer->produce($producerHandler);
     }
 
-    public function testShouldBuildDispacther(): void
+    public function testShouldBuildDispatcher(): void
     {
         // Set
         $record = json_encode(['message' => 'some message']);
         $topic = 'some_topic';
-        $config = $this->instance(Config::class, m::mock(Config::class));
-        $producer = new Producer($config);
+
+        $config = $this->app->make(Config::class);
+        $connector = m::mock(Connector::class);
+        $producer = new Producer($config, $connector);
+
+        $kafkaProducer = m::mock(KafkaProducer::class);
+        $producerTopic = m::mock(ProducerTopic::class);
+
         $producerHandler = new class($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
-        $config->expects()
-            ->setOption('some_topic');
+        $connector->expects()
+            ->getProducerTopic($producerHandler)
+            ->andReturn($kafkaProducer);
+
+        $kafkaProducer->expects()
+            ->newTopic('topic_name')
+            ->andReturn($producerTopic);
+
+        $kafkaProducer->expects()
+            ->poll(1000)
+            ->andReturn(0);
 
         // Actions
         $result = $producer->build($producerHandler);

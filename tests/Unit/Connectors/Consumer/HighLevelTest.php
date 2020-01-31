@@ -3,7 +3,7 @@ namespace Test;
 
 use Metamorphosis\Connectors\Consumer\HighLevel;
 use Metamorphosis\Consumers\HighLevel as HighLevelConsumer;
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 use Tests\LaravelTestCase;
 
 class HighLevelTest extends LaravelTestCase
@@ -11,7 +11,7 @@ class HighLevelTest extends LaravelTestCase
     public function testItShouldMakeConnectorSetup(): void
     {
         // Set
-        Manager::set([
+        ConfigManager::set([
             'connections' => 'kafka:123',
             'consumer_group' => 'some-group',
             'topic_id' => 'some_topic',
@@ -20,7 +20,7 @@ class HighLevelTest extends LaravelTestCase
         $connector = new HighLevel();
 
         // Actions
-        $result = $connector->getConsumer();
+        $result = $connector->getConsumer(false);
 
         // Assertions
         $this->assertInstanceOf(HighLevelConsumer::class, $result);

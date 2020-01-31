@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Consumers;
 
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 use RdKafka\KafkaConsumer;
 use RdKafka\Message;
 
@@ -21,11 +21,21 @@ class HighLevel implements ConsumerInterface
     {
         $this->consumer = $consumer;
 
-        $this->timeout = Manager::get('timeout');
+        $this->timeout = ConfigManager::get('timeout');
     }
 
     public function consume(): Message
     {
         return $this->consumer->consume($this->timeout);
+    }
+
+    public function commit(): void
+    {
+        $this->consumer->commit();
+    }
+
+    public function commitAsync(): void
+    {
+        $this->consumer->commitAsync();
     }
 }

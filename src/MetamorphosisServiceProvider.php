@@ -34,23 +34,23 @@ class MetamorphosisServiceProvider extends ServiceProvider
             return $app->make(Producer::class);
         });
 
-        $this->app->singleton('manager', function () {
-            return new Manager();
+        $this->app->singleton('configManager', function () {
+            return new ConfigManager();
         });
 
         $this->app->bind(CachedSchemaRegistryClient::class, function ($app) {
-            $guzzleHttp = $this->getGuzzleHttpClient($app->manager);
+            $guzzleHttp = $this->getGuzzleHttpClient($app->configManager);
             $avroClient = new Client($guzzleHttp);
 
             return new CachedSchemaRegistryClient($avroClient);
         });
     }
 
-    private function getGuzzleHttpClient(Manager $manager): GuzzleClient
+    private function getGuzzleHttpClient(ConfigManager $configManager): GuzzleClient
     {
-        $options = $manager->get('request_options') ?: [];
-        $options['timeout'] = $manager->get('timeout');
-        $options['base_uri'] = $manager->get('url');
+        $options = $configManager->get('request_options') ?: [];
+        $options['timeout'] = $configManager->get('timeout');
+        $options['base_uri'] = $configManager->get('url');
         $options['headers'] = array_merge(
             $this->getDefaultHeaders(),
             $options['headers']

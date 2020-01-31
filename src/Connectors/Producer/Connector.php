@@ -2,7 +2,7 @@
 namespace Metamorphosis\Connectors\Producer;
 
 use Metamorphosis\Authentication\Factory;
-use Metamorphosis\Facades\Manager;
+use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use RdKafka\Conf;
@@ -25,7 +25,7 @@ class Connector
             });
         }
 
-        $conf->set('metadata.broker.list', Manager::get('connections'));
+        $conf->set('metadata.broker.list', ConfigManager::get('connections'));
 
         Factory::authenticate($conf);
 

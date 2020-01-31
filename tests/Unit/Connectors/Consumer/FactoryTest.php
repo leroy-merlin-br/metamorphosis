@@ -2,13 +2,13 @@
 namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\Config;
-use Metamorphosis\Connectors\Consumer\ConnectorFactory;
-use Metamorphosis\Connectors\Consumer\HighLevel;
-use Metamorphosis\Connectors\Consumer\LowLevel;
+use Metamorphosis\Connectors\Consumer\Factory;
+use Metamorphosis\Consumers\HighLevel;
+use Metamorphosis\Consumers\LowLevel;
 use Tests\LaravelTestCase;
 use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
-class ConnectorFactoryTest extends LaravelTestCase
+class FactoryTest extends LaravelTestCase
 {
     protected function setUp()
     {
@@ -45,15 +45,15 @@ class ConnectorFactoryTest extends LaravelTestCase
         ]);
     }
 
-    public function testItMakesLowLevelClass(): void
+    public function testItMakesManagerWithLowLevelConsumer(): void
     {
         // Set
         $config = new Config();
         $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
-        $lowLevelConnector = ConnectorFactory::make();
+        $manager = Factory::make();
 
         // Assertions
-        $this->assertInstanceOf(LowLevel::class, $lowLevelConnector);
+        $this->assertInstanceOf(LowLevel::class, $manager->getConsumer());
     }
 
     public function testItMakesHighLevelClass(): void
@@ -61,9 +61,9 @@ class ConnectorFactoryTest extends LaravelTestCase
         // Set
         $config = new Config();
         $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'without-partition']);
-        $highLevelConnector = ConnectorFactory::make();
+        $manager = Factory::make();
 
         // Assertions
-        $this->assertInstanceOf(HighLevel::class, $highLevelConnector);
+        $this->assertInstanceOf(HighLevel::class, $manager->getConsumer());
     }
 }

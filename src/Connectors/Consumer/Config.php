@@ -30,6 +30,8 @@ class Config extends AbstractConfig
         'url' => 'string',
         'auth' => 'array',
         'request_options' => 'array',
+        'auto_commit' => 'boolean',
+        'commit_async' => 'boolean',
         'middlewares' => 'array',
     ];
 

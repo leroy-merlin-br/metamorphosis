@@ -42,7 +42,7 @@ class ManagerTest extends LaravelTestCase
         $consumerHandler = m::mock(ConsumerHandler::class);
         $dispatcher = m::mock(Dispatcher::class);
 
-        $runner = new Manager($consumer, $consumerHandler, $dispatcher);
+        $runner = new Manager($consumer, $consumerHandler, $dispatcher, true, false);
 
         $kafkaMessage1 = new KafkaMessage();
         $kafkaMessage1->payload = 'original message 1';
@@ -94,7 +94,7 @@ class ManagerTest extends LaravelTestCase
         $consumerHandler = m::mock(ConsumerHandler::class);
         $dispatcher = m::mock(Dispatcher::class);
 
-        $runner = new Manager($consumer, $consumerHandler, $dispatcher);
+        $runner = new Manager($consumer, $consumerHandler, $dispatcher, true, false);
 
         $exception = new ResponseWarningException('Error occurs when consuming.');
 

@@ -7,7 +7,7 @@ use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Producer\Poll;
 use Metamorphosis\Record\ProducerRecord;
 use Mockery as m;
-use RdKafka\Producer as KafkaTopicProducer;
+use RdKafka\ProducerTopic as KafkaTopicProducer;
 use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase

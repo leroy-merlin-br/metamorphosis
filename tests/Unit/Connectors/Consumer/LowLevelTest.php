@@ -22,7 +22,7 @@ class LowLevelTest extends LaravelTestCase
         $connector = new LowLevel();
 
         // Actions
-        $result = $connector->getConsumer();
+        $result = $connector->getConsumer(true);
 
         // Assertions
         $this->assertInstanceOf(LowLevelConsumer::class, $result);

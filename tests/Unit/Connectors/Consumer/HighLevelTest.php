@@ -20,7 +20,7 @@ class HighLevelTest extends LaravelTestCase
         $connector = new HighLevel();
 
         // Actions
-        $result = $connector->getConsumer();
+        $result = $connector->getConsumer(false);
 
         // Assertions
         $this->assertInstanceOf(HighLevelConsumer::class, $result);

@@ -102,7 +102,7 @@ return [
                         // offset of the last message received in response to its poll() call
                         'auto_commit' => true,
 
-                        // If commit_async if false process block until offsets are committed or the commit fails.
+                        // If commit_async is false process block until offsets are committed or the commit fails.
                         // Only works when auto_commit is false
                         'commit_async' => false,
 

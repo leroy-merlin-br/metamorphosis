@@ -28,6 +28,9 @@ class Producer implements MiddlewareInterface
         $this->topic = $topic;
         $this->poll = $poll;
         $this->partition = $partition;
+
+        // __destructor() doesn't get called on Fatal errors
+        register_shutdown_function(array($this, 'close'));
     }
 
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
@@ -38,6 +41,13 @@ class Producer implements MiddlewareInterface
     }
 
     public function __destruct()
+    {
+        // suppress the parent behavior since we already have register_shutdown_function()
+        // to call close(), and the reference contained there will prevent this from being
+        // GC'd until the end of the request
+    }
+
+    public function close()
     {
         $this->poll->flushMessage();
     }

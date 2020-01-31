@@ -10,7 +10,7 @@ class Poll
     /**
      * @var int
      */
-    private $processMessageCount = 0;
+    private $processedMessagesCount = 0;
 
     /**
      * @var bool
@@ -55,7 +55,7 @@ class Poll
 
     public function handleResponse(): void
     {
-        $this->processMessageCount++;
+        $this->processedMessagesCount++;
 
         if (!$this->isAsync) {
             $this->flushMessage();
@@ -63,7 +63,7 @@ class Poll
             return;
         }
 
-        if (0 === ($this->processMessageCount % $this->maxPollRecords)) {
+        if (0 === ($this->processedMessagesCount % $this->maxPollRecords)) {
             $this->flushMessage();
         }
     }

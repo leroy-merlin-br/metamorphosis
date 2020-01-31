@@ -56,10 +56,6 @@ class Producer
         $poll = app(Poll::class, ['producer' => $producer]);
         $partition = ConfigManager::get('partition');
 
-        return app(ProducerMiddleware::class, [
-            'topic' => $topic,
-            'poll' => $poll,
-            'partition' => $partition,
-        ]);
+        return app(ProducerMiddleware::class, compact('topic', 'poll', 'partition'));
     }
 }

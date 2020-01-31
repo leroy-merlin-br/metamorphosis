@@ -11,18 +11,20 @@ use RdKafka\TopicConf;
 
 class LowLevel implements ConnectorInterface
 {
-    public function getConsumer(): ConsumerInterface
+    public function getConsumer(bool $autoCommit): ConsumerInterface
     {
         $conf = $this->getConf();
         $conf->set('group.id', ConfigManager::get('consumer_group'));
+        if (!$autoCommit) {
+            $conf->set('auto.commit.enable', 'false');
+        }
+
         Factory::authenticate($conf);
 
         $consumer = new Consumer($conf);
         $consumer->addBrokers(ConfigManager::get('connections'));
 
         $topicConf = $this->getTopicConfigs();
-        $topicConf->set('auto.commit.enable', ConfigManager::get('auto_commit', true));
-
         $topicConsumer = $consumer->newTopic(ConfigManager::get('topic_id'), $topicConf);
 
         $topicConsumer->consumeStart(ConfigManager::get('partition'), ConfigManager::get('offset'));

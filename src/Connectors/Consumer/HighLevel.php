@@ -10,12 +10,15 @@ use RdKafka\KafkaConsumer;
 
 class HighLevel implements ConnectorInterface
 {
-    public function getConsumer(): ConsumerInterface
+    public function getConsumer(bool $autoCommit): ConsumerInterface
     {
         $conf = $this->getConf();
 
         $conf->set('group.id', ConfigManager::get('consumer_group'));
         $conf->set('auto.offset.reset', ConfigManager::get('offset_reset'));
+        if (!$autoCommit) {
+            $conf->set('auto.commit.enable', 'false');
+        }
 
         $consumer = app(KafkaConsumer::class, ['conf' => $conf]);
         $consumer->subscribe([ConfigManager::get('topic_id')]);

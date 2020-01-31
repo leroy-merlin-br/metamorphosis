@@ -32,11 +32,11 @@ class Factory
 
     private static function getConsumer(bool $autoCommit): ConsumerInterface
     {
-        if (self::requiresPartition() || !$autoCommit) {
-            return app(LowLevel::class)->getConsumer();
+        if (self::requiresPartition()) {
+            return app(LowLevel::class)->getConsumer($autoCommit);
         }
 
-        return app(HighLevel::class)->getConsumer();
+        return app(HighLevel::class)->getConsumer($autoCommit);
     }
 
     private static function getMiddlewareDispatcher($handler, array $middlewares): Dispatcher

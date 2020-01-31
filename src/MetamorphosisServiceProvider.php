@@ -39,7 +39,7 @@ class MetamorphosisServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(CachedSchemaRegistryClient::class, function ($app) {
-            $guzzleHttp = $this->getGuzzleHttpClient($app->manager);
+            $guzzleHttp = $this->getGuzzleHttpClient($app->configManager);
             $avroClient = new Client($guzzleHttp);
 
             return new CachedSchemaRegistryClient($avroClient);

@@ -14,15 +14,17 @@ class ConfigManager
     private $middlewares = [];
 
     /**
+     * @param mixed $default
+     *
      * @return mixed
      */
-    public function get(string $key = null)
+    public function get(string $key = null, $default = null)
     {
         if (!$key) {
             return $this->setting;
         }
 
-        return array_get($this->setting, $key);
+        return array_get($this->setting, $key, $default);
     }
 
     public function set(array $config): void

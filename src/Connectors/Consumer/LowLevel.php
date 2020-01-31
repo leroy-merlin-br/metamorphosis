@@ -21,7 +21,7 @@ class LowLevel implements ConnectorInterface
         $consumer->addBrokers(ConfigManager::get('connections'));
 
         $topicConf = $this->getTopicConfigs();
-        if (!ConfigManager::get('auto_commit')) {
+        if (false === ConfigManager::get('auto_commit')) {
             $topicConf->set('auto.commit.enable', false);
         }
 

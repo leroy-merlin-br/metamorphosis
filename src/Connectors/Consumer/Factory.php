@@ -2,7 +2,6 @@
 namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\Consumers\ConsumerInterface;
-use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
@@ -16,8 +15,8 @@ class Factory
 {
     public static function make(): Manager
     {
-        $autoCommit = ConfigManager::get('auto_commit');
-        $commitAsync = ConfigManager::get('commit_async');
+        $autoCommit = ConfigManager::get('auto_commit', true);
+        $commitAsync = ConfigManager::get('commit_async', true);
 
         $consumer = self::getConsumer($autoCommit);
         $handler = app(ConfigManager::get('handler'));
@@ -33,11 +32,7 @@ class Factory
 
     private static function getConsumer(bool $autoCommit): ConsumerInterface
     {
-        if (self::requiresPartition()) {
-            if (!$autoCommit) {
-                throw new ConfigurationException("To use manually commit you should use High Level Consumer.");
-            }
-
+        if (self::requiresPartition() || !$autoCommit) {
             return app(LowLevel::class)->getConsumer();
         }
 

@@ -20,7 +20,7 @@ class RunnerTest extends LaravelTestCase
         $manager->shouldReceive('handleMessage')
             ->times(4)
             ->andReturnUsing(function () use (&$count) {
-                if ($count == 3) {
+                if (3 === $count) {
                     $exception = new Exception('Error when consuming.');
                     throw $exception;
                 }

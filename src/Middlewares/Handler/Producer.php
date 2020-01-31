@@ -30,7 +30,7 @@ class Producer implements MiddlewareInterface
         $this->partition = $partition;
 
         // __destructor() doesn't get called on Fatal errors
-        register_shutdown_function(array($this, 'close'));
+        register_shutdown_function([$this, 'close']);
     }
 
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void

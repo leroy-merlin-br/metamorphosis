@@ -79,7 +79,7 @@ class Poll
                 return;
             }
 
-            sleep($this->timeout/1000);
+            sleep($this->timeout / 1000);
         }
 
         throw new RuntimeException('Unable to flush, messages might be lost!');

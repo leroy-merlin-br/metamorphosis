@@ -78,6 +78,8 @@ class Poll
             if (0 === $this->producer->poll($this->timeout)) {
                 return;
             }
+
+            sleep($this->timeout/1000);
         }
 
         throw new RuntimeException('Unable to flush, messages might be lost!');

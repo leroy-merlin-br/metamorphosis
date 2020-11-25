@@ -1,0 +1,36 @@
+on:
+    push:
+    pull_request:
+name: Tests
+jobs:
+    setup:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Build containers
+                run: docker-compose build --build-arg UID=$(id -u) --build-arg GID=$(id -g)
+
+            -   name: Composer install
+                run: docker-compose run --rm php composer install --no-interaction
+
+    tests:
+        runs-on: ubuntu-latest
+        needs: setup
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Code Standards
+                run: docker-compose run --rm -T php vendor/bin/phpcs
+
+            -   name: Tests
+                run: docker-compose run --rm -T php vendor/bin/phpcs
+
+    coverage-report:
+        runs-on: ubuntu-latest
+        needs: [ setup, tests ]
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Coverage Report
+                run: docker-compose run --rm php php vendor/bin/coveralls -v

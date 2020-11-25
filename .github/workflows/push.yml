@@ -16,7 +16,7 @@ jobs:
                 run: docker-compose run --rm -T php vendor/bin/phpcs
 
             -   name: Run Tests
-                run: docker-compose run --rm -T php vendor/bin/phpcs
+                run: docker-compose run --rm -T php vendor/bin/phpunit
 
             -   name: Report Coverage
                 run: docker-compose run --rm php php vendor/bin/php-coveralls -v

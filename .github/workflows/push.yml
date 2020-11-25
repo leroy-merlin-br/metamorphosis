@@ -19,4 +19,4 @@ jobs:
                 run: docker-compose run --rm -T php vendor/bin/phpunit
 
             -   name: Report Coverage
-                run: docker-compose run --rm -T -e COVERALLS_REPO_TOKEN -e GITHUB_REF -e GITHUB_ACTIONS -e GITHUB_RUN_ID -e GITHUB_EVENT_NAME php vendor/bin/php-coveralls -v
+                run: docker-compose run --rm -T -e COVERALLS_REPO_TOKEN=${{ secrets.COVERALLS_REPO_TOKEN }} -e GITHUB_REF -e GITHUB_ACTIONS -e GITHUB_RUN_ID -e GITHUB_EVENT_NAME php vendor/bin/php-coveralls -v

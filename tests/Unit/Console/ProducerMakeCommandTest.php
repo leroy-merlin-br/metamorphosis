@@ -2,6 +2,7 @@
 namespace Tests\Unit\Console;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use Tests\LaravelTestCase;
 
 class ProducerMakeCommandTest extends LaravelTestCase
@@ -11,7 +12,7 @@ class ProducerMakeCommandTest extends LaravelTestCase
         // Set
         $command = 'make:kafka-producer';
         $parameters = [
-            'name' => str_random(8),
+            'name' => Str::random(8),
         ];
 
         // Actions

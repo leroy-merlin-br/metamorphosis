@@ -16,7 +16,7 @@ use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class ManagerTest extends LaravelTestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

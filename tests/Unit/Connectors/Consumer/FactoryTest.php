@@ -10,7 +10,7 @@ use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class FactoryTest extends LaravelTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -1,6 +1,8 @@
 <?php
 namespace Metamorphosis;
 
+use Illuminate\Support\Arr;
+
 class ConfigManager
 {
     /**
@@ -24,7 +26,7 @@ class ConfigManager
             return $this->setting;
         }
 
-        return array_get($this->setting, $key, $default);
+        return Arr::get($this->setting, $key, $default);
     }
 
     public function set(array $config): void

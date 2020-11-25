@@ -9,7 +9,7 @@ use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class ConsumerCommandTest extends LaravelTestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

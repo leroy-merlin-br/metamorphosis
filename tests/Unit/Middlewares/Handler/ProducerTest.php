@@ -12,7 +12,7 @@ use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

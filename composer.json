@@ -10,19 +10,20 @@
         "ext-rdkafka": "*",
         "ext-json": "*",
         "guzzlehttp/guzzle": "~6.5.0",
-        "illuminate/support": "^5.5 || ^6.0",
-        "illuminate/console": "^5.5 || ^6.0",
-        "illuminate/config": "^5.5 || ^6.0",
-        "php": ">=7.1",
+        "illuminate/support": "^5.5 || ^6.0 || ^7.0",
+        "illuminate/console": "^5.5 || ^6.0 || ^7.0",
+        "illuminate/config": "^5.5 || ^6.0 || ^7.0",
+        "php": ">=7.2",
         "wikimedia/avro": "^1.7"
     },
     "require-dev": {
-        "leroy-merlin-br/coding-standard": "^0.1.0",
-        "phpunit/phpunit": "^8.5",
+        "leroy-merlin-br/coding-standard": "^1.0.1",
+        "phpunit/phpunit": "^9.4.3",
         "mockery/mockery": "^1.3.0",
         "kwn/php-rdkafka-stubs": "~1.1.0",
-        "orchestra/testbench": "^3.5 || ^4.0",
-        "satooshi/php-coveralls": "^1.0"
+        "orchestra/testbench": "^3.5 || ^4.0 || ^5.0",
+        "php-coveralls/php-coveralls": "^2.4",
+        "dms/phpunit-arraysubset-asserts": "^0.2.1"
     },
     "autoload": {
         "psr-4" : {

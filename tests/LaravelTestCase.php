@@ -1,11 +1,14 @@
 <?php
 namespace Tests;
 
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use Metamorphosis\MetamorphosisServiceProvider;
 use Orchestra\Testbench\TestCase;
 
 class LaravelTestCase extends TestCase
 {
+    use ArraySubsetAsserts;
+
     protected function getPackageProviders($app)
     {
         return [MetamorphosisServiceProvider::class];

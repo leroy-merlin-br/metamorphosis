@@ -30,7 +30,7 @@ Prefer to read in other language?
 <a name="requirements"></a>
 ## Requirements
 
-- PHP >= 7.1
+- PHP >= 7.2
 - [Kafka Driver](https://github.com/edenhill/librdkafka)
 - [Kafka PHP Extension](https://github.com/arnaud-lb/php-rdkafka)
 

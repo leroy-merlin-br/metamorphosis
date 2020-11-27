@@ -22,12 +22,11 @@
         "mockery/mockery": "^1.3.0",
         "kwn/php-rdkafka-stubs": "~1.1.0",
         "orchestra/testbench": "^6.0",
-        "php-coveralls/php-coveralls": "^2.4",
         "dms/phpunit-arraysubset-asserts": "^0.2.1"
     },
     "autoload": {
-        "psr-4" : {
-            "Metamorphosis\\" : "src/"
+        "psr-4": {
+            "Metamorphosis\\": "src/"
         }
     },
     "autoload-dev": {
@@ -47,7 +46,7 @@
                 "Metamorphosis\\MetamorphosisServiceProvider"
             ]
         },
-        "aliases":{
+        "aliases": {
             "Metamorphosis": "Metamorphosis\\Facades\\Metamorphosis"
         }
     }

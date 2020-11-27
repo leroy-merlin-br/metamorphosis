@@ -2,6 +2,7 @@
 namespace Tests\Integration;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Metamorphosis\Facades\Metamorphosis;
 use Tests\Integration\Dummies\MessageConsumer;
 use Tests\Integration\Dummies\MessageProducer;
@@ -24,7 +25,7 @@ class ProducerTest extends LaravelTestCase
      */
     protected $secondLowLevelMessage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->withoutAuthentication();
@@ -130,7 +131,7 @@ class ProducerTest extends LaravelTestCase
 
     private function haveSomeRandomMessagesProduced(): void
     {
-        $this->highLevelMessage = str_random(10);
+        $this->highLevelMessage = Str::random(10);
         $producer = app(MessageProducer::class, ['record' => $this->highLevelMessage]);
 
         Metamorphosis::produce($producer);

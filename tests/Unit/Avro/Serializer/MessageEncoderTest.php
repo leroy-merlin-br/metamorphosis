@@ -119,7 +119,6 @@ class MessageEncoderTest extends LaravelTestCase
         $this->assertSame("\x01\x00\x00\x00\x0Emy-topic-value\x00\x00\x00\x05\x00", $result);
     }
 
-
     public function testShouldEncodeRecordWithSubjectAndVersionRegisteringMissingSchemas(): void
     {
         // Set

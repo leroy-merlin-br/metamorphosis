@@ -10,23 +10,23 @@
         "ext-rdkafka": "*",
         "ext-json": "*",
         "guzzlehttp/guzzle": "~6.5.0",
-        "illuminate/support": "~5.5.0||~5.6.0||~5.7.0",
-        "illuminate/console": "~5.5.0||~5.6.0||~5.7.0",
-        "illuminate/config": "~5.5.0||~5.6.0||~5.7.0",
+        "illuminate/support": "^5.5 || ^6.0 || ^7.0 || ^8.0",
+        "illuminate/console": "^5.5 || ^6.0 || ^7.0 || ^8.0",
+        "illuminate/config": "^5.5 || ^6.0 || ^7.0 || ^8.0",
         "php": ">=7.1",
         "wikimedia/avro": "^1.7"
     },
     "require-dev": {
-        "leroy-merlin-br/coding-standard": "^0.1.0",
-        "phpunit/phpunit": "^7.3",
+        "leroy-merlin-br/coding-standard": "^1.0.1",
+        "phpunit/phpunit": "^9.4.3",
         "mockery/mockery": "^1.3.0",
         "kwn/php-rdkafka-stubs": "~1.1.0",
-        "orchestra/testbench": "~3.5.0||~3.6.0||~3.7.0",
-        "satooshi/php-coveralls": "^1.0"
+        "orchestra/testbench": "^6.0",
+        "dms/phpunit-arraysubset-asserts": "^0.2.1"
     },
     "autoload": {
-        "psr-4" : {
-            "Metamorphosis\\" : "src/"
+        "psr-4": {
+            "Metamorphosis\\": "src/"
         }
     },
     "autoload-dev": {
@@ -46,7 +46,7 @@
                 "Metamorphosis\\MetamorphosisServiceProvider"
             ]
         },
-        "aliases":{
+        "aliases": {
             "Metamorphosis": "Metamorphosis\\Facades\\Metamorphosis"
         }
     }

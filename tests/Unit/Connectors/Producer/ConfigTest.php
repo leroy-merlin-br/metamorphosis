@@ -26,9 +26,9 @@ class ConfigTest extends LaravelTestCase
             'connections' => 'kafka:9092',
             'auth' => [
                 'type' => 'ssl',
-                'ca' => '/var/www/html/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/ca.pem',
-                'certificate' => '/var/www/html/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/kafka.cert',
-                'key' => '/var/www/html/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/kafka.key',
+                'ca' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/ca.pem',
+                'certificate' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.cert',
+                'key' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.key',
             ],
         ];
 
@@ -72,9 +72,9 @@ class ConfigTest extends LaravelTestCase
             'connections' => 'kafka:9092',
             'auth' => [
                 'type' => 'ssl',
-                'ca' => '/var/www/html/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/ca.pem',
-                'certificate' => '/var/www/html/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/kafka.cert',
-                'key' => '/var/www/html/vendor/orchestra/testbench-core/src/Concerns/../../laravel/storage/kafka.key',
+                'ca' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/ca.pem',
+                'certificate' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.cert',
+                'key' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.key',
             ],
         ];
 

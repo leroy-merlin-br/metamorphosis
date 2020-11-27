@@ -4,6 +4,7 @@
 
 ![Metamorphosis](./docs/logo.png)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e3f964d4b33f4fe09790dcd2d6d2a04c)](https://app.codacy.com/gh/leroy-merlin-br/metamorphosis?utm_source=github.com&utm_medium=referral&utm_content=leroy-merlin-br/metamorphosis&utm_campaign=Badge_Grade)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/leroy-merlin-br/metamorphosis.svg?style=flat-square)](https://packagist.org/packages/leroy-merlin-br/metamorphosis)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Total Downloads](https://img.shields.io/packagist/dt/leroy-merlin-br/metamorphosis.svg?style=flat-square)](https://packagist.org/packages/leroy-merlin-br/metamorphosis)

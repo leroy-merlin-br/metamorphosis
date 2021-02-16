@@ -9,7 +9,7 @@
     "require": {
         "ext-rdkafka": "*",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "~6.5.0",
+        "guzzlehttp/guzzle": "^6.5.0 || ^7.0",
         "illuminate/support": "^5.5 || ^6.0 || ^7.0 || ^8.0",
         "illuminate/console": "^5.5 || ^6.0 || ^7.0 || ^8.0",
         "illuminate/config": "^5.5 || ^6.0 || ^7.0 || ^8.0",

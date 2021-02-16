@@ -35,6 +35,7 @@ class LogTest extends LaravelTestCase
                     'offset' => null,
                     'timestamp' => null,
                     'headers' => null,
+                    'opaque' => null,
                 ],
             ]);
 

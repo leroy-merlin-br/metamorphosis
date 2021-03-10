@@ -39,6 +39,8 @@ class ConfigTest extends LaravelTestCase
                 'certificate' => storage_path('kafka.cert'),
                 'key' => storage_path('kafka.key'),
             ],
+            'url' => '',
+            'request_options' => [],
         ];
 
         // Actions

@@ -42,7 +42,8 @@ class Config extends AbstractConfig
             $topicConfig['producer']['middlewares'] ?? []
         );
         $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
-        $config = array_merge($topicConfig, $brokerConfig);
+        $schemaConfig = $this->getSchemaConfig($topicId);
+        $config = array_merge($topicConfig, $brokerConfig, $schemaConfig);
 
         $this->validate($config);
         $config = array_merge($this->default, $config);

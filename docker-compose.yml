@@ -4,22 +4,17 @@ services:
     php:
         build: docker
         volumes:
-            - .:/var/www/html:rw
+            - .:/var/www/html
         depends_on:
             - kafka
 
     zookeeper:
-        image: 'bitnami/zookeeper:latest'
-        ports:
-            - '2181:2181'
+        image: bitnami/zookeeper
         environment:
             - ALLOW_ANONYMOUS_LOGIN=yes
 
     kafka:
-        image: 'bitnami/kafka:latest'
-        hostname: 'kafka'
-        ports:
-            - '9092:9092'
+        image: bitnami/kafka
         depends_on:
           - zookeeper
         environment:

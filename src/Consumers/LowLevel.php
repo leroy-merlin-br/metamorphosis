@@ -30,7 +30,7 @@ class LowLevel implements ConsumerInterface
         $this->timeout = ConfigManager::get('timeout');
     }
 
-    public function consume(): Message
+    public function consume(): ?Message
     {
         return $this->consumer->consume($this->partition, $this->timeout);
     }

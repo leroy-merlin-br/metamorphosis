@@ -3,7 +3,8 @@ namespace Metamorphosis\Connectors\Consumer;
 
 use Exception;
 use Metamorphosis\Consumers\ConsumerInterface;
-use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
+use Metamorphosis\Exceptions\ResponseErrorException;
+use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Record\ConsumerRecord;
@@ -36,6 +37,11 @@ class Manager
      */
     private $commitAsync;
 
+    /**
+     * @var bool
+     */
+    private $finished = false;
+
     public function __construct(
         ConsumerInterface $consumer,
         ConsumerHandler $consumerHandler,
@@ -58,20 +64,29 @@ class Manager
     public function handleMessage(): void
     {
         try {
-            $response = $this->consumer->consume();
+            if (!$response = $this->consumer->consume()) {
+                $this->handleTimeOut();
+                return;
+            }
+
             $record = app(ConsumerRecord::class, compact('response'));
             $this->dispatcher->handle($record);
             $this->commit();
+        } catch (ResponseTimeoutException $exception) {
+            $this->handleTimeOut();
+            return;
         } catch (ResponseWarningException $exception) {
             $this->consumerHandler->warning($exception);
         } catch (Exception $exception) {
             $this->consumerHandler->failed($exception);
         }
+
+        $this->finished = false;
     }
 
     private function commit(): void
     {
-        if ($this->autoCommit || $this->consumer instanceof LowLevelConsumer) {
+        if ($this->autoCommit || $this->consumer instanceof \Metamorphosis\Consumers\LowLevel) {
             return;
         }
 
@@ -81,5 +96,13 @@ class Manager
         }
 
         $this->consumer->commit();
+    }
+
+    private function handleTimeOut(): void
+    {
+        if (!$this->finished) {
+            $this->consumerHandler->finished();
+            $this->finished = true;
+        }
     }
 }

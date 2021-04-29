@@ -18,6 +18,11 @@ interface Handler
     public function warning(ResponseWarningException $exception): void;
 
     /**
+     * Handle finished consume.
+     */
+    public function finished(): void;
+
+    /**
      * Handle failure process.
      */
     public function failed(Exception $exception): void;

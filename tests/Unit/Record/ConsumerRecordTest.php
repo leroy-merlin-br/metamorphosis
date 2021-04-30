@@ -2,6 +2,7 @@
 namespace Tests\Unit\Record;
 
 use Metamorphosis\Exceptions\ResponseErrorException;
+use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Record\ConsumerRecord as Record;
 use Mockery as m;
@@ -25,6 +26,26 @@ class ConsumerRecordTest extends LaravelTestCase
         $this->expectException(ResponseErrorException::class);
         $this->expectExceptionMessage('Error response: Invalid Message');
         $this->expectExceptionCode(RD_KAFKA_RESP_ERR_INVALID_MSG);
+
+        // Actions
+        new Record($kafkaMessage);
+    }
+
+    public function testItShouldThrowTimeoutException(): void
+    {
+        // Set
+        $kafkaMessage = m::mock(KafkaMessage::class);
+        $kafkaMessage->payload = '';
+        $kafkaMessage->err = RD_KAFKA_RESP_ERR__TIMED_OUT;
+
+        // Expectations
+        $kafkaMessage->expects()
+            ->errstr()
+            ->andReturn('Process timed out.');
+
+        $this->expectException(ResponseTimeoutException::class);
+        $this->expectExceptionMessage("Consumer finished to process or timed out: Process timed out.");
+        $this->expectExceptionCode(RD_KAFKA_RESP_ERR__TIMED_OUT);
 
         // Actions
         new Record($kafkaMessage);

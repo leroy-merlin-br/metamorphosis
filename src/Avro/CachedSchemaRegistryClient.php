@@ -150,6 +150,7 @@ class CachedSchemaRegistryClient
      * @param int|string $version Version number or 'latest'
      *
      * @return AvroSchema
+     *
      * @throws AvroSchemaParseException
      * @throws RuntimeException
      */
@@ -159,7 +160,7 @@ class CachedSchemaRegistryClient
             return $this->subjectVersionToSchema[$subject][$version];
         }
 
-        $version = $version === 'latest' ? 'latest' : (int) $version;
+        $version = 'latest' === $version ? 'latest' : (int) $version;
         $url = sprintf('/subjects/%s/versions/%s', $subject, $version);
         [$status, $response] = $this->client->get($url);
 

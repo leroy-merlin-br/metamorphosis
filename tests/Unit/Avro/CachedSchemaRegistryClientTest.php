@@ -371,7 +371,6 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
             ->get('/subjects/some-kafka-topic/versions/1')
             ->andReturn([$status, $response]);
 
-
         // Actions
         $client->getBySubjectAndVersion('some-kafka-topic', '1.2');
     }

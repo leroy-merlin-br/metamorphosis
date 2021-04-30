@@ -35,4 +35,43 @@ class RunnerTest extends LaravelTestCase
         // Actions
         $runner->run();
     }
+
+    public function testItShouldRunADeterminedNumberOfTimes(): void
+    {
+        // Set
+        $manager = m::mock(Manager::class);
+        $runner = new Runner($manager);
+        $count = 0;
+
+        // Expectations
+        $manager->shouldReceive('handleMessage')
+            ->times(3)
+            ->andReturnUsing(function () use (&$count) {
+                return;
+            });
+
+        // Actions
+        $runner->run(3);
+    }
+
+    public function testItShouldRunADeterminedNumberOfTimesButStopsOnException(): void
+    {
+        // Set
+        $manager = m::mock(Manager::class);
+        $runner = new Runner($manager);
+        $count = 0;
+
+        // Expectations
+        $manager->shouldReceive('handleMessage')
+            ->times(1)
+            ->andReturnUsing(function () use (&$count) {
+                throw new Exception('Error when consuming.');
+            });
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Error when consuming.');
+
+        // Actions
+        $runner->run(3);
+    }
 }

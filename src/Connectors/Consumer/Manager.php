@@ -3,7 +3,7 @@ namespace Metamorphosis\Connectors\Consumer;
 
 use Exception;
 use Metamorphosis\Consumers\ConsumerInterface;
-use Metamorphosis\Exceptions\ResponseErrorException;
+use Metamorphosis\Consumers\LowLevel as ConsumerLowLevel;
 use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
@@ -86,7 +86,7 @@ class Manager
 
     private function commit(): void
     {
-        if ($this->autoCommit || $this->consumer instanceof \Metamorphosis\Consumers\LowLevel) {
+        if ($this->autoCommit || $this->consumer instanceof ConsumerLowLevel) {
             return;
         }
 

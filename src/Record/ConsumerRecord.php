@@ -114,7 +114,7 @@ class ConsumerRecord implements RecordInterface
 
     private function throwResponseErrorException(): void
     {
-        if ($this->original->err == RD_KAFKA_RESP_ERR__TIMED_OUT) {
+        if (RD_KAFKA_RESP_ERR__TIMED_OUT === $this->original->err) {
             throw new ResponseTimeoutException(
                 'Consumer finished to process or timed out: '.$this->original->errstr(),
                 $this->original->err

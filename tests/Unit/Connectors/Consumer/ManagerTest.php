@@ -4,6 +4,7 @@ namespace Tests\Unit\Connectors\Consumer;
 use Exception;
 use Metamorphosis\Connectors\Consumer\Manager;
 use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
@@ -109,6 +110,59 @@ class ManagerTest extends LaravelTestCase
             ->never();
 
         // Actions
+        $runner->handleMessage();
+    }
+
+    public function testShouldHandleAsyncCommit(): void
+    {
+        // Set
+        $consumerRecord = $this->instance(ConsumerRecord::class, m::mock(ConsumerRecord::class));
+
+        $consumer = m::mock(ConsumerInterface::class);
+        $consumerHandler = m::mock(ConsumerHandler::class);
+        $dispatcher = m::mock(Dispatcher::class);
+
+        $runner = new Manager($consumer, $consumerHandler, $dispatcher, false, true);
+
+        $kafkaMessage1 = new KafkaMessage();
+        $kafkaMessage1->payload = 'original message 1';
+        $kafkaMessage1->err = RD_KAFKA_RESP_ERR_NO_ERROR;
+
+        $kafkaMessage2 = new KafkaMessage();
+        $kafkaMessage2->payload = 'original message 2';
+        $kafkaMessage2->err = RD_KAFKA_RESP_ERR_NO_ERROR;
+
+        $messages = [$kafkaMessage1, $kafkaMessage2];
+        $count = 0;
+        $exception = new ResponseTimeoutException('Consume timeout or finished to processed.');
+
+        // Expectations
+        $consumer->shouldReceive('consume')
+            ->times(3)
+            ->andReturnUsing(function () use ($messages, &$count, $exception) {
+                $message = $messages[$count] ?? null;
+                if (!$message) {
+                    throw $exception;
+                }
+                $count++;
+
+                return $message;
+            });
+
+        $consumer->expects()
+            ->commitAsync()
+            ->twice(2);
+
+        $dispatcher->expects()
+            ->handle($consumerRecord)
+            ->times(2);
+
+        $consumerHandler->expects()
+            ->finished();
+
+        // Actions
+        $runner->handleMessage();
+        $runner->handleMessage();
         $runner->handleMessage();
     }
 }

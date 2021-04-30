@@ -86,6 +86,8 @@ class Manager
 
     private function commit(): void
     {
+        // when running low level consumer, we dont need
+        // to commit the messages as they've already committed.
         if ($this->autoCommit || $this->consumer instanceof ConsumerLowLevel) {
             return;
         }

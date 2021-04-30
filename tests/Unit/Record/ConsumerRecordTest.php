@@ -44,7 +44,7 @@ class ConsumerRecordTest extends LaravelTestCase
             ->andReturn('Process timed out.');
 
         $this->expectException(ResponseTimeoutException::class);
-        $this->expectExceptionMessage("Consumer finished to process or timed out: Process timed out.");
+        $this->expectExceptionMessage('Consumer finished to process or timed out: Process timed out.');
         $this->expectExceptionCode(RD_KAFKA_RESP_ERR__TIMED_OUT);
 
         // Actions

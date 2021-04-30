@@ -342,10 +342,6 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
             ->get('/subjects/some-kafka-topic/versions/1')
             ->andReturn([$status, $response]);
 
-        $httpClient->expects()
-            ->post('/subjects/some-kafka-topic', ['schema' => $parsedSchema])
-            ->andReturn([$status, $response]);
-
         // Actions
         $result = $client->getBySubjectAndVersion('some-kafka-topic', '1.2');
 
@@ -359,7 +355,6 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $httpClient = m::mock(Client::class);
         $client = new CachedSchemaRegistryClient($httpClient);
         $schemaString = $this->getSchemaTest();
-        $parsedSchema = AvroSchema::parse($schemaString);
 
         $response = [
             'schema' => $schemaString,
@@ -376,9 +371,6 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
             ->get('/subjects/some-kafka-topic/versions/1')
             ->andReturn([$status, $response]);
 
-        $httpClient->expects()
-            ->post('/subjects/some-kafka-topic', ['schema' => $parsedSchema])
-            ->never();
 
         // Actions
         $client->getBySubjectAndVersion('some-kafka-topic', '1.2');
@@ -390,7 +382,6 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $httpClient = m::mock(Client::class);
         $client = new CachedSchemaRegistryClient($httpClient);
         $schemaString = $this->getSchemaTest();
-        $parsedSchema = AvroSchema::parse($schemaString);
 
         $response = [
             'schema' => $schemaString,
@@ -407,10 +398,6 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
             ->get('/subjects/some-kafka-topic/versions/1')
             ->andReturn([$status, $response]);
 
-        $httpClient->expects()
-            ->post('/subjects/some-kafka-topic', ['schema' => $parsedSchema])
-            ->never();
-
         // Actions
         $client->getBySubjectAndVersion('some-kafka-topic', '1.2');
     }
@@ -421,7 +408,6 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $httpClient = m::mock(Client::class);
         $client = new CachedSchemaRegistryClient($httpClient);
         $schemaString = $this->getSchemaTest();
-        $parsedSchema = AvroSchema::parse($schemaString);
 
         $response = [
             'schema' => $schemaString,
@@ -434,11 +420,6 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         // Expectations
         $httpClient->expects()
             ->get('/subjects/some-kafka-topic/versions/1')
-            ->once()
-            ->andReturn([$status, $response]);
-
-        $httpClient->expects()
-            ->post('/subjects/some-kafka-topic', ['schema' => $parsedSchema])
             ->once()
             ->andReturn([$status, $response]);
 

@@ -159,9 +159,10 @@ class CachedSchemaRegistryClient
             throw new RuntimeException('Unable to get schema for the specific ID: '.$status);
         }
 
+        $schemaId = $response['id'];
         $schema = AvroSchema::parse($response['schema']);
 
-        $this->cacheSchemaDetails($subject, $schema);
+        $this->cacheSchema($schema, $schemaId, $subject, $version);
 
         return $schema;
     }

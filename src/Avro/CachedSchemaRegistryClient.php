@@ -2,6 +2,7 @@
 namespace Metamorphosis\Avro;
 
 use AvroSchema;
+use AvroSchemaParseException;
 use RuntimeException;
 use SplObjectStorage;
 
@@ -144,13 +145,22 @@ class CachedSchemaRegistryClient
         return $schema;
     }
 
+    /**
+     * @param string     $subject
+     * @param int|string $version Version number or 'latest'
+     *
+     * @return AvroSchema
+     * @throws AvroSchemaParseException
+     * @throws RuntimeException
+     */
     public function getBySubjectAndVersion($subject, $version)
     {
         if (isset($this->subjectVersionToSchema[$subject][$version])) {
             return $this->subjectVersionToSchema[$subject][$version];
         }
 
-        $url = sprintf('/subjects/%s/versions/%d', $subject, $version);
+        $version = $version === 'latest' ? 'latest' : (int) $version;
+        $url = sprintf('/subjects/%s/versions/%s', $subject, $version);
         [$status, $response] = $this->client->get($url);
 
         if (404 === $status) {

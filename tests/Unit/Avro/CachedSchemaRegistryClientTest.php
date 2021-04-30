@@ -412,22 +412,22 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $response = [
             'schema' => $schemaString,
             'id' => '123',
-            'version' => '1.2',
+            'version' => 'latest',
             'subject' => 'some-kafka-topic',
         ];
         $status = 200;
 
         // Expectations
         $httpClient->expects()
-            ->get('/subjects/some-kafka-topic/versions/1')
+            ->get('/subjects/some-kafka-topic/versions/latest')
             ->once()
             ->andReturn([$status, $response]);
 
         // Actions
-        $client->getBySubjectAndVersion('some-kafka-topic', '1.2');
-        $client->getBySubjectAndVersion('some-kafka-topic', '1.2');
-        $client->getBySubjectAndVersion('some-kafka-topic', '1.2');
-        $client->getBySubjectAndVersion('some-kafka-topic', '1.2');
+        $client->getBySubjectAndVersion('some-kafka-topic', 'latest');
+        $client->getBySubjectAndVersion('some-kafka-topic', 'latest');
+        $client->getBySubjectAndVersion('some-kafka-topic', 'latest');
+        $client->getBySubjectAndVersion('some-kafka-topic', 'latest');
     }
 
     private function getSchemaTest(): string

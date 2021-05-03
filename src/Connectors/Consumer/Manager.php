@@ -86,7 +86,7 @@ class Manager
 
     private function commit(): void
     {
-        if ($this->autoCommit || $this->consumer->canCommit()) {
+        if ($this->autoCommit || !$this->consumer->canCommit()) {
             return;
         }
 

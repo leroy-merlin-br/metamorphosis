@@ -153,6 +153,11 @@ class ManagerTest extends LaravelTestCase
             ->commitAsync()
             ->twice(2);
 
+        $consumer->expects()
+            ->canCommit()
+            ->twice(2)
+            ->andReturnTrue();
+
         $dispatcher->expects()
             ->handle($consumerRecord)
             ->times(2);

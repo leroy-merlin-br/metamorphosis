@@ -39,11 +39,6 @@ class Manager
     private $commitAsync;
 
     /**
-     * @var bool
-     */
-    private $finished = false;
-
-    /**
      * @var Message
      */
     private $lastResponse;

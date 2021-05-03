@@ -24,7 +24,7 @@ class HighLevel implements ConsumerInterface
         $this->timeout = ConfigManager::get('timeout');
     }
 
-    public function consume(): Message
+    public function consume(): ?Message
     {
         return $this->consumer->consume($this->timeout);
     }
@@ -37,5 +37,10 @@ class HighLevel implements ConsumerInterface
     public function commitAsync(): void
     {
         $this->consumer->commitAsync();
+    }
+
+    public function canCommit(): bool
+    {
+        return true;
     }
 }

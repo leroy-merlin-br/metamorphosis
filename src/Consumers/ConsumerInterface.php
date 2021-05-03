@@ -5,5 +5,7 @@ use RdKafka\Message;
 
 interface ConsumerInterface
 {
-    public function consume(): Message;
+    public function consume(): ?Message;
+
+    public function canCommit(): bool;
 }

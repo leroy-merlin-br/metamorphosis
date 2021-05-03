@@ -53,7 +53,7 @@ class MetamorphosisServiceProvider extends ServiceProvider
         $options['base_uri'] = $configManager->get('url');
         $options['headers'] = array_merge(
             $this->getDefaultHeaders(),
-            $options['headers']
+            $options['headers'] ?? []
         );
 
         return new GuzzleClient($options);

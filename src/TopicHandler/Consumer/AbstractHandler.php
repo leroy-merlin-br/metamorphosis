@@ -13,4 +13,8 @@ abstract class AbstractHandler implements Handler
     public function failed(Exception $exception): void
     {
     }
+
+    public function finished(): void
+    {
+    }
 }

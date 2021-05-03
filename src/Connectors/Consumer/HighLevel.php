@@ -17,7 +17,7 @@ class HighLevel implements ConnectorInterface
         $conf->set('group.id', ConfigManager::get('consumer_group'));
         $conf->set('auto.offset.reset', ConfigManager::get('offset_reset'));
         if (!$autoCommit) {
-            $conf->set('auto.commit.enable', 'false');
+            $conf->set('enable.auto.commit', 'false');
         }
 
         $consumer = app(KafkaConsumer::class, ['conf' => $conf]);

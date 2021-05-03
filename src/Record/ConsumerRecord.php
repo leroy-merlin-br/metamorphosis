@@ -2,6 +2,7 @@
 namespace Metamorphosis\Record;
 
 use Metamorphosis\Exceptions\ResponseErrorException;
+use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use RdKafka\Message;
 
@@ -13,7 +14,6 @@ class ConsumerRecord implements RecordInterface
      */
     const KAFKA_ERROR_WHITELIST = [
         RD_KAFKA_RESP_ERR__PARTITION_EOF,
-        RD_KAFKA_RESP_ERR__TIMED_OUT,
     ];
 
     /**
@@ -114,6 +114,13 @@ class ConsumerRecord implements RecordInterface
 
     private function throwResponseErrorException(): void
     {
+        if (RD_KAFKA_RESP_ERR__TIMED_OUT === $this->original->err) {
+            throw new ResponseTimeoutException(
+                'Consumer finished to process or timed out: '.$this->original->errstr(),
+                $this->original->err
+            );
+        }
+
         if (in_array($this->original->err, self::KAFKA_ERROR_WHITELIST)) {
             throw new ResponseWarningException(
                 'Invalid response: '.$this->original->errstr(),

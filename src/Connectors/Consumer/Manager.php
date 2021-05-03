@@ -3,10 +3,12 @@ namespace Metamorphosis\Connectors\Consumer;
 
 use Exception;
 use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerHandler;
+use RdKafka\Message;
 
 class Manager
 {
@@ -35,6 +37,11 @@ class Manager
      */
     private $commitAsync;
 
+    /**
+     * @var Message
+     */
+    private $lastResponse;
+
     public function __construct(
         ConsumerInterface $consumer,
         ConsumerHandler $consumerHandler,
@@ -57,20 +64,27 @@ class Manager
     public function handleMessage(): void
     {
         try {
-            $response = $this->consumer->consume();
-            $record = app(ConsumerRecord::class, compact('response'));
-            $this->dispatcher->handle($record);
-            $this->commit();
+            if ($response = $this->consumer->consume()) {
+                $record = app(ConsumerRecord::class, compact('response'));
+                $this->dispatcher->handle($record);
+                $this->commit();
+            }
+        } catch (ResponseTimeoutException $exception) {
+            $response = null;
         } catch (ResponseWarningException $exception) {
             $this->consumerHandler->warning($exception);
+            return;
         } catch (Exception $exception) {
             $this->consumerHandler->failed($exception);
+            return;
         }
+
+        $this->handleFinished($response);
     }
 
     private function commit(): void
     {
-        if ($this->autoCommit) {
+        if ($this->autoCommit || !$this->consumer->canCommit()) {
             return;
         }
 
@@ -80,5 +94,14 @@ class Manager
         }
 
         $this->consumer->commit();
+    }
+
+    private function handleFinished(?Message $response): void
+    {
+        if ($this->lastResponse && !$response) {
+            $this->consumerHandler->finished();
+        }
+
+        $this->lastResponse = $response;
     }
 }

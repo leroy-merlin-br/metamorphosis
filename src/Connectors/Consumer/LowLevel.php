@@ -16,7 +16,7 @@ class LowLevel implements ConnectorInterface
         $conf = $this->getConf();
         $conf->set('group.id', ConfigManager::get('consumer_group'));
         if (!$autoCommit) {
-            $conf->set('auto.commit.enable', 'false');
+            $conf->set('enable.auto.commit', 'false');
         }
 
         Factory::authenticate($conf);

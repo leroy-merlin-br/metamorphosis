@@ -3,7 +3,6 @@ namespace Metamorphosis\Connectors\Consumer;
 
 use Exception;
 use Metamorphosis\Consumers\ConsumerInterface;
-use Metamorphosis\Consumers\LowLevel as ConsumerLowLevel;
 use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
@@ -70,7 +69,6 @@ class Manager
                 $this->dispatcher->handle($record);
                 $this->commit();
             }
-
         } catch (ResponseTimeoutException $exception) {
             $response = null;
         } catch (ResponseWarningException $exception) {

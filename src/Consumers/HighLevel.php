@@ -38,4 +38,9 @@ class HighLevel implements ConsumerInterface
     {
         $this->consumer->commitAsync();
     }
+
+    public function canCommit(): bool
+    {
+        return true;
+    }
 }

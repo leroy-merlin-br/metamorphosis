@@ -34,4 +34,13 @@ class LowLevel implements ConsumerInterface
     {
         return $this->consumer->consume($this->partition, $this->timeout);
     }
+
+    /**
+     *  When running low level consumer, we dont need
+     * to commit the messages as they've already been committed.
+     */
+    public function canCommit(): bool
+    {
+        return false;
+    }
 }

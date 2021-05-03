@@ -9,6 +9,7 @@ use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerHandler;
+use RdKafka\Message;
 
 class Manager
 {
@@ -42,6 +43,11 @@ class Manager
      */
     private $finished = false;
 
+    /**
+     * @var Message
+     */
+    private $lastResponse;
+
     public function __construct(
         ConsumerInterface $consumer,
         ConsumerHandler $consumerHandler,
@@ -64,31 +70,28 @@ class Manager
     public function handleMessage(): void
     {
         try {
-            if (!$response = $this->consumer->consume()) {
-                $this->handleTimeOut();
-                return;
+            if ($response = $this->consumer->consume()) {
+                $record = app(ConsumerRecord::class, compact('response'));
+                $this->dispatcher->handle($record);
+                $this->commit();
             }
 
-            $record = app(ConsumerRecord::class, compact('response'));
-            $this->dispatcher->handle($record);
-            $this->commit();
         } catch (ResponseTimeoutException $exception) {
-            $this->handleTimeOut();
-            return;
+            $response = null;
         } catch (ResponseWarningException $exception) {
             $this->consumerHandler->warning($exception);
+            return;
         } catch (Exception $exception) {
             $this->consumerHandler->failed($exception);
+            return;
         }
 
-        $this->finished = false;
+        $this->handleFinished($response);
     }
 
     private function commit(): void
     {
-        // when running low level consumer, we dont need
-        // to commit the messages as they've already committed.
-        if ($this->autoCommit || $this->consumer instanceof ConsumerLowLevel) {
+        if ($this->autoCommit || $this->consumer->canCommit()) {
             return;
         }
 
@@ -100,11 +103,12 @@ class Manager
         $this->consumer->commit();
     }
 
-    private function handleTimeOut(): void
+    private function handleFinished(?Message $response): void
     {
-        if (!$this->finished) {
+        if ($this->lastResponse && !$response) {
             $this->consumerHandler->finished();
-            $this->finished = true;
         }
+
+        $this->lastResponse = $response;
     }
 }

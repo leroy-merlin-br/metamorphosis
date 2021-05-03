@@ -41,7 +41,6 @@ class RunnerTest extends LaravelTestCase
         // Set
         $manager = m::mock(Manager::class);
         $runner = new Runner($manager);
-        $count = 0;
 
         // Expectations
         $manager->shouldReceive('handleMessage')
@@ -59,7 +58,6 @@ class RunnerTest extends LaravelTestCase
         // Set
         $manager = m::mock(Manager::class);
         $runner = new Runner($manager);
-        $count = 0;
 
         // Expectations
         $manager->shouldReceive('handleMessage')

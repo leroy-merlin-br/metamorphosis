@@ -35,7 +35,6 @@ class HighLevelTest extends LaravelTestCase
         // Set
         ConfigManager::set(['timeout' => 1]);
         $kafkaConsumer = m::mock(KafkaConsumer::class);
-        $message = new Message();
         $highLevelConsumer = new HighLevel($kafkaConsumer);
 
         // Expectations
@@ -52,7 +51,6 @@ class HighLevelTest extends LaravelTestCase
         // Set
         ConfigManager::set(['timeout' => 1]);
         $kafkaConsumer = m::mock(KafkaConsumer::class);
-        $message = new Message();
         $highLevelConsumer = new HighLevel($kafkaConsumer);
 
         // Expectations

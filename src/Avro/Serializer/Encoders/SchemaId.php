@@ -29,6 +29,18 @@ class SchemaId implements EncoderInterface
             $schemaId = $this->registerMissingSchemas($subject, $schema, $registerMissingSchemas, $exception);
         }
 
+        return $this->doEncoding($schema, $schemaId, $message);
+    }
+
+    /**
+     * @param AvroSchema $schema
+     * @param int        $schemaId
+     * @param mixed      $message
+     *
+     * @throws \AvroIOException
+     */
+    public function doEncoding(AvroSchema $schema, int $schemaId, $message): string
+    {
         $writer = new AvroIODatumWriter($schema);
         $io = new AvroStringIO();
 

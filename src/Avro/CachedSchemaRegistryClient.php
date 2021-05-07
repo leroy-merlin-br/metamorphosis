@@ -154,7 +154,7 @@ class CachedSchemaRegistryClient
      * @throws AvroSchemaParseException
      * @throws RuntimeException
      */
-    public function getBySubjectAndVersion($subject, $version)
+    public function getBySubjectAndVersion($subject, $version, bool $returnResponse = false)
     {
         if (isset($this->subjectVersionToSchema[$subject][$version])) {
             return $this->subjectVersionToSchema[$subject][$version];
@@ -174,6 +174,10 @@ class CachedSchemaRegistryClient
         $schema = AvroSchema::parse($response['schema']);
 
         $this->cacheSchema($schema, $schemaId, $subject, $version);
+
+        if ($returnResponse) {
+            return $response;
+        }
 
         return $schema;
     }

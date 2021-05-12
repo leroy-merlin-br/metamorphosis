@@ -30,7 +30,7 @@ class SchemaSubjectAndVersion implements DecoderInterface
 
         $schema = $this->registry->getBySubjectAndVersion($subject, $version);
 
-        $reader = new AvroIODatumReader($schema);
+        $reader = new AvroIODatumReader($schema->getAvroSchema());
 
         return $reader->read(new AvroIOBinaryDecoder($io));
     }

@@ -57,16 +57,12 @@ class CachedSchemaRegistryClient
      */
     public function register(string $subject, Schema $schema)
     {
-        if (isset($this->subjectToSchemaIds[$subject])) {
-            $schemasToId = $this->subjectToSchemaIds[$subject];
-
-            if (isset($schemasToId[$schema])) {
-                return $schemasToId[$schema];
-            }
+        if (isset($schemasToId[$schema])) {
+            return $schemasToId[$schema];
         }
 
         $url = sprintf('/subjects/%s-value/versions', $subject);
-        [$status, $response] = $this->client->post($url, ['schema' => (string) $schema]);
+        [$status, $response] = $this->client->post($url, ['schema' => (string) $schema->getAvroSchema()]);
 
         if (409 === $status) {
             throw new RuntimeException('Incompatible Avro schema');
@@ -105,13 +101,17 @@ class CachedSchemaRegistryClient
      *
      * @return int
      */
-    public function getSchemaId($subject, Schema $schema)
+    public function getSchemaId(String $subject, Schema $schema): int
     {
         if (!isset($this->subjectToSchemaVersions[$subject][$schema])) {
             $this->cacheSchemaDetails($subject, $schema);
         }
 
-        return $this->subjectToSchemaIds[$subject][$schema];
+        if ($schemaId = $schema->getSchemaId()) {
+            return $schemaId;
+        }
+
+        throw new RuntimeException('Unable to get schema ID for the specific subject: ');
     }
 
     /**
@@ -168,7 +168,7 @@ class CachedSchemaRegistryClient
         }
 
         $schemaId = $response['id'];
-        $schema = $schema->parse($response['schema'], $schemaId);
+        $schema = $schema->parse($response['schema'], $schemaId, $subject, $version);
 
         $this->cacheSchema($schema, $schemaId, $subject, $version);
 
@@ -202,8 +202,6 @@ class CachedSchemaRegistryClient
         }
 
         if ($subject) {
-            $this->addSchemaIdsToCache($subject, $schema, $schemaId);
-
             if ($version) {
                 if (!isset($this->subjectVersionToSchema[$subject])) {
                     $this->subjectVersionToSchema[$subject] = [];
@@ -213,15 +211,6 @@ class CachedSchemaRegistryClient
                 $this->addSchemaVersionToCache($subject, $schema, $version);
             }
         }
-    }
-
-    private function addSchemaIdsToCache(string $subject, Schema $schema, string $schemaId): void
-    {
-        if (!isset($this->subjectToSchemaIds[$subject])) {
-            $this->subjectToSchemaIds[$subject] = new SplObjectStorage();
-        }
-
-        $this->subjectToSchemaIds[$subject][$schema] = $schemaId;
     }
 
     private function addSchemaVersionToCache(string $subject, Schema $schema, string $version): void

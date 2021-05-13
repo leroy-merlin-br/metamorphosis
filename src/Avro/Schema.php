@@ -11,14 +11,26 @@ class Schema
     private $schemaId;
 
     /**
+     * @var string
+     */
+    private $subject;
+
+    /**
+     * @var string
+     */
+    private $version;
+
+    /**
      * @var AvroSchema
      */
     private $avroSchema;
 
-    public function parse($schema, $id): self
+    public function parse($schema, int $id, ?string $subject, ?string $version): self
     {
-        $this->avroSchema = AvroSchema::parse($schema);
-        $this->schemaId = $id;
+        $this->setAvroSchema(AvroSchema::parse($schema));
+        $this->setSchemaId($id);
+        $this->setSubject($subject);
+        $this->setVersion($version);
 
         return $this;
     }
@@ -41,5 +53,25 @@ class Schema
     public function setAvroSchema(AvroSchema $avroSchema): void
     {
         $this->avroSchema = $avroSchema;
+    }
+
+    public function getVersion(): string
+    {
+        return $this->version;
+    }
+
+    public function setVersion(?string $version): void
+    {
+        $this->version = $version;
+    }
+
+    public function getSubject(): string
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?string $subject): void
+    {
+        $this->subject = $subject;
     }
 }

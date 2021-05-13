@@ -3,6 +3,7 @@ namespace Tests\Unit\Avro\Serializer;
 
 use AvroSchema;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\MessageEncoder;
 use Metamorphosis\Avro\Serializer\SchemaFormats;
 use Mockery as m;
@@ -65,7 +66,7 @@ class MessageEncoderTest extends LaravelTestCase
         $registry = m::mock(CachedSchemaRegistryClient::class);
         $serializer = new MessageEncoder($registry);
         $topic = 'my-topic';
-        $schema = new AvroSchema('array');
+        $schema = new Schema();
         $record = [];
 
         // Expectations

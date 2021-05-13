@@ -3,6 +3,7 @@ namespace Metamorphosis\Avro\Serializer;
 
 use AvroSchema;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\Encoders\EncoderInterface;
 use Metamorphosis\Avro\Serializer\Encoders\SchemaId;
 use Metamorphosis\Avro\Serializer\Encoders\SchemaSubjectAndVersion;
@@ -45,11 +46,11 @@ class MessageEncoder
      * Given a parsed Avro schema, encode a record for the given topic.
      * The schema is registered with the subject of 'topic-value'
      *
-     * @param string     $topic   Topic name
-     * @param AvroSchema $schema  Avro Schema
-     * @param mixed      $message An message/record (object, array, string, etc) to serialize
-     * @param bool       $isKey   If the record is a key
-     * @param int|null   $format  Encoding Format
+     * @param string   $topic   Topic name
+     * @param Schema   $schema  Avro Schema
+     * @param mixed    $message An message/record (object, array, string, etc) to serialize
+     * @param bool     $isKey   If the record is a key
+     * @param int|null $format  Encoding Format
      *
      * @throws \AvroIOException
      *
@@ -57,7 +58,7 @@ class MessageEncoder
      */
     public function encodeMessage(
         string $topic,
-        AvroSchema $schema,
+        Schema $schema,
         $message,
         bool $isKey = false,
         int $format = null
@@ -68,7 +69,7 @@ class MessageEncoder
 
         $encoder = $this->getEncoder($format);
 
-        return $encoder->encode($subject, $schema, $message, $this->registerMissingSchemas);
+        return $encoder->encode($schema, $message);
     }
 
     private function getEncoder(int $format): EncoderInterface

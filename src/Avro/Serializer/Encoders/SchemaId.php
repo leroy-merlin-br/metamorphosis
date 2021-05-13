@@ -3,11 +3,10 @@ namespace Metamorphosis\Avro\Serializer\Encoders;
 
 use AvroIOBinaryEncoder;
 use AvroIODatumWriter;
-use AvroSchema;
 use AvroStringIO;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\SchemaFormats;
-use RuntimeException;
 
 class SchemaId implements EncoderInterface
 {
@@ -21,19 +20,9 @@ class SchemaId implements EncoderInterface
         $this->registry = $registry;
     }
 
-    public function encode(string $subject, AvroSchema $schema, $message, bool $registerMissingSchemas): string
+    public function encode(Schema $schema, $message): string
     {
-        try {
-            $schemaId = $this->registry->getSchemaId($subject, $schema);
-        } catch (RuntimeException $exception) {
-            $schemaId = $this->registerMissingSchemas($subject, $schema, $registerMissingSchemas, $exception);
-        }
-
-        return $this->doEncoding($schema, $schemaId, $message);
-    }
-
-    public function doEncoding(AvroSchema $schema, int $schemaId, $message): string
-    {
+        $schemaId = $schema->getSchemaId();
         $writer = new AvroIODatumWriter($schema);
         $io = new AvroStringIO();
 
@@ -53,16 +42,5 @@ class SchemaId implements EncoderInterface
         $writer->write($message, $encoder);
 
         return $io->string();
-    }
-
-    private function registerMissingSchemas(string $subject, AvroSchema $schema, bool $registerMissingSchemas, $exception): int
-    {
-        if ($registerMissingSchemas) {
-            $schemaId = $this->registry->register($subject, $schema);
-        } else {
-            throw $exception;
-        }
-
-        return $schemaId;
     }
 }

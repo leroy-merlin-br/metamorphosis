@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Avro;
 
-use AvroSchema;
 use AvroSchemaParseException;
 use RuntimeException;
 use SplObjectStorage;
@@ -51,7 +50,7 @@ class CachedSchemaRegistryClient
      *
      * Multiple instances of the same schema will result in cache misses.
      *
-     * @param string     $subject Subject name
+     * @param string $subject Subject name
      * @param Schema $schema  Avro schema to be registered
      *
      * @return int
@@ -148,8 +147,6 @@ class CachedSchemaRegistryClient
      * @param string     $subject
      * @param int|string $version Version number or 'latest'
      *
-     * @return Schema
-     *
      * @throws AvroSchemaParseException
      * @throws RuntimeException
      */
@@ -175,7 +172,7 @@ class CachedSchemaRegistryClient
 
         $this->cacheSchema($schema, $schemaId, $subject, $version);
 
-        return $this->subjectVersionToSchema[$subject][$version];;
+        return $this->subjectVersionToSchema[$subject][$version];
     }
 
     /**

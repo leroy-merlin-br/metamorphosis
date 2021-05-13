@@ -1,5 +1,4 @@
 <?php
-
 namespace Metamorphosis\Avro;
 
 use AvroSchema;

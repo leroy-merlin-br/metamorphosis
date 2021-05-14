@@ -22,9 +22,10 @@ class SchemaSubjectAndVersion implements EncoderInterface
         $this->registry = $registry;
     }
 
-    public function encode(Schema $schema, $message, ?string $subject = null): string
+    public function encode(Schema $schema, $message): string
     {
-        $version = $this->registry->getSchemaVersion($subject, $schema);
+        $version = $schema->getVersion();
+        $subject = $schema->getSubject();
 
         $writer = new AvroIODatumWriter($schema->getAvroSchema());
         $io = new AvroStringIO();

@@ -20,7 +20,7 @@ class SchemaId implements EncoderInterface
         $this->registry = $registry;
     }
 
-    public function encode(Schema $schema, $message, ?string $subject = null): string
+    public function encode(Schema $schema, $message): string
     {
         $schemaId = $schema->getSchemaId();
         $writer = new AvroIODatumWriter($schema->getAvroSchema());

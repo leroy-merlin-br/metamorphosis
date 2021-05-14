@@ -14,5 +14,5 @@ interface EncoderInterface
      *
      * @return string Encoded record with schema ID as bytes
      */
-    public function encode(Schema $schema, $message, ?string $subject = null): string;
+    public function encode(Schema $schema, $message): string;
 }

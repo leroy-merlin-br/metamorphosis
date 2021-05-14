@@ -25,7 +25,7 @@ class Schema
      */
     private $avroSchema;
 
-    public function parse($schema, int $id, ?string $subject, ?string $version): self
+    public function parse($schema, int $id, ?string $subject = null, ?string $version = null): self
     {
         $this->setAvroSchema(AvroSchema::parse($schema));
         $this->setSchemaId($id);

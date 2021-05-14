@@ -41,11 +41,8 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
         $topic = $record->getTopicName();
         $schema = $this->schemaRegistry->getBySubjectAndVersion("{$topic}-value", 'latest');
 
-        $schemaId = $schema->getSchemaId();
-        $schema = AvroSchema::parse($schema->getAvroSchema());
-
         $arrayPayload = json_decode($record->getPayload(), true);
-        $encodedPayload = $this->schemaIdEncoder->doEncoding($schema, $schemaId, $arrayPayload);
+        $encodedPayload = $this->schemaIdEncoder->encode($schema, $arrayPayload);
 
         $record->setPayload($encodedPayload);
         $handler->handle($record);

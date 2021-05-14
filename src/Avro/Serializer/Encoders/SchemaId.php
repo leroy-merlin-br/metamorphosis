@@ -23,7 +23,7 @@ class SchemaId implements EncoderInterface
     public function encode(Schema $schema, $message): string
     {
         $schemaId = $schema->getSchemaId();
-        $writer = new AvroIODatumWriter($schema);
+        $writer = new AvroIODatumWriter($schema->getAvroSchema());
         $io = new AvroStringIO();
 
         // write the header

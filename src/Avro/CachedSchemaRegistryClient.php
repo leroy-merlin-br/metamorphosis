@@ -3,7 +3,6 @@ namespace Metamorphosis\Avro;
 
 use AvroSchemaParseException;
 use RuntimeException;
-use SplObjectStorage;
 
 class CachedSchemaRegistryClient
 {
@@ -17,11 +16,6 @@ class CachedSchemaRegistryClient
      */
     private $idToSchema = [];
 
-    /**
-     * @var SplObjectStorage[]|int[][]
-     */
-    private $subjectToSchemaVersions = [];
-
     /** Schemas by Version
      *
      * @var Schema[][]
@@ -34,63 +28,10 @@ class CachedSchemaRegistryClient
     }
 
     /**
-     * POST /subjects/(string: subject)/versions
-     * Register a schema with the registry under the given subject
-     * and receive a schema id.
-     *
-     * $schema must be a parsed schema from the php avro library
-     *
-     * Multiple instances of the same schema will result in cache misses.
-     *
-     * @param string $subject Subject name
-     * @param Schema $schema  Avro schema to be registered
-     *
-     * @return int
-     */
-    public function register(string $subject, Schema $schema)
-    {
-        if (isset($this->idToSchema[$schema->getSchemaId()])) {
-            return $this->idToSchema[$schema->getSchemaId()];
-        }
-
-        $url = sprintf('/subjects/%s-value/versions', $subject);
-        [$status, $response] = $this->client->post($url, ['schema' => (string) $schema->getAvroSchema()]);
-
-        if (409 === $status) {
-            throw new RuntimeException('Incompatible Avro schema');
-        } elseif (422 === $status) {
-            throw new RuntimeException('Invalid Avro schema');
-        } elseif (!($status >= 200 && $status < 300)) {
-            throw new RuntimeException('Unable to register schema. Error code: '.$status);
-        }
-
-        $schemaId = $response['id'];
-        $this->cacheSchema($schema, $schemaId, $subject);
-
-        return $schemaId;
-    }
-
-    /**
-     * Returns the version of a registered schema
-     *
-     * @param string $subject
-     *
-     * @return int
-     */
-    public function getSchemaVersion($subject, Schema $schema)
-    {
-        if (!isset($this->subjectToSchemaVersions[$subject][$schema])) {
-            $this->cacheSchemaDetails($subject, $schema);
-        }
-
-        return $this->subjectToSchemaVersions[$subject][$schema];
-    }
-
-    /**
      * GET /schemas/ids/{int: id}
      * Retrieve a parsed avro schema by id or None if not found
      *
-     * @param int $schemaId value
+     * @param string|int $schemaId
      */
     public function getById($schemaId): Schema
     {
@@ -110,7 +51,7 @@ class CachedSchemaRegistryClient
 
         $schema = $schema->parse($response['schema'], $schemaId);
 
-        $this->cacheSchema($schema, $schemaId);
+        $this->cacheSchema($schema);
 
         return $this->idToSchema[$schemaId];
     }
@@ -142,55 +83,17 @@ class CachedSchemaRegistryClient
         $schemaId = $response['id'];
         $schema = $schema->parse($response['schema'], $schemaId, $subject, $version);
 
-        $this->cacheSchema($schema, $schemaId, $subject, $version);
+        $this->cacheSchema($schema);
 
         return $this->subjectVersionToSchema[$subject][$version];
     }
 
-    /**
-     * Fetch and caches the details of a schema
-     *
-     * @param string $subject
-     */
-    protected function cacheSchemaDetails($subject, Schema $schema)
+    private function cacheSchema(Schema $schema): void
     {
-        $url = sprintf('/subjects/%s', $subject);
-        [$status, $response] = $this->client->post($url, ['schema' => (string) $schema]);
-        if (!($status >= 200 && $status < 300)) {
-            throw new RuntimeException('Unable to get schema details. Error code: '.$status);
+        if ($schema->getSubject() && $schema->getVersion()) {
+            $this->subjectVersionToSchema[$schema->getSubject()][$schema->getVersion()] = $schema;
         }
 
-        $response['schema'] = $schema;
-
-        $this->cacheSchema($response['schema'], $response['id'], $response['subject'], $response['version']);
-    }
-
-    private function cacheSchema(Schema $schema, string $schemaId, string $subject = null, string $version = null): void
-    {
-        if (isset($this->idToSchema[$schemaId])) {
-            $schema = $this->idToSchema[$schemaId];
-        } else {
-            $this->idToSchema[$schemaId] = $schema;
-        }
-
-        if ($subject) {
-            if ($version) {
-                if (!isset($this->subjectVersionToSchema[$subject])) {
-                    $this->subjectVersionToSchema[$subject] = [];
-                }
-
-                $this->subjectVersionToSchema[$subject][$version] = $schema;
-                $this->addSchemaVersionToCache($subject, $schema, $version);
-            }
-        }
-    }
-
-    private function addSchemaVersionToCache(string $subject, Schema $schema, string $version): void
-    {
-        if (!isset($this->subjectToSchemaVersions[$subject])) {
-            $this->subjectToSchemaVersions[$subject] = new SplObjectStorage();
-        }
-
-        $this->subjectToSchemaVersions[$subject][$schema] = $version;
+        $this->idToSchema[$schema->getSchemaId()] = $schema;
     }
 }

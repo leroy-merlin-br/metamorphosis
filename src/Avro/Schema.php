@@ -55,7 +55,7 @@ class Schema
         $this->avroSchema = $avroSchema;
     }
 
-    public function getVersion(): string
+    public function getVersion(): ?string
     {
         return $this->version;
     }
@@ -65,7 +65,7 @@ class Schema
         $this->version = $version;
     }
 
-    public function getSubject(): string
+    public function getSubject(): ?string
     {
         return $this->subject;
     }

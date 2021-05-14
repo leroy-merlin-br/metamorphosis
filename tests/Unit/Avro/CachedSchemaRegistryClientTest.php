@@ -154,6 +154,10 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
             ->getAvroSchema()
             ->andReturn($avroSchema);
 
+        $schema->expects()
+            ->getSchemaId()
+            ->andReturn('123');
+
         // Actions
         $client->register('some-kafka-topic', $schema);
     }
@@ -207,57 +211,6 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $client->getSchemaVersion('some-kafka-topic', $schema);
         $client->getSchemaVersion('some-kafka-topic', $schema);
         $client->getSchemaVersion('some-kafka-topic', $schema);
-    }
-
-    public function testGetSchemaId(): void
-    {
-        // Set
-        $httpClient = m::mock(Client::class);
-        $client = new CachedSchemaRegistryClient($httpClient);
-        $schema = m::mock(Schema::class);
-        $response = [
-            'subject' => 'some-kafka-topic',
-            'id' => '123',
-            'version' => '1.2',
-        ];
-        $status = 200;
-
-        // Expectations
-        $httpClient->expects()
-            ->post('/subjects/some-kafka-topic', compact('schema'))
-            ->andReturn([$status, $response]);
-
-        // Actions
-        $result = $client->getSchemaId('some-kafka-topic', $schema);
-
-        // Assertions
-        $this->assertSame('123', $result);
-    }
-
-    public function testGetSchemaIdShouldHitCache(): void
-    {
-        // Set
-        $httpClient = m::mock(Client::class);
-        $client = new CachedSchemaRegistryClient($httpClient);
-        $schema = m::mock(Schema::class);
-        $response = [
-            'subject' => 'some-kafka-topic',
-            'id' => '123',
-            'version' => '1.2',
-        ];
-        $status = 200;
-
-        // Expectations
-        $httpClient->expects()
-            ->post('/subjects/some-kafka-topic', compact('schema'))
-            ->once()
-            ->andReturn([$status, $response]);
-
-        // Actions
-        $client->getSchemaId('some-kafka-topic', $schema);
-        $client->getSchemaId('some-kafka-topic', $schema);
-        $client->getSchemaId('some-kafka-topic', $schema);
-        $client->getSchemaId('some-kafka-topic', $schema);
     }
 
     public function testGetById(): void
@@ -380,11 +333,13 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $schema = new Schema();
         $schema->setAvroSchema($parsedSchema);
         $schema->setSchemaId('123');
+        $schema->setVersion(1);
+        $schema->setSubject('some-kafka-topic');
 
         $response = [
             'schema' => $schemaString,
             'id' => '123',
-            'version' => '1.2',
+            'version' => 1,
             'subject' => 'some-kafka-topic',
         ];
         $status = 200;

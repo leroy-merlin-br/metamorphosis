@@ -13,14 +13,6 @@ class CachedSchemaRegistryClient
     private $client;
 
     /**
-     * In the first time we register an schema and receive a schema
-     * Id, we will cache it to new requests.
-     *
-     * @var SplObjectStorage[]|int[][]
-     */
-    private $subjectToSchemaIds = [];
-
-    /**
      * @var Schema[]
      */
     private $idToSchema = [];
@@ -92,22 +84,6 @@ class CachedSchemaRegistryClient
         }
 
         return $this->subjectToSchemaVersions[$subject][$schema];
-    }
-
-    /**
-     * Returns the id of a registered schema
-     */
-    public function getSchemaId(string $subject, Schema $schema): int
-    {
-        if (!isset($this->subjectToSchemaVersions[$subject][$schema])) {
-            $this->cacheSchemaDetails($subject, $schema);
-        }
-
-        if ($schemaId = $schema->getSchemaId()) {
-            return $schemaId;
-        }
-
-        throw new RuntimeException('Unable to get schema ID for the specific subject: ');
     }
 
     /**

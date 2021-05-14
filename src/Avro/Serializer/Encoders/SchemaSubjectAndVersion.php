@@ -3,12 +3,10 @@ namespace Metamorphosis\Avro\Serializer\Encoders;
 
 use AvroIOBinaryEncoder;
 use AvroIODatumWriter;
-use AvroSchema;
 use AvroStringIO;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\SchemaFormats;
-use RuntimeException;
 
 class SchemaSubjectAndVersion implements EncoderInterface
 {

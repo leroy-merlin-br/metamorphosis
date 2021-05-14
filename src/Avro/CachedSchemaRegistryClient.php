@@ -96,12 +96,8 @@ class CachedSchemaRegistryClient
 
     /**
      * Returns the id of a registered schema
-     *
-     * @param string $subject
-     *
-     * @return int
      */
-    public function getSchemaId(String $subject, Schema $schema): int
+    public function getSchemaId(string $subject, Schema $schema): int
     {
         if (!isset($this->subjectToSchemaVersions[$subject][$schema])) {
             $this->cacheSchemaDetails($subject, $schema);

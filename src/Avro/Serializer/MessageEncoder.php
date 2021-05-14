@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Avro\Serializer;
 
-use AvroSchema;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\Encoders\EncoderInterface;

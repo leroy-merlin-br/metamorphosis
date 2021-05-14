@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Middlewares;
 
-use AvroSchema;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\Serializer\Encoders\SchemaId;
 use Metamorphosis\Exceptions\ConfigurationException;

@@ -57,8 +57,8 @@ class CachedSchemaRegistryClient
      */
     public function register(string $subject, Schema $schema)
     {
-        if (isset($schemasToId[$schema])) {
-            return $schemasToId[$schema];
+        if (isset($this->idToSchema[$schema->getSchemaId()])) {
+            return $this->idToSchema[$schema->getSchemaId()];
         }
 
         $url = sprintf('/subjects/%s-value/versions', $subject);

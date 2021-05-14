@@ -18,13 +18,22 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $httpClient = m::mock(Client::class);
         $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(Schema::class);
+        $avroSchema = m::mock(AvroSchema::class);
         $response = ['id' => '123'];
         $status = 200;
 
         // Expectations
         $httpClient->expects()
-            ->post('/subjects/some-kafka-topic-value/versions', compact('schema'))
+            ->post('/subjects/some-kafka-topic-value/versions', ['schema' => $avroSchema])
             ->andReturn([$status, $response]);
+
+        $schema->expects()
+            ->getAvroSchema()
+            ->andReturn($avroSchema);
+
+        $schema->expects()
+            ->getSchemaId()
+            ->andReturn(1);
 
         // Actions
         $result = $client->register('some-kafka-topic', $schema);
@@ -39,14 +48,23 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $httpClient = m::mock(Client::class);
         $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(Schema::class);
+        $avroSchema = m::mock(AvroSchema::class);
         $response = ['id' => '123'];
         $status = 200;
 
         // Expectations
         $httpClient->expects()
-            ->post('/subjects/some-kafka-topic-value/versions', compact('schema'))
-            ->once()
+            ->post('/subjects/some-kafka-topic-value/versions', ['schema' => $avroSchema])
             ->andReturn([$status, $response]);
+
+        $schema->expects()
+            ->getAvroSchema()
+            ->andReturn($avroSchema);
+
+        $schema->expects()
+            ->getSchemaId()
+            ->times(3)
+            ->andReturn('123');
 
         // Actions
         $client->register('some-kafka-topic', $schema);
@@ -59,14 +77,24 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $httpClient = m::mock(Client::class);
         $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(Schema::class);
+        $avroSchema = m::mock(AvroSchema::class);
         $response = ['id' => '123'];
         $status = 409;
 
         // Expectations
         $this->expectException(RuntimeException::class);
+
         $httpClient->expects()
-            ->post('/subjects/some-kafka-topic-value/versions', compact('schema'))
+            ->post('/subjects/some-kafka-topic-value/versions', ['schema' => $avroSchema])
             ->andReturn([$status, $response]);
+
+        $schema->expects()
+            ->getAvroSchema()
+            ->andReturn($avroSchema);
+
+        $schema->expects()
+            ->getSchemaId()
+            ->andReturn(1);
 
         // Actions
         $client->register('some-kafka-topic', $schema);
@@ -78,15 +106,26 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $httpClient = m::mock(Client::class);
         $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(Schema::class);
-        $response = ['id' => '123'];
+        $avroSchema = m::mock(AvroSchema::class);
+        $response = ['id' => "123"];
         $status = 422;
 
         // Expectations
         $this->expectException(RuntimeException::class);
+
         $this->expectExceptionMessage('Invalid Avro schema');
+
         $httpClient->expects()
-            ->post('/subjects/some-kafka-topic-value/versions', compact('schema'))
+            ->post('/subjects/some-kafka-topic-value/versions', ['schema' => $avroSchema])
             ->andReturn([$status, $response]);
+
+        $schema->expects()
+            ->getAvroSchema()
+            ->andReturn($avroSchema);
+
+        $schema->expects()
+            ->getSchemaId()
+            ->andReturn("123");
 
         // Actions
         $client->register('some-kafka-topic', $schema);
@@ -98,15 +137,22 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $httpClient = m::mock(Client::class);
         $client = new CachedSchemaRegistryClient($httpClient);
         $schema = m::mock(Schema::class);
+        $avroSchema = m::mock(AvroSchema::class);
         $response = ['id' => '123'];
         $status = 199;
 
         // Expectations
         $this->expectException(RuntimeException::class);
+
         $this->expectExceptionMessage("Unable to register schema. Error code: {$status}");
+
         $httpClient->expects()
-            ->post('/subjects/some-kafka-topic-value/versions', compact('schema'))
+            ->post('/subjects/some-kafka-topic-value/versions', ['schema' => $avroSchema])
             ->andReturn([$status, $response]);
+
+        $schema->expects()
+            ->getAvroSchema()
+            ->andReturn($avroSchema);
 
         // Actions
         $client->register('some-kafka-topic', $schema);

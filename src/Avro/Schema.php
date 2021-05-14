@@ -6,7 +6,7 @@ use AvroSchema;
 class Schema
 {
     /**
-     * @var int
+     * @var string
      */
     private $schemaId;
 
@@ -25,7 +25,7 @@ class Schema
      */
     private $avroSchema;
 
-    public function parse($schema, int $id, ?string $subject = null, ?string $version = null): self
+    public function parse($schema, string $id, ?string $subject = null, ?string $version = null): self
     {
         $this->setAvroSchema(AvroSchema::parse($schema));
         $this->setSchemaId($id);
@@ -35,12 +35,12 @@ class Schema
         return $this;
     }
 
-    public function getSchemaId(): int
+    public function getSchemaId(): string
     {
         return $this->schemaId;
     }
 
-    public function setSchemaId(int $schemaId): void
+    public function setSchemaId(string $schemaId): void
     {
         $this->schemaId = $schemaId;
     }

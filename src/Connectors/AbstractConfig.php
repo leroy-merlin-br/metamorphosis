@@ -29,4 +29,9 @@ abstract class AbstractConfig
     {
         ConfigManager::set($config);
     }
+
+    protected function getSchemaConfig(string $topicId): array
+    {
+        return config('kafka.avro_schemas.'.$topicId, []);
+    }
 }

@@ -3,6 +3,7 @@ namespace Tests\Unit\Avro\Serializer;
 
 use AvroSchema;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\MessageDecoder;
 use Mockery as m;
 use RuntimeException;
@@ -45,7 +46,8 @@ class MessageDecoderTest extends LaravelTestCase
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
         $serializer = new MessageDecoder($registry);
-        $decoder = new AvroSchema('boolean');
+        $decoder = m::mock(Schema::class);
+        $avroSchema = new AvroSchema('boolean');
         $message = "\x00\x00\x00\x00\x07\x00";
         $expected = false;
 
@@ -53,6 +55,10 @@ class MessageDecoderTest extends LaravelTestCase
         $registry->expects()
             ->getById(7)
             ->andReturn($decoder);
+
+        $decoder->expects()
+            ->getAvroSchema()
+            ->andReturn($avroSchema);
 
         // Actions
         $result = $serializer->decodeMessage($message);
@@ -66,7 +72,8 @@ class MessageDecoderTest extends LaravelTestCase
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
         $serializer = new MessageDecoder($registry);
-        $decoder = new AvroSchema('string');
+        $decoder = m::mock(Schema::class);
+        $avroSchema = new AvroSchema('string');
         $message = "\x01\x00\x00\x00\fmy-topic-key\x00\x00\x00\x05\$my awesome message";
         $expected = 'my awesome message';
 
@@ -74,6 +81,10 @@ class MessageDecoderTest extends LaravelTestCase
         $registry->expects()
             ->getBySubjectAndVersion('my-topic-key', 5)
             ->andReturn($decoder);
+
+        $decoder->expects()
+            ->getAvroSchema()
+            ->andReturn($avroSchema);
 
         // Actions
         $result = $serializer->decodeMessage($message);

@@ -3,11 +3,10 @@ namespace Metamorphosis\Avro\Serializer\Encoders;
 
 use AvroIOBinaryEncoder;
 use AvroIODatumWriter;
-use AvroSchema;
 use AvroStringIO;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\SchemaFormats;
-use RuntimeException;
 
 class SchemaSubjectAndVersion implements EncoderInterface
 {
@@ -21,20 +20,12 @@ class SchemaSubjectAndVersion implements EncoderInterface
         $this->registry = $registry;
     }
 
-    public function encode(string $subject, AvroSchema $schema, $message, bool $registerMissingSchemas): string
+    public function encode(Schema $schema, $message): string
     {
-        try {
-            $version = $this->registry->getSchemaVersion($subject, $schema);
-        } catch (RuntimeException $exception) {
-            if ($registerMissingSchemas) {
-                $this->registry->register($subject, $schema);
-                $version = $this->registry->getSchemaVersion($subject, $schema);
-            } else {
-                throw $exception;
-            }
-        }
+        $version = $schema->getVersion();
+        $subject = $schema->getSubject();
 
-        $writer = new AvroIODatumWriter($schema);
+        $writer = new AvroIODatumWriter($schema->getAvroSchema());
         $io = new AvroStringIO();
 
         // write the header

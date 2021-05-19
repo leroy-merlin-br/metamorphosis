@@ -104,9 +104,4 @@ class Config extends AbstractConfig
             return !is_null($value);
         });
     }
-
-    private function getSchemaConfig(string $topicId): array
-    {
-        return config('kafka.avro_schemas.'.$topicId, []);
-    }
 }

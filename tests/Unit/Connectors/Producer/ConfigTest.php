@@ -30,6 +30,8 @@ class ConfigTest extends LaravelTestCase
                 'certificate' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.cert',
                 'key' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.key',
             ],
+            'url' => '',
+            'request_options' => [],
         ];
 
         // Actions

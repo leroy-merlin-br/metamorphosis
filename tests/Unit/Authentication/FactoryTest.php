@@ -35,6 +35,32 @@ class FactoryTest extends LaravelTestCase
         $this->assertArraySubset($expected, $conf->dump());
     }
 
+    public function testItMakesSASLAuthenticationClass(): void
+    {
+        // Set
+        ConfigManager::set([
+            'auth' => [
+                'type' => 'sasl_ssl',
+                'mechanisms' => 'PLAIN',
+                'username' => 'some-username',
+                'password' => 'some-password',
+            ],
+        ]);
+        $conf = new Conf();
+        $expected = [
+            'security.protocol' => 'sasl_ssl',
+            'sasl.username' => 'some-username',
+            'sasl.password' => 'some-password',
+            'sasl.mechanisms' => 'PLAIN',
+        ];
+
+        // Actions
+        Factory::authenticate($conf);
+
+        // Assertions
+        $this->assertArraySubset($expected, $conf->dump());
+    }
+
     public function testItThrowsExceptionWhenInvalidProtocolIsPassed(): void
     {
         // Set

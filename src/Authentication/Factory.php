@@ -9,6 +9,8 @@ class Factory
 {
     const TYPE_SSL = 'ssl';
 
+    const TYPE_SASL_SSL = 'sasl_ssl';
+
     const TYPE_NONE = 'none';
 
     public static function authenticate(Conf $conf): void
@@ -22,6 +24,10 @@ class Factory
                 break;
             case self::TYPE_SSL:
                 app(SSLAuthentication::class, compact('conf'));
+
+                break;
+            case self::TYPE_SASL_SSL:
+                app(SASLAuthentication::class, compact('conf'));
 
                 break;
             default:

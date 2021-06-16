@@ -139,7 +139,7 @@ return [
 
                 // Here you can configure which partition you want to send the message
                 // it can be -1 (RD_KAFKA_PARTITION_UA) to let Kafka decide, or an int with the partition number
-                'partition' => RD_KAFKA_PARTITION_UA,
+                'partition' => constant('RD_KAFKA_PARTITION_UA') ?? -1,
             ],
         ],
     ],

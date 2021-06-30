@@ -37,7 +37,7 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
 
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
-        $topic = $record->getTopicName();
+        $topic = ConfigManager::get('topic_id');
         $schema = $this->schemaRegistry->getBySubjectAndVersion("{$topic}-value", 'latest');
 
         $arrayPayload = json_decode($record->getPayload(), true);

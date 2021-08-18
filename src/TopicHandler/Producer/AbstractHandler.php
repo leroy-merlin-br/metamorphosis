@@ -71,7 +71,7 @@ abstract class AbstractHandler implements HandlerInterface
 
     private function encodeRecord(array $record): string
     {
-        $record = json_encode($record);
+        $record = json_encode($record, JSON_PRESERVE_ZERO_FRACTION);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
             throw new JsonException('Cannot convert data into a valid JSON. Reason: '.json_last_error_msg());

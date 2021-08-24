@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Consumers;
 
-use Metamorphosis\Facades\ConfigManager;
+
 use RdKafka\KafkaConsumer;
 use RdKafka\Message;
 
@@ -17,11 +17,11 @@ class HighLevel implements ConsumerInterface
      */
     private $timeout;
 
-    public function __construct(KafkaConsumer $consumer)
+    public function __construct(KafkaConsumer $consumer, int $timeout)
     {
         $this->consumer = $consumer;
 
-        $this->timeout = ConfigManager::get('timeout');
+        $this->timeout = $timeout;
     }
 
     public function consume(): ?Message

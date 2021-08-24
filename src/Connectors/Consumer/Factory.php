@@ -1,8 +1,9 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
-use Metamorphosis\Facades\ConfigManager;
+
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 
@@ -13,14 +14,14 @@ use Metamorphosis\Middlewares\Handler\Dispatcher;
  */
 class Factory
 {
-    public static function make(): Manager
+    public static function make(ConfigManager $configManager): Manager
     {
-        $autoCommit = ConfigManager::get('auto_commit', true);
-        $commitAsync = ConfigManager::get('commit_async', true);
+        $autoCommit = $configManager->get('auto_commit', true);
+        $commitAsync = $configManager->get('commit_async', true);
 
-        $consumer = self::getConsumer($autoCommit);
-        $handler = app(ConfigManager::get('handler'));
-        $dispatcher = self::getMiddlewareDispatcher($handler, ConfigManager::middlewares());
+        $consumer = self::getConsumer($autoCommit, $configManager);
+        $handler = app($configManager->get('handler'));
+        $dispatcher = self::getMiddlewareDispatcher($handler, $configManager->middlewares());
 
         return new Manager($consumer, $handler, $dispatcher, $autoCommit, $commitAsync);
     }
@@ -30,13 +31,13 @@ class Factory
         return ConfigManager::has('partition');
     }
 
-    private static function getConsumer(bool $autoCommit): ConsumerInterface
+    private static function getConsumer(bool $autoCommit, ConfigManager $configManager): ConsumerInterface
     {
         if (self::requiresPartition()) {
-            return app(LowLevel::class)->getConsumer($autoCommit);
+            return app(LowLevel::class)->getConsumer($autoCommit, $configManager);
         }
 
-        return app(HighLevel::class)->getConsumer($autoCommit);
+        return app(HighLevel::class)->getConsumer($autoCommit, $configManager);
     }
 
     private static function getMiddlewareDispatcher($handler, array $middlewares): Dispatcher

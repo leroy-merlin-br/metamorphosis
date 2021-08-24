@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\Producer;
 
-use Metamorphosis\Facades\ConfigManager;
+
 use Metamorphosis\Producer\Poll;
 use Mockery as m;
 use RdKafka\Producer as KafkaProducer;

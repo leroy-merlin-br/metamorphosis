@@ -15,17 +15,6 @@ use Tests\LaravelTestCase;
 
 class ProducerWithAvroTest extends LaravelTestCase
 {
-    /**
-     * @var string
-     */
-    protected $highLevelMessage;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->withoutAuthentication();
-    }
-
     public function testShouldRunAProducerAndReceiveMessagesWithAAvroSchema(): void
     {
         // Given That I
@@ -33,12 +22,7 @@ class ProducerWithAvroTest extends LaravelTestCase
         $this->haveSomeRandomMessagesProduced();
 
         // When I
-        $this->runTheConsumer();
-    }
-
-    protected function withoutAuthentication(): void
-    {
-        config(['kafka.brokers.default.auth' => []]);
+//        $this->runTheConsumer();
     }
 
     protected function haveAHandlerConfigured(): void

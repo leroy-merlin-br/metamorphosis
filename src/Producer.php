@@ -4,7 +4,6 @@ namespace Metamorphosis;
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Exceptions\JsonException;
-use Metamorphosis\Facades\ConfigManager;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer\Poll;
@@ -40,21 +39,21 @@ class Producer
 
     public function build(HandlerInterface $producerHandler): Dispatcher
     {
-        $this->config->setOption($producerHandler->getTopic());
+        $configManager = $this->config->setOption($producerHandler->getTopic());
 
-        $middlewares = ConfigManager::middlewares();
-        $middlewares[] = $this->getProducerMiddleware($producerHandler);
+        $middlewares = $configManager->middlewares();
+        $middlewares[] = $this->getProducerMiddleware($producerHandler, $configManager);
 
         return new Dispatcher($middlewares);
     }
 
-    public function getProducerMiddleware(HandlerInterface $producerHandler): ProducerMiddleware
+    public function getProducerMiddleware(HandlerInterface $producerHandler, ConfigManager $configManager): ProducerMiddleware
     {
         $producer = $this->connector->getProducerTopic($producerHandler);
 
-        $topic = $producer->newTopic(ConfigManager::get('topic_id'));
+        $topic = $producer->newTopic($configManager->get('topic_id'));
         $poll = app(Poll::class, ['producer' => $producer]);
-        $partition = ConfigManager::get('partition');
+        $partition = $configManager->get('partition');
 
         return app(ProducerMiddleware::class, compact('topic', 'poll', 'partition'));
     }

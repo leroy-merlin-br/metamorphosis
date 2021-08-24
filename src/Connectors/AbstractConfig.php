@@ -3,7 +3,7 @@ namespace Metamorphosis\Connectors;
 
 use Illuminate\Support\Facades\Validator;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\Facades\ConfigManager;
+
 
 abstract class AbstractConfig
 {
@@ -23,11 +23,6 @@ abstract class AbstractConfig
         if (!$validator->errors()->isEmpty()) {
             throw new ConfigurationException($validator->errors()->toJson());
         }
-    }
-
-    protected function setConfigRuntime(array $config): void
-    {
-        ConfigManager::set($config);
     }
 
     protected function getSchemaConfig(string $topicId): array

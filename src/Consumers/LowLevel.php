@@ -1,7 +1,8 @@
 <?php
 namespace Metamorphosis\Consumers;
 
-use Metamorphosis\Facades\ConfigManager;
+
+use Metamorphosis\ConfigManager;
 use RdKafka\ConsumerTopic;
 use RdKafka\Message;
 
@@ -22,12 +23,12 @@ class LowLevel implements ConsumerInterface
      */
     private $timeout;
 
-    public function __construct(ConsumerTopic $consumer)
+    public function __construct(ConsumerTopic $consumer, ConfigManager $configManager)
     {
         $this->consumer = $consumer;
 
-        $this->partition = ConfigManager::get('partition');
-        $this->timeout = ConfigManager::get('timeout');
+        $this->partition = $configManager->get('partition');
+        $this->timeout = $configManager->get('timeout');
     }
 
     public function consume(): ?Message

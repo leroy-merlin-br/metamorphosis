@@ -48,15 +48,15 @@ class MetamorphosisServiceProvider extends ServiceProvider
 
     private function getGuzzleHttpClient(ConfigManager $configManager): GuzzleClient
     {
-        $options = $configManager->get('request_options') ?: [];
-        $options['timeout'] = $configManager->get('timeout');
-        $options['base_uri'] = $configManager->get('url');
-        $options['headers'] = array_merge(
+        $config = $configManager->get('request_options') ?: [];
+        $config['timeout'] = $configManager->get('timeout');
+        $config['base_uri'] = $configManager->get('url');
+        $config['headers'] = array_merge(
             $this->getDefaultHeaders(),
-            $options['headers'] ?? []
+            $config['headers'] ?? []
         );
 
-        return new GuzzleClient($options);
+        return app(GuzzleClient::class, compact('config'));
     }
 
     private function getDefaultHeaders(): array

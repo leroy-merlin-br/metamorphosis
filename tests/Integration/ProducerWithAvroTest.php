@@ -26,7 +26,7 @@ class ProducerWithAvroTest extends LaravelTestCase
         $this->withoutAuthentication();
     }
 
-    public function testShouldRunAProducerAndReceiveMessagesWithAHighLevelConsumer(): void
+    public function testShouldRunAProducerAndReceiveMessagesWithAAvroSchema(): void
     {
         // Given That I
         $this->haveAHandlerConfigured();
@@ -53,15 +53,19 @@ class ProducerWithAvroTest extends LaravelTestCase
                 'topics' => [
                     'sale_order' => [
                         'broker' => 'test',
+                        'topic_id' => 'sale_order',
                         'consumer' => [
                             'consumer_groups' => [
                                 'test' => [
-                            'handler' => MessageConsumer::class,
-                            'middlewares' => [
-                                AvroSchemaDecoder::class,
+                                    'auto_commit' => false,
+                                    'offset_reset' => 'smallest',
+                                    'offset' => 0,
+                                    'handler' => MessageConsumer::class,
+                                    'middlewares' => [
+                                        AvroSchemaDecoder::class,
+                                    ],
+                                ],
                             ],
-                        ],
-                        ],
                         ],
                         'producer' => [
                             'middlewares' => [
@@ -71,15 +75,19 @@ class ProducerWithAvroTest extends LaravelTestCase
                     ],
                     'product' => [
                         'broker' => 'test',
+                        'topic_id' => 'product',
                         'consumer' => [
                             'consumer_groups' => [
                                 'test' => [
-                            'handler' => MessageConsumer::class,
-                            'middlewares' => [
-                                AvroSchemaDecoder::class,
-                            ],
-                        ],
-                        ]
+                                    'auto_commit' => false,
+                                    'offset_reset' => 'smallest',
+                                    'offset' => 0,
+                                    'handler' => MessageConsumer::class,
+                                    'middlewares' => [
+                                        AvroSchemaDecoder::class,
+                                    ],
+                                ],
+                            ]
                         ],
                         'producer' => [
                             'middlewares' => [
@@ -101,8 +109,8 @@ class ProducerWithAvroTest extends LaravelTestCase
         $this->artisan(
             'kafka:consume',
             [
-                'topic' => 'default',
-                'consumer_group' => 'test-consumer-group',
+                'topic' => 'sale_order',
+                'consumer_group' => 'test',
                 '--timeout' => 20000,
                 '--times' => 2,
             ]
@@ -114,23 +122,35 @@ class ProducerWithAvroTest extends LaravelTestCase
         $saleOrderProducer = app(MessageProducer::class, ['record' => ['saleOrderId' => 'SALE_ORDER_ID'], 'topic' => 'sale_order']);
         $productProducer = app(MessageProducer::class, ['record' => ['productId' => 'PRODUCT_ID'],  'topic' => 'product']);
 
-        $saleOrderSchemaResponse = '{"type":"record","name":"sale_oder","fields":[{"name":"saleOrderId","type":["string","null"],"default":null}]}';
-        $productSchemaResponse = '{"type":"record","name":"product","fields":[{"name":"productId","type":["string","null"],"default":null}]}';
+        $saleOrderSchemaResponse = '{
+           "subject":"sale_order-value",
+           "version":1,
+           "id":1,
+           "schema":"{\"type\":\"record\",\"name\":\"sale_order\",\"fields\":[{\"name\":\"saleOrderId\",\"type\":[\"string\",\"null\"],\"default\":null}]}"
+        }';
+
+        $productSchemaResponse = '{
+           "subject":"product-value",
+           "version":1,
+           "id":2,
+           "schema":"{\"type\":\"record\",\"name\":\"product\",\"fields\":[{\"name\":\"productId\",\"type\":[\"string\",\"null\"],\"default\":null}]}"
+        }';
 
         $mockedHandler = new MockHandler([
             new Response(200, [], $saleOrderSchemaResponse),
             new Response(200, [], $productSchemaResponse),
+            new Response(200, [], $productSchemaResponse),
         ]);
         $handlerStack = HandlerStack::create($mockedHandler);
         $client = new GuzzleClient(['handler' => $handlerStack]);
-        $client = m::mock(GuzzleClient::class);
         $this->instance(GuzzleClient::class, $client);
 
         $saleOrderDispatcher = Metamorphosis::build($saleOrderProducer);
-        $productDispatcher = Metamorphosis::build($productProducer);
-
         $saleOrderDispatcher->handle($saleOrderProducer->createRecord());
-        $productDispatcher->handle($saleOrderProducer->createRecord());
+
+        $productDispatcher = Metamorphosis::build($productProducer);
+        $productDispatcher->handle($productProducer->createRecord());
+
         $saleOrderDispatcher->handle($saleOrderProducer->createRecord());
     }
 }

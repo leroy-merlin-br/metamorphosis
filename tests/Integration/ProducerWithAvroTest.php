@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Response;
 use Metamorphosis\Facades\Metamorphosis;
 use Metamorphosis\Middlewares\AvroSchemaDecoder;
 use Metamorphosis\Middlewares\AvroSchemaMixedEncoder;
+use Mockery as m;
 use Tests\Integration\Dummies\MessageConsumer;
 use Tests\Integration\Dummies\MessageProducer;
 use Tests\LaravelTestCase;
@@ -43,19 +44,54 @@ class ProducerWithAvroTest extends LaravelTestCase
     protected function haveAHandlerConfigured(): void
     {
         config([
-            'kafka.topics.default.consumer.consumer_groups.test-consumer-group' => [
-                'handler' => MessageConsumer::class,
-                'middlewares' => [
-                    AvroSchemaDecoder::class,
+            'kafka' => [
+                'brokers' => [
+                    'test' => [
+                        'connections' => 'kafka:9092',
+                    ],
                 ],
-            ],
-            'kafka.topics.default.producer' => [
-                'middlewares' => [
-                    AvroSchemaMixedEncoder::class,
+                'topics' => [
+                    'sale_order' => [
+                        'broker' => 'test',
+                        'consumer' => [
+                            'consumer_groups' => [
+                                'test' => [
+                            'handler' => MessageConsumer::class,
+                            'middlewares' => [
+                                AvroSchemaDecoder::class,
+                            ],
+                        ],
+                        ],
+                        ],
+                        'producer' => [
+                            'middlewares' => [
+                                AvroSchemaMixedEncoder::class,
+                            ],
+                        ],
+                    ],
+                    'product' => [
+                        'broker' => 'test',
+                        'consumer' => [
+                            'consumer_groups' => [
+                                'test' => [
+                            'handler' => MessageConsumer::class,
+                            'middlewares' => [
+                                AvroSchemaDecoder::class,
+                            ],
+                        ],
+                        ]
+                        ],
+                        'producer' => [
+                            'middlewares' => [
+                                AvroSchemaMixedEncoder::class,
+                            ],
+                        ],
+                    ],
                 ],
-            ],
-            'kafka.avro_schemas.default' => [
-                'url' => 'http://schema-registry',
+                'avro_schemas' => [
+                    'sale_order' => ['url' => 'http://schema-registry'],
+                    'product' => ['url' => 'http://schema-registry'],
+                ]
             ]
         ]);
     }
@@ -87,6 +123,7 @@ class ProducerWithAvroTest extends LaravelTestCase
         ]);
         $handlerStack = HandlerStack::create($mockedHandler);
         $client = new GuzzleClient(['handler' => $handlerStack]);
+        $client = m::mock(GuzzleClient::class);
         $this->instance(GuzzleClient::class, $client);
 
         $saleOrderDispatcher = Metamorphosis::build($saleOrderProducer);

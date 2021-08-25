@@ -2,6 +2,7 @@
 namespace Tests\Unit\Connectors\Consumer;
 
 use Exception;
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Consumer\Manager;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseTimeoutException;

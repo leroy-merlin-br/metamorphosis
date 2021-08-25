@@ -1,6 +1,7 @@
 <?php
-namespace Test;
+namespace Tests\Unit\Connectors\Consumer;
 
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Consumer\LowLevel;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
 
@@ -23,7 +24,7 @@ class LowLevelTest extends LaravelTestCase
         $connector = new LowLevel();
 
         // Actions
-        $result = $connector->getConsumer(true);
+        $result = $connector->getConsumer(true, $configManager);
 
         // Assertions
         $this->assertInstanceOf(LowLevelConsumer::class, $result);

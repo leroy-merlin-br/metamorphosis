@@ -23,8 +23,9 @@ class HighLevel implements ConnectorInterface
 
         $consumer = app(KafkaConsumer::class, ['conf' => $conf]);
         $consumer->subscribe([$configManager->get('topic_id')]);
+        $timeout = $configManager->get('timeout');
 
-        return app(HighLevelConsumer::class, compact('consumer'));
+        return app(HighLevelConsumer::class, compact('consumer', 'timeout'));
     }
 
     protected function getConf(ConfigManager $configManager): Conf

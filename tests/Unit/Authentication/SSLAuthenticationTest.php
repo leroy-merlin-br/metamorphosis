@@ -3,6 +3,7 @@ namespace Tests\Unit\Authentication;
 
 use Metamorphosis\Authentication\SSLAuthentication;
 
+use Metamorphosis\ConfigManager;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
@@ -29,7 +30,7 @@ class SSLAuthenticationTest extends LaravelTestCase
         ];
 
         // Actions
-        new SSLAuthentication($conf);
+        new SSLAuthentication($conf, $configManager);
 
         // Assertions
         $this->assertArraySubset($expected, $conf->dump());

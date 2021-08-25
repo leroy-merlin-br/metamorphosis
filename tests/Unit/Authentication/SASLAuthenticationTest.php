@@ -3,6 +3,7 @@ namespace Tests\Unit\Authentication;
 
 use Metamorphosis\Authentication\SASLAuthentication;
 
+use Metamorphosis\ConfigManager;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
@@ -29,7 +30,7 @@ class SASLAuthenticationTest extends LaravelTestCase
         ];
 
         // Actions
-        new SASLAuthentication($conf);
+        new SASLAuthentication($conf, $configManager);
 
         // Assertions
         $this->assertArraySubset($expected, $conf->dump());

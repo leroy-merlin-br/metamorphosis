@@ -54,6 +54,7 @@ class ProducerTest extends LaravelTestCase
 
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
+        $configManager = $this->instance(ConfigManager::class, m::mock(ConfigManager::class)->makePartial());
 
         $producerHandler = new class($record, $topic) extends AbstractHandler {
         };
@@ -99,6 +100,7 @@ class ProducerTest extends LaravelTestCase
 
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
+        $configManager = $this->instance(ConfigManager::class, m::mock(ConfigManager::class)->makePartial());
 
         $producerHandler = new class($record, $topic) extends AbstractHandler {
         };
@@ -138,13 +140,14 @@ class ProducerTest extends LaravelTestCase
 
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
+        $configManager = $this->instance(ConfigManager::class, m::mock(ConfigManager::class)->makePartial());
 
         $producerHandler = new class($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
         $connector->expects()
-            ->getProducerTopic($producerHandler)
+            ->getProducerTopic($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
         $kafkaProducer->expects()
@@ -177,13 +180,14 @@ class ProducerTest extends LaravelTestCase
 
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
+        $configManager = $this->instance(ConfigManager::class, m::mock(ConfigManager::class)->makePartial());
 
         $producerHandler = new class($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
         $connector->expects()
-            ->getProducerTopic($producerHandler)
+            ->getProducerTopic($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
         $kafkaProducer->expects()

@@ -2,6 +2,7 @@
 namespace Tests\Unit\Authentication;
 
 use Metamorphosis\Authentication\Factory;
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Exceptions\AuthenticationException;
 
 use RdKafka\Conf;
@@ -30,7 +31,7 @@ class FactoryTest extends LaravelTestCase
         ];
 
         // Actions
-        Factory::authenticate($conf);
+        Factory::authenticate($conf, $configManager);
 
         // Assertions
         $this->assertArraySubset($expected, $conf->dump());
@@ -57,7 +58,7 @@ class FactoryTest extends LaravelTestCase
         ];
 
         // Actions
-        Factory::authenticate($conf);
+        Factory::authenticate($conf, $configManager);
 
         // Assertions
         $this->assertArraySubset($expected, $conf->dump());
@@ -73,6 +74,6 @@ class FactoryTest extends LaravelTestCase
         $this->expectException(AuthenticationException::class);
 
         // Actions
-        Factory::authenticate($conf);
+        Factory::authenticate($conf, $configManager);
     }
 }

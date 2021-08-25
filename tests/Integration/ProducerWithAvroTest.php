@@ -123,7 +123,6 @@ class ProducerWithAvroTest extends LaravelTestCase
         $mockedHandler = new MockHandler([
             new Response(200, [], $saleOrderSchemaResponse),
             new Response(200, [], $productSchemaResponse),
-            new Response(200, [], $productSchemaResponse),
         ]);
         $handlerStack = HandlerStack::create($mockedHandler);
         $client = new GuzzleClient(['handler' => $handlerStack]);

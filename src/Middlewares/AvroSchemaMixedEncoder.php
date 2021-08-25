@@ -37,6 +37,7 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
             throw new ConfigurationException("Avro schema url not found, it's required to use AvroSchemaEncoder Middleware");
         }
 
+        $schemaRegistry->setClientConfig($configManager);
         $this->schemaIdEncoder = $schemaIdEncoder;
         $this->schemaRegistry = $schemaRegistry;
         $this->configManager = $configManager;
@@ -45,7 +46,6 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
     {
         $topic = $this->configManager->get('topic_id');
-        dump($topic);
         $schema = $this->schemaRegistry->getBySubjectAndVersion("{$topic}-value", 'latest');
 
         $arrayPayload = json_decode($record->getPayload(), true);

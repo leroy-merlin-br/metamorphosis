@@ -2,6 +2,8 @@
 namespace Metamorphosis\Avro;
 
 use AvroSchemaParseException;
+use GuzzleHttp\Client as GuzzleClient;
+use Metamorphosis\ConfigManager;
 use RuntimeException;
 
 class CachedSchemaRegistryClient
@@ -22,9 +24,11 @@ class CachedSchemaRegistryClient
      */
     private $subjectVersionToSchema = [];
 
-    public function __construct(Client $client)
+    public function setClientConfig(ConfigManager $configManager)
     {
-        $this->client = $client;
+        $guzzleHttp = $this->getGuzzleHttpClient($configManager);
+
+        $this->client = new Client($guzzleHttp);
     }
 
     /**
@@ -95,5 +99,25 @@ class CachedSchemaRegistryClient
         }
 
         $this->idToSchema[$schema->getSchemaId()] = $schema;
+    }
+
+    private function getGuzzleHttpClient(ConfigManager $configManager): GuzzleClient
+    {
+        $config = $configManager->get('request_options') ?: [];
+        $config['timeout'] = $configManager->get('timeout');
+        $config['base_uri'] = $configManager->get('url');
+        $config['headers'] = array_merge(
+            $this->getDefaultHeaders(),
+            $config['headers'] ?? []
+        );
+
+        return app(GuzzleClient::class, compact('config'));
+    }
+
+    private function getDefaultHeaders(): array
+    {
+        return [
+            'Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json',
+        ];
     }
 }

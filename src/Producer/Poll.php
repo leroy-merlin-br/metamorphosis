@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Producer;
 
-
 use Metamorphosis\ConfigManager;
 use RdKafka\Producer;
 use RuntimeException;

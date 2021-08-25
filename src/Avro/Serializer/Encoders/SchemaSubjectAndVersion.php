@@ -4,22 +4,11 @@ namespace Metamorphosis\Avro\Serializer\Encoders;
 use AvroIOBinaryEncoder;
 use AvroIODatumWriter;
 use AvroStringIO;
-use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\SchemaFormats;
 
 class SchemaSubjectAndVersion implements EncoderInterface
 {
-    /**
-     * @var CachedSchemaRegistryClient
-     */
-    private $registry;
-
-    public function __construct(CachedSchemaRegistryClient $registry)
-    {
-        $this->registry = $registry;
-    }
-
     public function encode(Schema $schema, $message): string
     {
         $version = $schema->getVersion();

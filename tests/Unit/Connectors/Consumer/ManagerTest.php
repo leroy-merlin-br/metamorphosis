@@ -21,7 +21,8 @@ class ManagerTest extends LaravelTestCase
     {
         parent::setUp();
 
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'connections' => 'kafka:2019',
             'topic' => 'topic_key',
             'broker' => 'default',

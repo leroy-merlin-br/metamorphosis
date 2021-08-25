@@ -12,7 +12,8 @@ class FactoryTest extends LaravelTestCase
     public function testItMakesSslAuthenticationClass(): void
     {
         // Set
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'auth' => [
                 'type' => 'ssl',
                 'ca' => 'path/to/ca',
@@ -38,7 +39,8 @@ class FactoryTest extends LaravelTestCase
     public function testItMakesSASLAuthenticationClass(): void
     {
         // Set
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'auth' => [
                 'type' => 'sasl_ssl',
                 'mechanisms' => 'PLAIN',
@@ -64,7 +66,8 @@ class FactoryTest extends LaravelTestCase
     public function testItThrowsExceptionWhenInvalidProtocolIsPassed(): void
     {
         // Set
-        ConfigManager::set(['auth' => ['type' => 'some-invalid-type']]);
+        $configManager = new ConfigManager();
+        $configManager->set(['auth' => ['type' => 'some-invalid-type']]);
         $conf = new Conf();
 
         $this->expectException(AuthenticationException::class);

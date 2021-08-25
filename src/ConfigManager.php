@@ -38,7 +38,7 @@ class ConfigManager
         $this->setting = $config;
 
         foreach ($middlewares as $middleware) {
-            $this->middlewares[] = is_string($middleware) ? app($middleware) : $middleware;
+            $this->middlewares[] = is_string($middleware) ? app($middleware, ['configManager' => $this]) : $middleware;
         }
     }
 

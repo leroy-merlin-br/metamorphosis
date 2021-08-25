@@ -13,7 +13,8 @@ class HighLevelTest extends LaravelTestCase
     public function testItShouldConsume(): void
     {
         // Set
-        ConfigManager::set(['timeout' => 1]);
+        $configManager = new ConfigManager();
+        $configManager->set(['timeout' => 1]);
         $kafkaConsumer = m::mock(KafkaConsumer::class);
         $message = new Message();
         $highLevelConsumer = new HighLevel($kafkaConsumer);
@@ -33,7 +34,8 @@ class HighLevelTest extends LaravelTestCase
     public function testItShouldCommit(): void
     {
         // Set
-        ConfigManager::set(['timeout' => 1]);
+        $configManager = new ConfigManager();
+        $configManager->set(['timeout' => 1]);
         $kafkaConsumer = m::mock(KafkaConsumer::class);
         $highLevelConsumer = new HighLevel($kafkaConsumer);
 
@@ -49,7 +51,8 @@ class HighLevelTest extends LaravelTestCase
     public function testItShouldCommitAsynchronously(): void
     {
         // Set
-        ConfigManager::set(['timeout' => 1]);
+        $configManager = new ConfigManager();
+        $configManager->set(['timeout' => 1]);
         $kafkaConsumer = m::mock(KafkaConsumer::class);
         $highLevelConsumer = new HighLevel($kafkaConsumer);
 

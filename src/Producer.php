@@ -49,10 +49,10 @@ class Producer
 
     public function getProducerMiddleware(HandlerInterface $producerHandler, ConfigManager $configManager): ProducerMiddleware
     {
-        $producer = $this->connector->getProducerTopic($producerHandler);
+        $producer = $this->connector->getProducerTopic($producerHandler, $configManager);
 
         $topic = $producer->newTopic($configManager->get('topic_id'));
-        $poll = app(Poll::class, ['producer' => $producer]);
+        $poll = app(Poll::class, ['producer' => $producer, 'configManager' => $configManager]);
         $partition = $configManager->get('partition');
 
         return app(ProducerMiddleware::class, compact('topic', 'poll', 'partition'));

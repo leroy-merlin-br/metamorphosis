@@ -2,6 +2,7 @@
 namespace Tests\Unit\Producer;
 
 
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Producer\Poll;
 use Mockery as m;
 use RdKafka\Producer as KafkaProducer;
@@ -13,7 +14,8 @@ class PollTest extends LaravelTestCase
     public function testItShouldHandleMessageWithoutAcknowledgment(): void
     {
         // Set
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => true,
@@ -22,7 +24,7 @@ class PollTest extends LaravelTestCase
             'required_acknowledgment' => false,
         ]);
         $kafkaProducer = m::mock(KafkaProducer::class);
-        $poll = new Poll($kafkaProducer);
+        $poll = new Poll($kafkaProducer, $configManager);
 
         // Expectations
         $kafkaProducer->shouldReceive('poll')
@@ -35,7 +37,8 @@ class PollTest extends LaravelTestCase
     public function testShouldThrowExceptionWhenFlushFailed(): void
     {
         // Set
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => false,
@@ -46,7 +49,7 @@ class PollTest extends LaravelTestCase
         ]);
 
         $kafkaProducer = m::mock(KafkaProducer::class);
-        $poll = new Poll($kafkaProducer);
+        $poll = new Poll($kafkaProducer, $configManager);
 
         // Expectations
         $kafkaProducer->expects()
@@ -63,7 +66,8 @@ class PollTest extends LaravelTestCase
     public function testItShouldHandleResponseEveryTimeWhenAsyncModeIsTrue(): void
     {
         // Set
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => false,
@@ -73,7 +77,7 @@ class PollTest extends LaravelTestCase
             'partition' => 0,
         ]);
         $kafkaProducer = m::mock(KafkaProducer::class);
-        $poll = new Poll($kafkaProducer);
+        $poll = new Poll($kafkaProducer, $configManager);
 
         // Expectations
         $kafkaProducer->expects()

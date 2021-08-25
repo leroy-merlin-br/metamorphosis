@@ -16,7 +16,8 @@ class ProducerTest extends LaravelTestCase
     {
         parent::setUp();
 
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => true,

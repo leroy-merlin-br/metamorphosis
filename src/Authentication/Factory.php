@@ -24,11 +24,11 @@ class Factory
 
                 break;
             case self::TYPE_SSL:
-                app(SSLAuthentication::class, compact('conf'));
+                app(SSLAuthentication::class, compact('conf', 'configManager'));
 
                 break;
             case self::TYPE_SASL_SSL:
-                app(SASLAuthentication::class, compact('conf'));
+                app(SASLAuthentication::class, compact('conf', 'configManager'));
 
                 break;
             default:

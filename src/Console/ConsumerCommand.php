@@ -37,7 +37,7 @@ class ConsumerCommand extends BaseCommand
 
         $this->writeStartingConsumer($configManager);
 
-        $manager = Factory::make();
+        $manager = Factory::make($configManager);
 
         $runner = app(Runner::class, compact('manager'));
         $runner->run($configManager->get('times'));

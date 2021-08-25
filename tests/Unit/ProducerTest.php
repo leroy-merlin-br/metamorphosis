@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit;
 
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Exceptions\JsonException;
@@ -46,8 +47,9 @@ class ProducerTest extends LaravelTestCase
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)
         );
-        $config = $this->app->make(Config::class);
+        $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
+        $configManager = m::mock(ConfigManager::class);
         $producer = new Producer($config, $connector);
 
         $kafkaProducer = m::mock(KafkaProducer::class);
@@ -57,8 +59,16 @@ class ProducerTest extends LaravelTestCase
         };
 
         // Expectations
+        $config->expects()
+            ->setOption($topic)
+            ->andReturn($configManager);
+
+        $config->expects()
+            ->setOption($topic)
+            ->andReturn($configManager);
+
         $connector->expects()
-            ->getProducerTopic($producerHandler)
+            ->getProducerTopic($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
         $kafkaProducer->expects()
@@ -82,8 +92,9 @@ class ProducerTest extends LaravelTestCase
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)
         );
-        $config = $this->app->make(Config::class);
+        $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
+        $configManager = m::mock(ConfigManager::class);
         $producer = new Producer($config, $connector);
 
         $kafkaProducer = m::mock(KafkaProducer::class);
@@ -94,7 +105,7 @@ class ProducerTest extends LaravelTestCase
 
         // Expectations
         $connector->expects()
-            ->getProducerTopic($producerHandler)
+            ->getProducerTopic($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
         $kafkaProducer->expects()
@@ -121,7 +132,7 @@ class ProducerTest extends LaravelTestCase
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)
         );
-        $config = $this->app->make(Config::class);
+        $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
         $producer = new Producer($config, $connector);
 
@@ -160,7 +171,7 @@ class ProducerTest extends LaravelTestCase
         $record = json_encode(['message' => 'some message']);
         $topic = 'some_topic';
 
-        $config = $this->app->make(Config::class);
+        $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
         $producer = new Producer($config, $connector);
 

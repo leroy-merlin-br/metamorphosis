@@ -11,7 +11,8 @@ class SASLAuthenticationTest extends LaravelTestCase
     public function testItShouldValidateAuthenticationConfigurations(): void
     {
         // Set
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'auth' => [
                 'type' => 'sasl_ssl',
                 'mechanisms' => 'PLAIN',

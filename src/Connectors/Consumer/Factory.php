@@ -26,14 +26,14 @@ class Factory
         return new Manager($consumer, $handler, $dispatcher, $autoCommit, $commitAsync);
     }
 
-    protected static function requiresPartition(): bool
+    protected static function requiresPartition(ConfigManager $configManager): bool
     {
-        return ConfigManager::has('partition');
+        return $configManager->has('partition');
     }
 
     private static function getConsumer(bool $autoCommit, ConfigManager $configManager): ConsumerInterface
     {
-        if (self::requiresPartition()) {
+        if (self::requiresPartition($configManager)) {
             return app(LowLevel::class)->getConsumer($autoCommit, $configManager);
         }
 

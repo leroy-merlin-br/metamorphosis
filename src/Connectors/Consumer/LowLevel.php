@@ -29,7 +29,7 @@ class LowLevel implements ConnectorInterface
 
         $topicConsumer->consumeStart($configManager->get('partition'), $configManager->get('offset'));
 
-        return new LowLevelConsumer($topicConsumer);
+        return new LowLevelConsumer($topicConsumer, $configManager);
     }
 
     protected function getTopicConfigs(ConfigManager $configManager)

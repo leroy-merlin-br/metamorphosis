@@ -11,7 +11,8 @@ class HighLevelTest extends LaravelTestCase
     public function testItShouldMakeConnectorSetup(): void
     {
         // Set
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'connections' => 'kafka:123',
             'consumer_group' => 'some-group',
             'topic_id' => 'some_topic',

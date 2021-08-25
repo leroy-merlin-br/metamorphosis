@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\Consumers;
 
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Consumers\LowLevel;
 
 use Mockery as m;
@@ -21,7 +22,7 @@ class LowLevelTest extends LaravelTestCase
         $consumerTopic = m::mock(ConsumerTopic::class);
         $message = new Message();
 
-        $lowLevelConsumer = new LowLevel($consumerTopic);
+        $lowLevelConsumer = new LowLevel($consumerTopic, $configManager);
 
         // Expectations
         $consumerTopic->expects()

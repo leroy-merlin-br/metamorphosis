@@ -16,28 +16,6 @@ use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        config([
-            'kafka' => [
-                'brokers' => [
-                    'default' => [
-                        'connections' => 'kafka:9092',
-                        'auth' => [],
-                    ],
-                ],
-                'topics' => [
-                    'some_topic' => [
-                        'topic_id' => 'topic_name',
-                        'broker' => 'default',
-                    ],
-                ],
-            ],
-        ]);
-    }
-
     public function testItShouldProduceRecordAsArrayThroughMiddlewareQueue(): void
     {
         // Set
@@ -190,7 +168,6 @@ class ProducerTest extends LaravelTestCase
         $configManager->expects()
             ->get('required_acknowledgment')
             ->andReturn(true);
-
 
         $configManager->expects()
             ->get('flush_attempts')

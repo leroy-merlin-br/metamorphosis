@@ -1,10 +1,7 @@
 <?php
 namespace Metamorphosis;
 
-use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\ServiceProvider;
-use Metamorphosis\Avro\CachedSchemaRegistryClient;
-use Metamorphosis\Avro\Client;
 use Metamorphosis\Console\ConsumerCommand;
 use Metamorphosis\Console\ConsumerMakeCommand;
 use Metamorphosis\Console\MiddlewareMakeCommand;

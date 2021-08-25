@@ -8,6 +8,11 @@ use RuntimeException;
 
 class CachedSchemaRegistryClient
 {
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
     /**
      * @var Client
      */
@@ -24,7 +29,7 @@ class CachedSchemaRegistryClient
      */
     private $subjectVersionToSchema = [];
 
-    public function setClientConfig(ConfigManager $configManager)
+    public function setClientConfig(ConfigManager $configManager): void
     {
         $guzzleHttp = $this->getGuzzleHttpClient($configManager);
 

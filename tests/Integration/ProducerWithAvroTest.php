@@ -14,14 +14,13 @@ use Tests\LaravelTestCase;
 
 class ProducerWithAvroTest extends LaravelTestCase
 {
-    public function testShouldRunAProducerAndReceiveMessagesWithAAvroSchema(): void
+    public function testShouldRunAProducerMessagesWithAAvroSchema(): void
     {
         // Given That I
         $this->haveAHandlerConfigured();
-        $this->haveSomeRandomMessagesProduced();
 
         // When I
-//        $this->runTheConsumer();
+        $this->haveSomeRandomMessagesProduced();
     }
 
     protected function haveAHandlerConfigured(): void
@@ -85,19 +84,6 @@ class ProducerWithAvroTest extends LaravelTestCase
                 ],
             ],
         ]);
-    }
-
-    protected function runTheConsumer(): void
-    {
-        $this->artisan(
-            'kafka:consume',
-            [
-                'topic' => 'sale_order',
-                'consumer_group' => 'test',
-                '--timeout' => 20000,
-                '--times' => 2,
-            ]
-        );
     }
 
     private function haveSomeRandomMessagesProduced(): void

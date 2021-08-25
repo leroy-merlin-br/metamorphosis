@@ -1,6 +1,7 @@
 <?php
 namespace Test;
 
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Consumer\HighLevel;
 use Metamorphosis\Consumers\HighLevel as HighLevelConsumer;
 
@@ -17,11 +18,12 @@ class HighLevelTest extends LaravelTestCase
             'consumer_group' => 'some-group',
             'topic_id' => 'some_topic',
             'offset_reset' => 'earliest',
+            'timeout' => 1000,
         ]);
         $connector = new HighLevel();
 
         // Actions
-        $result = $connector->getConsumer(false);
+        $result = $connector->getConsumer(false, $configManager);
 
         // Assertions
         $this->assertInstanceOf(HighLevelConsumer::class, $result);

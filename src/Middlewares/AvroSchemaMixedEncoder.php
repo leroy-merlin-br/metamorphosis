@@ -5,7 +5,6 @@ use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\Serializer\Encoders\SchemaId;
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Exceptions\ConfigurationException;
-
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Record\RecordInterface;
 

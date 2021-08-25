@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Authentication;
 
-
 use Metamorphosis\ConfigManager;
 use RdKafka\Conf;
 

@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Unit\Producer;
 
-
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Producer\Poll;
 use Mockery as m;

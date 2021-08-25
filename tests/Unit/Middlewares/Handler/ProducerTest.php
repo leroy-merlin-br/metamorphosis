@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Unit\Middlewares\Handler;
 
-
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Middlewares\Handler\Producer;

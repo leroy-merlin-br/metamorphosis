@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Consumers;
 
-
 use Metamorphosis\ConfigManager;
 use RdKafka\ConsumerTopic;
 use RdKafka\Message;

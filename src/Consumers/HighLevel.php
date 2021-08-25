@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Consumers;
 
-
 use RdKafka\KafkaConsumer;
 use RdKafka\Message;
 

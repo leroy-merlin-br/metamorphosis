@@ -4,7 +4,6 @@ namespace Tests\Unit\Connectors\Consumer;
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Consumer\LowLevel;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
-
 use Tests\LaravelTestCase;
 
 class LowLevelTest extends LaravelTestCase

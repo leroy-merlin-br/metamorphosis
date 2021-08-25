@@ -3,7 +3,6 @@ namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
-
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 

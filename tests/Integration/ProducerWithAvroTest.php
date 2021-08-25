@@ -8,7 +8,6 @@ use GuzzleHttp\Psr7\Response;
 use Metamorphosis\Facades\Metamorphosis;
 use Metamorphosis\Middlewares\AvroSchemaDecoder;
 use Metamorphosis\Middlewares\AvroSchemaMixedEncoder;
-use Mockery as m;
 use Tests\Integration\Dummies\MessageConsumer;
 use Tests\Integration\Dummies\MessageProducer;
 use Tests\LaravelTestCase;
@@ -71,7 +70,7 @@ class ProducerWithAvroTest extends LaravelTestCase
                                         AvroSchemaDecoder::class,
                                     ],
                                 ],
-                            ]
+                            ],
                         ],
                         'producer' => [
                             'middlewares' => [
@@ -83,8 +82,8 @@ class ProducerWithAvroTest extends LaravelTestCase
                 'avro_schemas' => [
                     'sale_order' => ['url' => 'http://schema-registry'],
                     'product' => ['url' => 'http://schema-registry'],
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
@@ -104,7 +103,7 @@ class ProducerWithAvroTest extends LaravelTestCase
     private function haveSomeRandomMessagesProduced(): void
     {
         $saleOrderProducer = app(MessageProducer::class, ['record' => ['saleOrderId' => 'SALE_ORDER_ID'], 'topic' => 'sale_order']);
-        $productProducer = app(MessageProducer::class, ['record' => ['productId' => 'PRODUCT_ID'],  'topic' => 'product']);
+        $productProducer = app(MessageProducer::class, ['record' => ['productId' => 'PRODUCT_ID'], 'topic' => 'product']);
 
         $saleOrderSchemaResponse = '{
            "subject":"sale_order-value",

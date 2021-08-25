@@ -2,7 +2,6 @@
 namespace Tests\Unit\Authentication;
 
 use Metamorphosis\Authentication\SASLAuthentication;
-
 use Metamorphosis\ConfigManager;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;

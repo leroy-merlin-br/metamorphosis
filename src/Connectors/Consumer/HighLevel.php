@@ -5,7 +5,6 @@ use Metamorphosis\Authentication\Factory;
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\HighLevel as HighLevelConsumer;
-
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 

@@ -3,7 +3,6 @@ namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
-
 use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase

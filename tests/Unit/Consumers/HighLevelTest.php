@@ -1,9 +1,7 @@
 <?php
 namespace Tests\Unit\Consumers;
 
-use Metamorphosis\ConfigManager;
 use Metamorphosis\Consumers\HighLevel;
-
 use Mockery as m;
 use RdKafka\KafkaConsumer;
 use RdKafka\Message;

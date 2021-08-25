@@ -4,7 +4,6 @@ namespace Metamorphosis\Connectors;
 use Illuminate\Support\Facades\Validator;
 use Metamorphosis\Exceptions\ConfigurationException;
 
-
 abstract class AbstractConfig
 {
     protected function getBrokerConfig(string $brokerId): array

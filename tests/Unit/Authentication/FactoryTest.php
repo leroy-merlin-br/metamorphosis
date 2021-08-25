@@ -4,7 +4,6 @@ namespace Tests\Unit\Authentication;
 use Metamorphosis\Authentication\Factory;
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Exceptions\AuthenticationException;
-
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 

@@ -4,7 +4,6 @@ namespace Test;
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Consumer\HighLevel;
 use Metamorphosis\Consumers\HighLevel as HighLevelConsumer;
-
 use Tests\LaravelTestCase;
 
 class HighLevelTest extends LaravelTestCase

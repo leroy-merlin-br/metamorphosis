@@ -3,7 +3,6 @@ namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\Facades\ConfigManager;
 use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase
@@ -11,7 +10,7 @@ class ConfigTest extends LaravelTestCase
     public function testShouldValidateConsumerConfig(): void
     {
         // Set
-        $validate = new Config();
+        $config = new Config();
         $options = [
             'partition' => 0,
             'offset' => 0,
@@ -44,16 +43,16 @@ class ConfigTest extends LaravelTestCase
         ];
 
         // Actions
-        $validate->setOption($options, $arguments);
+        $configManager = $config->make($options, $arguments);
 
         // Assertions
-        $this->assertArraySubset($expected, ConfigManager::get());
+        $this->assertArraySubset($expected, $configManager->get());
     }
 
     public function testShouldNotSetRuntimeConfigWhenOptionsIsInvalid(): void
     {
         // Set
-        $validate = new Config();
+        $config = new Config();
         $options = [
             'partition' => 'one',
             'offset' => 0,
@@ -66,17 +65,17 @@ class ConfigTest extends LaravelTestCase
 
         // Actions
         $this->expectException(ConfigurationException::class);
-        $validate->setOption($options, $arguments);
+        $configManager = $config->make($options, $arguments);
 
         // Assertions
-        $this->assertEmpty(ConfigManager::get());
+        $this->assertEmpty($configManager->get());
     }
 
     public function testShouldNotSetRuntimeConfigWhenKafkaConfigIsInvalid(): void
     {
         // Set
         config(['kafka.brokers.default.connections' => null]);
-        $validate = new Config();
+        $config = new Config();
         $options = [
             'partition' => 0,
             'offset' => 0,
@@ -89,9 +88,9 @@ class ConfigTest extends LaravelTestCase
 
         // Actions
         $this->expectException(ConfigurationException::class);
-        $validate->setOption($options, $arguments);
+        $configManager = $config->make($options, $arguments);
 
         // Assertions
-        $this->assertEmpty(ConfigManager::get());
+        $this->assertEmpty($configManager->get());
     }
 }

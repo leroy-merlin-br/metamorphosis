@@ -2,8 +2,8 @@
 namespace Tests\Unit\Authentication;
 
 use Metamorphosis\Authentication\Factory;
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Exceptions\AuthenticationException;
-use Metamorphosis\Facades\ConfigManager;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
@@ -12,7 +12,8 @@ class FactoryTest extends LaravelTestCase
     public function testItMakesSslAuthenticationClass(): void
     {
         // Set
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'auth' => [
                 'type' => 'ssl',
                 'ca' => 'path/to/ca',
@@ -29,7 +30,7 @@ class FactoryTest extends LaravelTestCase
         ];
 
         // Actions
-        Factory::authenticate($conf);
+        Factory::authenticate($conf, $configManager);
 
         // Assertions
         $this->assertArraySubset($expected, $conf->dump());
@@ -38,7 +39,8 @@ class FactoryTest extends LaravelTestCase
     public function testItMakesSASLAuthenticationClass(): void
     {
         // Set
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'auth' => [
                 'type' => 'sasl_ssl',
                 'mechanisms' => 'PLAIN',
@@ -55,7 +57,7 @@ class FactoryTest extends LaravelTestCase
         ];
 
         // Actions
-        Factory::authenticate($conf);
+        Factory::authenticate($conf, $configManager);
 
         // Assertions
         $this->assertArraySubset($expected, $conf->dump());
@@ -64,12 +66,13 @@ class FactoryTest extends LaravelTestCase
     public function testItThrowsExceptionWhenInvalidProtocolIsPassed(): void
     {
         // Set
-        ConfigManager::set(['auth' => ['type' => 'some-invalid-type']]);
+        $configManager = new ConfigManager();
+        $configManager->set(['auth' => ['type' => 'some-invalid-type']]);
         $conf = new Conf();
 
         $this->expectException(AuthenticationException::class);
 
         // Actions
-        Factory::authenticate($conf);
+        Factory::authenticate($conf, $configManager);
     }
 }

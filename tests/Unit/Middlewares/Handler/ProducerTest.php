@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\Middlewares\Handler;
 
-use Metamorphosis\Facades\ConfigManager;
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Producer\Poll;
@@ -16,7 +16,8 @@ class ProducerTest extends LaravelTestCase
     {
         parent::setUp();
 
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
             'is_async' => true,

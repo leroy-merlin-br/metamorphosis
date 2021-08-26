@@ -3,7 +3,6 @@ namespace Tests\Unit\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\Facades\ConfigManager;
 use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase
@@ -35,10 +34,10 @@ class ConfigTest extends LaravelTestCase
         ];
 
         // Actions
-        $config->setOption($topicId);
+        $result = $config->make($topicId);
 
         // Assertions
-        $this->assertArraySubset($expected, ConfigManager::get());
+        $this->assertArraySubset($expected, $result->get());
     }
 
     public function testShouldNotSetRuntimeConfigWhenKafkaConfigIsInvalid(): void
@@ -50,10 +49,10 @@ class ConfigTest extends LaravelTestCase
 
         // Actions
         $this->expectException(ConfigurationException::class);
-        $config->setOption($topicId);
+        $result = $config->make($topicId);
 
         // Assertions
-        $this->assertEmpty(ConfigManager::get());
+        $this->assertEmpty($result->get());
     }
 
     public function testShouldNotOverrideDefaultParametersWhenConfigIsSet(): void
@@ -81,9 +80,9 @@ class ConfigTest extends LaravelTestCase
         ];
 
         // Actions
-        $config->setOption($topicId);
+        $result = $config->make($topicId);
 
         // Assertions
-        $this->assertArraySubset($expected, ConfigManager::get());
+        $this->assertArraySubset($expected, $result->get());
     }
 }

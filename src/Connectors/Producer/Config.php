@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis\Connectors\Producer;
 
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
 
@@ -34,7 +35,7 @@ class Config extends AbstractConfig
         'partition' => RD_KAFKA_PARTITION_UA,
     ];
 
-    public function setOption(string $topicId): void
+    public function make(string $topicId): ConfigManager
     {
         $topicConfig = $this->getTopicConfig($topicId);
         $topicConfig['middlewares'] = array_merge(
@@ -47,7 +48,11 @@ class Config extends AbstractConfig
 
         $this->validate($config);
         $config = array_merge($this->default, $config);
-        $this->setConfigRuntime($config);
+
+        $configManager = app(ConfigManager::class);
+        $configManager->set($config);
+
+        return $configManager;
     }
 
     private function getTopicConfig(string $topicId): array

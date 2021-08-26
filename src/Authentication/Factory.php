@@ -1,8 +1,8 @@
 <?php
 namespace Metamorphosis\Authentication;
 
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Exceptions\AuthenticationException;
-use Metamorphosis\Facades\ConfigManager;
 use RdKafka\Conf;
 
 class Factory
@@ -13,9 +13,9 @@ class Factory
 
     const TYPE_NONE = 'none';
 
-    public static function authenticate(Conf $conf): void
+    public static function authenticate(Conf $conf, ConfigManager $configManager): void
     {
-        $type = ConfigManager::get('auth.type');
+        $type = $configManager->get('auth.type');
         switch ($type) {
             case null:
             case self::TYPE_NONE:
@@ -23,11 +23,11 @@ class Factory
 
                 break;
             case self::TYPE_SSL:
-                app(SSLAuthentication::class, compact('conf'));
+                app(SSLAuthentication::class, compact('conf', 'configManager'));
 
                 break;
             case self::TYPE_SASL_SSL:
-                app(SASLAuthentication::class, compact('conf'));
+                app(SASLAuthentication::class, compact('conf', 'configManager'));
 
                 break;
             default:

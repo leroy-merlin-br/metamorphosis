@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
 
@@ -35,7 +36,7 @@ class Config extends AbstractConfig
         'middlewares' => 'array',
     ];
 
-    public function setOption(array $options, array $arguments): void
+    public function make(array $options, array $arguments): ConfigManager
     {
         $topicConfig = $this->getTopicConfig($arguments['topic']);
         $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer_group']);
@@ -51,7 +52,10 @@ class Config extends AbstractConfig
         );
 
         $this->validate($config);
-        $this->setConfigRuntime($config);
+        $configManager = app(ConfigManager::class);
+        $configManager->set($config);
+
+        return $configManager;
     }
 
     private function getTopicConfig(string $topicId): array

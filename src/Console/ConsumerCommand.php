@@ -2,10 +2,10 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Consumers\Runner;
-use Metamorphosis\Facades\ConfigManager;
 
 class ConsumerCommand extends BaseCommand
 {
@@ -33,21 +33,21 @@ class ConsumerCommand extends BaseCommand
 
     public function handle(Config $config)
     {
-        $config->setOption($this->option(), $this->argument());
+        $configManager = $config->make($this->option(), $this->argument());
 
-        $this->writeStartingConsumer();
+        $this->writeStartingConsumer($configManager);
 
-        $manager = Factory::make();
+        $manager = Factory::make($configManager);
 
         $runner = app(Runner::class, compact('manager'));
-        $runner->run(ConfigManager::get('times'));
+        $runner->run($configManager->get('times'));
     }
 
-    private function writeStartingConsumer()
+    private function writeStartingConsumer(ConfigManager $configManager)
     {
-        $text = 'Starting consumer for topic: '.ConfigManager::get('topic').PHP_EOL;
-        $text .= ' on consumer group: '.ConfigManager::get('consumer_group').PHP_EOL;
-        $text .= 'Connecting in '.ConfigManager::get('connections').PHP_EOL;
+        $text = 'Starting consumer for topic: '.$configManager->get('topic').PHP_EOL;
+        $text .= ' on consumer group: '.$configManager->get('consumer_group').PHP_EOL;
+        $text .= 'Connecting in '.$configManager->get('connections').PHP_EOL;
         $text .= 'Running consumer..';
 
         $this->output->writeln($text);

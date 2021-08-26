@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit;
 
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Exceptions\JsonException;
@@ -15,28 +16,6 @@ use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        config([
-            'kafka' => [
-                'brokers' => [
-                    'default' => [
-                        'connections' => 'kafka:9092',
-                        'auth' => [],
-                    ],
-                ],
-                'topics' => [
-                    'some_topic' => [
-                        'topic_id' => 'topic_name',
-                        'broker' => 'default',
-                    ],
-                ],
-            ],
-        ]);
-    }
-
     public function testItShouldProduceRecordAsArrayThroughMiddlewareQueue(): void
     {
         // Set
@@ -46,8 +25,9 @@ class ProducerTest extends LaravelTestCase
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)
         );
-        $config = $this->app->make(Config::class);
+        $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
+        $configManager = m::mock(ConfigManager::class)->makePartial();
         $producer = new Producer($config, $connector);
 
         $kafkaProducer = m::mock(KafkaProducer::class);
@@ -57,12 +37,32 @@ class ProducerTest extends LaravelTestCase
         };
 
         // Expectations
+        $config->expects()
+            ->make($topic)
+            ->andReturn($configManager);
+
+        $configManager->expects()
+            ->middlewares()
+            ->andReturn([]);
+
+        $configManager->expects()
+            ->get('topic_id')
+            ->andReturn($topic);
+
+        $configManager->expects()
+            ->get('partition')
+            ->andReturn(0);
+
+        $configManager->expects()
+            ->get('timeout')
+            ->andReturn(1000);
+
         $connector->expects()
-            ->getProducerTopic($producerHandler)
+            ->getProducerTopic($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
         $kafkaProducer->expects()
-            ->newTopic('topic_name')
+            ->newTopic($topic)
             ->andReturn($producerTopic);
 
         $producerMiddleware->expects()
@@ -82,8 +82,9 @@ class ProducerTest extends LaravelTestCase
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)
         );
-        $config = $this->app->make(Config::class);
+        $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
+        $configManager = m::mock(ConfigManager::class)->makePartial();
         $producer = new Producer($config, $connector);
 
         $kafkaProducer = m::mock(KafkaProducer::class);
@@ -93,12 +94,28 @@ class ProducerTest extends LaravelTestCase
         };
 
         // Expectations
+        $config->expects()
+            ->make($topic)
+            ->andReturn($configManager);
+
+        $configManager->expects()
+            ->middlewares()
+            ->andReturn([]);
+
+        $configManager->expects()
+            ->get('topic_id')
+            ->andReturn($topic);
+
+        $configManager->expects()
+            ->get('partition')
+            ->andReturn(0);
+
         $connector->expects()
-            ->getProducerTopic($producerHandler)
+            ->getProducerTopic($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
         $kafkaProducer->expects()
-            ->newTopic('topic_name')
+            ->newTopic($topic)
             ->andReturn($producerTopic);
 
         $producerMiddleware->expects()
@@ -121,10 +138,10 @@ class ProducerTest extends LaravelTestCase
             ProducerMiddleware::class,
             m::mock(ProducerMiddleware::class)
         );
-        $config = $this->app->make(Config::class);
+        $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
         $producer = new Producer($config, $connector);
-
+        $configManager = m::mock(ConfigManager::class);
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
@@ -132,12 +149,48 @@ class ProducerTest extends LaravelTestCase
         };
 
         // Expectations
+        $configManager->expects()
+            ->middlewares()
+            ->andReturn([]);
+
+        $configManager->expects()
+            ->get('topic_id')
+            ->andReturn($topic);
+
+        $configManager->expects()
+            ->get('partition')
+            ->andReturn(0);
+
+        $configManager->expects()
+            ->get('max_poll_records')
+            ->andReturn(500);
+
+        $configManager->expects()
+            ->get('required_acknowledgment')
+            ->andReturn(true);
+
+        $configManager->expects()
+            ->get('flush_attempts')
+            ->andReturn(1);
+
+        $configManager->expects()
+            ->get('timeout')
+            ->andReturn(1000);
+
+        $configManager->expects()
+            ->get('is_async')
+            ->andReturn(false);
+
+        $config->expects()
+            ->make($topic)
+            ->andReturn($configManager);
+
         $connector->expects()
-            ->getProducerTopic($producerHandler)
+            ->getProducerTopic($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
         $kafkaProducer->expects()
-            ->newTopic('topic_name')
+            ->newTopic($topic)
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
@@ -160,23 +213,60 @@ class ProducerTest extends LaravelTestCase
         $record = json_encode(['message' => 'some message']);
         $topic = 'some_topic';
 
-        $config = $this->app->make(Config::class);
+        $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
         $producer = new Producer($config, $connector);
 
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
+        $configManager = m::mock(ConfigManager::class);
 
         $producerHandler = new class($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
+        $config->expects()
+            ->make($topic)
+            ->andReturn($configManager);
+
+        $configManager->expects()
+            ->middlewares()
+            ->andReturn([]);
+
+        $configManager->expects()
+            ->get('topic_id')
+            ->andReturn($topic);
+
+        $configManager->expects()
+            ->get('partition')
+            ->andReturn(0);
+
+        $configManager->expects()
+            ->get('max_poll_records')
+            ->andReturn(500);
+
+        $configManager->expects()
+            ->get('is_async')
+            ->andReturn(true);
+
+        $configManager->expects()
+            ->get('required_acknowledgment')
+            ->andReturn(true);
+
+        $configManager->expects()
+            ->get('flush_attempts')
+            ->andReturn(1);
+
+        $configManager->expects()
+            ->get('timeout')
+            ->andReturn(1000);
+
         $connector->expects()
-            ->getProducerTopic($producerHandler)
+            ->getProducerTopic($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
         $kafkaProducer->expects()
-            ->newTopic('topic_name')
+            ->newTopic($topic)
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()

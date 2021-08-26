@@ -2,36 +2,37 @@
 namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\Authentication\Factory;
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\HighLevel as HighLevelConsumer;
-use Metamorphosis\Facades\ConfigManager;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 
 class HighLevel implements ConnectorInterface
 {
-    public function getConsumer(bool $autoCommit): ConsumerInterface
+    public function getConsumer(bool $autoCommit, ConfigManager $configManager): ConsumerInterface
     {
-        $conf = $this->getConf();
+        $conf = $this->getConf($configManager);
 
-        $conf->set('group.id', ConfigManager::get('consumer_group'));
-        $conf->set('auto.offset.reset', ConfigManager::get('offset_reset'));
+        $conf->set('group.id', $configManager->get('consumer_group'));
+        $conf->set('auto.offset.reset', $configManager->get('offset_reset'));
         if (!$autoCommit) {
             $conf->set('enable.auto.commit', 'false');
         }
 
         $consumer = app(KafkaConsumer::class, ['conf' => $conf]);
-        $consumer->subscribe([ConfigManager::get('topic_id')]);
+        $consumer->subscribe([$configManager->get('topic_id')]);
+        $timeout = $configManager->get('timeout');
 
-        return app(HighLevelConsumer::class, compact('consumer'));
+        return app(HighLevelConsumer::class, compact('consumer', 'timeout'));
     }
 
-    protected function getConf(): Conf
+    protected function getConf(ConfigManager $configManager): Conf
     {
         $conf = resolve(Conf::class);
-        Factory::authenticate($conf);
+        Factory::authenticate($conf, $configManager);
 
-        $conf->set('metadata.broker.list', ConfigManager::get('connections'));
+        $conf->set('metadata.broker.list', $configManager->get('connections'));
 
         return $conf;
     }

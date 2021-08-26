@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Producer;
 
-use Metamorphosis\Facades\ConfigManager;
+use Metamorphosis\ConfigManager;
 use RdKafka\Producer;
 use RuntimeException;
 
@@ -42,13 +42,13 @@ class Poll
      */
     private $producer;
 
-    public function __construct(Producer $producer)
+    public function __construct(Producer $producer, ConfigManager $configManager)
     {
-        $this->isAsync = ConfigManager::get('is_async');
-        $this->maxPollRecords = ConfigManager::get('max_poll_records');
-        $this->requiredAcknowledgment = ConfigManager::get('required_acknowledgment');
-        $this->maxFlushAttempts = ConfigManager::get('flush_attempts');
-        $this->timeout = ConfigManager::get('timeout');
+        $this->isAsync = $configManager->get('is_async');
+        $this->maxPollRecords = $configManager->get('max_poll_records');
+        $this->requiredAcknowledgment = $configManager->get('required_acknowledgment');
+        $this->maxFlushAttempts = $configManager->get('flush_attempts');
+        $this->timeout = $configManager->get('timeout');
 
         $this->producer = $producer;
     }

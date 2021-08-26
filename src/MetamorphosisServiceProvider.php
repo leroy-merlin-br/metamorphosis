@@ -1,10 +1,7 @@
 <?php
 namespace Metamorphosis;
 
-use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\ServiceProvider;
-use Metamorphosis\Avro\CachedSchemaRegistryClient;
-use Metamorphosis\Avro\Client;
 use Metamorphosis\Console\ConsumerCommand;
 use Metamorphosis\Console\ConsumerMakeCommand;
 use Metamorphosis\Console\MiddlewareMakeCommand;
@@ -33,36 +30,5 @@ class MetamorphosisServiceProvider extends ServiceProvider
         $this->app->bind('metamorphosis', function ($app) {
             return $app->make(Producer::class);
         });
-
-        $this->app->singleton('configManager', function () {
-            return new ConfigManager();
-        });
-
-        $this->app->bind(CachedSchemaRegistryClient::class, function ($app) {
-            $guzzleHttp = $this->getGuzzleHttpClient($app->configManager);
-            $avroClient = new Client($guzzleHttp);
-
-            return new CachedSchemaRegistryClient($avroClient);
-        });
-    }
-
-    private function getGuzzleHttpClient(ConfigManager $configManager): GuzzleClient
-    {
-        $options = $configManager->get('request_options') ?: [];
-        $options['timeout'] = $configManager->get('timeout');
-        $options['base_uri'] = $configManager->get('url');
-        $options['headers'] = array_merge(
-            $this->getDefaultHeaders(),
-            $options['headers'] ?? []
-        );
-
-        return new GuzzleClient($options);
-    }
-
-    private function getDefaultHeaders(): array
-    {
-        return [
-            'Accept' => 'application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json',
-        ];
     }
 }

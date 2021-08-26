@@ -2,7 +2,7 @@
 namespace Tests\Unit\Authentication;
 
 use Metamorphosis\Authentication\SSLAuthentication;
-use Metamorphosis\Facades\ConfigManager;
+use Metamorphosis\ConfigManager;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
@@ -11,7 +11,8 @@ class SSLAuthenticationTest extends LaravelTestCase
     public function testItShouldValidateAuthenticationConfigurations(): void
     {
         // Set
-        ConfigManager::set([
+        $configManager = new ConfigManager();
+        $configManager->set([
             'auth' => [
                 'type' => 'ssl',
                 'ca' => 'path/to/ca',
@@ -28,7 +29,7 @@ class SSLAuthenticationTest extends LaravelTestCase
         ];
 
         // Actions
-        new SSLAuthentication($conf);
+        new SSLAuthentication($conf, $configManager);
 
         // Assertions
         $this->assertArraySubset($expected, $conf->dump());

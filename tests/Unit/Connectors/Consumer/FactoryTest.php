@@ -49,8 +49,8 @@ class FactoryTest extends LaravelTestCase
     {
         // Set
         $config = new Config();
-        $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
-        $manager = Factory::make();
+        $configManager = $config->make(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
+        $manager = Factory::make($configManager);
 
         // Assertions
         $this->assertInstanceOf(LowLevel::class, $manager->getConsumer());
@@ -60,8 +60,8 @@ class FactoryTest extends LaravelTestCase
     {
         // Set
         $config = new Config();
-        $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'without-partition']);
-        $manager = Factory::make();
+        $configManager = $config->make(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'without-partition']);
+        $manager = Factory::make($configManager);
 
         // Assertions
         $this->assertInstanceOf(HighLevel::class, $manager->getConsumer());

@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\Connectors\Producer;
 
+use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
@@ -24,6 +25,7 @@ class ConnectorTest extends LaravelTestCase
             KafkaProducer::class,
             m::mock(KafkaProducer::class)
         );
+        $configManager = m::mock(ConfigManager::class);
 
         $connector = new Connector();
         $handler = new class('record', 'some_topic') extends AbstractHandler implements HandleableResponseInterface {
@@ -44,8 +46,16 @@ class ConnectorTest extends LaravelTestCase
         $conf->expects()
             ->set('metadata.broker.list', 0);
 
+        $configManager->expects()
+            ->get('connections')
+            ->andReturn('kafka:9092');
+
+        $configManager->expects()
+            ->get('auth.type')
+            ->andReturn('none');
+
         // Actions
-        $result = $connector->getProducerTopic($handler);
+        $result = $connector->getProducerTopic($handler, $configManager);
 
         // Assertions
         $this->assertInstanceOf(KafkaProducer::class, $result);
@@ -62,6 +72,7 @@ class ConnectorTest extends LaravelTestCase
             KafkaProducer::class,
             m::mock(KafkaProducer::class)
         );
+        $configManager = m::mock(ConfigManager::class);
 
         $connector = new Connector();
         $handler = new class('record', 'some_topic') extends AbstractHandler implements HandlerInterface {
@@ -81,8 +92,16 @@ class ConnectorTest extends LaravelTestCase
         $conf->expects()
             ->set('metadata.broker.list', 0);
 
+        $configManager->expects()
+            ->get('connections')
+            ->andReturn('kafka:9092');
+
+        $configManager->expects()
+            ->get('auth.type')
+            ->andReturn('none');
+
         // Actions
-        $result = $connector->getProducerTopic($handler);
+        $result = $connector->getProducerTopic($handler, $configManager);
 
         // Assertions
         $this->assertInstanceOf(KafkaProducer::class, $result);

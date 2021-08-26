@@ -10,7 +10,7 @@ class ConfigTest extends LaravelTestCase
     public function testShouldValidateConsumerConfig(): void
     {
         // Set
-        $validate = new Config();
+        $config = new Config();
         $options = [
             'partition' => 0,
             'offset' => 0,
@@ -43,7 +43,7 @@ class ConfigTest extends LaravelTestCase
         ];
 
         // Actions
-        $configManager = $validate->setOption($options, $arguments);
+        $configManager = $config->make($options, $arguments);
 
         // Assertions
         $this->assertArraySubset($expected, $configManager->get());
@@ -52,7 +52,7 @@ class ConfigTest extends LaravelTestCase
     public function testShouldNotSetRuntimeConfigWhenOptionsIsInvalid(): void
     {
         // Set
-        $validate = new Config();
+        $config = new Config();
         $options = [
             'partition' => 'one',
             'offset' => 0,
@@ -65,7 +65,7 @@ class ConfigTest extends LaravelTestCase
 
         // Actions
         $this->expectException(ConfigurationException::class);
-        $configManager = $validate->setOption($options, $arguments);
+        $configManager = $config->make($options, $arguments);
 
         // Assertions
         $this->assertEmpty($configManager->get());
@@ -75,7 +75,7 @@ class ConfigTest extends LaravelTestCase
     {
         // Set
         config(['kafka.brokers.default.connections' => null]);
-        $validate = new Config();
+        $config = new Config();
         $options = [
             'partition' => 0,
             'offset' => 0,
@@ -88,7 +88,7 @@ class ConfigTest extends LaravelTestCase
 
         // Actions
         $this->expectException(ConfigurationException::class);
-        $configManager = $validate->setOption($options, $arguments);
+        $configManager = $config->make($options, $arguments);
 
         // Assertions
         $this->assertEmpty($configManager->get());

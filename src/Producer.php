@@ -39,7 +39,7 @@ class Producer
 
     public function build(HandlerInterface $producerHandler): Dispatcher
     {
-        $configManager = $this->config->setOption($producerHandler->getTopic());
+        $configManager = $this->config->make($producerHandler->getTopic());
 
         $middlewares = $configManager->middlewares();
         $middlewares[] = $this->getProducerMiddleware($producerHandler, $configManager);

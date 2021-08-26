@@ -36,7 +36,7 @@ class Config extends AbstractConfig
         'middlewares' => 'array',
     ];
 
-    public function setOption(array $options, array $arguments): ConfigManager
+    public function make(array $options, array $arguments): ConfigManager
     {
         $topicConfig = $this->getTopicConfig($arguments['topic']);
         $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer_group']);

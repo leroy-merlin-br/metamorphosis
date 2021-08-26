@@ -49,7 +49,7 @@ class FactoryTest extends LaravelTestCase
     {
         // Set
         $config = new Config();
-        $configManager = $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
+        $configManager = $config->make(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
         $manager = Factory::make($configManager);
 
         // Assertions
@@ -60,7 +60,7 @@ class FactoryTest extends LaravelTestCase
     {
         // Set
         $config = new Config();
-        $configManager = $config->setOption(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'without-partition']);
+        $configManager = $config->make(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'without-partition']);
         $manager = Factory::make($configManager);
 
         // Assertions

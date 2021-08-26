@@ -1,5 +1,4 @@
 <?php
-
 namespace Metamorphosis\Avro;
 
 use GuzzleHttp\Client as GuzzleClient;
@@ -13,7 +12,7 @@ class ClientFactory
 
         $client = app(Client::class, ['client' => $guzzleHttp]);
 
-        return  app(CachedSchemaRegistryClient::class, compact('client'));
+        return app(CachedSchemaRegistryClient::class, compact('client'));
     }
 
     private function getGuzzleHttpClient(ConfigManager $configManager): GuzzleClient

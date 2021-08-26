@@ -33,7 +33,7 @@ class ConsumerCommand extends BaseCommand
 
     public function handle(Config $config)
     {
-        $configManager = $config->setOption($this->option(), $this->argument());
+        $configManager = $config->make($this->option(), $this->argument());
 
         $this->writeStartingConsumer($configManager);
 

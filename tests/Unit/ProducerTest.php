@@ -38,7 +38,7 @@ class ProducerTest extends LaravelTestCase
 
         // Expectations
         $config->expects()
-            ->setOption($topic)
+            ->make($topic)
             ->andReturn($configManager);
 
         $configManager->expects()
@@ -95,7 +95,7 @@ class ProducerTest extends LaravelTestCase
 
         // Expectations
         $config->expects()
-            ->setOption($topic)
+            ->make($topic)
             ->andReturn($configManager);
 
         $configManager->expects()
@@ -182,7 +182,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn(false);
 
         $config->expects()
-            ->setOption($topic)
+            ->make($topic)
             ->andReturn($configManager);
 
         $connector->expects()
@@ -226,7 +226,7 @@ class ProducerTest extends LaravelTestCase
 
         // Expectations
         $config->expects()
-            ->setOption($topic)
+            ->make($topic)
             ->andReturn($configManager);
 
         $configManager->expects()

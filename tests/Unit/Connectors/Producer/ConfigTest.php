@@ -34,7 +34,7 @@ class ConfigTest extends LaravelTestCase
         ];
 
         // Actions
-        $result = $config->setOption($topicId);
+        $result = $config->make($topicId);
 
         // Assertions
         $this->assertArraySubset($expected, $result->get());
@@ -49,7 +49,7 @@ class ConfigTest extends LaravelTestCase
 
         // Actions
         $this->expectException(ConfigurationException::class);
-        $result = $config->setOption($topicId);
+        $result = $config->make($topicId);
 
         // Assertions
         $this->assertEmpty($result->get());
@@ -80,7 +80,7 @@ class ConfigTest extends LaravelTestCase
         ];
 
         // Actions
-        $result = $config->setOption($topicId);
+        $result = $config->make($topicId);
 
         // Assertions
         $this->assertArraySubset($expected, $result->get());

@@ -35,7 +35,7 @@ class Config extends AbstractConfig
         'partition' => RD_KAFKA_PARTITION_UA,
     ];
 
-    public function setOption(string $topicId): ConfigManager
+    public function make(string $topicId): ConfigManager
     {
         $topicConfig = $this->getTopicConfig($topicId);
         $topicConfig['middlewares'] = array_merge(

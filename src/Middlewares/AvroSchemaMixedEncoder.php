@@ -2,6 +2,7 @@
 namespace Metamorphosis\Middlewares;
 
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Serializer\Encoders\SchemaId;
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Exceptions\ConfigurationException;
@@ -30,13 +31,13 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
      */
     private $configManager;
 
-    public function __construct(SchemaId $schemaIdEncoder, CachedSchemaRegistryClient $schemaRegistry, ConfigManager $configManager)
+    public function __construct(SchemaId $schemaIdEncoder, ClientFactory $factory, ConfigManager $configManager)
     {
         if (!$configManager->get('url')) {
             throw new ConfigurationException("Avro schema url not found, it's required to use AvroSchemaEncoder Middleware");
         }
 
-        $schemaRegistry->setClientConfig($configManager);
+        $schemaRegistry = $factory->make($configManager);
         $this->schemaIdEncoder = $schemaIdEncoder;
         $this->schemaRegistry = $schemaRegistry;
         $this->configManager = $configManager;

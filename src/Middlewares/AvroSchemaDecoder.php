@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Middlewares;
 
-use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Serializer\Decoders\DecoderInterface;
 use Metamorphosis\Avro\Serializer\MessageDecoder;
 use Metamorphosis\ConfigManager;
@@ -21,15 +21,13 @@ class AvroSchemaDecoder implements MiddlewareInterface
      */
     private $configManager;
 
-    public function __construct(ConfigManager $configManager, CachedSchemaRegistryClient $cachedSchemaRegistryClient)
+    public function __construct(ConfigManager $configManager, ClientFactory $factory)
     {
         if (!$this->configManager->get('url')) {
             throw new ConfigurationException("Avro schema url not found, it's required to use AvroSchemaDecoder Middleware");
         }
 
-        $cachedSchemaRegistryClient->setClientConfig($configManager);
-
-        $this->decoder = new MessageDecoder($cachedSchemaRegistryClient);
+        $this->decoder = new MessageDecoder($factory->make($configManager));
         $this->configManager = $configManager;
     }
 

@@ -23,12 +23,12 @@ class AvroSchemaDecoder implements MiddlewareInterface
 
     public function __construct(ConfigManager $configManager, ClientFactory $factory)
     {
+        $this->configManager = $configManager;
         if (!$this->configManager->get('url')) {
             throw new ConfigurationException("Avro schema url not found, it's required to use AvroSchemaDecoder Middleware");
         }
 
         $this->decoder = new MessageDecoder($factory->make($configManager));
-        $this->configManager = $configManager;
     }
 
     public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void

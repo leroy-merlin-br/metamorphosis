@@ -21,6 +21,7 @@ class Config extends AbstractConfig
         'flush_attempts' => 'int',
         'auth' => 'array',
         'middlewares' => 'array',
+        'ssl_verify' => 'boolean',
     ];
 
     /**
@@ -33,6 +34,7 @@ class Config extends AbstractConfig
         'max_poll_records' => 500,
         'flush_attempts' => 10,
         'partition' => RD_KAFKA_PARTITION_UA,
+        'ssl_verify' => false,
     ];
 
     public function make(string $topicId): ConfigManager

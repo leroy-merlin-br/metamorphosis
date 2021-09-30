@@ -24,6 +24,7 @@ class ClientFactory
             $this->getDefaultHeaders(),
             $config['headers'] ?? []
         );
+        $config['verify'] = $configManager->get('ssl_verify') ?? false;
 
         return app(GuzzleClient::class, compact('config'));
     }

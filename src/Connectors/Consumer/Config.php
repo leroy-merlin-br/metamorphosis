@@ -29,6 +29,7 @@ class Config extends AbstractConfig
         'consumer_group' => 'required|string',
         'connections' => 'required|string',
         'url' => 'string',
+        'verify_ssl' => 'boolean',
         'auth' => 'array',
         'request_options' => 'array',
         'auto_commit' => 'boolean',

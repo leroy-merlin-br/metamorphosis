@@ -4,6 +4,8 @@
 - [Consumer](#consumer)
    - [Creating Consumer](#creating-consumer)
    - [Running](#running-consumer)
+- [Producer](#producer)
+  - [Produce Message](#produce-message)
 
 <a name="config"></a>
 ### Config file: `config/kafka.php`
@@ -134,3 +136,51 @@ stdout_logfile=/var/log/default/kafka-consumer-price-update.log
 ```
 
 That's it. For more information about usage, middlewares, broker authentication, consumer groups and other advanced topics, please have a look at our [Advanced Usage Guide](advanced.md).
+
+<a name="producer"></a>
+### Producer
+
+Producer also required configs, which will produce all records using parameters specified in the config.
+
+```php
+    'brokers' => [
+        'local-dev' => [
+            'connections' => 'kafka:9092',
+        ],
+    ],
+    'topics' => [
+        'product-updated' => [
+            'topic_id' => 'product_updated',
+            'broker' => 'local-dev',
+        ],
+    ],
+```
+<a name="produce-message"></a>
+### Produce Message
+
+Creating Producer handler.
+
+The Producer must extends AbstractHandler class and can be empty.
+
+```php
+<?php
+
+use Metamorphosis\TopicHandler\Producer\AbstractHandler;
+
+class ProductUpdated extends AbstractHandler
+{
+}
+```
+
+Creating payload and produce kafka message.
+
+The payload must be a array. This array can even store other arrays as values.
+
+The second parameter indicates which kafka topic will receive the message and the third indicates the message key.
+```php
+$record = ['name' => 'test', 'id' => 88989898, 'price' => 18.99];
+$key = 88989898;
+$producer = new ProductUpdated($record, 'product-updated', $key)
+
+Metamorphosis::produce($producer);
+```

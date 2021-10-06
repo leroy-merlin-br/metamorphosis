@@ -30,7 +30,7 @@ abstract class AbstractHandler implements Handler
     {
     }
 
-    public function getConfigOptions():array
+    public function getConfigOptions(): array
     {
         return $this->configOptions;
     }

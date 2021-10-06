@@ -3,9 +3,7 @@ namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Mockery as m;
 use Tests\LaravelTestCase;
-use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class ConfigTest extends LaravelTestCase
 {

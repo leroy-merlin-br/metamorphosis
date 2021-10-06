@@ -1,5 +1,4 @@
 <?php
-
 namespace Metamorphosis\TopicHandler\Producer;
 
 use Metamorphosis\Exceptions\JsonException;
@@ -81,4 +80,3 @@ class AbstractProducer implements HandlerInterface
         return $record;
     }
 }
-

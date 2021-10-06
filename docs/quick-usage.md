@@ -158,7 +158,9 @@ Producer also required configs, which will produce all records using parameters 
 <a name="produce-message"></a>
 ### Produce Message
 
-Creating Producer handler
+Creating Producer handler.
+
+The Producer must extends AbstractHandler class and can be empty.
 
 ```php
 <?php

@@ -2,6 +2,8 @@
 namespace Metamorphosis;
 
 use Illuminate\Support\Arr;
+use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
+use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
 class ConfigManager
 {
@@ -36,10 +38,24 @@ class ConfigManager
         unset($config['middlewares']);
 
         $this->setting = $config;
-
         foreach ($middlewares as $middleware) {
             $this->middlewares[] = is_string($middleware) ? app($middleware, ['configManager' => $this]) : $middleware;
         }
+
+        // Add Consumer Handler as a middleware
+        $consumerHandler = app($this->get('handler'));
+
+        $this->overrideHandlerConfig($consumerHandler);
+        $this->middlewares[] = new ConsumerMiddleware($consumerHandler);
+    }
+
+    public function overrideHandlerConfig(AbstractHandler $handler): void
+    {
+        if (!$overrideConfig = $handler->getConfigOptions()) {
+            return;
+        }
+
+        $this->setting = array_merge_recursive($this->setting, $overrideConfig);
     }
 
     public function has(string $key): bool

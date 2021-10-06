@@ -3,7 +3,6 @@ namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
-use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 
 /**
@@ -20,7 +19,8 @@ class Factory
 
         $consumer = self::getConsumer($autoCommit, $configManager);
         $handler = app($configManager->get('handler'));
-        $dispatcher = self::getMiddlewareDispatcher($handler, $configManager->middlewares());
+
+        $dispatcher = self::getMiddlewareDispatcher($configManager->middlewares());
 
         return new Manager($consumer, $handler, $dispatcher, $autoCommit, $commitAsync);
     }
@@ -39,10 +39,8 @@ class Factory
         return app(HighLevel::class)->getConsumer($autoCommit, $configManager);
     }
 
-    private static function getMiddlewareDispatcher($handler, array $middlewares): Dispatcher
+    private static function getMiddlewareDispatcher(array $middlewares): Dispatcher
     {
-        $middlewares[] = new ConsumerMiddleware($handler);
-
         return new Dispatcher($middlewares);
     }
 }

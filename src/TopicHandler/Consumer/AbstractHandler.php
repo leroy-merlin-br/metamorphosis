@@ -6,6 +6,18 @@ use Metamorphosis\Exceptions\ResponseWarningException;
 
 abstract class AbstractHandler implements Handler
 {
+    /**
+     * Merge and override laravel config from kafka file.
+     *
+     * @var array
+     */
+    private $configOptions;
+
+    public function __construct(array $configOptions)
+    {
+        $this->configOptions = $configOptions;
+    }
+
     public function warning(ResponseWarningException $exception): void
     {
     }
@@ -16,5 +28,10 @@ abstract class AbstractHandler implements Handler
 
     public function finished(): void
     {
+    }
+
+    public function getConfigOptions():array
+    {
+        return $this->configOptions;
     }
 }

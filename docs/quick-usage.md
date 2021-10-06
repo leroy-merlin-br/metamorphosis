@@ -145,7 +145,7 @@ Producer also required configs, which will produce all records using parameters 
 ```php
     'brokers' => [
         'local-dev' => [
-            'connections'    => 'kafka:9092',
+            'connections' => 'kafka:9092',
         ],
     ],
     'topics' => [

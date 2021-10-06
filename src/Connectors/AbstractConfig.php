@@ -24,8 +24,8 @@ abstract class AbstractConfig
         }
     }
 
-    protected function getSchemaConfig(string $topicId): array
+    protected function getSchemaConfig(string $configName, string $topicId): array
     {
-        return config('kafka.avro_schemas.'.$topicId, []);
+        return config($configName.'.avro_schemas.'.$topicId, []);
     }
 }

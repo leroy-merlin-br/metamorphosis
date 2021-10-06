@@ -26,12 +26,23 @@ class AbstractProducer implements HandlerInterface
      */
     protected $partition;
 
-    public function __construct($record, string $key = null, array $configOptions = [])
+    /**
+     * @var ConfigOptions
+     */
+    private $configOptions;
+
+    public function __construct($record, ConfigOptions $configOptions, string $key = null)
     {
         $this->record = $record;
         $this->key = $key;
-        $this->topic = $configOptions['topic'];
-        $this->partition = $configOptions['partition'];
+        $this->topic = $configOptions->getTopicConfigName();
+        $this->partition = $configOptions->getPartition();
+        $this->configOptions = $configOptions;
+    }
+
+    public function getConfigOptions(): ConfigOptions
+    {
+        return $this->configOptions;
     }
 
     public function getRecord()

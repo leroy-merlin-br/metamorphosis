@@ -15,6 +15,7 @@ return [
     'avro_schemas' => [
         'default' => [
             'url' => '',
+            // Disable SSL verification on schema request.
             'ssl_verify' => true,
             // This option will be put directly into a Guzzle http request
             // Use this to do authorizations or send any headers you want.

@@ -7,6 +7,7 @@ use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer\Poll;
+use Metamorphosis\TopicHandler\Producer\AbstractProducer;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
 class Producer
@@ -39,7 +40,7 @@ class Producer
 
     public function build(HandlerInterface $producerHandler): Dispatcher
     {
-        $configManager = $this->config->make($producerHandler->getTopic());
+        $configManager = $this->getConfigManager($producerHandler);
 
         $middlewares = $configManager->middlewares();
         $middlewares[] = $this->getProducerMiddleware($producerHandler, $configManager);
@@ -56,5 +57,14 @@ class Producer
         $partition = $configManager->get('partition');
 
         return app(ProducerMiddleware::class, compact('topic', 'poll', 'partition'));
+    }
+
+    private function getConfigManager(HandlerInterface $producerHandler): ConfigManager
+    {
+        if ($producerHandler instanceof AbstractProducer) {
+            return $this->config->make($producerHandler->getConfigOptions());
+        }
+
+        return $this->config->makeByTopic($producerHandler->getTopic());
     }
 }

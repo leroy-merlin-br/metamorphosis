@@ -51,12 +51,8 @@ class ConfigManager
         }
     }
 
-    public function overrideHandlerConfig(AbstractHandler $handler): void
+    public function replace(array $overrideConfig): void
     {
-        if (!$overrideConfig = $handler->getConfigOptions()) {
-            return;
-        }
-
         $this->setting = array_replace_recursive($this->setting, $overrideConfig);
     }
 
@@ -68,5 +64,14 @@ class ConfigManager
     public function middlewares(): array
     {
         return $this->middlewares;
+    }
+
+    private function overrideHandlerConfig(AbstractHandler $handler): void
+    {
+        if (!$overrideConfig = $handler->getConfigOptions()) {
+            return;
+        }
+
+        $this->replace($overrideConfig);
     }
 }

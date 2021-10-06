@@ -1,13 +1,11 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\Producer;
 
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Record\ProducerRecord;
 
-/**
- * @deprecated
- */
-abstract class AbstractHandler implements HandlerInterface
+class AbstractProducer implements HandlerInterface
 {
     /**
      * @var mixed
@@ -29,12 +27,12 @@ abstract class AbstractHandler implements HandlerInterface
      */
     protected $partition;
 
-    public function __construct($record, string $topic = null, string $key = null, int $partition = null)
+    public function __construct($record, string $key = null, array $configOptions = [])
     {
         $this->record = $record;
-        $this->topic = $topic;
         $this->key = $key;
-        $this->partition = $partition;
+        $this->topic = $configOptions['topic'];
+        $this->partition = $configOptions['partition'];
     }
 
     public function getRecord()
@@ -83,3 +81,4 @@ abstract class AbstractHandler implements HandlerInterface
         return $record;
     }
 }
+

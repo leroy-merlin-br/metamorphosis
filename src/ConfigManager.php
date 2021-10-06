@@ -42,11 +42,13 @@ class ConfigManager
             $this->middlewares[] = is_string($middleware) ? app($middleware, ['configManager' => $this]) : $middleware;
         }
 
-        // Add Consumer Handler as a middleware
-        $consumerHandler = app($config['handler']);
+        if ($handlerName = $config['handler'] ?? null) {
+            // Add Consumer Handler as a middleware
+            $consumerHandler = app($handlerName);
 
-        $this->overrideHandlerConfig($consumerHandler);
-        $this->middlewares[] = new ConsumerMiddleware($consumerHandler);
+            $this->overrideHandlerConfig($consumerHandler);
+            $this->middlewares[] = new ConsumerMiddleware($consumerHandler);
+        }
     }
 
     public function overrideHandlerConfig(AbstractHandler $handler): void

@@ -170,7 +170,11 @@ class ProductUpdated extends AbstractHandler
 }
 ```
 
-Creating payload and produce kafka message
+Creating payload and produce kafka message.
+
+The payload must be a array. This array can even store other arrays as values.
+
+The second parameter indicates which kafka topic will receive the message and the third indicates the message key.
 ```php
 $record = ['name' => 'test', 'id' => 88989898, 'price' => 18.99];
 $key = 88989898;

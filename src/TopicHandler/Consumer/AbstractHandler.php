@@ -7,7 +7,7 @@ use Metamorphosis\Exceptions\ResponseWarningException;
 abstract class AbstractHandler implements Handler
 {
     /**
-     * Merge and override laravel config from kafka file.
+     * Merge and override config from kafka file.
      *
      * @var array
      */

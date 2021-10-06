@@ -43,7 +43,7 @@ class ConfigManager
         }
 
         // Add Consumer Handler as a middleware
-        $consumerHandler = app($this->get('handler'));
+        $consumerHandler = app($config['handler']);
 
         $this->overrideHandlerConfig($consumerHandler);
         $this->middlewares[] = new ConsumerMiddleware($consumerHandler);
@@ -55,7 +55,7 @@ class ConfigManager
             return;
         }
 
-        $this->setting = array_merge_recursive($this->setting, $overrideConfig);
+        $this->setting = array_replace_recursive($this->setting, $overrideConfig);
     }
 
     public function has(string $key): bool

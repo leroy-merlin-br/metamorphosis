@@ -10,6 +10,8 @@ class ConfigTest extends LaravelTestCase
     public function testShouldValidateConsumerConfig(): void
     {
         // Set
+        config(['kafka.topics.default.consumer.consumer_groups.test-consumer-group.handler' => '\Tests\Unit\Dummies\ConsumerHandlerDummy']);
+
         $config = new Config();
         $options = [
             'partition' => 0,
@@ -28,7 +30,7 @@ class ConfigTest extends LaravelTestCase
             'offset_reset' => 'earliest',
             'offset' => 0,
             'partition' => 0,
-            'handler' => '\App\Kafka\Consumers\ConsumerExample',
+            'handler' => '\Tests\Unit\Dummies\ConsumerHandlerDummy',
             'timeout' => 20000,
             'consumer_group' => 'test-consumer-group',
             'connections' => 'kafka:9092',

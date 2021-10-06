@@ -13,7 +13,7 @@ abstract class AbstractHandler implements Handler
      */
     private $configOptions;
 
-    public function __construct(array $configOptions)
+    public function __construct(array $configOptions = [])
     {
         $this->configOptions = $configOptions;
     }

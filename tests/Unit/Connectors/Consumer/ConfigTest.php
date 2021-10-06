@@ -3,7 +3,9 @@ namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Mockery as m;
 use Tests\LaravelTestCase;
+use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class ConfigTest extends LaravelTestCase
 {
@@ -25,7 +27,7 @@ class ConfigTest extends LaravelTestCase
 
         $expected = [
             'topic' => 'default',
-            'topic_id' => 'kafka-test',
+            'topic_id' => 'kafka-override',
             'broker' => 'default',
             'offset_reset' => 'earliest',
             'offset' => 0,

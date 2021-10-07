@@ -3,6 +3,7 @@ namespace Tests\Unit\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Metamorphosis\TopicHandler\Producer\ConfigOptions;
 use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase
@@ -34,7 +35,7 @@ class ConfigTest extends LaravelTestCase
         ];
 
         // Actions
-        $result = $config->make($topicId);
+        $result = $config->makeByTopic($topicId);
 
         // Assertions
         $this->assertArraySubset($expected, $result->get());
@@ -49,7 +50,7 @@ class ConfigTest extends LaravelTestCase
 
         // Actions
         $this->expectException(ConfigurationException::class);
-        $result = $config->make($topicId);
+        $result = $config->makeByTopic($topicId);
 
         // Assertions
         $this->assertEmpty($result->get());
@@ -80,7 +81,47 @@ class ConfigTest extends LaravelTestCase
         ];
 
         // Actions
-        $result = $config->make($topicId);
+        $result = $config->makeByTopic($topicId);
+
+        // Assertions
+        $this->assertArraySubset($expected, $result->get());
+    }
+
+    public function testShouldOverrideDefaultParametersWhenConfigOptionsExists(): void
+    {
+        // Set
+        config(['kafka.topics.default.producer.max_poll_records' => 3000]);
+        $config = new Config();
+        $broker = [
+            'connections' => 'kafka:9092',
+            'auth' => [
+                'type' => 'sasl_ssl',
+                'mechanisms' => 'PLAIN',
+                'username' => 'USERNAME',
+                'password' => 'PASSWORD',
+            ],
+        ];
+        $configOptions = new ConfigOptions('TOPIC-ID', $broker);
+
+        $expected = [
+            "topic_id" => "TOPIC-ID",
+            "connections" => "kafka:9092",
+            "auth" => [
+                "type" => "sasl_ssl",
+                "mechanisms" => "PLAIN",
+                "username" => "USERNAME",
+                "password" => "PASSWORD",
+            ],
+            "timeout" => 1000,
+            "is_async" => true,
+            "required_acknowledgment" => false,
+            "max_poll_records" => 500,
+            "flush_attempts" => 10,
+            "avro_schema" => [],
+        ];
+
+        // Actions
+        $result = $config->make($configOptions);
 
         // Assertions
         $this->assertArraySubset($expected, $result->get());

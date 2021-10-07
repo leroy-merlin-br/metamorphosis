@@ -9,22 +9,39 @@ class ConfigOptions
      * remove this configuration, or set as empty.
      * The Authentication types may be "ssl" or "none"
      * @example [
-     *    'type' => 'ssl', // ssl and none
-     *    'ca' => storage_path('ca.pem'),
-     *    'certificate' => storage_path('kafka.cert'),
-     *    'key' => storage_path('kafka.key'),
+     *    'connections' => 'kafka:9092',
+     *    'auth' => [
+     *        'type' => 'ssl', // ssl and none
+     *        'ca' => storage_path('ca.pem'),
+     *        'certificate' => storage_path('kafka.cert'),
+     *        'key' => storage_path('kafka.key'),
+     *     ]
      * ]
      *
      * @var array
      */
-    private $auth;
+    private $broker;
 
     /**
-     * Here you may point the key of the broker configured above.
+     * @example [
+     *     'url' => 'http://schema-registry:8081',
+     *     // Disable SSL verification on schema request.
+     *     'ssl_verify' => true,
+     *     // This option will be put directly into a Guzzle http request
+     *     // Use this to do authorizations or send any headers you want.
+     *     // Here is a example of basic authentication on AVRO schema.
+     *     'request_options' => [
+     *         'headers' => [
+     *              'Authorization' => [
+     *                  'Basic AUTHENTICATION'
+     *              ],
+     *         ],
+     *     ],
+     * ]
      *
-     * @var string
+     * @var array
      */
-    private $broker;
+    private $avroSchema;
 
     /**
      * The amount of attempts we will try to run the flush.
@@ -73,51 +90,37 @@ class ConfigOptions
     private $timeout;
 
     /**
-     * Disable SSL verification on schema request.
-     *
-     * @var bool
-     */
-    private $sslVerify;
-
-    /**
-     * @var string
-     */
-    private $topicConfigName;
-
-    /**
      * @var int|null
      */
     private $partition;
 
+    /**
+     * @var string
+     */
+    private $topicId;
+
     public function __construct(
-        string $broker,
-        string $topicConfigName,
+        string $topicId,
+        array $broker,
         ?int $partition = null,
-        array $auth = [],
+        array $avroSchema = [],
         array $middlewares = [],
         int $timeout = 1000,
         bool $isAsync = true,
         bool $requiredAcknowledgment = false,
         int $maxPollRecords = 500,
-        int $flushAttempts = 10,
-        bool $sslVerify = true
+        int $flushAttempts = 10
     ) {
-        $this->topicConfigName = $topicConfigName;
         $this->broker = $broker;
-        $this->auth = $auth;
         $this->middlewares = $middlewares;
         $this->timeout = $timeout;
         $this->isAsync = $isAsync;
         $this->requiredAcknowledgment = $requiredAcknowledgment;
         $this->maxPollRecords = $maxPollRecords;
         $this->flushAttempts = $flushAttempts;
-        $this->sslVerify = $sslVerify;
         $this->partition = $partition;
-    }
-
-    public function isSslVerify(): bool
-    {
-        return $this->sslVerify;
+        $this->topicId = $topicId;
+        $this->avroSchema = $avroSchema;
     }
 
     public function getTimeout(): int
@@ -150,19 +153,9 @@ class ConfigOptions
         return $this->flushAttempts;
     }
 
-    public function getAuth(): array
-    {
-        return $this->auth;
-    }
-
-    public function getBroker(): string
+    public function getBroker(): array
     {
         return $this->broker;
-    }
-
-    public function getTopicConfigName(): string
-    {
-        return $this->topicConfigName;
     }
 
     public function getPartition(): ?int
@@ -172,17 +165,29 @@ class ConfigOptions
 
     public function toArray(): array
     {
+        $broker = $this->getBroker();
+
         return [
-            'topic' => $this->getTopicConfigName(),
-            'broker' => $this->getBroker(),
+            'topic_id' => $this->getTopicId(),
+            'connections' => $broker['connections'] ?? null,
+            'auth' => $broker['auth'] ?? null,
             'timeout' => $this->getTimeout(),
             'is_async' => $this->isAsync(),
             'required_acknowledgment' => $this->isRequiredAcknowledgment(),
             'max_poll_records' => $this->getMaxPollRecords(),
             'flush_attempts' => $this->getFlushAttempts(),
-            'auth' => $this->getAuth(),
             'middlewares' => $this->getMiddlewares(),
-            'ssl_verify' => $this->isSslVerify(),
+            'avro_schema' => $this->getAvroSchema(),
         ];
+    }
+
+    public function getTopicId(): string
+    {
+        return $this->topicId;
+    }
+
+    public function getAvroSchema(): array
+    {
+        return $this->avroSchema;
     }
 }

@@ -12,15 +12,14 @@ class Config extends AbstractConfig
      * @var array
      */
     protected $rules = [
-        'topic' => 'required',
-        'broker' => 'required',
+        'topic_id' => 'required',
         'connections' => 'required|string',
         'timeout' => 'int',
         'is_async' => 'boolean',
         'required_acknowledgment' => 'boolean',
         'max_poll_records' => 'int',
         'flush_attempts' => 'int',
-        'auth' => 'array',
+        'auth' => 'nullable|array',
         'middlewares' => 'array',
         'ssl_verify' => 'boolean',
     ];
@@ -38,10 +37,10 @@ class Config extends AbstractConfig
         'ssl_verify' => false,
     ];
 
-    public function make(ConfigOptions $configOptions) {
-        $topic = $configOptions->getTopicConfigName();
-        $configManager = $this->makeByTopic($topic);
-        $configManager->replace(array_filter($configOptions->toArray()));
+    public function make(ConfigOptions $configOptions): ConfigManager
+    {
+        $configManager = app(ConfigManager::class);
+        $configManager->set($configOptions->toArray());
 
         return $configManager;
     }
@@ -69,7 +68,7 @@ class Config extends AbstractConfig
     private function getTopicConfig(string $topicId): array
     {
         $topicConfig = array_merge(
-            config('kafka.topics.'.$topicId),
+            config('kafka.topics.'.$topicId, []),
             config('kafka.topics.'.$topicId.'.producer', [])
         );
         if (!$topicConfig) {

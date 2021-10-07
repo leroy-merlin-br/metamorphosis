@@ -4,6 +4,7 @@ namespace Metamorphosis\Connectors\Producer;
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Metamorphosis\TopicHandler\Producer\ConfigOptions;
 
 class Config extends AbstractConfig
 {
@@ -11,15 +12,14 @@ class Config extends AbstractConfig
      * @var array
      */
     protected $rules = [
-        'topic' => 'required',
-        'broker' => 'required',
+        'topic_id' => 'required',
         'connections' => 'required|string',
         'timeout' => 'int',
         'is_async' => 'boolean',
         'required_acknowledgment' => 'boolean',
         'max_poll_records' => 'int',
         'flush_attempts' => 'int',
-        'auth' => 'array',
+        'auth' => 'nullable|array',
         'middlewares' => 'array',
         'ssl_verify' => 'boolean',
     ];
@@ -37,7 +37,15 @@ class Config extends AbstractConfig
         'ssl_verify' => false,
     ];
 
-    public function make(string $topicId): ConfigManager
+    public function make(ConfigOptions $configOptions): ConfigManager
+    {
+        $configManager = app(ConfigManager::class);
+        $configManager->set($configOptions->toArray());
+
+        return $configManager;
+    }
+
+    public function makeByTopic(string $topicId): ConfigManager
     {
         $topicConfig = $this->getTopicConfig($topicId);
         $topicConfig['middlewares'] = array_merge(
@@ -45,7 +53,7 @@ class Config extends AbstractConfig
             $topicConfig['producer']['middlewares'] ?? []
         );
         $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
-        $schemaConfig = $this->getSchemaConfig($topicId);
+        $schemaConfig = $this->getSchemaConfig('kafka', $topicId);
         $config = array_merge($topicConfig, $brokerConfig, $schemaConfig);
 
         $this->validate($config);
@@ -60,7 +68,7 @@ class Config extends AbstractConfig
     private function getTopicConfig(string $topicId): array
     {
         $topicConfig = array_merge(
-            config('kafka.topics.'.$topicId),
+            config('kafka.topics.'.$topicId, []),
             config('kafka.topics.'.$topicId.'.producer', [])
         );
         if (!$topicConfig) {

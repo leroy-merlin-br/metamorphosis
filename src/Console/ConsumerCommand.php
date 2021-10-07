@@ -29,7 +29,8 @@ class ConsumerCommand extends BaseCommand
         {--partition= : Sets the partition to consume.}
         {--broker= : Override broker connection from config.}
         {--timeout= : Sets timeout for consumer.}
-        {--times= : Amount of messages to be consumed.}';
+        {--times= : Amount of messages to be consumed.}
+        {--config_name= : Change default name for laravel config file.}';
 
     public function handle(Config $config)
     {

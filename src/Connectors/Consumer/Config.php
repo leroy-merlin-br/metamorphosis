@@ -39,10 +39,11 @@ class Config extends AbstractConfig
 
     public function make(array $options, array $arguments): ConfigManager
     {
-        $topicConfig = $this->getTopicConfig($arguments['topic']);
+        $configName = $arguments['config_name'] ?? 'kafka';
+        $topicConfig = $this->getTopicConfig($configName, $arguments['topic']);
         $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer_group']);
         $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
-        $schemaConfig = $this->getSchemaConfig($arguments['topic']);
+        $schemaConfig = $this->getSchemaConfig($configName, $arguments['topic']);
         $config = array_merge(
             $topicConfig,
             $brokerConfig,
@@ -59,14 +60,14 @@ class Config extends AbstractConfig
         return $configManager;
     }
 
-    private function getTopicConfig(string $topicId): array
+    private function getTopicConfig(string $configName, string $topicId): array
     {
-        $topicConfig = config('kafka.topics.'.$topicId);
+        $topicConfig = config($configName.'.topics.'.$topicId);
         if (!$topicConfig) {
             throw new ConfigurationException("Topic '{$topicId}' not found");
         }
 
-        $topicConfig['middlewares'] = $this->getMiddlewares($topicConfig);
+        $topicConfig['middlewares'] = $this->getMiddlewares($configName, $topicConfig);
 
         return $topicConfig;
     }
@@ -88,10 +89,10 @@ class Config extends AbstractConfig
         return $consumerConfig;
     }
 
-    private function getMiddlewares(array $topicConfig): array
+    private function getMiddlewares(string $configName, array $topicConfig): array
     {
         return array_merge(
-            config('kafka.middlewares.consumer', []),
+            config($configName.'.middlewares.consumer', []),
             $topicConfig['consumer']['middlewares'] ?? []
         );
     }

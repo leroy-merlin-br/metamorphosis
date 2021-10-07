@@ -4,10 +4,7 @@ namespace Metamorphosis\TopicHandler\Producer;
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Record\ProducerRecord;
 
-/**
- * @deprecated
- */
-abstract class AbstractHandler implements HandlerInterface
+class AbstractProducer implements HandlerInterface
 {
     /**
      * @var mixed
@@ -17,39 +14,28 @@ abstract class AbstractHandler implements HandlerInterface
     /**
      * @var string
      */
-    protected $topic;
-
-    /**
-     * @var string
-     */
     protected $key;
 
     /**
-     * @var int
+     * @var ConfigOptions
      */
-    protected $partition;
+    private $configOptions;
 
-    public function __construct($record, string $topic = null, string $key = null, int $partition = null)
+    public function __construct($record, ConfigOptions $configOptions, string $key = null)
     {
         $this->record = $record;
-        $this->topic = $topic;
         $this->key = $key;
-        $this->partition = $partition;
+        $this->configOptions = $configOptions;
+    }
+
+    public function getConfigOptions(): ConfigOptions
+    {
+        return $this->configOptions;
     }
 
     public function getRecord()
     {
         return $this->record;
-    }
-
-    public function getTopic(): string
-    {
-        return $this->topic;
-    }
-
-    public function getPartition(): ?int
-    {
-        return $this->partition;
     }
 
     public function getKey(): ?string

@@ -104,20 +104,20 @@ class ConfigTest extends LaravelTestCase
         $configOptions = new ConfigOptions('TOPIC-ID', $broker);
 
         $expected = [
-            "topic_id" => "TOPIC-ID",
-            "connections" => "kafka:9092",
-            "auth" => [
-                "type" => "sasl_ssl",
-                "mechanisms" => "PLAIN",
-                "username" => "USERNAME",
-                "password" => "PASSWORD",
+            'topic_id' => 'TOPIC-ID',
+            'connections' => 'kafka:9092',
+            'auth' => [
+                'type' => 'sasl_ssl',
+                'mechanisms' => 'PLAIN',
+                'username' => 'USERNAME',
+                'password' => 'PASSWORD',
             ],
-            "timeout" => 1000,
-            "is_async" => true,
-            "required_acknowledgment" => false,
-            "max_poll_records" => 500,
-            "flush_attempts" => 10,
-            "avro_schema" => [],
+            'timeout' => 1000,
+            'is_async' => true,
+            'required_acknowledgment' => false,
+            'max_poll_records' => 500,
+            'flush_attempts' => 10,
+            'avro_schema' => [],
         ];
 
         // Actions

@@ -1,5 +1,4 @@
 <?php
-
 namespace Metamorphosis\TopicHandler\Producer;
 
 class ConfigOptions
@@ -8,6 +7,7 @@ class ConfigOptions
      * If your broker doest not have authentication, you can
      * remove this configuration, or set as empty.
      * The Authentication types may be "ssl" or "none"
+     *
      * @example [
      *    'connections' => 'kafka:9092',
      *    'auth' => [

@@ -13,17 +13,6 @@ interface HandlerInterface
     public function getRecord();
 
     /**
-     * The key name for the topic which the record should be send to.
-     * This key is the one set inside the config/kafka.php file.
-     */
-    public function getTopic(): string;
-
-    /**
-     * The partition where the record should be to send.
-     */
-    public function getPartition(): ?int;
-
-    /**
      * The key that defines which partition kafka will put the record.
      * If a key is passed, kafka can guarantee order inside a group of consumers.
      * If no key is passed, kafka cannot guarantee that the record will be delivery

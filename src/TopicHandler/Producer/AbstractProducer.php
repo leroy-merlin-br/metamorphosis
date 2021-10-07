@@ -14,17 +14,7 @@ class AbstractProducer implements HandlerInterface
     /**
      * @var string
      */
-    protected $topic;
-
-    /**
-     * @var string
-     */
     protected $key;
-
-    /**
-     * @var int
-     */
-    protected $partition;
 
     /**
      * @var ConfigOptions
@@ -35,8 +25,6 @@ class AbstractProducer implements HandlerInterface
     {
         $this->record = $record;
         $this->key = $key;
-        $this->topic = $configOptions->getTopicConfigName();
-        $this->partition = $configOptions->getPartition();
         $this->configOptions = $configOptions;
     }
 
@@ -48,16 +36,6 @@ class AbstractProducer implements HandlerInterface
     public function getRecord()
     {
         return $this->record;
-    }
-
-    public function getTopic(): string
-    {
-        return $this->topic;
-    }
-
-    public function getPartition(): ?int
-    {
-        return $this->partition;
     }
 
     public function getKey(): ?string

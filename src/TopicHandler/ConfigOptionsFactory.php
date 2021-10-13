@@ -35,7 +35,7 @@ class ConfigOptionsFactory
 
     private function getTopic(string $configName, string $topicName): array
     {
-        $topic = config($configName . '.topics.' . $topicName);
+        $topic = config($configName.'.topics.'.$topicName);
         $topic['topicId'] = $topic['topic_id'];
 
         return $topic;

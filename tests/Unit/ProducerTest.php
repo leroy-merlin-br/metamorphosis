@@ -10,7 +10,7 @@ use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use Metamorphosis\TopicHandler\Producer\AbstractProducer;
-use Metamorphosis\TopicHandler\Producer\ConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions;
 use Mockery as m;
 use RdKafka\Producer as KafkaProducer;
 use RdKafka\ProducerTopic;

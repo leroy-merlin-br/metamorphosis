@@ -4,7 +4,7 @@ namespace Metamorphosis\Connectors\Producer;
 use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\TopicHandler\Producer\ConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions;
 
 class Config extends AbstractConfig
 {

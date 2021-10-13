@@ -72,6 +72,6 @@ class ConfigManager
             return;
         }
 
-        $this->replace($overrideConfig);
+        $this->replace($overrideConfig->toArray());
     }
 }

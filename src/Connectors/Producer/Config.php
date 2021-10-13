@@ -52,7 +52,7 @@ class Config extends AbstractConfig
             config('kafka.middlewares.producer', []),
             $topicConfig['producer']['middlewares'] ?? []
         );
-        $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
+        $brokerConfig = $this->getBrokerConfig('kafka', $topicConfig['broker']);
         $schemaConfig = $this->getSchemaConfig('kafka', $topicId);
         $config = array_merge($topicConfig, $brokerConfig, $schemaConfig);
 

@@ -6,9 +6,9 @@ use Metamorphosis\Exceptions\ConfigurationException;
 
 abstract class AbstractConfig
 {
-    protected function getBrokerConfig(string $brokerId): array
+    protected function getBrokerConfig(string $configName, string $brokerId): array
     {
-        if (!$brokerConfig = config("kafka.brokers.{$brokerId}")) {
+        if (!$brokerConfig = config($configName.".brokers.{$brokerId}")) {
             throw new ConfigurationException("Broker '{$brokerId}' configuration not found");
         }
 

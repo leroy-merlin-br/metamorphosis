@@ -3,14 +3,19 @@ namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Metamorphosis\TopicHandler\ConfigOptions;
+use Mockery as m;
 use Tests\LaravelTestCase;
+use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class ConfigTest extends LaravelTestCase
 {
     public function testShouldValidateConsumerConfig(): void
     {
         // Set
-        config(['kafka.topics.default.consumer.consumer_groups.test-consumer-group.handler' => '\Tests\Unit\Dummies\ConsumerHandlerDummy']);
+        config(['kafka.topics.default.consumer.consumer_groups.test-consumer-group.handler' => ConsumerHandlerDummy::class]);
+        $consumerHandler = $this->instance(ConsumerHandlerDummy::class, m::mock(ConsumerHandlerDummy::class));
+        $configOptions = m::mock(ConfigOptions::class);
 
         $config = new Config();
         $options = [
@@ -30,7 +35,7 @@ class ConfigTest extends LaravelTestCase
             'offset_reset' => 'earliest',
             'offset' => 0,
             'partition' => 0,
-            'handler' => '\Tests\Unit\Dummies\ConsumerHandlerDummy',
+            'handler' => 'Tests\Unit\Dummies\ConsumerHandlerDummy',
             'timeout' => 20000,
             'consumer_group' => 'test-consumer-group',
             'connections' => 'kafka:9092',
@@ -43,6 +48,17 @@ class ConfigTest extends LaravelTestCase
             'url' => '',
             'request_options' => [],
         ];
+
+        // Expectations
+        $consumerHandler->expects()
+            ->getConfigOptions()
+            ->andReturn($configOptions);
+
+        $configOptions->expects()
+            ->toArray()
+            ->andReturn([
+                'topic_id' => 'kafka-override',
+            ]);
 
         // Actions
         $configManager = $config->make($options, $arguments);

@@ -31,7 +31,7 @@ abstract class AbstractHandler implements Handler
     {
     }
 
-    public function getConfigOptions(): ConfigOptions
+    public function getConfigOptions(): ?ConfigOptions
     {
         return $this->configOptions;
     }

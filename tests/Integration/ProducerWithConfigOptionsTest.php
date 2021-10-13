@@ -79,7 +79,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
             0,
             [],
             [],
-            2000,
+            20000,
             false,
             true,
             600,

@@ -3,6 +3,7 @@ namespace Metamorphosis\TopicHandler\Producer;
 
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Record\ProducerRecord;
+use Metamorphosis\TopicHandler\ConfigOptions;
 
 class AbstractProducer implements HandlerInterface
 {

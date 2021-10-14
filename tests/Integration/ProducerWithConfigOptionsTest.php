@@ -74,7 +74,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
     protected function haveAHandlerConfigured(): void
     {
         $this->configOptions = new ConfigOptions(
-            'sale_order',
+            'sale_order_override',
             ['connections' => 'kafka:9092'],
             0,
             [],
@@ -112,7 +112,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
     {
         Log::shouldReceive('info')
             ->with('Record successfully sent to broker.', [
-                'topic' => 'sale_order',
+                'topic' => 'sale_order_override',
                 'payload' => '{"saleOrderId":"SALE_ORDER_ID"}',
                 'key' => '1',
                 'partition' => 0,

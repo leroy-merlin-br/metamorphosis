@@ -3,6 +3,7 @@ namespace Metamorphosis\TopicHandler\Producer;
 
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Record\ProducerRecord;
+use Metamorphosis\TopicHandler\ConfigOptions;
 
 class AbstractProducer implements HandlerInterface
 {
@@ -51,8 +52,8 @@ class AbstractProducer implements HandlerInterface
             $record = $this->encodeRecord($record);
         }
 
-        $topic = $this->getTopic();
-        $partition = $this->getPartition();
+        $topic = $this->getConfigOptions()->getTopicId();
+        $partition = $this->getConfigOptions()->getPartition();
         $key = $this->getKey();
 
         return new ProducerRecord($record, $topic, $partition, $key);

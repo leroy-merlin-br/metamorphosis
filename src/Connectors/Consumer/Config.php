@@ -39,10 +39,10 @@ class Config extends AbstractConfig
 
     public function make(array $options, array $arguments): ConfigManager
     {
-        $configName = $arguments['config_name'] ?? 'kafka';
+        $configName = $options['config_name'] ?? 'kafka';
         $topicConfig = $this->getTopicConfig($configName, $arguments['topic']);
         $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer_group']);
-        $brokerConfig = $this->getBrokerConfig($topicConfig['broker']);
+        $brokerConfig = $this->getBrokerConfig($configName, $topicConfig['broker']);
         $schemaConfig = $this->getSchemaConfig($configName, $arguments['topic']);
         $config = array_merge(
             $topicConfig,

@@ -1,5 +1,5 @@
 <?php
-namespace Metamorphosis\TopicHandler\Producer;
+namespace Metamorphosis\TopicHandler;
 
 class ConfigOptions
 {
@@ -90,7 +90,7 @@ class ConfigOptions
     private $timeout;
 
     /**
-     * @var int|null
+     * @var int
      */
     private $partition;
 
@@ -102,7 +102,7 @@ class ConfigOptions
     public function __construct(
         string $topicId,
         array $broker,
-        ?int $partition = null,
+        int $partition = 0,
         array $avroSchema = [],
         array $middlewares = [],
         int $timeout = 1000,
@@ -158,7 +158,7 @@ class ConfigOptions
         return $this->broker;
     }
 
-    public function getPartition(): ?int
+    public function getPartition(): int
     {
         return $this->partition;
     }
@@ -173,6 +173,7 @@ class ConfigOptions
             'auth' => $broker['auth'] ?? null,
             'timeout' => $this->getTimeout(),
             'is_async' => $this->isAsync(),
+            'partition' => $this->getPartition(),
             'required_acknowledgment' => $this->isRequiredAcknowledgment(),
             'max_poll_records' => $this->getMaxPollRecords(),
             'flush_attempts' => $this->getFlushAttempts(),

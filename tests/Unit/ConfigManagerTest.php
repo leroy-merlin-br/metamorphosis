@@ -2,6 +2,7 @@
 namespace Tests\Unit;
 
 use Metamorphosis\ConfigManager;
+use Metamorphosis\TopicHandler\ConfigOptions;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 use Mockery as m;
 use Tests\LaravelTestCase;
@@ -22,16 +23,25 @@ class ConfigManagerTest extends LaravelTestCase
             ],
             'topic_id' => 'kafka-test',
         ];
-        $overrideConfig = [
-            'topic_id' => 'kafka-override',
-        ];
+        $configOptions = new ConfigOptions(
+            'kafka-override',
+            ['connections' => 'kafka:9092'],
+            1,
+            [],
+            [],
+            200,
+            false,
+            true,
+            200,
+            1
+        );
 
         $configManager = new ConfigManager();
 
         // Expectations
         $handler->expects()
             ->getConfigOptions()
-            ->andReturn($overrideConfig);
+            ->andReturn($configOptions);
 
         // Actions
         $configManager->set($config);

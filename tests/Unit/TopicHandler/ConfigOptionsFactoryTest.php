@@ -22,7 +22,9 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
             ],
             'timeout' => 1000,
             'is_async' => true,
+            'handler' => "\App\Kafka\Consumers\ConsumerExample",
             'partition' => -1,
+            'consumer_group' => 'default',
             'required_acknowledgment' => false,
             'max_poll_records' => 500,
             'flush_attempts' => 10,
@@ -38,6 +40,9 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
                     ],
                 ],
             ],
+            'auto_commit' => true,
+            'commit_async' => true,
+            'offset_reset' => 'smallest',
         ];
         // Actions
         $result = $factory->makeByConfigNameWithSchema(
@@ -63,12 +68,17 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
             'auth' => null,
             'timeout' => 1000,
             'is_async' => true,
+            'handler' => "\App\Kafka\Consumers\ConsumerExample",
             'partition' => -1,
+            'consumer_group' => 'default',
             'required_acknowledgment' => false,
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'middlewares' => [],
             'avro_schema' => [],
+            'auto_commit' => true,
+            'commit_async' => true,
+            'offset_reset' => 'smallest',
         ];
 
         // Actions

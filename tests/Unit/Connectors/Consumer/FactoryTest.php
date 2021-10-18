@@ -56,6 +56,17 @@ class FactoryTest extends LaravelTestCase
         $this->assertInstanceOf(LowLevel::class, $manager->getConsumer());
     }
 
+    public function testItMakesManagerWithLowLevelConsumerWhenPartitionIsNotValid(): void
+    {
+        // Set
+        $config = new Config();
+        $configManager = $config->make(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition', 'partition' => -1]);
+        $manager = Factory::make($configManager);
+
+        // Assertions
+        $this->assertInstanceOf(HighLevel::class, $manager->getConsumer());
+    }
+
     public function testItMakesHighLevelClass(): void
     {
         // Set

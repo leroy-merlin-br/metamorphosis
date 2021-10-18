@@ -12,7 +12,7 @@ class ConfigOptionsTest extends LaravelTestCase
         $configOptions = new ConfigOptions(
             'topic-id',
             ['connections' => 'kafka:9092'],
-            1,
+            null,
             [],
             [],
             200,
@@ -28,7 +28,7 @@ class ConfigOptionsTest extends LaravelTestCase
             'auth' => null,
             'timeout' => 200,
             'is_async' => false,
-            'partition' => 1,
+            'partition' => RD_KAFKA_PARTITION_UA,
             'required_acknowledgment' => true,
             'max_poll_records' => 200,
             'flush_attempts' => 1,

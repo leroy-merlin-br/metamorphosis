@@ -27,7 +27,9 @@ class Factory
 
     protected static function requiresPartition(ConfigManager $configManager): bool
     {
-        return $configManager->has('partition');
+        $partition = $configManager->get('partition');
+
+        return !is_null($partition) && $partition >= 0;
     }
 
     private static function getConsumer(bool $autoCommit, ConfigManager $configManager): ConsumerInterface

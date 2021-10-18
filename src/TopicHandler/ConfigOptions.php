@@ -90,7 +90,7 @@ class ConfigOptions
     private $timeout;
 
     /**
-     * @var int
+     * @var ?int
      */
     private $partition;
 
@@ -102,7 +102,7 @@ class ConfigOptions
     public function __construct(
         string $topicId,
         array $broker,
-        int $partition = 0,
+        ?int $partition = null,
         array $avroSchema = [],
         array $middlewares = [],
         int $timeout = 1000,
@@ -160,7 +160,7 @@ class ConfigOptions
 
     public function getPartition(): int
     {
-        return $this->partition;
+        return $this->partition ?? RD_KAFKA_PARTITION_UA;
     }
 
     public function toArray(): array

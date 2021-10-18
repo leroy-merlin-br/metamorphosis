@@ -102,7 +102,7 @@ class ConfigOptions
     public function __construct(
         string $topicId,
         array $broker,
-        ?int $partition,
+        ?int $partition = null,
         array $avroSchema = [],
         array $middlewares = [],
         int $timeout = 1000,

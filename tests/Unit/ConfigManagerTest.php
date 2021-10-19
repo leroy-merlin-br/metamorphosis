@@ -26,14 +26,17 @@ class ConfigManagerTest extends LaravelTestCase
         $configOptions = new ConfigOptions(
             'kafka-override',
             ['connections' => 'kafka:9092'],
-            1,
+            '\App\Kafka\Consumers\ConsumerExample',
+            null,
+            'default',
             [],
             [],
             200,
             false,
             true,
             200,
-            1
+            1,
+            10
         );
 
         $configManager = new ConfigManager();

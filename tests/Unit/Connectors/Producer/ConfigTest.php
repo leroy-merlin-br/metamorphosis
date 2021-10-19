@@ -101,7 +101,7 @@ class ConfigTest extends LaravelTestCase
                 'password' => 'PASSWORD',
             ],
         ];
-        $configOptions = new ConfigOptions('TOPIC-ID', $broker);
+        $configOptions = new ConfigOptions('TOPIC-ID', $broker, 'App\Kafka\Consumers\ConsumerExample');
 
         $expected = [
             'topic_id' => 'TOPIC-ID',

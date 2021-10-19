@@ -1,8 +1,6 @@
 <?php
 namespace Metamorphosis\TopicHandler;
 
-use Metamorphosis\Exceptions\ConfigurationException;
-
 class ConfigOptionsFactory
 {
     public function makeByConfigName(string $configName, string $topicName, string $brokerName): ConfigOptions
@@ -42,8 +40,8 @@ class ConfigOptionsFactory
 
         $consumer = current($topic['consumer']);
 
-        $topic['consumer_group'] =  key($consumer);
-        $topic['handler'] =  current($consumer)['handler'];
+        $topic['consumer_group'] = key($consumer);
+        $topic['handler'] = current($consumer)['handler'];
 
         return $topic;
     }

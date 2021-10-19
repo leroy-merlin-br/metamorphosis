@@ -253,7 +253,7 @@ class ConfigOptions
             'avro_schema' => $this->getAvroSchema(),
             'auto_commit' => $this->isAutoCommit(),
             'commit_async' => $this->isCommitASync(),
-            'offset_reset' => $this->getOffsetReset()
+            'offset_reset' => $this->getOffsetReset(),
         ];
     }
 }

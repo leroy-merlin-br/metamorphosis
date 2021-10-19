@@ -71,7 +71,7 @@ class CachedSchemaRegistryClient
         $schema = app(Schema::class);
 
         $version = 'latest' === $version ? 'latest' : (int) $version;
-        $url = sprintf('/subjects/%s/versions/%s', $subject, $version);
+        $url = sprintf('subjects/%s/versions/%s', $subject, $version);
         [$status, $response] = $this->client->get($url);
 
         if (404 === $status) {

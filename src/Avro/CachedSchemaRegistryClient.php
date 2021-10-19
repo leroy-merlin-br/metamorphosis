@@ -28,7 +28,7 @@ class CachedSchemaRegistryClient
     }
 
     /**
-     * GET /schemas/ids/{int: id}
+     * GET schemas/ids/{int: id}
      * Retrieve a parsed avro schema by id or None if not found
      *
      * @param string|int $schemaId
@@ -40,7 +40,7 @@ class CachedSchemaRegistryClient
         }
 
         $schema = app(Schema::class);
-        $url = sprintf('/schemas/ids/%d', $schemaId);
+        $url = sprintf('schemas/ids/%d', $schemaId);
         [$status, $response] = $this->client->get($url);
 
         if (404 === $status) {
@@ -71,7 +71,7 @@ class CachedSchemaRegistryClient
         $schema = app(Schema::class);
 
         $version = 'latest' === $version ? 'latest' : (int) $version;
-        $url = sprintf('/subjects/%s/versions/%s', $subject, $version);
+        $url = sprintf('subjects/%s/versions/%s', $subject, $version);
         [$status, $response] = $this->client->get($url);
 
         if (404 === $status) {

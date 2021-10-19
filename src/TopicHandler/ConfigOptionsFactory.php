@@ -40,7 +40,7 @@ class ConfigOptionsFactory
 
         $consumer = current($topic['consumer']);
 
-        $topic['consumer_group'] = key($consumer);
+        $topic['consumerGroup'] = key($consumer);
         $topic['handler'] = current($consumer)['handler'];
 
         return $topic;

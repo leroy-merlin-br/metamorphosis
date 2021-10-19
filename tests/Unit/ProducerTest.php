@@ -15,6 +15,7 @@ use Mockery as m;
 use RdKafka\Producer as KafkaProducer;
 use RdKafka\ProducerTopic;
 use Tests\LaravelTestCase;
+use Tests\Unit\Dummies\ProducerHandlerDummy;
 
 class ProducerTest extends LaravelTestCase
 {
@@ -298,7 +299,7 @@ class ProducerTest extends LaravelTestCase
         $broker = [
             'connections' => 'kafka:9092',
         ];
-        $configOptions = new ConfigOptions($topicId, $broker);
+        $configOptions = new ConfigOptions($topicId, $broker, ProducerHandlerDummy::class);
         $producerHandler = new class($record, $configOptions) extends AbstractProducer {
         };
 

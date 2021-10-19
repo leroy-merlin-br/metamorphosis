@@ -31,7 +31,7 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
 
         // Expectations
         $httpClient->expects()
-            ->get('/schemas/ids/123')
+            ->get('schemas/ids/123')
             ->andReturn([$status, $response]);
 
         // Actions
@@ -58,7 +58,7 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
 
         // Expectations
         $httpClient->expects()
-            ->get('/schemas/ids/123')
+            ->get('schemas/ids/123')
             ->once()
             ->andReturn([$status, $response]);
 
@@ -88,7 +88,7 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Schema not found');
         $httpClient->expects()
-            ->get('/schemas/ids/123')
+            ->get('schemas/ids/123')
             ->andReturn([$status, $response]);
 
         // Actions
@@ -114,7 +114,7 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("Unable to get schema for the specific ID: {$status}");
         $httpClient->expects()
-            ->get('/schemas/ids/123')
+            ->get('schemas/ids/123')
             ->andReturn([$status, $response]);
 
         // Actions

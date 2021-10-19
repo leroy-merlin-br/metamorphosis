@@ -38,6 +38,11 @@ class ConfigOptionsFactory
         $topic = config($configName.'.topics.'.$topicName);
         $topic['topicId'] = $topic['topic_id'];
 
+        $consumer = current($topic['consumer']);
+
+        $topic['consumer_group'] = key($consumer);
+        $topic['handler'] = current($consumer)['handler'];
+
         return $topic;
     }
 }

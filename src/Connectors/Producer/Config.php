@@ -40,7 +40,9 @@ class Config extends AbstractConfig
     public function make(ConfigOptions $configOptions): ConfigManager
     {
         $configManager = app(ConfigManager::class);
-        $configManager->set($configOptions->toArray());
+        $data = $configOptions->toArray();
+        unset($data['handler']);
+        $configManager->set($data);
 
         return $configManager;
     }

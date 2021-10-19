@@ -76,7 +76,9 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
         $this->configOptions = new ConfigOptions(
             'sale_order_override',
             ['connections' => 'kafka:9092'],
+            '\App\Kafka\Consumers\ConsumerOverride',
             null,
+            'test-consumer-group',
             [],
             [],
             20000,

@@ -99,17 +99,47 @@ class ConfigOptions
      */
     private $topicId;
 
+    /**
+     * @var string
+     */
+    private $consumerGroup;
+
+    /**
+     * @var string
+     */
+    private $handler;
+
+    /**
+     * @var bool
+     */
+    private $autoCommit;
+
+    /**
+     * @var bool
+     */
+    private $commitASync;
+
+    /**
+     * @var string
+     */
+    private $offsetReset;
+
     public function __construct(
         string $topicId,
         array $broker,
+        string $handler,
         ?int $partition = null,
+        string $consumerGroup = 'default',
         array $avroSchema = [],
         array $middlewares = [],
         int $timeout = 1000,
         bool $isAsync = true,
         bool $requiredAcknowledgment = false,
         int $maxPollRecords = 500,
-        int $flushAttempts = 10
+        int $flushAttempts = 10,
+        bool $autoCommit = true,
+        bool $commitASync = true,
+        string $offsetReset = 'smallest'
     ) {
         $this->broker = $broker;
         $this->middlewares = $middlewares;
@@ -121,6 +151,11 @@ class ConfigOptions
         $this->partition = $partition;
         $this->topicId = $topicId;
         $this->avroSchema = $avroSchema;
+        $this->consumerGroup = $consumerGroup;
+        $this->handler = $handler;
+        $this->autoCommit = $autoCommit;
+        $this->commitASync = $commitASync;
+        $this->offsetReset = $offsetReset;
     }
 
     public function getTimeout(): int
@@ -163,6 +198,41 @@ class ConfigOptions
         return $this->partition ?? RD_KAFKA_PARTITION_UA;
     }
 
+    public function getTopicId(): string
+    {
+        return $this->topicId;
+    }
+
+    public function getAvroSchema(): array
+    {
+        return $this->avroSchema;
+    }
+
+    public function getConsumerGroup(): string
+    {
+        return $this->consumerGroup;
+    }
+
+    public function getHandler(): string
+    {
+        return $this->handler;
+    }
+
+    public function isAutoCommit(): bool
+    {
+        return $this->autoCommit;
+    }
+
+    public function isCommitASync(): bool
+    {
+        return $this->commitASync;
+    }
+
+    public function getOffsetReset(): string
+    {
+        return $this->offsetReset;
+    }
+
     public function toArray(): array
     {
         $broker = $this->getBroker();
@@ -173,22 +243,17 @@ class ConfigOptions
             'auth' => $broker['auth'] ?? null,
             'timeout' => $this->getTimeout(),
             'is_async' => $this->isAsync(),
+            'handler' => $this->getHandler(),
             'partition' => $this->getPartition(),
+            'consumer_group' => $this->getConsumerGroup(),
             'required_acknowledgment' => $this->isRequiredAcknowledgment(),
             'max_poll_records' => $this->getMaxPollRecords(),
             'flush_attempts' => $this->getFlushAttempts(),
             'middlewares' => $this->getMiddlewares(),
             'avro_schema' => $this->getAvroSchema(),
+            'auto_commit' => $this->isAutoCommit(),
+            'commit_async' => $this->isCommitASync(),
+            'offset_reset' => $this->getOffsetReset(),
         ];
-    }
-
-    public function getTopicId(): string
-    {
-        return $this->topicId;
-    }
-
-    public function getAvroSchema(): array
-    {
-        return $this->avroSchema;
     }
 }

@@ -79,8 +79,8 @@ class ProducerWithAvroTest extends LaravelTestCase
                     ],
                 ],
                 'avro_schemas' => [
-                    'sale_order' => ['url' => 'http://schema-registry'],
-                    'product' => ['url' => 'http://schema-registry'],
+                    'sale_order' => ['url' => 'http://schema-registry/'],
+                    'product' => ['url' => 'http://schema-registry/'],
                 ],
             ],
         ]);

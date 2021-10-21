@@ -33,27 +33,17 @@ class ConfigManager
 
     public function set(array $config): void
     {
-        $this->middlewares = [];
-        $middlewares = $config['middlewares'] ?? [];
-        unset($config['middlewares']);
-
-        $this->setting = $config;
-        foreach ($middlewares as $middleware) {
-            $this->middlewares[] = is_string($middleware) ? app($middleware, ['configManager' => $this]) : $middleware;
-        }
-
         if ($handlerName = $config['handler'] ?? null) {
             // Add Consumer Handler as a middleware
             $consumerHandler = app($handlerName);
 
-            $this->overrideHandlerConfig($consumerHandler);
-            $this->middlewares[] = new ConsumerMiddleware($consumerHandler);
+            $this->setConfig($consumerHandler, $config);
         }
-    }
 
-    public function replace(array $overrideConfig): void
-    {
-        $this->setting = array_replace_recursive($this->setting, $overrideConfig);
+        foreach ($this->get('middlewares') as $middleware) {
+            $this->middlewares[] = is_string($middleware) ? app($middleware, ['configManager' => $this]) : $middleware;
+        }
+        $this->middlewares[] = new ConsumerMiddleware($consumerHandler);
     }
 
     public function has(string $key): bool
@@ -66,12 +56,14 @@ class ConfigManager
         return $this->middlewares;
     }
 
-    private function overrideHandlerConfig(AbstractHandler $handler): void
+    private function setConfig(AbstractHandler $handler, array $config): void
     {
         if (!$overrideConfig = $handler->getConfigOptions()) {
+            $this->setting = $config;
+
             return;
         }
 
-        $this->replace($overrideConfig->toArray());
+        $this->setting = $overrideConfig->toArray();
     }
 }

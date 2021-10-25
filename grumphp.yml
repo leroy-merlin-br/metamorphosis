@@ -1,0 +1,2 @@
+grumphp:
+    tasks: { yamllint: null }

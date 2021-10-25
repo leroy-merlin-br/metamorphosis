@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="4.11.1@e33492398bd4e5e2ab60e331d445979bd83feecd">
+  <file src="src/Avro/Client.php">
+    <ImplicitToStringCast occurrences="1">
+      <code>$response-&gt;getBody()</code>
+    </ImplicitToStringCast>
+  </file>
+  <file src="src/Connectors/AbstractConfig.php">
+    <InvalidReturnStatement occurrences="1">
+      <code>$brokerConfig</code>
+    </InvalidReturnStatement>
+    <UndefinedThisPropertyFetch occurrences="1">
+      <code>$this-&gt;rules</code>
+    </UndefinedThisPropertyFetch>
+  </file>
+  <file src="src/Connectors/Consumer/Config.php">
+    <InvalidReturnStatement occurrences="1">
+      <code>$topicConfig</code>
+    </InvalidReturnStatement>
+  </file>
+  <file src="src/Connectors/Consumer/LowLevel.php">
+    <UndefinedMethod occurrences="1">
+      <code>consumeStart</code>
+    </UndefinedMethod>
+  </file>
+  <file src="src/Connectors/Consumer/Manager.php">
+    <UndefinedInterfaceMethod occurrences="2">
+      <code>commit</code>
+      <code>commitAsync</code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="src/Connectors/Producer/Connector.php">
+    <UndefinedInterfaceMethod occurrences="2">
+      <code>failed</code>
+      <code>success</code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="src/Console/ConsumerCommand.php">
+    <InvalidDocblock occurrences="3">
+      <code>protected $description = 'Consumes something';</code>
+      <code>protected $name = 'kafka:consume';</code>
+      <code>protected $signature = 'kafka:consume</code>
+    </InvalidDocblock>
+  </file>
+  <file src="src/Middlewares/AvroSchemaDecoder.php">
+    <InvalidPropertyAssignmentValue occurrences="1">
+      <code>new MessageDecoder($factory-&gt;make($configManager))</code>
+    </InvalidPropertyAssignmentValue>
+    <UndefinedInterfaceMethod occurrences="1">
+      <code>decodeMessage</code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="src/Middlewares/Handler/Dispatcher.php">
+    <InvalidArgument occurrences="1">
+      <code>$this-&gt;queue</code>
+    </InvalidArgument>
+  </file>
+  <file src="src/Middlewares/Handler/Iterator.php">
+    <InvalidArgument occurrences="2">
+      <code>$this-&gt;queue</code>
+      <code>$this-&gt;queue</code>
+    </InvalidArgument>
+  </file>
+  <file src="src/Middlewares/Handler/Producer.php">
+    <InvalidNullableReturnType occurrences="1">
+      <code>int</code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement occurrences="1">
+      <code>is_null($record-&gt;getPartition()) ? $this-&gt;partition : $record-&gt;getPartition()</code>
+    </NullableReturnStatement>
+  </file>
+  <file src="src/Producer.php">
+    <UndefinedInterfaceMethod occurrences="1">
+      <code>getTopic</code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="src/Producer/Poll.php">
+    <InvalidScalarArgument occurrences="1">
+      <code>$this-&gt;timeout / 1000</code>
+    </InvalidScalarArgument>
+    <TypeDoesNotContainType occurrences="1">
+      <code>0 === $this-&gt;producer-&gt;poll($this-&gt;timeout)</code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="src/Record/ConsumerRecord.php">
+    <InvalidNullableReturnType occurrences="1">
+      <code>string</code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement occurrences="1">
+      <code>$this-&gt;original-&gt;key</code>
+    </NullableReturnStatement>
+  </file>
+</files>

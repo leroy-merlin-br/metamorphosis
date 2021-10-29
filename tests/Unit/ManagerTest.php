@@ -18,7 +18,7 @@ class ManagerTest extends LaravelTestCase
                 Log::class,
                 app(JsonDecode::class),
             ],
-            'other' => 'config',
+            'other' => 'config'
         ]);
 
         // Actions

@@ -50,7 +50,7 @@ class ProducerRecord implements RecordInterface
         $this->payload = $payload;
     }
 
-    public function getPayload(): string
+    public function getPayload()
     {
         return $this->payload;
     }

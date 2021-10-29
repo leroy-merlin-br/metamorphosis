@@ -33,27 +33,31 @@ class ConfigManager
 
     public function set(array $config): void
     {
-        $this->middlewares = [];
-        $middlewares = $config['middlewares'] ?? [];
-        unset($config['middlewares']);
+        $consumerHandler = null;
+        if ($handlerName = $config['handler'] ?? null) {
+            // Add Consumer Handler as a middleware
+            $consumerHandler = app($handlerName);
+        }
+        $this->setConfig($config, $consumerHandler);
 
-        $this->setting = $config;
+        $middlewares = $this->get('middlewares', []);
+        $this->middlewares = [];
+        $this->remove('middlewares');
+
         foreach ($middlewares as $middleware) {
             $this->middlewares[] = is_string($middleware) ? app($middleware, ['configManager' => $this]) : $middleware;
         }
 
-        if ($handlerName = $config['handler'] ?? null) {
-            // Add Consumer Handler as a middleware
-            $consumerHandler = app($handlerName);
-
-            $this->overrideHandlerConfig($consumerHandler);
-            $this->middlewares[] = new ConsumerMiddleware($consumerHandler);
+        if (!$consumerHandler) {
+            return;
         }
+
+        $this->middlewares[] = new ConsumerMiddleware($consumerHandler);
     }
 
-    public function replace(array $overrideConfig): void
+    private function remove(string $key): void
     {
-        $this->setting = array_replace_recursive($this->setting, $overrideConfig);
+        unset($this->setting[$key]);
     }
 
     public function has(string $key): bool
@@ -66,12 +70,14 @@ class ConfigManager
         return $this->middlewares;
     }
 
-    private function overrideHandlerConfig(AbstractHandler $handler): void
+    private function setConfig(array $config, ?AbstractHandler $handler): void
     {
-        if (!$overrideConfig = $handler->getConfigOptions()) {
+        if (!$handler || !$overrideConfig = $handler->getConfigOptions()) {
+            $this->setting = $config;
+
             return;
         }
 
-        $this->replace($overrideConfig->toArray());
+        $this->setting = $overrideConfig->toArray();
     }
 }

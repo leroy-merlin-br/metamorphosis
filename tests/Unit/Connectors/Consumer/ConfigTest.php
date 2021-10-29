@@ -57,7 +57,24 @@ class ConfigTest extends LaravelTestCase
         $configOptions->expects()
             ->toArray()
             ->andReturn([
+                'topic' => 'default',
                 'topic_id' => 'kafka-override',
+                'broker' => 'default',
+                'offset_reset' => 'earliest',
+                'offset' => 0,
+                'partition' => 0,
+                'handler' => 'Tests\Unit\Dummies\ConsumerHandlerDummy',
+                'timeout' => 20000,
+                'consumer_group' => 'test-consumer-group',
+                'connections' => 'kafka:9092',
+                'auth' => [
+                    'type' => 'ssl',
+                    'ca' => storage_path('ca.pem'),
+                    'certificate' => storage_path('kafka.cert'),
+                    'key' => storage_path('kafka.key'),
+                ],
+                'url' => '',
+                'request_options' => [],
             ]);
 
         // Actions

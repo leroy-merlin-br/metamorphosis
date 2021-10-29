@@ -29,14 +29,12 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'middlewares' => [],
-            'avro_schema' => [
-                'url' => '',
-                'ssl_verify' => true,
-                'request_options' => [
-                    'headers' => [
-                        'Authorization' => [
-                            'Basic Og==',
-                        ],
+            'url' => '',
+            'ssl_verify' => true,
+            'request_options' => [
+                'headers' => [
+                    'Authorization' => [
+                        'Basic Og==',
                     ],
                 ],
             ],
@@ -75,7 +73,9 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'middlewares' => [],
-            'avro_schema' => [],
+            'url' => null,
+            'ssl_verify' => null,
+            'request_options' => null,
             'auto_commit' => true,
             'commit_async' => true,
             'offset_reset' => 'smallest',

@@ -1,8 +1,8 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
+use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Authentication\Factory;
-use Metamorphosis\ConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
 use RdKafka\Conf;
@@ -11,7 +11,7 @@ use RdKafka\TopicConf;
 
 class LowLevel implements ConnectorInterface
 {
-    public function getConsumer(bool $autoCommit, ConfigManager $configManager): ConsumerInterface
+    public function getConsumer(bool $autoCommit, AbstractConfigManager $configManager): ConsumerInterface
     {
         $conf = $this->getConf();
         $conf->set('group.id', $configManager->get('consumer_group'));
@@ -32,7 +32,7 @@ class LowLevel implements ConnectorInterface
         return new LowLevelConsumer($topicConsumer, $configManager);
     }
 
-    protected function getTopicConfigs(ConfigManager $configManager)
+    protected function getTopicConfigs(AbstractConfigManager $configManager)
     {
         $topicConfig = new TopicConf();
 

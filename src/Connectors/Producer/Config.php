@@ -1,9 +1,10 @@
 <?php
 namespace Metamorphosis\Connectors\Producer;
 
-use Metamorphosis\ConfigManager;
+use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Metamorphosis\ProducerConfigManager;
 use Metamorphosis\TopicHandler\ConfigOptions;
 
 class Config extends AbstractConfig
@@ -37,9 +38,9 @@ class Config extends AbstractConfig
         'ssl_verify' => false,
     ];
 
-    public function make(ConfigOptions $configOptions): ConfigManager
+    public function make(ConfigOptions $configOptions): AbstractConfigManager
     {
-        $configManager = app(ConfigManager::class);
+        $configManager = app(ProducerConfigManager::class);
         $data = $configOptions->toArray();
         unset($data['handler']);
         $configManager->set($data);
@@ -47,7 +48,7 @@ class Config extends AbstractConfig
         return $configManager;
     }
 
-    public function makeByTopic(string $topicId): ConfigManager
+    public function makeByTopic(string $topicId): AbstractConfigManager
     {
         $topicConfig = $this->getTopicConfig($topicId);
         $topicConfig['middlewares'] = array_merge(
@@ -61,7 +62,7 @@ class Config extends AbstractConfig
         $this->validate($config);
         $config = array_merge($this->default, $config);
 
-        $configManager = app(ConfigManager::class);
+        $configManager = app(ProducerConfigManager::class);
         $configManager->set($config);
 
         return $configManager;

@@ -1,8 +1,9 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\ConfigManager;
+use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\AbstractConfig;
+use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Exceptions\ConfigurationException;
 
 /**
@@ -37,25 +38,24 @@ class Config extends AbstractConfig
         'middlewares' => 'array',
     ];
 
-    public function make(array $options, array $arguments): ConfigManager
+    public function make(array $options, array $arguments): AbstractConfigManager
     {
         $configName = $options['config_name'] ?? 'kafka';
         $topicConfig = $this->getTopicConfig($configName, $arguments['topic']);
         $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer_group']);
         $brokerConfig = $this->getBrokerConfig($configName, $topicConfig['broker']);
         $schemaConfig = $this->getSchemaConfig($configName, $arguments['topic']);
+        $override = array_merge($this->filterValues($options), $this->filterValues($arguments));
         $config = array_merge(
             $topicConfig,
             $brokerConfig,
             $consumerConfig,
-            $this->filterValues($options),
-            $this->filterValues($arguments),
             $schemaConfig
         );
 
-        $this->validate($config);
-        $configManager = app(ConfigManager::class);
-        $configManager->set($config);
+        $this->validate(array_merge($config, $override));
+        $configManager = app(ConsumerConfigManager::class);
+        $configManager->set($config, $override);
 
         return $configManager;
     }

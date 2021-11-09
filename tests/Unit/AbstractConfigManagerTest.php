@@ -1,14 +1,14 @@
 <?php
 namespace Tests\Unit;
 
-use Metamorphosis\ConfigManager;
+use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\TopicHandler\ConfigOptions;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 use Mockery as m;
 use Tests\LaravelTestCase;
 use Tests\Unit\Dummies\MiddlewareDummy;
 
-class ConfigManagerTest extends LaravelTestCase
+class AbstractConfigManagerTest extends LaravelTestCase
 {
     public function testShouldOverrideConfig(): void
     {
@@ -61,7 +61,7 @@ class ConfigManagerTest extends LaravelTestCase
             'offset_reset' => 'smallest',
         ];
 
-        $configManager = new ConfigManager();
+        $configManager = new ConsumerConfigManager();
 
         // Expectations
         $handler->expects()

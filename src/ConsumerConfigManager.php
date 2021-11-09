@@ -1,37 +1,12 @@
 <?php
 namespace Metamorphosis;
 
-use Illuminate\Support\Arr;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
-class ConfigManager
+class ConsumerConfigManager extends AbstractConfigManager
 {
-    /**
-     * @var array
-     */
-    private $setting = [];
-
-    /**
-     * @var array
-     */
-    private $middlewares = [];
-
-    /**
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    public function get(string $key = null, $default = null)
-    {
-        if (!$key) {
-            return $this->setting;
-        }
-
-        return Arr::get($this->setting, $key, $default);
-    }
-
-    public function set(array $config): void
+    public function set(array $config, ?array $commandConfig = null): void
     {
         $consumerHandler = null;
         if ($handlerName = $config['handler'] ?? null) {
@@ -39,6 +14,7 @@ class ConfigManager
             $consumerHandler = app($handlerName);
         }
         $this->setConfig($config, $consumerHandler);
+        $this->setCommandConfig($commandConfig);
 
         $middlewares = $this->get('middlewares', []);
         $this->middlewares = [];
@@ -55,19 +31,13 @@ class ConfigManager
         $this->middlewares[] = new ConsumerMiddleware($consumerHandler);
     }
 
-    private function remove(string $key): void
+    private function setCommandConfig(?array $commandConfig): void
     {
-        unset($this->setting[$key]);
-    }
+        if (!$commandConfig) {
+            return;
+        }
 
-    public function has(string $key): bool
-    {
-        return !is_null($this->get($key));
-    }
-
-    public function middlewares(): array
-    {
-        return $this->middlewares;
+        $this->setting = array_merge($this->setting, $commandConfig);
     }
 
     private function setConfig(array $config, ?AbstractHandler $handler): void

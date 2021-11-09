@@ -2,8 +2,8 @@
 namespace Tests\Unit\Connectors\Consumer;
 
 use Exception;
-use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Consumer\Manager;
+use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
@@ -21,7 +21,7 @@ class ManagerTest extends LaravelTestCase
     {
         parent::setUp();
 
-        $configManager = new ConfigManager();
+        $configManager = new ConsumerConfigManager();
         $configManager->set([
             'connections' => 'kafka:2019',
             'topic' => 'topic_key',

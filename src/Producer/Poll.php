@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Producer;
 
-use Metamorphosis\ConfigManager;
+use Metamorphosis\AbstractConfigManager;
 use RdKafka\Producer;
 use RuntimeException;
 
@@ -42,7 +42,7 @@ class Poll
      */
     private $producer;
 
-    public function __construct(Producer $producer, ConfigManager $configManager)
+    public function __construct(Producer $producer, AbstractConfigManager $configManager)
     {
         $this->isAsync = $configManager->get('is_async');
         $this->maxPollRecords = $configManager->get('max_poll_records');

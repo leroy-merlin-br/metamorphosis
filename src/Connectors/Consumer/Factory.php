@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\ConfigManager;
+use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 
@@ -12,7 +12,7 @@ use Metamorphosis\Middlewares\Handler\Dispatcher;
  */
 class Factory
 {
-    public static function make(ConfigManager $configManager): Manager
+    public static function make(AbstractConfigManager $configManager): Manager
     {
         $autoCommit = $configManager->get('auto_commit', true);
         $commitAsync = $configManager->get('commit_async', true);
@@ -25,14 +25,14 @@ class Factory
         return new Manager($consumer, $handler, $dispatcher, $autoCommit, $commitAsync);
     }
 
-    protected static function requiresPartition(ConfigManager $configManager): bool
+    protected static function requiresPartition(AbstractConfigManager $configManager): bool
     {
         $partition = $configManager->get('partition');
 
         return !is_null($partition) && $partition >= 0;
     }
 
-    private static function getConsumer(bool $autoCommit, ConfigManager $configManager): ConsumerInterface
+    private static function getConsumer(bool $autoCommit, AbstractConfigManager $configManager): ConsumerInterface
     {
         if (self::requiresPartition($configManager)) {
             return app(LowLevel::class)->getConsumer($autoCommit, $configManager);

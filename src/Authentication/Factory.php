@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Authentication;
 
-use Metamorphosis\ConfigManager;
+use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Exceptions\AuthenticationException;
 use RdKafka\Conf;
 
@@ -13,7 +13,7 @@ class Factory
 
     const TYPE_NONE = 'none';
 
-    public static function authenticate(Conf $conf, ConfigManager $configManager): void
+    public static function authenticate(Conf $conf, AbstractConfigManager $configManager): void
     {
         $type = $configManager->get('auth.type');
         switch ($type) {

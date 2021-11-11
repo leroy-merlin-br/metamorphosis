@@ -28,6 +28,17 @@ class ConfigOptionsFactory
         return $this->makeConfigOptions($params);
     }
 
+    public function makeProducerConfigOptions(string $configName, string $topicName, string $brokerName): ConfigOptions
+    {
+        $topic = $this->getTopic($configName, $topicName);
+        $broker = config($configName.'.brokers.'.$brokerName);
+
+        $params = array_merge($topic, compact('broker'));
+        $params['middlewares'] = [];
+
+        return $this->makeConfigOptions($params);
+    }
+
     private function makeConfigOptions($params): ConfigOptions
     {
         return app(ConfigOptions::class, $params);
@@ -39,10 +50,35 @@ class ConfigOptionsFactory
         $topic['topicId'] = $topic['topic_id'];
 
         $consumer = current($topic['consumer']);
-
         $topic['consumerGroup'] = key($consumer);
-        $topic['handler'] = current($consumer)['handler'];
 
-        return $topic;
+        return array_merge($topic, $this->getConsumerConfig($consumer));
+    }
+
+    private function getConsumerConfig(array $consumer): array
+    {
+        $consumerConfig = current($consumer);
+
+        if (isset($consumerConfig['auto_commit'])) {
+            $consumerConfig['autoCommit'] = $consumerConfig['auto_commit'];
+        }
+
+        if (isset($consumerConfig['max_poll_records'])) {
+            $consumerConfig['maxPollRecords'] = $consumerConfig['max_poll_records'];
+        }
+
+        if (isset($consumerConfig['flush_attempts'])) {
+            $consumerConfig['flushAttempts'] = $consumerConfig['flush_attempts'];
+        }
+
+        if (isset($consumerConfig['commit_async'])) {
+            $consumerConfig['commitAsync'] = $consumerConfig['commit_async'];
+        }
+
+        if (isset($consumerConfig['offset_reset'])) {
+            $consumerConfig['offsetReset'] = $consumerConfig['offset_reset'];
+        }
+
+        return $consumerConfig;
     }
 }

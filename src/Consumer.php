@@ -3,37 +3,26 @@
 namespace Metamorphosis;
 
 use Metamorphosis\Connectors\Consumer\Factory;
-use Metamorphosis\Connectors\Consumer\Manager;
+use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\TopicHandler\ConfigOptions;
 use RdKafka\Message;
 
 class Consumer
 {
     /**
-     * @var Manager
+     * @var ConsumerInterface
      */
-    private $manager;
+    private $consumer;
 
-    /**
-     * @var ConfigManager
-     */
-    private $configManager;
-
-    public function __construct(ConfigManager $configManager, Manager $manager)
+    public function __construct(ConsumerConfigManager $configManager, ConfigOptions $configOptions)
     {
-        $this->manager = $manager;
-        $this->configManager = $configManager;
-    }
+        $configManager->set($configOptions->toArray());
 
-    public function setup(ConfigOptions $configOptions)
-    {
-        $this->configManager->set($configOptions->toArray());
-
-        $this->manager = Factory::make($this->configManager);
+        $this->consumer = Factory::getConsumer(true, $configManager);
     }
 
     public function consume(): ?Message
     {
-        return $this->manager->consume();
+        return $this->consumer->consume();
     }
 }

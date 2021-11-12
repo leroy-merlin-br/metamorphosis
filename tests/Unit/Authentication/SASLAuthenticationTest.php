@@ -2,7 +2,7 @@
 namespace Tests\Unit\Authentication;
 
 use Metamorphosis\Authentication\SASLAuthentication;
-use Metamorphosis\ConfigManager;
+use Metamorphosis\ConsumerConfigManager;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
@@ -11,7 +11,7 @@ class SASLAuthenticationTest extends LaravelTestCase
     public function testItShouldValidateAuthenticationConfigurations(): void
     {
         // Set
-        $configManager = new ConfigManager();
+        $configManager = new ConsumerConfigManager();
         $configManager->set([
             'auth' => [
                 'type' => 'sasl_ssl',

@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\Consumers;
 
-use Metamorphosis\ConfigManager;
+use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Consumers\LowLevel;
 use Mockery as m;
 use RdKafka\ConsumerTopic;
@@ -15,7 +15,7 @@ class LowLevelTest extends LaravelTestCase
         // Set
         $timeout = 2;
         $partition = 3;
-        $configManager = new ConfigManager();
+        $configManager = new ConsumerConfigManager();
         $configManager->set(compact('timeout', 'partition'));
 
         $consumerTopic = m::mock(ConsumerTopic::class);

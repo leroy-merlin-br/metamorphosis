@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\Authentication;
 
-use Metamorphosis\ConfigManager;
+use Metamorphosis\AbstractConfigManager;
 use RdKafka\Conf;
 
 class SASLAuthentication implements AuthenticationInterface
@@ -12,11 +12,11 @@ class SASLAuthentication implements AuthenticationInterface
     private $conf;
 
     /**
-     * @var ConfigManager
+     * @var AbstractConfigManager
      */
     private $configManager;
 
-    public function __construct(Conf $conf, ConfigManager $configManager)
+    public function __construct(Conf $conf, AbstractConfigManager $configManager)
     {
         $this->conf = $conf;
         $this->configManager = $configManager;

@@ -1,8 +1,8 @@
 <?php
 namespace Tests\Unit\Producer;
 
-use Metamorphosis\ConfigManager;
 use Metamorphosis\Producer\Poll;
+use Metamorphosis\ProducerConfigManager;
 use Mockery as m;
 use RdKafka\Producer as KafkaProducer;
 use RuntimeException;
@@ -13,7 +13,7 @@ class PollTest extends LaravelTestCase
     public function testItShouldHandleMessageWithoutAcknowledgment(): void
     {
         // Set
-        $configManager = new ConfigManager();
+        $configManager = new ProducerConfigManager();
         $configManager->set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
@@ -36,7 +36,7 @@ class PollTest extends LaravelTestCase
     public function testShouldThrowExceptionWhenFlushFailed(): void
     {
         // Set
-        $configManager = new ConfigManager();
+        $configManager = new ProducerConfigManager();
         $configManager->set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,
@@ -65,7 +65,7 @@ class PollTest extends LaravelTestCase
     public function testItShouldHandleResponseEveryTimeWhenAsyncModeIsTrue(): void
     {
         // Set
-        $configManager = new ConfigManager();
+        $configManager = new ProducerConfigManager();
         $configManager->set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,

@@ -117,7 +117,9 @@ class ConfigTest extends LaravelTestCase
             'required_acknowledgment' => false,
             'max_poll_records' => 500,
             'flush_attempts' => 10,
-            'avro_schema' => [],
+            'url' => null,
+            'ssl_verify' => null,
+            'request_options' => null,
         ];
 
         // Actions

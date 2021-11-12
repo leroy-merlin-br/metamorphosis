@@ -1,13 +1,13 @@
 <?php
 namespace Tests\Unit;
 
-use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer;
+use Metamorphosis\ProducerConfigManager;
 use Metamorphosis\TopicHandler\ConfigOptions;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use Metamorphosis\TopicHandler\Producer\AbstractProducer;
@@ -30,7 +30,7 @@ class ProducerTest extends LaravelTestCase
         );
         $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
-        $configManager = m::mock(ConfigManager::class)->makePartial();
+        $configManager = m::mock(ProducerConfigManager::class)->makePartial();
         $producer = new Producer($config, $connector);
 
         $kafkaProducer = m::mock(KafkaProducer::class);
@@ -87,7 +87,7 @@ class ProducerTest extends LaravelTestCase
         );
         $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
-        $configManager = m::mock(ConfigManager::class)->makePartial();
+        $configManager = m::mock(ProducerConfigManager::class)->makePartial();
         $producer = new Producer($config, $connector);
 
         $kafkaProducer = m::mock(KafkaProducer::class);
@@ -144,7 +144,7 @@ class ProducerTest extends LaravelTestCase
         $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
         $producer = new Producer($config, $connector);
-        $configManager = m::mock(ConfigManager::class);
+        $configManager = m::mock(ProducerConfigManager::class);
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
@@ -222,7 +222,7 @@ class ProducerTest extends LaravelTestCase
 
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
-        $configManager = m::mock(ConfigManager::class);
+        $configManager = m::mock(ProducerConfigManager::class);
 
         $producerHandler = new class($record, $topic) extends AbstractHandler {
         };
@@ -295,7 +295,7 @@ class ProducerTest extends LaravelTestCase
 
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
-        $configManager = m::mock(ConfigManager::class);
+        $configManager = m::mock(ProducerConfigManager::class);
         $broker = [
             'connections' => 'kafka:9092',
         ];

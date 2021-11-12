@@ -1,8 +1,8 @@
 <?php
 namespace Tests\Unit\Connectors\Consumer;
 
-use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Consumer\LowLevel;
+use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
 use Tests\LaravelTestCase;
 
@@ -11,7 +11,7 @@ class LowLevelTest extends LaravelTestCase
     public function testItShouldMakeConnectorSetup(): void
     {
         // Set
-        $configManager = new ConfigManager();
+        $configManager = new ConsumerConfigManager();
         $configManager->set([
             'connections' => 'kafka:123',
             'consumer_group' => 'some-group',

@@ -2,7 +2,7 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
-use Metamorphosis\ConfigManager;
+use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Consumers\Runner;
@@ -44,7 +44,7 @@ class ConsumerCommand extends BaseCommand
         $runner->run($configManager->get('times'));
     }
 
-    private function writeStartingConsumer(ConfigManager $configManager)
+    private function writeStartingConsumer(AbstractConfigManager $configManager)
     {
         $text = 'Starting consumer for topic: '.$configManager->get('topic').PHP_EOL;
         $text .= ' on consumer group: '.$configManager->get('consumer_group').PHP_EOL;

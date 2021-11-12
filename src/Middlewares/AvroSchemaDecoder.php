@@ -1,10 +1,10 @@
 <?php
 namespace Metamorphosis\Middlewares;
 
+use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Serializer\Decoders\DecoderInterface;
 use Metamorphosis\Avro\Serializer\MessageDecoder;
-use Metamorphosis\ConfigManager;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Record\RecordInterface;
@@ -17,11 +17,11 @@ class AvroSchemaDecoder implements MiddlewareInterface
     private $decoder;
 
     /**
-     * @var ConfigManager
+     * @var AbstractConfigManager
      */
     private $configManager;
 
-    public function __construct(ConfigManager $configManager, ClientFactory $factory)
+    public function __construct(AbstractConfigManager $configManager, ClientFactory $factory)
     {
         $this->configManager = $configManager;
         if (!$this->configManager->get('url')) {

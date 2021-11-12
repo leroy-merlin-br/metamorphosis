@@ -1,10 +1,10 @@
 <?php
 namespace Tests\Unit\Middlewares\Handler;
 
-use Metamorphosis\ConfigManager;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Producer\Poll;
+use Metamorphosis\ProducerConfigManager;
 use Metamorphosis\Record\ProducerRecord;
 use Mockery as m;
 use RdKafka\ProducerTopic as KafkaTopicProducer;
@@ -16,7 +16,7 @@ class ProducerTest extends LaravelTestCase
     {
         parent::setUp();
 
-        $configManager = new ConfigManager();
+        $configManager = new ProducerConfigManager();
         $configManager->set([
             'topic_id' => 'topic_name',
             'timeout' => 4000,

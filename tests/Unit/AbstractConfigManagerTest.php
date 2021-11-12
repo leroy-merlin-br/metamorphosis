@@ -1,13 +1,14 @@
 <?php
 namespace Tests\Unit;
 
-use Metamorphosis\ConfigManager;
+use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\TopicHandler\ConfigOptions;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 use Mockery as m;
 use Tests\LaravelTestCase;
+use Tests\Unit\Dummies\MiddlewareDummy;
 
-class ConfigManagerTest extends LaravelTestCase
+class AbstractConfigManagerTest extends LaravelTestCase
 {
     public function testShouldOverrideConfig(): void
     {
@@ -30,16 +31,37 @@ class ConfigManagerTest extends LaravelTestCase
             null,
             'default',
             [],
-            [],
+            [MiddlewareDummy::class],
             200,
             false,
             true,
             200,
             1,
-            10
+            false,
+            true
         );
 
-        $configManager = new ConfigManager();
+        $expected = [
+            'topic_id' => 'kafka-override',
+            'connections' => 'kafka:9092',
+            'auth' => null,
+            'timeout' => 200,
+            'is_async' => false,
+            'handler' => '\App\Kafka\Consumers\ConsumerExample',
+            'partition' => -1,
+            'consumer_group' => 'default',
+            'required_acknowledgment' => true,
+            'max_poll_records' => 200,
+            'flush_attempts' => 1,
+            'url' => null,
+            'ssl_verify' => null,
+            'request_options' => null,
+            'auto_commit' => false,
+            'commit_async' => true,
+            'offset_reset' => 'smallest',
+        ];
+
+        $configManager = new ConsumerConfigManager();
 
         // Expectations
         $handler->expects()
@@ -50,6 +72,6 @@ class ConfigManagerTest extends LaravelTestCase
         $configManager->set($config);
 
         // Expectations
-        $this->assertSame('kafka-override', $configManager->get('topic_id'));
+        $this->assertSame($expected, $configManager->get());
     }
 }

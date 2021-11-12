@@ -2,11 +2,11 @@
 namespace Metamorphosis\Avro;
 
 use GuzzleHttp\Client as GuzzleClient;
-use Metamorphosis\ConfigManager;
+use Metamorphosis\AbstractConfigManager;
 
 class ClientFactory
 {
-    public function make(ConfigManager $configManager): CachedSchemaRegistryClient
+    public function make(AbstractConfigManager $configManager): CachedSchemaRegistryClient
     {
         $guzzleHttp = $this->getGuzzleHttpClient($configManager);
 
@@ -15,7 +15,7 @@ class ClientFactory
         return app(CachedSchemaRegistryClient::class, compact('client'));
     }
 
-    private function getGuzzleHttpClient(ConfigManager $configManager): GuzzleClient
+    private function getGuzzleHttpClient(AbstractConfigManager $configManager): GuzzleClient
     {
         $config = $configManager->get('request_options') ?: [];
         $config['timeout'] = $configManager->get('timeout');

@@ -48,7 +48,7 @@ class Producer
         return new Dispatcher($middlewares);
     }
 
-    public function getProducerMiddleware(HandlerInterface $producerHandler, ConfigManager $configManager): ProducerMiddleware
+    public function getProducerMiddleware(HandlerInterface $producerHandler, AbstractConfigManager $configManager): ProducerMiddleware
     {
         $producer = $this->connector->getProducerTopic($producerHandler, $configManager);
 
@@ -59,7 +59,7 @@ class Producer
         return app(ProducerMiddleware::class, compact('topic', 'poll', 'partition'));
     }
 
-    private function getConfigManager(HandlerInterface $producerHandler): ConfigManager
+    private function getConfigManager(HandlerInterface $producerHandler): AbstractConfigManager
     {
         if ($producerHandler instanceof AbstractProducer) {
             return $this->config->make($producerHandler->getConfigOptions());

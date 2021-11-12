@@ -1,9 +1,10 @@
 <?php
 namespace Tests\Unit\Connectors\Producer;
 
-use Metamorphosis\ConfigManager;
 use Metamorphosis\Connectors\Producer\Connector;
-use Metamorphosis\TopicHandler\Producer\AbstractHandler;
+use Metamorphosis\ProducerConfigManager;
+use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\Producer\AbstractProducer;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use Mockery as m;
@@ -21,14 +22,15 @@ class ConnectorTest extends LaravelTestCase
             Conf::class,
             m::mock(Conf::class)
         );
-        $kafkaProducer = $this->instance(
+        $this->instance(
             KafkaProducer::class,
             m::mock(KafkaProducer::class)
         );
-        $configManager = m::mock(ConfigManager::class);
+        $configManager = m::mock(ProducerConfigManager::class);
+        $configOptions = m::mock(ConfigOptions::class);
 
         $connector = new Connector();
-        $handler = new class('record', 'some_topic') extends AbstractHandler implements HandleableResponseInterface {
+        $handler = new class('record', $configOptions) extends AbstractProducer implements HandleableResponseInterface {
             public function success(Message $message): void
             {
             }
@@ -68,14 +70,15 @@ class ConnectorTest extends LaravelTestCase
             Conf::class,
             m::mock(Conf::class)
         );
-        $kafkaProducer = $this->instance(
+        $this->instance(
             KafkaProducer::class,
             m::mock(KafkaProducer::class)
         );
-        $configManager = m::mock(ConfigManager::class);
+        $configManager = m::mock(ProducerConfigManager::class);
+        $configOptions = m::mock(ConfigOptions::class);
 
         $connector = new Connector();
-        $handler = new class('record', 'some_topic') extends AbstractHandler implements HandlerInterface {
+        $handler = new class('record', $configOptions) extends AbstractProducer implements HandlerInterface {
             public function success(Message $message): void
             {
             }

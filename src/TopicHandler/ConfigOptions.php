@@ -236,6 +236,7 @@ class ConfigOptions
     public function toArray(): array
     {
         $broker = $this->getBroker();
+        $avroSchema = $this->getAvroSchema();
 
         return [
             'topic_id' => $this->getTopicId(),
@@ -250,7 +251,9 @@ class ConfigOptions
             'max_poll_records' => $this->getMaxPollRecords(),
             'flush_attempts' => $this->getFlushAttempts(),
             'middlewares' => $this->getMiddlewares(),
-            'avro_schema' => $this->getAvroSchema(),
+            'url' => $avroSchema['url'] ?? null,
+            'ssl_verify' => $avroSchema['ssl_verify'] ?? null,
+            'request_options' => $avroSchema['request_options'] ?? null,
             'auto_commit' => $this->isAutoCommit(),
             'commit_async' => $this->isCommitASync(),
             'offset_reset' => $this->getOffsetReset(),

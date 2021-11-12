@@ -2,7 +2,7 @@
 namespace Tests\Unit\Authentication;
 
 use Metamorphosis\Authentication\Factory;
-use Metamorphosis\ConfigManager;
+use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Exceptions\AuthenticationException;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
@@ -12,7 +12,7 @@ class FactoryTest extends LaravelTestCase
     public function testItMakesSslAuthenticationClass(): void
     {
         // Set
-        $configManager = new ConfigManager();
+        $configManager = new ConsumerConfigManager();
         $configManager->set([
             'auth' => [
                 'type' => 'ssl',
@@ -39,7 +39,7 @@ class FactoryTest extends LaravelTestCase
     public function testItMakesSASLAuthenticationClass(): void
     {
         // Set
-        $configManager = new ConfigManager();
+        $configManager = new ConsumerConfigManager();
         $configManager->set([
             'auth' => [
                 'type' => 'sasl_ssl',
@@ -66,7 +66,7 @@ class FactoryTest extends LaravelTestCase
     public function testItThrowsExceptionWhenInvalidProtocolIsPassed(): void
     {
         // Set
-        $configManager = new ConfigManager();
+        $configManager = new ConsumerConfigManager();
         $configManager->set(['auth' => ['type' => 'some-invalid-type']]);
         $conf = new Conf();
 

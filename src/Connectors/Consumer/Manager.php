@@ -61,10 +61,15 @@ class Manager
         return $this->consumer;
     }
 
+    public function consume(): ?Message
+    {
+        return $this->getConsumer()->consume();
+    }
+
     public function handleMessage(): void
     {
         try {
-            if ($response = $this->consumer->consume()) {
+            if ($response = $this->consume()) {
                 $record = app(ConsumerRecord::class, compact('response'));
                 $this->dispatcher->handle($record);
                 $this->commit();

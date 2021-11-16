@@ -63,6 +63,11 @@ class Consumer
      */
     private $offsetReset;
 
+    /**
+     * @var int|null
+     */
+    private $offset;
+
     public function __construct(
         string $topicId,
         Broker $broker,

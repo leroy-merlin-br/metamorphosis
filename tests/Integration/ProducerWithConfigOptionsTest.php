@@ -3,7 +3,9 @@ namespace Tests\Integration;
 
 use Illuminate\Support\Facades\Log;
 use Metamorphosis\Facades\Metamorphosis;
-use Metamorphosis\TopicHandler\BaseConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Tests\Integration\Dummies\MessageConsumer;
 use Tests\Integration\Dummies\MessageProducerWithConfigOptions;
 use Tests\LaravelTestCase;
@@ -11,7 +13,7 @@ use Tests\LaravelTestCase;
 class ProducerWithConfigOptionsTest extends LaravelTestCase
 {
     /**
-     * @var BaseConfigOptions
+     * @var ProducerConfigOptions
      */
     private $configOptions;
 
@@ -73,19 +75,17 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
 
     protected function haveAHandlerConfigured(): void
     {
-        $this->configOptions = new BaseConfigOptions(
+        $broker = new Broker('kafka:9092', new None());
+        $this->configOptions = new ProducerConfigOptions(
             'sale_order_override',
-            ['connections' => 'kafka:9092'],
-            '\App\Kafka\Consumers\ConsumerOverride',
+            $broker,
             null,
-            'test-consumer-group',
-            [],
             [],
             20000,
             false,
             true,
-            600,
-            10
+            10,
+            100
         );
     }
 

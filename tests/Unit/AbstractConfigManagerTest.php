@@ -2,7 +2,9 @@
 namespace Tests\Unit;
 
 use Metamorphosis\ConsumerConfigManager;
-use Metamorphosis\TopicHandler\BaseConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 use Mockery as m;
 use Tests\LaravelTestCase;
@@ -24,21 +26,19 @@ class AbstractConfigManagerTest extends LaravelTestCase
             ],
             'topic_id' => 'kafka-test',
         ];
-        $configOptions = new BaseConfigOptions(
+        $broker = new Broker('kafka:9092', new None());
+        $configOptions = new ConsumerConfigOptions(
             'kafka-override',
-            ['connections' => 'kafka:9092'],
+            $broker,
             '\App\Kafka\Consumers\ConsumerExample',
             null,
+            null,
             'default',
-            [],
+            null,
             [MiddlewareDummy::class],
             200,
             false,
             true,
-            200,
-            1,
-            false,
-            true
         );
 
         $expected = [
@@ -50,9 +50,6 @@ class AbstractConfigManagerTest extends LaravelTestCase
             'handler' => '\App\Kafka\Consumers\ConsumerExample',
             'partition' => -1,
             'consumer_group' => 'default',
-            'required_acknowledgment' => true,
-            'max_poll_records' => 200,
-            'flush_attempts' => 1,
             'url' => null,
             'ssl_verify' => null,
             'request_options' => null,

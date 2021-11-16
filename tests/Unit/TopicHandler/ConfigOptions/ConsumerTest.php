@@ -1,28 +1,31 @@
 <?php
-namespace Tests\Unit\TopicHandler;
 
-use Metamorphosis\TopicHandler\BaseConfigOptions;
+namespace Tests\Unit\TopicHandler\ConfigOptions;
+
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer;
 use Tests\LaravelTestCase;
 use Tests\Unit\Dummies\ProducerHandlerDummy;
 
-class ConfigOptionsTest extends LaravelTestCase
+class ConsumerTest extends LaravelTestCase
 {
     public function testShouldConvertConfigOptionsToArray(): void
     {
         // Set
-        $configOptions = new BaseConfigOptions(
+        $broker = new Broker('kafka:9092', new None());
+        $configOptions = new Consumer(
             'topic-id',
-            ['connections' => 'kafka:9092'],
+            $broker,
             ProducerHandlerDummy::class,
             null,
+            null,
             'some_consumer_group',
-            [],
+            null,
             [],
             200,
             false,
             true,
-            200,
-            1
         );
 
         $expected = [
@@ -34,9 +37,6 @@ class ConfigOptionsTest extends LaravelTestCase
             'handler' => 'Tests\Unit\Dummies\ProducerHandlerDummy',
             'partition' => RD_KAFKA_PARTITION_UA,
             'consumer_group' => 'some_consumer_group',
-            'required_acknowledgment' => true,
-            'max_poll_records' => 200,
-            'flush_attempts' => 1,
             'middlewares' => [],
             'url' => null,
             'ssl_verify' => null,

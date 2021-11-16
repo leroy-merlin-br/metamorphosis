@@ -1,7 +1,7 @@
 <?php
 namespace Metamorphosis\TopicHandler;
 
-class ConfigOptions
+class ProducerConfigOptions
 {
     /**
      * If your broker doest not have authentication, you can

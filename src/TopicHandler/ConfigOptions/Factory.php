@@ -3,7 +3,7 @@ namespace Metamorphosis\TopicHandler;
 
 class ConfigOptionsFactory
 {
-    public function makeByConfigName(string $configName, string $topicName, string $brokerName): ConfigOptions
+    public function makeByConfigName(string $configName, string $topicName, string $brokerName): BaseConfigOptions
     {
         $topic = $this->getTopic($configName, $topicName);
         $broker = config($configName.'.brokers.'.$brokerName);
@@ -18,7 +18,7 @@ class ConfigOptionsFactory
         string $topicName,
         string $brokerName,
         string $schemaName
-    ): ConfigOptions {
+    ): BaseConfigOptions {
         $topic = $this->getTopic($configName, $topicName);
         $broker = config($configName.'.brokers.'.$brokerName);
         $avroSchema = config($configName.'.avro_schemas.'.$schemaName);
@@ -28,7 +28,7 @@ class ConfigOptionsFactory
         return $this->makeConfigOptions($params);
     }
 
-    public function makeProducerConfigOptions(string $configName, string $topicName, string $brokerName): ConfigOptions
+    public function makeProducerConfigOptions(string $configName, string $topicName, string $brokerName): BaseConfigOptions
     {
         $topic = $this->getTopic($configName, $topicName);
         $broker = config($configName.'.brokers.'.$brokerName);
@@ -39,9 +39,9 @@ class ConfigOptionsFactory
         return $this->makeConfigOptions($params);
     }
 
-    private function makeConfigOptions($params): ConfigOptions
+    private function makeConfigOptions($params): BaseConfigOptions
     {
-        return app(ConfigOptions::class, $params);
+        return app(BaseConfigOptions::class, $params);
     }
 
     private function getTopic(string $configName, string $topicName): array

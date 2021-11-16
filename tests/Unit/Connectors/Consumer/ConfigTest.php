@@ -3,7 +3,7 @@ namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\BaseConfigOptions;
 use Mockery as m;
 use Tests\LaravelTestCase;
 use Tests\Unit\Dummies\ConsumerHandlerDummy;
@@ -15,7 +15,7 @@ class ConfigTest extends LaravelTestCase
         // Set
         config(['kafka.topics.default.consumer.consumer_groups.test-consumer-group.handler' => ConsumerHandlerDummy::class]);
         $consumerHandler = $this->instance(ConsumerHandlerDummy::class, m::mock(ConsumerHandlerDummy::class));
-        $configOptions = m::mock(ConfigOptions::class);
+        $configOptions = m::mock(BaseConfigOptions::class);
 
         $config = new Config();
         $options = [

@@ -1,63 +1,54 @@
 <?php
-namespace Metamorphosis\TopicHandler;
+namespace Metamorphosis\TopicHandler\ConfigOptions;
 
-class ConfigOptionsFactory
+use Metamorphosis\ProducerConfigManager;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\Factory as AuthFactory;
+
+class Factory
 {
-    public function makeByConfigName(string $configName, string $topicName, string $brokerName): BaseConfigOptions
-    {
-        $topic = $this->getTopic($configName, $topicName);
-        $broker = config($configName.'.brokers.'.$brokerName);
+    public function makeConsumerConfigOptions(
+        array $brokerData,
+        array $topicData,
+        ?array $avroSchemaData = []
+    ): Consumer {
+        $params = $this->getConsumerTopic($topicData);
 
-        $params = array_merge($topic, compact('broker'));
+        $brokerData['auth'] = AuthFactory::make($brokerData['auth'] ?? []);
+        $params['broker'] = app(Broker::class, $brokerData);
 
-        return $this->makeConfigOptions($params);
+        $params['avroSchema'] = $avroSchemaData ? app(AvroSchema::class, $avroSchemaData): null;
+
+        return app(Consumer::class, $params);
     }
 
-    public function makeByConfigNameWithSchema(
-        string $configName,
-        string $topicName,
-        string $brokerName,
-        string $schemaName
-    ): BaseConfigOptions {
-        $topic = $this->getTopic($configName, $topicName);
-        $broker = config($configName.'.brokers.'.$brokerName);
-        $avroSchema = config($configName.'.avro_schemas.'.$schemaName);
+    public function makeProducerConfigOptions(
+        array $brokerData,
+        array $topicData,
+        ?array $avroSchemaData = []
+    ): ProducerConfigManager
+    {
+        $params = $this->convertProducerConfig($topicData);
+        $brokerData['auth'] = AuthFactory::make($brokerData['auth'] ?? []);
+        $params['broker'] = app(Broker::class, $brokerData);
 
-        $params = array_merge($topic, compact('broker', 'avroSchema'));
+        $params['avroSchema'] = $avroSchemaData ? app(AvroSchema::class, $avroSchemaData): null;
 
-        return $this->makeConfigOptions($params);
+        return app(Producer::class, $params);
     }
 
-    public function makeProducerConfigOptions(string $configName, string $topicName, string $brokerName): BaseConfigOptions
+    private function getConsumerTopic(array $topicData): array
     {
-        $topic = $this->getTopic($configName, $topicName);
-        $broker = config($configName.'.brokers.'.$brokerName);
+        $topicData['topicId'] = $topicData['topic_id'];
 
-        $params = array_merge($topic, compact('broker'));
-        $params['middlewares'] = [];
+        $consumer = current($topicData['consumer']);
+        $topicData['consumerGroup'] = key($consumer);
 
-        return $this->makeConfigOptions($params);
+        return array_merge($topicData, $this->convertConsumerConfig($consumer));
     }
 
-    private function makeConfigOptions($params): BaseConfigOptions
+    private function convertConsumerConfig(array $topic): array
     {
-        return app(BaseConfigOptions::class, $params);
-    }
-
-    private function getTopic(string $configName, string $topicName): array
-    {
-        $topic = config($configName.'.topics.'.$topicName);
-        $topic['topicId'] = $topic['topic_id'];
-
-        $consumer = current($topic['consumer']);
-        $topic['consumerGroup'] = key($consumer);
-
-        return array_merge($topic, $this->getConsumerConfig($consumer));
-    }
-
-    private function getConsumerConfig(array $consumer): array
-    {
-        $consumerConfig = current($consumer);
+        $consumerConfig = current($topic);
 
         if (isset($consumerConfig['auto_commit'])) {
             $consumerConfig['autoCommit'] = $consumerConfig['auto_commit'];
@@ -80,5 +71,28 @@ class ConfigOptionsFactory
         }
 
         return $consumerConfig;
+    }
+
+    private function convertProducerConfig(array $topic): array
+    {
+        $configs = $topic['producer'];
+
+        if (isset($configs['required_acknowledgment'])) {
+            $configs['requiredAcknowledgment'] = $configs['required_acknowledgment'];
+        }
+
+        if (isset($configs['is_async'])) {
+            $configs['isAsync'] = $configs['is_async'];
+        }
+
+        if (isset($configs['max_poll_records'])) {
+            $configs['maxPollRecords'] = $configs['max_poll_records'];
+        }
+
+        if (isset($configs['flush_attempts'])) {
+            $configs['flushAttempts'] = $configs['flush_attempts'];
+        }
+
+        return $configs;
     }
 }

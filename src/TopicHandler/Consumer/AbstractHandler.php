@@ -3,18 +3,18 @@ namespace Metamorphosis\TopicHandler\Consumer;
 
 use Exception;
 use Metamorphosis\Exceptions\ResponseWarningException;
-use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\BaseConfigOptions;
 
 abstract class AbstractHandler implements Handler
 {
     /**
      * Merge and override config from kafka file.
      *
-     * @var ConfigOptions
+     * @var BaseConfigOptions
      */
     private $configOptions;
 
-    public function __construct(ConfigOptions $configOptions = null)
+    public function __construct(BaseConfigOptions $configOptions = null)
     {
         $this->configOptions = $configOptions;
     }
@@ -31,7 +31,7 @@ abstract class AbstractHandler implements Handler
     {
     }
 
-    public function getConfigOptions(): ?ConfigOptions
+    public function getConfigOptions(): ?BaseConfigOptions
     {
         return $this->configOptions;
     }

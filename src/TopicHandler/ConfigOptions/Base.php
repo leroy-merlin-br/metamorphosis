@@ -1,27 +1,8 @@
 <?php
-namespace Metamorphosis\TopicHandler;
+namespace Metamorphosis\TopicHandler\ConfigOptions;
 
-class BaseConfigOptions
+class Base
 {
-    /**
-     * If your broker doest not have authentication, you can
-     * remove this configuration, or set as empty.
-     * The Authentication types may be "ssl" or "none"
-     *
-     * @example [
-     *    'connections' => 'kafka:9092',
-     *    'auth' => [
-     *        'type' => 'ssl', // ssl and none
-     *        'ca' => storage_path('ca.pem'),
-     *        'certificate' => storage_path('kafka.cert'),
-     *        'key' => storage_path('kafka.key'),
-     *     ]
-     * ]
-     *
-     * @var array
-     */
-    private $broker;
-
     /**
      * @example [
      *     'url' => 'http://schema-registry:8081',

@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\TopicHandler;
 
-use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\BaseConfigOptions;
 use Tests\LaravelTestCase;
 use Tests\Unit\Dummies\ProducerHandlerDummy;
 
@@ -10,7 +10,7 @@ class ConfigOptionsTest extends LaravelTestCase
     public function testShouldConvertConfigOptionsToArray(): void
     {
         // Set
-        $configOptions = new ConfigOptions(
+        $configOptions = new BaseConfigOptions(
             'topic-id',
             ['connections' => 'kafka:9092'],
             ProducerHandlerDummy::class,

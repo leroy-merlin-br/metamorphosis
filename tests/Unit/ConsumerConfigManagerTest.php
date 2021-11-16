@@ -2,7 +2,7 @@
 namespace Tests\Unit;
 
 use Metamorphosis\ConsumerConfigManager;
-use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\BaseConfigOptions;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 use Mockery as m;
 use Tests\LaravelTestCase;
@@ -23,7 +23,7 @@ class ConsumerConfigManagerTest extends LaravelTestCase
             ],
             'topic_id' => 'kafka-test',
         ];
-        $configOptions = new ConfigOptions(
+        $configOptions = new BaseConfigOptions(
             'kafka-override',
             ['connections' => 'kafka:9092'],
             '\App\Kafka\Consumers\ConsumerExample',

@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\TopicHandler;
 
-use Metamorphosis\TopicHandler\ConfigOptionsFactory;
+use Metamorphosis\TopicHandler\Factory;
 use Tests\LaravelTestCase;
 
 class ConfigOptionsFactoryTest extends LaravelTestCase
@@ -9,7 +9,7 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
     public function testShouldMakeConfigOptionWithAvroSchema(): void
     {
         // Set
-        $factory = new ConfigOptionsFactory();
+        $factory = new Factory();
 
         $expected = [
             'topic_id' => 'kafka-test',
@@ -58,7 +58,7 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
     {
         // Set
         config(['kafka.brokers.new' => ['connections' => 'localhost:9092']]);
-        $factory = new ConfigOptionsFactory();
+        $factory = new Factory();
 
         $expected = [
             'topic_id' => 'kafka-test',
@@ -95,7 +95,7 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
     public function testShouldMakeProducerConfigOptions(): void
     {
         // Set
-        $factory = new ConfigOptionsFactory();
+        $factory = new Factory();
 
         $expected = [
             'topic_id' => 'kafka-test',

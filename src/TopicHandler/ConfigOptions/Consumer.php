@@ -1,45 +1,15 @@
 <?php
-namespace Metamorphosis\TopicHandler;
+namespace Metamorphosis\TopicHandler\ConfigOptions;
 
-class ConsumerConfigOptions
+class Consumer
 {
     /**
-     * If your broker doest not have authentication, you can
-     * remove this configuration, or set as empty.
-     * The Authentication types may be "ssl" or "none"
-     *
-     * @example [
-     *    'connections' => 'kafka:9092',
-     *    'auth' => [
-     *        'type' => 'ssl', // ssl and none
-     *        'ca' => storage_path('ca.pem'),
-     *        'certificate' => storage_path('kafka.cert'),
-     *        'key' => storage_path('kafka.key'),
-     *     ]
-     * ]
-     *
-     * @var array
+     * @var Broker
      */
     private $broker;
 
     /**
-     * @example [
-     *     'url' => 'http://schema-registry:8081',
-     *     // Disable SSL verification on schema request.
-     *     'ssl_verify' => true,
-     *     // This option will be put directly into a Guzzle http request
-     *     // Use this to do authorizations or send any headers you want.
-     *     // Here is a example of basic authentication on AVRO schema.
-     *     'request_options' => [
-     *         'headers' => [
-     *              'Authorization' => [
-     *                  'Basic AUTHENTICATION'
-     *              ],
-     *         ],
-     *     ],
-     * ]
-     *
-     * @var array
+     * @var AvroSchema
      */
     private $avroSchema;
 
@@ -95,12 +65,12 @@ class ConsumerConfigOptions
 
     public function __construct(
         string $topicId,
-        array $broker,
+        Broker $broker,
         string $handler,
         ?int $partition = null,
         ?int $offset = null,
         string $consumerGroup = 'default',
-        array $avroSchema = [],
+        ?AvroSchema $avroSchema = null,
         array $middlewares = [],
         int $timeout = 1000,
         bool $autoCommit = true,
@@ -198,13 +168,8 @@ class ConsumerConfigOptions
 
     public function toArray(): array
     {
-        $broker = $this->getBroker();
-        $avroSchema = $this->getAvroSchema();
-
-        return [
+        $data = [
             'topic_id' => $this->getTopicId(),
-            'connections' => $broker['connections'] ?? null,
-            'auth' => $broker['auth'] ?? null,
             'timeout' => $this->getTimeout(),
             'is_async' => $this->isAsync(),
             'handler' => $this->getHandler(),
@@ -214,12 +179,15 @@ class ConsumerConfigOptions
             'max_poll_records' => $this->getMaxPollRecords(),
             'flush_attempts' => $this->getFlushAttempts(),
             'middlewares' => $this->getMiddlewares(),
-            'url' => $avroSchema['url'] ?? null,
-            'ssl_verify' => $avroSchema['ssl_verify'] ?? null,
-            'request_options' => $avroSchema['request_options'] ?? null,
             'auto_commit' => $this->isAutoCommit(),
             'commit_async' => $this->isCommitASync(),
             'offset_reset' => $this->getOffsetReset(),
         ];
+
+        if ($avroSchema = $this->getAvroSchema()) {
+            $data = array_merge($data, $avroSchema->toArray());
+        }
+
+        return array_merge($this->broker->toArray(), $data);
     }
 }

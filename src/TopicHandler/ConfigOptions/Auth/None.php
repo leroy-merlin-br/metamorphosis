@@ -13,6 +13,6 @@ class None implements AuthInterface
 
     public function getType(): string
     {
-        return 'none';
+        return EnumType::NONE_TYPE;
     }
 }

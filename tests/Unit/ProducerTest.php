@@ -8,7 +8,7 @@ use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer;
 use Metamorphosis\ProducerConfigManager;
-use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\BaseConfigOptions;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use Metamorphosis\TopicHandler\Producer\AbstractProducer;
 use Mockery as m;
@@ -299,7 +299,7 @@ class ProducerTest extends LaravelTestCase
         $broker = [
             'connections' => 'kafka:9092',
         ];
-        $configOptions = new ConfigOptions($topicId, $broker, ProducerHandlerDummy::class);
+        $configOptions = new BaseConfigOptions($topicId, $broker, ProducerHandlerDummy::class);
         $producerHandler = new class($record, $configOptions) extends AbstractProducer {
         };
 

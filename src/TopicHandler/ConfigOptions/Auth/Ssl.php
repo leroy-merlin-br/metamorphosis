@@ -53,6 +53,6 @@ class Ssl implements AuthInterface
 
     public function getType(): string
     {
-        return 'ssl';
+        return EnumType::SSL_TYPE;
     }
 }

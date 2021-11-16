@@ -4,7 +4,7 @@ namespace Metamorphosis;
 
 use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Consumers\ConsumerInterface;
-use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\BaseConfigOptions;
 use RdKafka\Message;
 
 class Consumer
@@ -14,7 +14,7 @@ class Consumer
      */
     private $consumer;
 
-    public function __construct(ConsumerConfigManager $configManager, ConfigOptions $configOptions)
+    public function __construct(ConsumerConfigManager $configManager, BaseConfigOptions $configOptions)
     {
         $configManager->set($configOptions->toArray());
 

@@ -1,45 +1,15 @@
 <?php
-namespace Metamorphosis\TopicHandler;
+namespace Metamorphosis\TopicHandler\ConfigOptions;
 
-class ProducerConfigOptions
+class Producer
 {
     /**
-     * If your broker doest not have authentication, you can
-     * remove this configuration, or set as empty.
-     * The Authentication types may be "ssl" or "none"
-     *
-     * @example [
-     *    'connections' => 'kafka:9092',
-     *    'auth' => [
-     *        'type' => 'ssl', // ssl and none
-     *        'ca' => storage_path('ca.pem'),
-     *        'certificate' => storage_path('kafka.cert'),
-     *        'key' => storage_path('kafka.key'),
-     *     ]
-     * ]
-     *
-     * @var array
+     * @var Broker
      */
     private $broker;
 
     /**
-     * @example [
-     *     'url' => 'http://schema-registry:8081',
-     *     // Disable SSL verification on schema request.
-     *     'ssl_verify' => true,
-     *     // This option will be put directly into a Guzzle http request
-     *     // Use this to do authorizations or send any headers you want.
-     *     // Here is a example of basic authentication on AVRO schema.
-     *     'request_options' => [
-     *         'headers' => [
-     *              'Authorization' => [
-     *                  'Basic AUTHENTICATION'
-     *              ],
-     *         ],
-     *     ],
-     * ]
-     *
-     * @var array
+     * @var AvroSchema
      */
     private $avroSchema;
 
@@ -90,56 +60,20 @@ class ProducerConfigOptions
     private $timeout;
 
     /**
-     * @var ?int
-     */
-    private $partition;
-
-    /**
      * @var string
      */
     private $topicId;
 
-    /**
-     * @var string
-     */
-    private $consumerGroup;
-
-    /**
-     * @var string
-     */
-    private $handler;
-
-    /**
-     * @var bool
-     */
-    private $autoCommit;
-
-    /**
-     * @var bool
-     */
-    private $commitASync;
-
-    /**
-     * @var string
-     */
-    private $offsetReset;
-
     public function __construct(
         string $topicId,
-        array $broker,
-        string $handler,
-        ?int $partition = null,
-        string $consumerGroup = 'default',
-        array $avroSchema = [],
+        Broker $broker,
+        ?AvroSchema $avroSchema = null,
         array $middlewares = [],
         int $timeout = 1000,
         bool $isAsync = true,
         bool $requiredAcknowledgment = false,
         int $maxPollRecords = 500,
-        int $flushAttempts = 10,
-        bool $autoCommit = true,
-        bool $commitASync = true,
-        string $offsetReset = 'smallest'
+        int $flushAttempts = 10
     ) {
         $this->broker = $broker;
         $this->middlewares = $middlewares;
@@ -148,14 +82,8 @@ class ProducerConfigOptions
         $this->requiredAcknowledgment = $requiredAcknowledgment;
         $this->maxPollRecords = $maxPollRecords;
         $this->flushAttempts = $flushAttempts;
-        $this->partition = $partition;
         $this->topicId = $topicId;
         $this->avroSchema = $avroSchema;
-        $this->consumerGroup = $consumerGroup;
-        $this->handler = $handler;
-        $this->autoCommit = $autoCommit;
-        $this->commitASync = $commitASync;
-        $this->offsetReset = $offsetReset;
     }
 
     public function getTimeout(): int
@@ -188,14 +116,9 @@ class ProducerConfigOptions
         return $this->flushAttempts;
     }
 
-    public function getBroker(): array
+    public function getBroker(): Broker
     {
         return $this->broker;
-    }
-
-    public function getPartition(): int
-    {
-        return $this->partition ?? RD_KAFKA_PARTITION_UA;
     }
 
     public function getTopicId(): string
@@ -203,50 +126,19 @@ class ProducerConfigOptions
         return $this->topicId;
     }
 
-    public function getAvroSchema(): array
+    public function getAvroSchema(): AvroSchema
     {
         return $this->avroSchema;
     }
 
-    public function getConsumerGroup(): string
-    {
-        return $this->consumerGroup;
-    }
-
-    public function getHandler(): string
-    {
-        return $this->handler;
-    }
-
-    public function isAutoCommit(): bool
-    {
-        return $this->autoCommit;
-    }
-
-    public function isCommitASync(): bool
-    {
-        return $this->commitASync;
-    }
-
-    public function getOffsetReset(): string
-    {
-        return $this->offsetReset;
-    }
-
     public function toArray(): array
     {
-        $broker = $this->getBroker();
-        $avroSchema = $this->getAvroSchema();
-
-        return [
+        $data = [
             'topic_id' => $this->getTopicId(),
             'connections' => $broker['connections'] ?? null,
             'auth' => $broker['auth'] ?? null,
             'timeout' => $this->getTimeout(),
             'is_async' => $this->isAsync(),
-            'handler' => $this->getHandler(),
-            'partition' => $this->getPartition(),
-            'consumer_group' => $this->getConsumerGroup(),
             'required_acknowledgment' => $this->isRequiredAcknowledgment(),
             'max_poll_records' => $this->getMaxPollRecords(),
             'flush_attempts' => $this->getFlushAttempts(),
@@ -254,9 +146,12 @@ class ProducerConfigOptions
             'url' => $avroSchema['url'] ?? null,
             'ssl_verify' => $avroSchema['ssl_verify'] ?? null,
             'request_options' => $avroSchema['request_options'] ?? null,
-            'auto_commit' => $this->isAutoCommit(),
-            'commit_async' => $this->isCommitASync(),
-            'offset_reset' => $this->getOffsetReset(),
         ];
+
+        if ($avroSchema = $this->getAvroSchema()) {
+            $data = array_merge($data, $avroSchema->toArray());
+        }
+
+        return array_merge($this->broker->toArray(), $data);
     }
 }

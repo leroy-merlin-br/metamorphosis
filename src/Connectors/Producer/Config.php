@@ -5,7 +5,7 @@ use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\ProducerConfigManager;
-use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\BaseConfigOptions;
 
 class Config extends AbstractConfig
 {
@@ -38,7 +38,7 @@ class Config extends AbstractConfig
         'ssl_verify' => false,
     ];
 
-    public function make(ConfigOptions $configOptions): AbstractConfigManager
+    public function make(BaseConfigOptions $configOptions): AbstractConfigManager
     {
         $configManager = app(ProducerConfigManager::class);
         $data = $configOptions->toArray();

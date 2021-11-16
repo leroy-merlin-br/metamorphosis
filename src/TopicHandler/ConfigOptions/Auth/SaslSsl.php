@@ -53,6 +53,6 @@ class SaslSsl implements AuthInterface
 
     public function getType(): string
     {
-        return 'sasl_ssl';
+        return EnumType::SASL_SSL_TYPE;
     }
 }

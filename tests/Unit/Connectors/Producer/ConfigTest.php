@@ -3,7 +3,7 @@ namespace Tests\Unit\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\BaseConfigOptions;
 use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase
@@ -101,7 +101,7 @@ class ConfigTest extends LaravelTestCase
                 'password' => 'PASSWORD',
             ],
         ];
-        $configOptions = new ConfigOptions('TOPIC-ID', $broker, 'App\Kafka\Consumers\ConsumerExample');
+        $configOptions = new BaseConfigOptions('TOPIC-ID', $broker, 'App\Kafka\Consumers\ConsumerExample');
 
         $expected = [
             'topic_id' => 'TOPIC-ID',

@@ -66,7 +66,7 @@ class Consumer
     public function __construct(
         string $topicId,
         Broker $broker,
-        string $handler,
+        ?string $handler = null,
         ?int $partition = null,
         ?int $offset = null,
         string $consumerGroup = 'default',
@@ -96,32 +96,12 @@ class Consumer
         return $this->timeout;
     }
 
-    public function isRequiredAcknowledgment(): bool
-    {
-        return $this->requiredAcknowledgment;
-    }
-
     public function getMiddlewares(): array
     {
         return $this->middlewares;
     }
 
-    public function getMaxPollRecords(): int
-    {
-        return $this->maxPollRecords;
-    }
-
-    public function isAsync(): bool
-    {
-        return $this->isAsync;
-    }
-
-    public function getFlushAttempts(): int
-    {
-        return $this->flushAttempts;
-    }
-
-    public function getBroker(): array
+    public function getBroker(): Broker
     {
         return $this->broker;
     }
@@ -136,7 +116,7 @@ class Consumer
         return $this->topicId;
     }
 
-    public function getAvroSchema(): array
+    public function getAvroSchema(): ?AvroSchema
     {
         return $this->avroSchema;
     }
@@ -146,7 +126,7 @@ class Consumer
         return $this->consumerGroup;
     }
 
-    public function getHandler(): string
+    public function getHandler(): ?string
     {
         return $this->handler;
     }
@@ -171,13 +151,9 @@ class Consumer
         $data = [
             'topic_id' => $this->getTopicId(),
             'timeout' => $this->getTimeout(),
-            'is_async' => $this->isAsync(),
             'handler' => $this->getHandler(),
             'partition' => $this->getPartition(),
             'consumer_group' => $this->getConsumerGroup(),
-            'required_acknowledgment' => $this->isRequiredAcknowledgment(),
-            'max_poll_records' => $this->getMaxPollRecords(),
-            'flush_attempts' => $this->getFlushAttempts(),
             'middlewares' => $this->getMiddlewares(),
             'auto_commit' => $this->isAutoCommit(),
             'commit_async' => $this->isCommitASync(),

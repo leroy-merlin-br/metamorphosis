@@ -3,7 +3,6 @@ namespace Tests\Unit\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\SaslSsl;
 use Metamorphosis\TopicHandler\ConfigOptions\Broker;
 use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;

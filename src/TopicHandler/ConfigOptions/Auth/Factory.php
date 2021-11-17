@@ -1,5 +1,4 @@
 <?php
-
 namespace Metamorphosis\TopicHandler\ConfigOptions\Auth;
 
 use Exception;
@@ -12,7 +11,7 @@ class Factory
         EnumType::NONE_TYPE => None::class,
     ];
 
-    static public function make(array $attributes = []): AuthInterface
+    public static function make(array $attributes = []): AuthInterface
     {
         if (!$attributes) {
             $attributes['type'] = EnumType::NONE_TYPE;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Metamorphosis\TopicHandler\ConfigOptions;
 
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\AuthInterface;

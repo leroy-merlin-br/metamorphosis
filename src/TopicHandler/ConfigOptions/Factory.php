@@ -16,7 +16,7 @@ class Factory
         $brokerData['auth'] = AuthFactory::make($brokerData['auth'] ?? []);
         $params['broker'] = app(Broker::class, $brokerData);
 
-        $params['avroSchema'] = $avroSchemaData ? app(AvroSchema::class, $avroSchemaData): null;
+        $params['avroSchema'] = $avroSchemaData ? app(AvroSchema::class, $avroSchemaData) : null;
 
         return app(Consumer::class, $params);
     }
@@ -25,13 +25,12 @@ class Factory
         array $brokerData,
         array $topicData,
         ?array $avroSchemaData = []
-    ): ProducerConfigManager
-    {
+    ): ProducerConfigManager {
         $params = $this->convertProducerConfig($topicData);
         $brokerData['auth'] = AuthFactory::make($brokerData['auth'] ?? []);
         $params['broker'] = app(Broker::class, $brokerData);
 
-        $params['avroSchema'] = $avroSchemaData ? app(AvroSchema::class, $avroSchemaData): null;
+        $params['avroSchema'] = $avroSchemaData ? app(AvroSchema::class, $avroSchemaData) : null;
 
         return app(Producer::class, $params);
     }

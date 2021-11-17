@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Integration;
 
 use Metamorphosis\Consumer;
@@ -30,10 +29,9 @@ class ConsumerTest extends LaravelTestCase
             'smallest'
         );
 
-
         $consumer = $this->app->make(Consumer::class, ['configOptions' => $configOptions]);
 
         // Actions
-        $result = $consumer->consume();
+        $consumer->consume();
     }
 }

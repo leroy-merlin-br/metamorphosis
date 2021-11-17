@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit\TopicHandler\ConfigOptions;
 
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;

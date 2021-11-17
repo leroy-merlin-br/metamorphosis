@@ -17,7 +17,6 @@ use Mockery as m;
 use RdKafka\Producer as KafkaProducer;
 use RdKafka\ProducerTopic;
 use Tests\LaravelTestCase;
-use Tests\Unit\Dummies\ProducerHandlerDummy;
 
 class ProducerTest extends LaravelTestCase
 {

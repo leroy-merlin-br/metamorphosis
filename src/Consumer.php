@@ -1,5 +1,4 @@
 <?php
-
 namespace Metamorphosis;
 
 use Metamorphosis\Connectors\Consumer\Factory;

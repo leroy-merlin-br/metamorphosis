@@ -64,9 +64,15 @@ class Producer
      */
     private $topicId;
 
+    /**
+     * @var int|null
+     */
+    private $partition;
+
     public function __construct(
         string $topicId,
         Broker $broker,
+        ?int $partition = null,
         ?AvroSchema $avroSchema = null,
         array $middlewares = [],
         int $timeout = 1000,
@@ -84,6 +90,7 @@ class Producer
         $this->flushAttempts = $flushAttempts;
         $this->topicId = $topicId;
         $this->avroSchema = $avroSchema;
+        $this->partition = $partition;
     }
 
     public function getTimeout(): int
@@ -126,7 +133,7 @@ class Producer
         return $this->topicId;
     }
 
-    public function getAvroSchema(): AvroSchema
+    public function getAvroSchema(): ?AvroSchema
     {
         return $this->avroSchema;
     }
@@ -136,6 +143,7 @@ class Producer
         $data = [
             'topic_id' => $this->getTopicId(),
             'connections' => $broker['connections'] ?? null,
+            'partition' => $this->getPartition(),
             'auth' => $broker['auth'] ?? null,
             'timeout' => $this->getTimeout(),
             'is_async' => $this->isAsync(),
@@ -153,5 +161,10 @@ class Producer
         }
 
         return array_merge($this->broker->toArray(), $data);
+    }
+
+    public function getPartition(): int
+    {
+        return $this->partition ?? RD_KAFKA_PARTITION_UA;
     }
 }

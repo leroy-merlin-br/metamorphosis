@@ -6,6 +6,7 @@ use Metamorphosis\Facades\Metamorphosis;
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
 use Metamorphosis\TopicHandler\ConfigOptions\Broker;
 use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 use Tests\Integration\Dummies\MessageConsumer;
 use Tests\Integration\Dummies\MessageProducerWithConfigOptions;
 use Tests\LaravelTestCase;
@@ -15,7 +16,12 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
     /**
      * @var ProducerConfigOptions
      */
-    private $configOptions;
+    private $producerConfigOptions;
+
+    /**
+     * @var ConsumerConfigOptions
+     */
+    private $consumerConfigOptions;
 
     public function testShouldRunAProducerMessagesWithConfigOptions(): void
     {
@@ -37,7 +43,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
 
     protected function runTheConsumer(): void
     {
-        $dummy = new MessageConsumer($this->configOptions);
+        $dummy = new MessageConsumer($this->consumerConfigOptions);
         $this->instance('\App\Kafka\Consumers\ConsumerOverride', $dummy);
         config([
             'kafka_new_config' => [
@@ -76,9 +82,10 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
     protected function haveAHandlerConfigured(): void
     {
         $broker = new Broker('kafka:9092', new None());
-        $this->configOptions = new ProducerConfigOptions(
+        $this->producerConfigOptions = new ProducerConfigOptions(
             'sale_order_override',
             $broker,
+            null,
             null,
             [],
             20000,
@@ -86,6 +93,20 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
             true,
             10,
             100
+        );
+
+        $this->consumerConfigOptions = new ConsumerConfigOptions(
+            'sale_order_override',
+            $broker,
+            '\App\Kafka\Consumers\ConsumerOverride',
+            null,
+            null,
+            'test-consumer-group',
+            null,
+            [],
+            20000,
+            false,
+            true
         );
     }
 
@@ -95,7 +116,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
             MessageProducerWithConfigOptions::class,
             [
                 'record' => ['saleOrderId' => 'SALE_ORDER_ID'],
-                'configOptions' => $this->configOptions,
+                'configOptions' => $this->producerConfigOptions,
                 'key' => 1,
             ]
         );

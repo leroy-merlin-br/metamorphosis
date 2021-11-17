@@ -142,10 +142,8 @@ class Producer
     {
         $data = [
             'topic_id' => $this->getTopicId(),
-            'connections' => $broker['connections'] ?? null,
-            'partition' => $this->getPartition(),
-            'auth' => $broker['auth'] ?? null,
             'timeout' => $this->getTimeout(),
+            'partition' => $this->getPartition(),
             'is_async' => $this->isAsync(),
             'required_acknowledgment' => $this->isRequiredAcknowledgment(),
             'max_poll_records' => $this->getMaxPollRecords(),

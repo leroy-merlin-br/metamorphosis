@@ -41,7 +41,7 @@ class Broker
     {
         return [
             'connections' => $this->getConnections(),
-            'auth' => $this->getAuth()->toArray(),
+            'auth' => $this->getAuth()->toArray() ?: null,
         ];
     }
 }

@@ -73,7 +73,7 @@ class Factory
 
     private static function convertProducerConfig(array $topic): array
     {
-        $configs = $topic['producer'];
+        $configs = $topic['producer'] ?? [];
         $configs['topicId'] = $topic['topic_id'];
 
         if (isset($configs['required_acknowledgment'])) {

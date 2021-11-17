@@ -5,9 +5,7 @@ class None implements AuthInterface
 {
     public function toArray(): array
     {
-        return [
-            'type' => $this->getType(),
-        ];
+        return [];
     }
 
     public function getType(): string

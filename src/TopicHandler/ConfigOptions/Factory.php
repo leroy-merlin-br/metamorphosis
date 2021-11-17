@@ -1,17 +1,16 @@
 <?php
 namespace Metamorphosis\TopicHandler\ConfigOptions;
 
-use Metamorphosis\ProducerConfigManager;
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\Factory as AuthFactory;
 
 class Factory
 {
-    public function makeConsumerConfigOptions(
+    public static function makeConsumerConfigOptions(
         array $brokerData,
         array $topicData,
         ?array $avroSchemaData = []
     ): Consumer {
-        $params = $this->getConsumerTopic($topicData);
+        $params = self::getConsumerTopic($topicData);
 
         $brokerData['auth'] = AuthFactory::make($brokerData['auth'] ?? []);
         $params['broker'] = app(Broker::class, $brokerData);
@@ -21,12 +20,12 @@ class Factory
         return app(Consumer::class, $params);
     }
 
-    public function makeProducerConfigOptions(
+    public static function makeProducerConfigOptions(
         array $brokerData,
         array $topicData,
         ?array $avroSchemaData = []
-    ): ProducerConfigManager {
-        $params = $this->convertProducerConfig($topicData);
+    ): Producer {
+        $params = self::convertProducerConfig($topicData);
         $brokerData['auth'] = AuthFactory::make($brokerData['auth'] ?? []);
         $params['broker'] = app(Broker::class, $brokerData);
 
@@ -35,17 +34,17 @@ class Factory
         return app(Producer::class, $params);
     }
 
-    private function getConsumerTopic(array $topicData): array
+    private static function getConsumerTopic(array $topicData): array
     {
         $topicData['topicId'] = $topicData['topic_id'];
 
         $consumer = current($topicData['consumer']);
         $topicData['consumerGroup'] = key($consumer);
 
-        return array_merge($topicData, $this->convertConsumerConfig($consumer));
+        return array_merge($topicData, self::convertConsumerConfig($consumer));
     }
 
-    private function convertConsumerConfig(array $topic): array
+    private static function convertConsumerConfig(array $topic): array
     {
         $consumerConfig = current($topic);
 
@@ -72,9 +71,10 @@ class Factory
         return $consumerConfig;
     }
 
-    private function convertProducerConfig(array $topic): array
+    private static function convertProducerConfig(array $topic): array
     {
         $configs = $topic['producer'];
+        $configs['topicId'] = $topic['topic_id'];
 
         if (isset($configs['required_acknowledgment'])) {
             $configs['requiredAcknowledgment'] = $configs['required_acknowledgment'];

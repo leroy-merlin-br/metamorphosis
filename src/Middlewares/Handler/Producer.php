@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis\Middlewares\Handler;
 
+use Closure;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Producer\Poll;
 use Metamorphosis\Record\RecordInterface;
@@ -30,7 +31,7 @@ class Producer implements MiddlewareInterface
         $this->partition = $partition;
     }
 
-    public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
+    public function process(RecordInterface $record, Closure $next): void
     {
         $this->topic->produce($this->getPartition($record), 0, $record->getPayload(), $record->getKey());
 

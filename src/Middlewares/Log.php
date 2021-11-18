@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis\Middlewares;
 
+use Closure;
 use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Record\RecordInterface;
 use Psr\Log\LoggerInterface;
@@ -17,12 +18,12 @@ class Log implements MiddlewareInterface
         $this->log = $log;
     }
 
-    public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
+    public function process(RecordInterface $record, Closure $next)
     {
         $this->log->info('Processing kafka record: '.$record->getPayload(), [
             'original' => (array) $record->getOriginal(),
         ]);
 
-        $handler->handle($record);
+        return $next($record);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Metamorphosis\Middlewares;
 
+use Closure;
 use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Serializer\Decoders\DecoderInterface;
@@ -31,10 +32,10 @@ class AvroSchemaDecoder implements MiddlewareInterface
         $this->decoder = new MessageDecoder($factory->make($configManager));
     }
 
-    public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
+    public function process(RecordInterface $record, Closure $next)
     {
         $record->setPayload($this->decoder->decodeMessage($record->getPayload()));
 
-        $handler->handle($record);
+        return $next($record);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Integration;
 
-use Illuminate\Support\Str;
 use Metamorphosis\Consumer;
 use Metamorphosis\Facades\Metamorphosis;
 use Metamorphosis\Middlewares\JsonDecode;
@@ -17,10 +16,9 @@ class ConsumerTest extends LaravelTestCase
     public function testItShouldSetup(): void
     {
         // Set
-        $seed = Str::random(10);
         $brokerOptions = new Broker('kafka:9092', new None());
         $consumerConfigOptions = new ConsumerConfigOptions(
-            'single_consumer_test_'.$seed,
+            'single_consumer_test',
             $brokerOptions,
             null,
             null,
@@ -28,14 +26,14 @@ class ConsumerTest extends LaravelTestCase
             'default',
             null,
             [JsonDecode::class],
-            200,
+            20000,
             false,
             true,
             'smallest'
         );
 
         $producerConfigOptions = new ProducerConfigOptions(
-            'single_consumer_test_'.$seed,
+            'single_consumer_test',
             $brokerOptions,
             null,
             null,

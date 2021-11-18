@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\Middlewares\Handler;
 
-use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
+use Closure;
 use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Producer\Poll;
 use Metamorphosis\ProducerConfigManager;
@@ -32,7 +32,8 @@ class ProducerTest extends LaravelTestCase
     {
         // Set
         $poll = m::mock(Poll::class);
-        $middlewareHandler = m::mock(MiddlewareHandlerInterface::class);
+        $closure = Closure::fromCallable(function () {
+        });
         $producerTopic = m::mock(KafkaTopicProducer::class);
 
         $record = json_encode(['message' => 'original record']);
@@ -50,6 +51,6 @@ class ProducerTest extends LaravelTestCase
 
         // Actions
         $producerHandler = new Producer($producerTopic, $poll, 1);
-        $producerHandler->process($record, $middlewareHandler);
+        $producerHandler->process($record, $closure);
     }
 }

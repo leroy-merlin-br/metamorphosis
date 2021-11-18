@@ -65,6 +65,7 @@ class ConsumerTest extends LaravelTestCase
         // Actions
         $result = $consumer->consume();
 
+        // Assertions
         $this->assertSame($expected, $result->getPayload());
     }
 }

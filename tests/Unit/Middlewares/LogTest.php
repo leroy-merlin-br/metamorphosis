@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\Middlewares;
 
-use Metamorphosis\Middlewares\Handler\Iterator;
+use Closure;
 use Metamorphosis\Middlewares\Log;
 use Metamorphosis\Record\ConsumerRecord as Record;
 use Mockery as m;
@@ -20,7 +20,9 @@ class LogTest extends LaravelTestCase
         $kafkaMessage->payload = 'original record';
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
         $record = new Record($kafkaMessage);
-        $handler = m::mock(Iterator::class);
+        $closure = Closure::fromCallable(function ($record) {
+            return $record;
+        });
 
         // Expectations
         $log->expects()
@@ -39,10 +41,7 @@ class LogTest extends LaravelTestCase
                 ],
             ]);
 
-        $handler->expects()
-            ->handle($record);
-
         // Actions
-        $middleware->process($record, $handler);
+        $middleware->process($record, $closure);
     }
 }

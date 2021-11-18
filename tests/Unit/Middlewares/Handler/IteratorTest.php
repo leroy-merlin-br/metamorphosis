@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\Middlewares\Handler;
 
+use Closure;
 use Metamorphosis\Middlewares\Handler\Iterator;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\ConsumerRecord as Record;
@@ -26,7 +27,7 @@ class IteratorTest extends LaravelTestCase
 
         // Expectations
         $middleware->expects()
-            ->process($record, $iterator);
+            ->process($record, m::type(Closure::class));
 
         // Actions
         $iterator->handle($record);

@@ -18,7 +18,7 @@ class Consumer implements MiddlewareInterface
         $this->consumerTopicHandler = $consumerTopicHandler;
     }
 
-    public function process(RecordInterface $record, Closure $handler)
+    public function process(RecordInterface $record, Closure $next)
     {
         $this->consumerTopicHandler->handle($record);
     }

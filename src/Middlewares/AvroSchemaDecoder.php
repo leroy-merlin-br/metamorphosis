@@ -7,7 +7,6 @@ use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Serializer\Decoders\DecoderInterface;
 use Metamorphosis\Avro\Serializer\MessageDecoder;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Record\RecordInterface;
 
 class AvroSchemaDecoder implements MiddlewareInterface

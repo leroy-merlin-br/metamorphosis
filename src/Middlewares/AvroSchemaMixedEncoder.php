@@ -1,12 +1,12 @@
 <?php
 namespace Metamorphosis\Middlewares;
 
+use Closure;
 use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Serializer\Encoders\SchemaId;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Closure;
 use Metamorphosis\Record\RecordInterface;
 
 /**

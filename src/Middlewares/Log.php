@@ -2,7 +2,6 @@
 namespace Metamorphosis\Middlewares;
 
 use Closure;
-use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Record\RecordInterface;
 use Psr\Log\LoggerInterface;
 

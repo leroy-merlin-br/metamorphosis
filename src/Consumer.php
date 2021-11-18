@@ -10,7 +10,6 @@ use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
-use RdKafka\Message;
 
 class Consumer
 {

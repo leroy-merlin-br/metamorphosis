@@ -7,7 +7,7 @@ use Metamorphosis\Record\RecordInterface;
 
 class Iterator extends AbstractMiddlewareHandler
 {
-    public function handle(RecordInterface $record): void
+    public function handle(RecordInterface $record)
     {
         $closure = Closure::fromCallable([$this, 'handle']);
         $entry = current($this->queue);
@@ -15,7 +15,9 @@ class Iterator extends AbstractMiddlewareHandler
         next($this->queue);
 
         if ($middleware instanceof MiddlewareInterface) {
-            $middleware->process($record, $closure);
+            return $middleware->process($record, $closure);
         }
+
+        return $record;
     }
 }

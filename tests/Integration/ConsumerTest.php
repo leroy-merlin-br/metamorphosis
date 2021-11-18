@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Integration;
 
+use Illuminate\Support\Str;
 use Metamorphosis\Consumer;
 use Metamorphosis\Facades\Metamorphosis;
 use Metamorphosis\Middlewares\JsonDecode;
@@ -16,9 +17,10 @@ class ConsumerTest extends LaravelTestCase
     public function testItShouldSetup(): void
     {
         // Set
+        $seed = Str::random(10);
         $brokerOptions = new Broker('kafka:9092', new None());
         $consumerConfigOptions = new ConsumerConfigOptions(
-            'single_consumer_test',
+            'single_consumer_test_'.$seed,
             $brokerOptions,
             null,
             null,
@@ -33,7 +35,7 @@ class ConsumerTest extends LaravelTestCase
         );
 
         $producerConfigOptions = new ProducerConfigOptions(
-            'single_consumer_test',
+            'single_consumer_test_'.$seed,
             $brokerOptions,
             null,
             null,
@@ -63,6 +65,6 @@ class ConsumerTest extends LaravelTestCase
         // Actions
         $result = $consumer->consume();
 
-        $this->assertSame($expected, $result->payload);
+        $this->assertSame($expected, $result->getPayload());
     }
 }

@@ -3,7 +3,7 @@ namespace Tests\Unit\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\ProducerConfigManager;
-use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Metamorphosis\TopicHandler\Producer\AbstractProducer;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
@@ -27,7 +27,7 @@ class ConnectorTest extends LaravelTestCase
             m::mock(KafkaProducer::class)
         );
         $configManager = m::mock(ProducerConfigManager::class);
-        $configOptions = m::mock(ConsumerConfigOptions::class);
+        $configOptions = m::mock(ProducerConfigOptions::class);
 
         $connector = new Connector();
         $handler = new class('record', $configOptions) extends AbstractProducer implements HandleableResponseInterface {
@@ -75,7 +75,7 @@ class ConnectorTest extends LaravelTestCase
             m::mock(KafkaProducer::class)
         );
         $configManager = m::mock(ProducerConfigManager::class);
-        $configOptions = m::mock(ConsumerConfigOptions::class);
+        $configOptions = m::mock(ProducerConfigOptions::class);
 
         $connector = new Connector();
         $handler = new class('record', $configOptions) extends AbstractProducer implements HandlerInterface {

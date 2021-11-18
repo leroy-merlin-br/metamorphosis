@@ -15,7 +15,9 @@ class Factory
         $brokerData['auth'] = AuthFactory::make($brokerData['auth'] ?? []);
         $params['broker'] = app(Broker::class, $brokerData);
 
-        $params['avroSchema'] = $avroSchemaData ? app(AvroSchema::class, $avroSchemaData) : null;
+        $params['avroSchema'] = $avroSchemaData
+            ? app(AvroSchema::class, self::convertAvroSchemaConfig($avroSchemaData))
+            : null;
 
         return app(Consumer::class, $params);
     }
@@ -73,25 +75,38 @@ class Factory
 
     private static function convertProducerConfig(array $topic): array
     {
-        $configs = $topic['producer'] ?? [];
-        $configs['topicId'] = $topic['topic_id'];
+        $config = $topic['producer'] ?? [];
+        $config['topicId'] = $topic['topic_id'];
 
-        if (isset($configs['required_acknowledgment'])) {
-            $configs['requiredAcknowledgment'] = $configs['required_acknowledgment'];
+        if (isset($config['required_acknowledgment'])) {
+            $config['requiredAcknowledgment'] = $config['required_acknowledgment'];
         }
 
-        if (isset($configs['is_async'])) {
-            $configs['isAsync'] = $configs['is_async'];
+        if (isset($config['is_async'])) {
+            $config['isAsync'] = $config['is_async'];
         }
 
-        if (isset($configs['max_poll_records'])) {
-            $configs['maxPollRecords'] = $configs['max_poll_records'];
+        if (isset($config['max_poll_records'])) {
+            $config['maxPollRecords'] = $config['max_poll_records'];
         }
 
-        if (isset($configs['flush_attempts'])) {
-            $configs['flushAttempts'] = $configs['flush_attempts'];
+        if (isset($config['flush_attempts'])) {
+            $config['flushAttempts'] = $config['flush_attempts'];
         }
 
-        return $configs;
+        return $config;
+    }
+
+    private static function convertAvroSchemaConfig(array $config): array
+    {
+        if (isset($config['ssl_verify'])) {
+            $config['sslVerify'] = $config['ssl_verify'];
+        }
+
+        if (isset($config['request_options'])) {
+            $config['requestOptions'] = $config['request_options'];
+        }
+
+        return $config;
     }
 }

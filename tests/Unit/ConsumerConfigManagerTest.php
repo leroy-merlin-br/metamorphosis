@@ -2,6 +2,8 @@
 namespace Tests\Unit;
 
 use Metamorphosis\ConsumerConfigManager;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 use Mockery as m;
@@ -23,9 +25,10 @@ class ConsumerConfigManagerTest extends LaravelTestCase
             ],
             'topic_id' => 'kafka-test',
         ];
+        $broker = new Broker('kafka:9092', new None());
         $configOptions = new ConsumerConfigOptions(
             'kafka-override',
-            ['connections' => 'kafka:9092'],
+            $broker,
             '\App\Kafka\Consumers\ConsumerExample',
             null,
             null,
@@ -33,6 +36,7 @@ class ConsumerConfigManagerTest extends LaravelTestCase
             null,
             [MiddlewareDummy::class],
             200,
+            false
         );
 
         $expected = [
@@ -40,16 +44,9 @@ class ConsumerConfigManagerTest extends LaravelTestCase
             'connections' => 'kafka:9092',
             'auth' => null,
             'timeout' => 1000,
-            'is_async' => false,
             'handler' => '\App\Kafka\Consumers\ConsumerExample',
             'partition' => -1,
             'consumer_group' => 'default',
-            'required_acknowledgment' => true,
-            'max_poll_records' => 200,
-            'flush_attempts' => 1,
-            'url' => null,
-            'ssl_verify' => null,
-            'request_options' => null,
             'auto_commit' => false,
             'commit_async' => true,
             'offset_reset' => 'smallest',
@@ -72,6 +69,6 @@ class ConsumerConfigManagerTest extends LaravelTestCase
         $configManager->set($config, $commandConfig);
 
         // Expectations
-        $this->assertSame($expected, $configManager->get());
+        $this->assertEquals($expected, $configManager->get());
     }
 }

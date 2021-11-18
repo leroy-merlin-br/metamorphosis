@@ -158,6 +158,7 @@ class Consumer
             'timeout' => $this->getTimeout(),
             'handler' => $this->getHandler(),
             'partition' => $this->getPartition(),
+            'offset' => $this->getOffset(),
             'consumer_group' => $this->getConsumerGroup(),
             'middlewares' => $this->getMiddlewares(),
             'auto_commit' => $this->isAutoCommit(),
@@ -170,5 +171,10 @@ class Consumer
         }
 
         return array_merge($this->broker->toArray(), $data);
+    }
+
+    public function getOffset(): ?int
+    {
+        return $this->offset;
     }
 }

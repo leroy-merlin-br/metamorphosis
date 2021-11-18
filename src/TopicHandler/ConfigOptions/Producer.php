@@ -149,9 +149,6 @@ class Producer
             'max_poll_records' => $this->getMaxPollRecords(),
             'flush_attempts' => $this->getFlushAttempts(),
             'middlewares' => $this->getMiddlewares(),
-            'url' => $avroSchema['url'] ?? null,
-            'ssl_verify' => $avroSchema['ssl_verify'] ?? null,
-            'request_options' => $avroSchema['request_options'] ?? null,
         ];
 
         if ($avroSchema = $this->getAvroSchema()) {

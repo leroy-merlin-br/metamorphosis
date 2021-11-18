@@ -1,10 +1,10 @@
 <?php
-namespace Tests\Unit\TopicHandler;
+namespace Tests\Unit\TopicHandler\ConfigOptions;
 
-use Metamorphosis\TopicHandler\Factory;
+use Metamorphosis\TopicHandler\ConfigOptions\Factory;
 use Tests\LaravelTestCase;
 
-class ConfigOptionsFactoryTest extends LaravelTestCase
+class FactoryTest extends LaravelTestCase
 {
     public function testShouldMakeConfigOptionWithAvroSchema(): void
     {
@@ -21,13 +21,10 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
                 'key' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.key',
             ],
             'timeout' => 20000,
-            'is_async' => true,
             'handler' => '\App\Kafka\Consumers\ConsumerExample',
             'partition' => 0,
+            'offset' => 0,
             'consumer_group' => 'test-consumer-group',
-            'required_acknowledgment' => false,
-            'max_poll_records' => 500,
-            'flush_attempts' => 10,
             'middlewares' => [],
             'url' => '',
             'ssl_verify' => true,
@@ -43,15 +40,14 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
             'offset_reset' => 'earliest',
         ];
         // Actions
-        $result = $factory->makeByConfigNameWithSchema(
-            'kafka',
-            'default',
-            'default',
-            'default'
+        $result = $factory->makeConsumerConfigOptions(
+            config('kafka.brokers.default'),
+            config('kafka.topics.default'),
+            config('kafka.avro_schemas.default')
         );
 
         // Assertions
-        $this->assertSame($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
     }
 
     public function testShouldMakeConfigOptionWithoutAvro(): void
@@ -65,31 +61,24 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
             'connections' => 'localhost:9092',
             'auth' => null,
             'timeout' => 20000,
-            'is_async' => true,
             'handler' => '\App\Kafka\Consumers\ConsumerExample',
             'partition' => 0,
+            'offset' => 0,
             'consumer_group' => 'test-consumer-group',
-            'required_acknowledgment' => false,
-            'max_poll_records' => 500,
-            'flush_attempts' => 10,
             'middlewares' => [],
-            'url' => null,
-            'ssl_verify' => null,
-            'request_options' => null,
             'auto_commit' => true,
             'commit_async' => true,
             'offset_reset' => 'earliest',
         ];
 
         // Actions
-        $result = $factory->makeByConfigName(
-            'kafka',
-            'default',
-            'new'
+        $result = $factory->makeConsumerConfigOptions(
+            config('kafka.brokers.new'),
+            config('kafka.topics.default')
         );
 
         // Assertions
-        $this->assertSame($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
     }
 
     public function testShouldMakeProducerConfigOptions(): void
@@ -106,27 +95,22 @@ class ConfigOptionsFactoryTest extends LaravelTestCase
                 'certificate' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.cert',
                 'key' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.key',
             ],
-            'timeout' => 20000,
+            'timeout' => 10000,
             'is_async' => true,
-            'handler' => '\App\Kafka\Consumers\ConsumerExample',
-            'partition' => 0,
-            'consumer_group' => 'test-consumer-group',
-            'required_acknowledgment' => false,
+            'partition' => RD_KAFKA_PARTITION_UA,
+            'required_acknowledgment' => true,
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'middlewares' => [],
-            'url' => null,
-            'ssl_verify' => null,
-            'request_options' => null,
-            'auto_commit' => true,
-            'commit_async' => true,
-            'offset_reset' => 'earliest',
         ];
 
         // Actions
-        $result = $factory->makeProducerConfigOptions('kafka', 'default', 'default');
+        $result = $factory->makeProducerConfigOptions(
+            config('kafka.brokers.default'),
+            config('kafka.topics.default')
+        );
 
         // Assertions
-        $this->assertSame($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
     }
 }

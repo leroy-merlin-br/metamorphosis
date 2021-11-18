@@ -38,7 +38,7 @@ class AbstractConfigManagerTest extends LaravelTestCase
             [MiddlewareDummy::class],
             200,
             false,
-            true,
+            true
         );
 
         $expected = [
@@ -46,13 +46,10 @@ class AbstractConfigManagerTest extends LaravelTestCase
             'connections' => 'kafka:9092',
             'auth' => null,
             'timeout' => 200,
-            'is_async' => false,
             'handler' => '\App\Kafka\Consumers\ConsumerExample',
             'partition' => -1,
+            'offset' => null,
             'consumer_group' => 'default',
-            'url' => null,
-            'ssl_verify' => null,
-            'request_options' => null,
             'auto_commit' => false,
             'commit_async' => true,
             'offset_reset' => 'smallest',
@@ -69,6 +66,6 @@ class AbstractConfigManagerTest extends LaravelTestCase
         $configManager->set($config);
 
         // Expectations
-        $this->assertSame($expected, $configManager->get());
+        $this->assertEquals($expected, $configManager->get());
     }
 }

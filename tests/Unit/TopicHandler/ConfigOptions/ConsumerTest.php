@@ -24,7 +24,7 @@ class ConsumerTest extends LaravelTestCase
             [],
             200,
             false,
-            true,
+            true
         );
 
         $expected = [
@@ -32,15 +32,12 @@ class ConsumerTest extends LaravelTestCase
             'connections' => 'kafka:9092',
             'auth' => null,
             'timeout' => 200,
-            'is_async' => false,
             'handler' => 'Tests\Unit\Dummies\ProducerHandlerDummy',
             'partition' => RD_KAFKA_PARTITION_UA,
+            'offset' => null,
             'consumer_group' => 'some_consumer_group',
             'middlewares' => [],
-            'url' => null,
-            'ssl_verify' => null,
-            'request_options' => null,
-            'auto_commit' => true,
+            'auto_commit' => false,
             'commit_async' => true,
             'offset_reset' => 'smallest',
         ];
@@ -49,6 +46,6 @@ class ConsumerTest extends LaravelTestCase
         $result = $configOptions->toArray();
 
         // Expectations
-        $this->assertSame($expected, $result);
+        $this->assertEquals($expected, $result);
     }
 }

@@ -46,6 +46,7 @@ class ConsumerConfigManagerTest extends LaravelTestCase
             'timeout' => 1000,
             'handler' => '\App\Kafka\Consumers\ConsumerExample',
             'partition' => -1,
+            'offset' => null,
             'consumer_group' => 'default',
             'auto_commit' => false,
             'commit_async' => true,

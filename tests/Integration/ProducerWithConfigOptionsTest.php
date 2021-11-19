@@ -3,7 +3,10 @@ namespace Tests\Integration;
 
 use Illuminate\Support\Facades\Log;
 use Metamorphosis\Facades\Metamorphosis;
-use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Tests\Integration\Dummies\MessageConsumer;
 use Tests\Integration\Dummies\MessageProducerWithConfigOptions;
 use Tests\LaravelTestCase;
@@ -11,9 +14,14 @@ use Tests\LaravelTestCase;
 class ProducerWithConfigOptionsTest extends LaravelTestCase
 {
     /**
-     * @var ConfigOptions
+     * @var ProducerConfigOptions
      */
-    private $configOptions;
+    private $producerConfigOptions;
+
+    /**
+     * @var ConsumerConfigOptions
+     */
+    private $consumerConfigOptions;
 
     public function testShouldRunAProducerMessagesWithConfigOptions(): void
     {
@@ -35,7 +43,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
 
     protected function runTheConsumer(): void
     {
-        $dummy = new MessageConsumer($this->configOptions);
+        $dummy = new MessageConsumer($this->consumerConfigOptions);
         $this->instance('\App\Kafka\Consumers\ConsumerOverride', $dummy);
         config([
             'kafka_new_config' => [
@@ -73,19 +81,32 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
 
     protected function haveAHandlerConfigured(): void
     {
-        $this->configOptions = new ConfigOptions(
+        $broker = new Broker('kafka:9092', new None());
+        $this->producerConfigOptions = new ProducerConfigOptions(
             'sale_order_override',
-            ['connections' => 'kafka:9092'],
-            '\App\Kafka\Consumers\ConsumerOverride',
+            $broker,
             null,
-            'test-consumer-group',
-            [],
+            null,
             [],
             20000,
             false,
             true,
-            600,
-            10
+            10,
+            100
+        );
+
+        $this->consumerConfigOptions = new ConsumerConfigOptions(
+            'sale_order_override',
+            $broker,
+            '\App\Kafka\Consumers\ConsumerOverride',
+            null,
+            null,
+            'test-consumer-group',
+            null,
+            [],
+            20000,
+            false,
+            true
         );
     }
 
@@ -95,7 +116,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
             MessageProducerWithConfigOptions::class,
             [
                 'record' => ['saleOrderId' => 'SALE_ORDER_ID'],
-                'configOptions' => $this->configOptions,
+                'configOptions' => $this->producerConfigOptions,
                 'key' => 1,
             ]
         );

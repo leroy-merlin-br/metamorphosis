@@ -1,11 +1,10 @@
 <?php
 namespace Tests\Unit\Middlewares;
 
+use Closure;
 use Exception;
-use Metamorphosis\Middlewares\Handler\Iterator;
 use Metamorphosis\Middlewares\JsonDecode;
 use Metamorphosis\Record\ConsumerRecord;
-use Mockery as m;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
 
@@ -21,14 +20,12 @@ class JsonDecodeTest extends LaravelTestCase
         $kafkaMessage->payload = $json;
         $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
         $record = new ConsumerRecord($kafkaMessage);
-        $handler = m::mock(Iterator::class);
-
-        // Expectations
-        $handler->expects()
-            ->handle($record);
+        $closure = Closure::fromCallable(function ($record) {
+            return $record;
+        });
 
         // Actions
-        $middleware->process($record, $handler);
+        $record = $middleware->process($record, $closure);
 
         // Assertions
         $this->assertSame($data, $record->getPayload());
@@ -37,9 +34,9 @@ class JsonDecodeTest extends LaravelTestCase
     public function testItShouldThrowAnExceptionOnInvalidJsonString(): void
     {
         // Set
-        $handler = m::mock(Iterator::class);
         $json = "{'Organization': 'Metamorphosis Team'}";
-
+        $closure = Closure::fromCallable(function () {
+        });
         $middleware = new JsonDecode();
 
         $kafkaMessage = new KafkaMessage();
@@ -48,15 +45,10 @@ class JsonDecodeTest extends LaravelTestCase
 
         $record = new ConsumerRecord($kafkaMessage);
 
-        // Expectations
-        $handler->expects()
-            ->handle()
-            ->never();
-
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Malformed JSON. Error: Syntax error');
 
         // Actions
-        $middleware->process($record, $handler);
+        $middleware->process($record, $closure);
     }
 }

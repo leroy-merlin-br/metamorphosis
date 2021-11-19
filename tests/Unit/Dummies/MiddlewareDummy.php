@@ -1,14 +1,14 @@
 <?php
 namespace Tests\Unit\Dummies;
 
-use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
+use Closure;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\RecordInterface;
 
 class MiddlewareDummy implements MiddlewareInterface
 {
-    public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
+    public function process(RecordInterface $record, Closure $next)
     {
-        $handler->handle($record);
+        return $next($record);
     }
 }

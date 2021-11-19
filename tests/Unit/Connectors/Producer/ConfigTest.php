@@ -3,7 +3,9 @@ namespace Tests\Unit\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\SaslSsl;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Tests\LaravelTestCase;
 
 class ConfigTest extends LaravelTestCase
@@ -30,8 +32,6 @@ class ConfigTest extends LaravelTestCase
                 'certificate' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.cert',
                 'key' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.key',
             ],
-            'url' => '',
-            'request_options' => [],
         ];
 
         // Actions
@@ -92,16 +92,8 @@ class ConfigTest extends LaravelTestCase
         // Set
         config(['kafka.topics.default.producer.max_poll_records' => 3000]);
         $config = new Config();
-        $broker = [
-            'connections' => 'kafka:9092',
-            'auth' => [
-                'type' => 'sasl_ssl',
-                'mechanisms' => 'PLAIN',
-                'username' => 'USERNAME',
-                'password' => 'PASSWORD',
-            ],
-        ];
-        $configOptions = new ConfigOptions('TOPIC-ID', $broker, 'App\Kafka\Consumers\ConsumerExample');
+        $broker = new Broker('kafka:9092', new SaslSsl('PLAIN', 'USERNAME', 'PASSWORD'));
+        $configOptions = new ProducerConfigOptions('TOPIC-ID', $broker);
 
         $expected = [
             'topic_id' => 'TOPIC-ID',
@@ -117,9 +109,6 @@ class ConfigTest extends LaravelTestCase
             'required_acknowledgment' => false,
             'max_poll_records' => 500,
             'flush_attempts' => 10,
-            'url' => null,
-            'ssl_verify' => null,
-            'request_options' => null,
         ];
 
         // Actions

@@ -5,5 +5,5 @@ use Metamorphosis\Record\RecordInterface;
 
 interface MiddlewareHandlerInterface
 {
-    public function handle(RecordInterface $record): void;
+    public function handle(RecordInterface $record);
 }

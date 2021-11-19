@@ -32,7 +32,7 @@ class Factory
         return !is_null($partition) && $partition >= 0;
     }
 
-    private static function getConsumer(bool $autoCommit, AbstractConfigManager $configManager): ConsumerInterface
+    public static function getConsumer(bool $autoCommit, AbstractConfigManager $configManager): ConsumerInterface
     {
         if (self::requiresPartition($configManager)) {
             return app(LowLevel::class)->getConsumer($autoCommit, $configManager);

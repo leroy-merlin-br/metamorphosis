@@ -18,5 +18,5 @@ abstract class AbstractMiddlewareHandler implements MiddlewareHandlerInterface
     /**
      * Handles the current entry in the middleware queue and advances.
      */
-    abstract public function handle(RecordInterface $record): void;
+    abstract public function handle(RecordInterface $record);
 }

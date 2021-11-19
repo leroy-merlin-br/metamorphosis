@@ -8,14 +8,15 @@ use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer;
 use Metamorphosis\ProducerConfigManager;
-use Metamorphosis\TopicHandler\ConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use Metamorphosis\TopicHandler\Producer\AbstractProducer;
 use Mockery as m;
 use RdKafka\Producer as KafkaProducer;
 use RdKafka\ProducerTopic;
 use Tests\LaravelTestCase;
-use Tests\Unit\Dummies\ProducerHandlerDummy;
 
 class ProducerTest extends LaravelTestCase
 {
@@ -296,10 +297,8 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
         $configManager = m::mock(ProducerConfigManager::class);
-        $broker = [
-            'connections' => 'kafka:9092',
-        ];
-        $configOptions = new ConfigOptions($topicId, $broker, ProducerHandlerDummy::class);
+        $broker = new Broker('kafka:9092', new None());
+        $configOptions = new ProducerConfigOptions($topicId, $broker);
         $producerHandler = new class($record, $configOptions) extends AbstractProducer {
         };
 

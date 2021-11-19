@@ -1,13 +1,13 @@
 <?php
 namespace Metamorphosis\Middlewares;
 
+use Closure;
 use Exception;
-use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Record\RecordInterface;
 
 class JsonDecode implements MiddlewareInterface
 {
-    public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
+    public function process(RecordInterface $record, Closure $next)
     {
         $payload = json_decode($record->getPayload(), true);
 
@@ -19,6 +19,6 @@ class JsonDecode implements MiddlewareInterface
 
         $record->setPayload($payload);
 
-        $handler->handle($record);
+        return $next($record);
     }
 }

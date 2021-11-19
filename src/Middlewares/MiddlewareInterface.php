@@ -1,10 +1,13 @@
 <?php
 namespace Metamorphosis\Middlewares;
 
-use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
+use Closure;
 use Metamorphosis\Record\RecordInterface;
 
 interface MiddlewareInterface
 {
-    public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void;
+    /**
+     * @return mixed
+     */
+    public function process(RecordInterface $record, Closure $next);
 }

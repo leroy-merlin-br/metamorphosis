@@ -1,12 +1,12 @@
 <?php
 namespace Metamorphosis\Middlewares;
 
+use Closure;
 use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Serializer\Encoders\SchemaId;
 use Metamorphosis\Exceptions\ConfigurationException;
-use Metamorphosis\Middlewares\Handler\MiddlewareHandlerInterface;
 use Metamorphosis\Record\RecordInterface;
 
 /**
@@ -43,7 +43,7 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
         $this->configManager = $configManager;
     }
 
-    public function process(RecordInterface $record, MiddlewareHandlerInterface $handler): void
+    public function process(RecordInterface $record, Closure $next)
     {
         $topic = $this->configManager->get('topic_id');
         $schema = $this->schemaRegistry->getBySubjectAndVersion("{$topic}-value", 'latest');
@@ -52,6 +52,7 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
         $encodedPayload = $this->schemaIdEncoder->encode($schema, $arrayPayload);
 
         $record->setPayload($encodedPayload);
-        $handler->handle($record);
+
+        return $next($record);
     }
 }

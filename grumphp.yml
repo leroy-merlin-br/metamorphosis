@@ -1,0 +1,33 @@
+grumphp:
+  stop_on_failure: true
+  process_timeout: 120
+  ascii:
+    failed: ~
+    succeeded: ~
+  tasks:
+    phpcs:
+      standard: [ phpcs.xml ]
+    psalm:
+      config: psalm.xml
+      threads: 4
+    git_commit_message:
+      enforce_capitalized_subject: false
+      max_body_width: 0
+      max_subject_width: 80
+      type_scope_conventions:
+        - types:
+          - build
+          - ci
+          - chore
+          - docs
+          - feat
+          - fix
+          - perf
+          - refactor
+          - revert
+          - style
+          - test
+        - scopes: [ ]
+  fixer:
+    enabled: true
+    fix_by_default: true

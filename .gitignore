@@ -1,6 +1,7 @@
 build/
 vendor/
 coverage/
+storage/
 .idea/
 composer.lock
 .phpcs-cache

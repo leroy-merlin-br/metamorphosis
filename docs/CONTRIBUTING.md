@@ -25,6 +25,7 @@ Evaluate the possibility of breaking your contribution into more objective branc
 
 Some examples of prefixes we can use: `feat`, `fix`, `ref`, `doc`, `chore`
 
+
 ## Commits
 
 We use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) as a guide for commit messages.
@@ -33,7 +34,6 @@ Try to let your commit do only one thing in the code, while not breaking if it i
 
 Ex: Imagine that you are going to change the return of a method that was `string`, but now you can also return `null`. It's interesting that at the same time you change the method signature, you also fix the test related to this change.
 That way, should you need to roll back that commit, you'll have confidence that the tests will continue to pass and nothing is affected.
-
 
 
 ## Description and PR comments by the author

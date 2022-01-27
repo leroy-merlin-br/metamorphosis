@@ -5,18 +5,18 @@
 ![Metamorphosis](./docs/logo.png)
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/leroy-merlin-br/metamorphosis.svg?style=flat-square)](https://packagist.org/packages/leroy-merlin-br/metamorphosis)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](#licença)
 [![Total Downloads](https://img.shields.io/packagist/dt/leroy-merlin-br/metamorphosis.svg?style=flat-square)](https://packagist.org/packages/leroy-merlin-br/metamorphosis)
 [![Build Status](https://github.com/leroy-merlin-br/metamorphosis/workflows/Tests/badge.svg)](https://github.com/leroy-merlin-br/metamorphosis/actions?query=workflow%3ATests)
 [![Coverage Status](https://app.codacy.com/project/badge/Coverage/68b086fe75294d3e8c21a72addccb1bc)](https://www.codacy.com/gh/leroy-merlin-br/metamorphosis/dashboard?utm_source=github.com&utm_medium=referral&utm_content=leroy-merlin-br/metamorphosis&utm_campaign=Badge_Coverage)
 
-- [Introdução](#introduction)
-- [Requisitos](#requirements)
-- [Instalação](#installation)
+- [Introdução](#introdução)
+- [Requisitos](#requisitos)
+- [Instalação](#instalação)
 - [Guia rápido](docs/quick-usage.pt.md)
 - [Guia avançado](docs/advanced.pt.md)
 - [Como contribuir](docs/CONTRIBUTING.pt.md)
-- [Licença](#license)
+- [Licença](#licença)
 
 
 <a name="introduction"></a>
@@ -74,7 +74,7 @@ extension=rdkafka.so
 ```
 **Importante:**
 
-Quando o host possui múltiplas versões do PHP, o PECL instala os pacotes apenas para a última versão do PHP.
+Quando existem múltiplas versões do PHP instaladas, a PECL instala os pacotes apenas para a última versão do PHP.
 Para especificar uma versão do PHP durante a instalação dos pacotes, 
 baixe o código-fonte e compile o pacote especificando a versão do PHP desejada.
 
@@ -122,7 +122,7 @@ Publique o arquivo de configuração:
 $ php artisan vendor:publish --provider="Metamorphosis\MetamorphosisServiceProvider"
 ```
 
-Para instruções de uso, dê uma olhada em nosso [guia rápido](docs/quick-usage.pt.md).
+Para instruções de uso, dê uma olhada no nosso [guia rápido](docs/quick-usage.pt.md).
 
 <a name="license"></a>
 ## Licença
@@ -132,4 +132,4 @@ Para instruções de uso, dê uma olhada em nosso [guia rápido](docs/quick-usag
 <a name="additional_information"></a>
 ## Informações adicionais
 
-**Metamorphosis** foi orgulhosamente desenvolvido pelo time [Leroy Merlin Brazil](https://github.com/leroy-merlin-br). [Veja todos os colaboradores](https://github.com/leroy-merlin-br/metamorphosis/graphs/contributors).
+**Metamorphosis** foi orgulhosamente desenvolvido pelo time [Leroy Merlin Brasil](https://github.com/leroy-merlin-br). [Veja todos os colaboradores](https://github.com/leroy-merlin-br/metamorphosis/graphs/contributors).

@@ -5,10 +5,11 @@
 1. Faça um [clone](https://help.github.com/en/articles/cloning-a-repository) do [metamorphosis](https://github.com/leroy-merlin-br/metamorphosis)
 
 2. Preparamos um ambiente docker com todas as dependências necessárias para tornar o processo mais suave. Compile
-   a imagem e inicie os contêineres:
+   a imagem e instale as dependencias:
 
 ```bash
 $ docker-compose build
+$ docker-compose run php composer setup-dev
 ```
 
 3. Seguimos as recomendações de Padrões do PHP (PSRs) do [PHP Framework Interoperability Group](http://www.php-fig.org/). Se você não estiver familiarizado com esses padrões, [familiarize-se agora](https://github.com/php-fig/fig-standards).

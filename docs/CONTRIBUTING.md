@@ -5,14 +5,14 @@
 1. [Clone](https://help.github.com/en/articles/cloning-a-repository) [metamorphosis](https://github.com/leroy-merlin-br/metamorphosis)
 
 2. We've prepare a docker environment with all required dependencies for making the process more smoothie. Build
-   the image:
+   the image and install the dependencies:
 
 ```bash 
 $ docker-compose build
+$ docker-compose run php composer setup-dev
 ```
 
 3. We follow PHP Standards Recommendations (PSRs) by [PHP Framework Interoperability Group](http://www.php-fig.org/). If you're not familiar with these standards, [familiarize yourself now](https://github.com/php-fig/fig-standards).
-
 
 ## Branches
 

@@ -24,13 +24,13 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
         $this->haveAHandlerConfigured();
 
         // I Expect That
-        //$this->myMessagesHaveBeenProduced();
+        $this->myMessagesHaveBeenProduced();
 
         // When I
-        //$this->haveSomeRandomMessageProduced();
+        $this->haveSomeRandomMessageProduced();
 
         // I Expect That
-        //$this->myMessagesHaveBeenLogged();
+        $this->myMessagesHaveBeenLogged();
 
         // When I
         $this->runTheConsumer();

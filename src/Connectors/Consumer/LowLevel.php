@@ -5,41 +5,43 @@ use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Authentication\Factory;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConfigOptions;
 use RdKafka\Conf;
 use RdKafka\Consumer;
 use RdKafka\TopicConf;
 
 class LowLevel implements ConnectorInterface
 {
-    public function getConsumer(bool $autoCommit, AbstractConfigManager $configManager): ConsumerInterface
+    public function getConsumer(bool $autoCommit, ConfigOptions $configOptions): ConsumerInterface
     {
         $conf = $this->getConf();
-        $conf->set('group.id', $configManager->get('consumer_group'));
+        $conf->set('group.id', $configOptions->getConsumerGroup());
         if (!$autoCommit) {
             $conf->set('enable.auto.commit', 'false');
         }
 
-        Factory::authenticate($conf, $configManager);
+        $broker = $configOptions->getBroker();
+        Factory::authenticate($conf, $broker->getAuth());
 
         $consumer = new Consumer($conf);
-        $consumer->addBrokers($configManager->get('connections'));
+        $consumer->addBrokers($broker->getConnections());
 
-        $topicConf = $this->getTopicConfigs($configManager);
-        $topicConsumer = $consumer->newTopic($configManager->get('topic_id'), $topicConf);
+        $topicConf = $this->getTopicConfigs($configOptions);
+        $topicConsumer = $consumer->newTopic($configOptions->getTopicId(), $topicConf);
 
-        $topicConsumer->consumeStart($configManager->get('partition'), $configManager->get('offset'));
+        $topicConsumer->consumeStart($configOptions->getPartition(), $configOptions->getOffset());
 
-        return new LowLevelConsumer($topicConsumer, $configManager);
+        return new LowLevelConsumer($topicConsumer, $configOptions);
     }
 
-    protected function getTopicConfigs(AbstractConfigManager $configManager)
+    protected function getTopicConfigs(ConfigOptions $configOptions)
     {
         $topicConfig = new TopicConf();
 
         // Set where to start consuming messages when there is no initial offset in
         // offset store or the desired offset is out of range.
         // 'smallest': start from the beginning
-        $topicConfig->set('auto.offset.reset', $configManager->get('offset_reset'));
+        $topicConfig->set('auto.offset.reset', $configOptions->getOffsetReset());
 
         return $topicConfig;
     }

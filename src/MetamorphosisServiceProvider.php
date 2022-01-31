@@ -2,6 +2,7 @@
 namespace Metamorphosis;
 
 use Illuminate\Support\ServiceProvider;
+use Metamorphosis\Console\ConfigOptionsCommand;
 use Metamorphosis\Console\ConsumerCommand;
 use Metamorphosis\Console\ConsumerMakeCommand;
 use Metamorphosis\Console\MiddlewareMakeCommand;
@@ -25,6 +26,7 @@ class MetamorphosisServiceProvider extends ServiceProvider
             ConsumerMakeCommand::class,
             MiddlewareMakeCommand::class,
             ProducerMakeCommand::class,
+            ConfigOptionsCommand::class,
         ]);
 
         $this->app->bind('metamorphosis', function ($app) {

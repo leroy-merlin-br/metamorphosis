@@ -6,6 +6,7 @@ use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Consumers\Runner;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConfigOptions;
 
 class ConfigOptionsCommand extends BaseCommand
 {
@@ -22,25 +23,29 @@ class ConfigOptionsCommand extends BaseCommand
     /**
      * @var {inheritdoc}
      */
-    protected $signature = 'kafka:consume-config-class {handler : handler.}';
+    protected $signature = 'kafka:consume-config-class
+        {handler : handler.}
+        {--times= : Amount of messages to be consumed.}';
 
     public function handle(Config $config)
     {
-        $configManager = $config->makeWithConfigOptions($this->argument()['handler']);
+        $consumerHandler = app($this->argument('handler'));
 
-        $this->writeStartingConsumer($configManager);
+        $configOptions = $consumerHandler->getConfigOptions();
 
-        $manager = Factory::make($configManager);
+        $this->writeStartingConsumer($configOptions);
+
+        $manager = Factory::make($configOptions);
 
         $runner = app(Runner::class, compact('manager'));
-        $runner->run(2);
+        $runner->run($this->option('times'));
     }
 
-    private function writeStartingConsumer(AbstractConfigManager $configManager)
+    private function writeStartingConsumer(ConfigOptions $configOptions)
     {
-        $text = 'Starting consumer for topic: '.$configManager->get('topic').PHP_EOL;
-        $text .= ' on consumer group: '.$configManager->get('consumer_group').PHP_EOL;
-        $text .= 'Connecting in '.$configManager->get('connections').PHP_EOL;
+        $text = 'Starting consumer for topic: '.$configOptions->getTopicId().PHP_EOL;
+        $text .= ' on consumer group: '.$configOptions->getConsumerGroup().PHP_EOL;
+        $text .= 'Connecting in '.$configOptions->getBroker()->getConnections().PHP_EOL;
         $text .= 'Running consumer..';
 
         $this->output->writeln($text);

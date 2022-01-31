@@ -52,5 +52,11 @@
         "aliases": {
             "Metamorphosis": "Metamorphosis\\Facades\\Metamorphosis"
         }
+    },
+    "scripts": {
+        "setup-dev": [
+            "@composer install",
+            "vendor/bin/grumphp git:init"
+        ]
     }
 }

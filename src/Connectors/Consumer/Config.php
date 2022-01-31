@@ -38,6 +38,14 @@ class Config extends AbstractConfig
         'middlewares' => 'array',
     ];
 
+    public function makeWithConfigOptions(string $handlerClass): AbstractConfigManager
+    {
+        $configManager = app(ConsumerConfigManager::class);
+        $configManager->set(['handler' => $handlerClass]);
+
+        return $configManager;
+    }
+
     public function make(array $options, array $arguments): AbstractConfigManager
     {
         $configName = $options['config_name'] ?? 'kafka';

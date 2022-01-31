@@ -2,8 +2,8 @@
 
 namespace Metamorphosis\Connectors\Producer;
 
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Authentication\Factory;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ConfigOptions;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 use RdKafka\Conf;
@@ -12,7 +12,7 @@ use RdKafka\Producer as KafkaProducer;
 
 class Connector
 {
-    public function getProducerTopic(HandlerInterface $handler, AbstractConfigManager $configManager): KafkaProducer
+    public function getProducerTopic(HandlerInterface $handler, ConfigOptions $configOptions): KafkaProducer
     {
         $conf = resolve(Conf::class);
 
@@ -29,9 +29,10 @@ class Connector
             );
         }
 
-        $conf->set('metadata.broker.list', $configManager->get('connections'));
+        $broker = $configOptions->getBroker();
+        $conf->set('metadata.broker.list', $broker->getConnections());
 
-        Factory::authenticate($conf, $configManager);
+        Factory::authenticate($conf, $broker->getAuth());
 
         return app(KafkaProducer::class, compact('conf'));
     }

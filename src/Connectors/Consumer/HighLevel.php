@@ -2,44 +2,43 @@
 
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Authentication\Factory;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\HighLevel as HighLevelConsumer;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConfigOptions;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
 
 class HighLevel implements ConnectorInterface
 {
-    public function getConsumer(bool $autoCommit, AbstractConfigManager $configManager): ConsumerInterface
+    public function getConsumer(bool $autoCommit, ConfigOptions $configOptions): ConsumerInterface
     {
-        $conf = $this->getConf($configManager);
-        $maxPollIntervalMs = (int) $configManager->get('max_poll_interval_ms');
-
-        $conf->set('group.id', $configManager->get('consumer_group'));
-        $conf->set('auto.offset.reset', $configManager->get('offset_reset'));
+        $conf = $this->getConf($configOptions);
+        $maxPollIntervalMs = (int) $configOptions->getTimeout();
+        $conf->set('group.id', $configOptions->getConsumerGroup());
+        $conf->set('auto.offset.reset', $configOptions->getOffsetReset());
+        if (!$autoCommit) {
+            $conf->set('enable.auto.commit', 'false');
+        }
         $conf->set(
             'max.poll.interval.ms',
             $maxPollIntervalMs ?: 300000
         );
 
-        if (!$autoCommit) {
-            $conf->set('enable.auto.commit', 'false');
-        }
-
         $consumer = app(KafkaConsumer::class, ['conf' => $conf]);
-        $consumer->subscribe([$configManager->get('topic_id')]);
-        $timeout = $configManager->get('timeout');
+        $consumer->subscribe([$configOptions->getTopicId()]);
+        $timeout = $configOptions->getTimeout();
 
         return app(HighLevelConsumer::class, compact('consumer', 'timeout'));
     }
 
-    protected function getConf(AbstractConfigManager $configManager): Conf
+    protected function getConf(ConfigOptions $configOptions): Conf
     {
         $conf = resolve(Conf::class);
-        Factory::authenticate($conf, $configManager);
+        $broker = $configOptions->getBroker();
+        Factory::authenticate($conf, $broker->getAuth());
 
-        $conf->set('metadata.broker.list', $configManager->get('connections'));
+        $conf->set('metadata.broker.list', $broker->getConnections());
 
         return $conf;
     }

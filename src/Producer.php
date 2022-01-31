@@ -7,6 +7,7 @@ use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer\Poll;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ConfigOptions;
 use Metamorphosis\TopicHandler\Producer\AbstractProducer;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
@@ -31,32 +32,21 @@ class Producer
 
     public function build(HandlerInterface $producerHandler): Dispatcher
     {
-        $configManager = $this->getConfigManager($producerHandler);
+        $configOptions = $producerHandler->getConfigOptions();
 
-        $middlewares = $configManager->middlewares();
-        $middlewares[] = $this->getProducerMiddleware(
-            $producerHandler,
-            $configManager
-        );
+        $middlewares = $configOptions->getMiddlewares();
+        $middlewares[] = $this->getProducerMiddleware($producerHandler, $configOptions);
 
         return new Dispatcher($middlewares);
     }
 
-    public function getProducerMiddleware(
-        HandlerInterface $producerHandler,
-        AbstractConfigManager $configManager
-    ): ProducerMiddleware {
-        $producer = $this->connector->getProducerTopic(
-            $producerHandler,
-            $configManager
-        );
+    public function getProducerMiddleware(HandlerInterface $producerHandler, ConfigOptions $configOptions): ProducerMiddleware
+    {
+        $producer = $this->connector->getProducerTopic($producerHandler, $configOptions);
 
-        $topic = $producer->newTopic($configManager->get('topic_id'));
-        $poll = app(
-            Poll::class,
-            ['producer' => $producer, 'configManager' => $configManager]
-        );
-        $partition = $configManager->get('partition');
+        $topic = $producer->newTopic($configOptions->getTopicId());
+        $poll = app(Poll::class, ['producer' => $producer, 'configOptions' => $configOptions]);
+        $partition = $configOptions->getPartition();
 
         return app(
             ProducerMiddleware::class,

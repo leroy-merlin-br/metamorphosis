@@ -3,6 +3,7 @@ namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
 use Metamorphosis\AbstractConfigManager;
+use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Consumers\Runner;
 
@@ -23,18 +24,16 @@ class ConfigOptionsCommand extends BaseCommand
      */
     protected $signature = 'kafka:consume-config-class {handler : handler.}';
 
-    public function handle()
+    public function handle(Config $config)
     {
-//        $configManager = $config->make($this->option(), $this->argument());
+        $configManager = $config->makeWithConfigOptions($this->argument()['handler']);
 
-//        $this->writeStartingConsumer($configManager);
+        $this->writeStartingConsumer($configManager);
 
-        $config = $this->argument()['handler'];
-
-        $manager = Factory::make($this->argument()['handler']);
+        $manager = Factory::make($configManager);
 
         $runner = app(Runner::class, compact('manager'));
-        //$runner->run($manager->get('times'));
+        $runner->run(2);
     }
 
     private function writeStartingConsumer(AbstractConfigManager $configManager)

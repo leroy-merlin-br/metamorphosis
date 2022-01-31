@@ -24,14 +24,13 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
         $this->haveAHandlerConfigured();
 
         // I Expect That
-        $this->myMessagesHaveBeenProduced();
-        $this->expectNotToPerformAssertions();
+        //$this->myMessagesHaveBeenProduced();
 
         // When I
-        $this->haveSomeRandomMessageProduced();
+        //$this->haveSomeRandomMessageProduced();
 
         // I Expect That
-        $this->myMessagesHaveBeenLogged();
+        //$this->myMessagesHaveBeenLogged();
 
         // When I
         $this->runTheConsumer();
@@ -41,39 +40,11 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
     {
         $dummy = new MessageConsumer($this->consumerConfigOptions);
         $this->instance('\App\Kafka\Consumers\ConsumerOverride', $dummy);
-        config([
-            'kafka_new_config' => [
-                'brokers' => [
-                    'override' => [
-                        'connections' => env(
-                            'KAFKA_BROKER_CONNECTIONS',
-                            'kafka:9092'
-                        ),
-                    ],
-                ],
-                'topics' => [
-                    'default' => [
-                        'broker' => 'override',
-                        'consumer' => [
-                            'consumer_groups' => [
-                                'test-consumer-group' => [
-                                    'handler' => '\App\Kafka\Consumers\ConsumerOverride',
-                                    'offset_reset' => 'earliest',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ]);
+
         $this->artisan(
-            'kafka:consume',
+            'kafka:consume-config-class',
             [
-                'topic' => 'default',
-                'consumer_group' => 'test-consumer-group',
-                '--timeout' => 20000,
-                '--times' => 2,
-                '--config_name' => 'kafka_new_config',
+                'handler' => '\\App\\Kafka\\Consumers\\ConsumerOverride',
             ]
         );
     }

@@ -50,6 +50,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
             'kafka:consume-config-class',
             [
                 'handler' => '\\App\\Kafka\\Consumers\\ConsumerOverride',
+                '--times' => 2,
             ]
         );
     }

@@ -38,10 +38,10 @@ class Config extends AbstractConfig
         'middlewares' => 'array',
     ];
 
-    public function makeWithConfigOptions(string $handlerClass): AbstractConfigManager
+    public function makeWithConfigOptions(string $handlerClass, ?int $times = null): AbstractConfigManager
     {
         $configManager = app(ConsumerConfigManager::class);
-        $configManager->set(['handler' => $handlerClass]);
+        $configManager->set(['handler' => $handlerClass], ['times' => $times]);
 
         return $configManager;
     }

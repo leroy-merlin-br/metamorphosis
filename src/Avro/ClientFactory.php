@@ -2,29 +2,31 @@
 namespace Metamorphosis\Avro;
 
 use GuzzleHttp\Client as GuzzleClient;
-use Metamorphosis\AbstractConfigManager;
+use Metamorphosis\TopicHandler\ConfigOptions\AvroSchema;
 
 class ClientFactory
 {
-    public function make(AbstractConfigManager $configManager): CachedSchemaRegistryClient
+    const REQUEST_TIMEOUT = 2000;
+
+    public function make(AvroSchema $avroSchema): CachedSchemaRegistryClient
     {
-        $guzzleHttp = $this->getGuzzleHttpClient($configManager);
+        $guzzleHttp = $this->getGuzzleHttpClient($avroSchema);
 
         $client = app(Client::class, ['client' => $guzzleHttp]);
 
         return app(CachedSchemaRegistryClient::class, compact('client'));
     }
 
-    private function getGuzzleHttpClient(AbstractConfigManager $configManager): GuzzleClient
+    private function getGuzzleHttpClient(AvroSchema $avroSchema): GuzzleClient
     {
-        $config = $configManager->get('request_options') ?: [];
-        $config['timeout'] = $configManager->get('timeout');
-        $config['base_uri'] = $configManager->get('url');
+        $config = $avroSchema->getRequestOptions();
+        $config['timeout'] = self::REQUEST_TIMEOUT;
+        $config['base_uri'] = $avroSchema->getUrl();
         $config['headers'] = array_merge(
             $this->getDefaultHeaders(),
             $config['headers'] ?? []
         );
-        $config['verify'] = $configManager->get('ssl_verify') ?? false;
+        $config['verify'] = $avroSchema->getRequestOptions()['ssl_verify'] ?? false;
 
         return app(GuzzleClient::class, compact('config'));
     }

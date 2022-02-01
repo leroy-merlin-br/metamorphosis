@@ -2,7 +2,6 @@
 
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Authentication\Factory;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;

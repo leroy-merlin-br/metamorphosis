@@ -2,7 +2,6 @@
 
 namespace Metamorphosis\Producer;
 
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\TopicHandler\ConfigOptions\Producer as ConfigOptions;
 use RdKafka\Producer;
 use RuntimeException;

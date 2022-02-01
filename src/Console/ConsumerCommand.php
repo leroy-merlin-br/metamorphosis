@@ -6,6 +6,7 @@ use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Consumers\Runner;
+use Metamorphosis\TopicHandler\ConfigOptions\Factories\ConsumerFactory;
 
 class ConsumerCommand extends BaseCommand
 {

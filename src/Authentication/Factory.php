@@ -1,10 +1,8 @@
 <?php
 namespace Metamorphosis\Authentication;
 
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Exceptions\AuthenticationException;
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\AuthInterface;
-use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConfigOptions;
 use RdKafka\Conf;
 
 class Factory

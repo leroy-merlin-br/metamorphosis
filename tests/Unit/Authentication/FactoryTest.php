@@ -2,8 +2,11 @@
 namespace Tests\Unit\Authentication;
 
 use Metamorphosis\Authentication\Factory;
-use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Exceptions\AuthenticationException;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\AuthInterface;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\SaslSsl;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\Ssl;
+use Mockery as m;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
@@ -12,15 +15,7 @@ class FactoryTest extends LaravelTestCase
     public function testItMakesSslAuthenticationClass(): void
     {
         // Set
-        $configManager = new ConsumerConfigManager();
-        $configManager->set([
-            'auth' => [
-                'type' => 'ssl',
-                'ca' => 'path/to/ca',
-                'certificate' => 'path/to/certificate',
-                'key' => 'path/to/key',
-            ],
-        ]);
+        $configOptionsSsl = new Ssl('path/to/ca', 'path/to/certificate', 'path/to/key');
         $conf = new Conf();
         $expected = [
             'security.protocol' => 'ssl',
@@ -30,7 +25,7 @@ class FactoryTest extends LaravelTestCase
         ];
 
         // Actions
-        Factory::authenticate($conf, $configManager);
+        Factory::authenticate($conf, $configOptionsSsl);
 
         // Assertions
         $this->assertArraySubset($expected, $conf->dump());
@@ -39,15 +34,11 @@ class FactoryTest extends LaravelTestCase
     public function testItMakesSASLAuthenticationClass(): void
     {
         // Set
-        $configManager = new ConsumerConfigManager();
-        $configManager->set([
-            'auth' => [
-                'type' => 'sasl_ssl',
-                'mechanisms' => 'PLAIN',
-                'username' => 'some-username',
-                'password' => 'some-password',
-            ],
-        ]);
+        $configOptionsSaslSsl = new SaslSsl(
+            'PLAIN',
+            'some-username',
+            'some-password'
+        );
         $conf = new Conf();
         $expected = [
             'security.protocol' => 'sasl_ssl',
@@ -57,7 +48,7 @@ class FactoryTest extends LaravelTestCase
         ];
 
         // Actions
-        Factory::authenticate($conf, $configManager);
+        Factory::authenticate($conf, $configOptionsSaslSsl);
 
         // Assertions
         $this->assertArraySubset($expected, $conf->dump());
@@ -66,13 +57,17 @@ class FactoryTest extends LaravelTestCase
     public function testItThrowsExceptionWhenInvalidProtocolIsPassed(): void
     {
         // Set
-        $configManager = new ConsumerConfigManager();
-        $configManager->set(['auth' => ['type' => 'some-invalid-type']]);
+        $invalidAuth = m::mock(AuthInterface::class);
         $conf = new Conf();
+
+        // Expectations
+        $invalidAuth->expects()
+            ->getType()
+            ->andReturn('some-invalid-type');
 
         $this->expectException(AuthenticationException::class);
 
         // Actions
-        Factory::authenticate($conf, $configManager);
+        Factory::authenticate($conf, $invalidAuth);
     }
 }

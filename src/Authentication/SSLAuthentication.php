@@ -9,21 +9,24 @@ class SSLAuthentication implements AuthenticationInterface
 {
     private Conf $conf;
 
-    private AbstractConfigManager $configManager;
+    /**
+     * @var Ssl
+     */
+    private $configOptions;
 
-    public function __construct(Conf $conf, Ssl $configSsl)
+    public function __construct(Conf $conf, Ssl $configOptions)
     {
         $this->conf = $conf;
-        $this->configSsl = $configSsl;
+        $this->configOptions = $configOptions;
 
         $this->authenticate();
     }
 
     private function authenticate(): void
     {
-        $this->conf->set('security.protocol', $this->configSsl->getType());
-        $this->conf->set('ssl.ca.location', $this->configSsl->getCa());
-        $this->conf->set('ssl.certificate.location', $this->configSsl->getCertificate());
-        $this->conf->set('ssl.key.location', $this->configSsl->getKey());
+        $this->conf->set('security.protocol', $this->configOptions->getType());
+        $this->conf->set('ssl.ca.location', $this->configOptions->getCa());
+        $this->conf->set('ssl.certificate.location', $this->configOptions->getCertificate());
+        $this->conf->set('ssl.key.location', $this->configOptions->getKey());
     }
 }

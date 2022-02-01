@@ -1,7 +1,6 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConfigOptions;

@@ -2,7 +2,6 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Consumers\Runner;

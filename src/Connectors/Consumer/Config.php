@@ -6,6 +6,7 @@ use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Metamorphosis\TopicHandler\ConfigOptions\Factories\ConsumerFactory;
 
 /**
  * This class is responsible for handling all configuration made on the
@@ -75,10 +76,8 @@ class Config extends AbstractConfig
         );
 
         $this->validate(array_merge($config, $override));
-        $configManager = app(ConsumerConfigManager::class);
-        $configManager->set($config, $override);
 
-        return $configManager;
+        return ConsumerFactory::make($brokerConfig, $topicConfig, $schemaConfig);
     }
 
     /**

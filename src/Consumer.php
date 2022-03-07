@@ -24,8 +24,8 @@ class Consumer
     {
         $configManager->set($configOptions->toArray());
 
-        $this->consumer = Factory::getConsumer(true, $configManager);
-        $this->dispatcher = new Dispatcher($configManager->middlewares());
+        $this->consumer = Factory::getConsumer(true, $configOptions);
+        $this->dispatcher = new Dispatcher($configOptions->getMiddlewares());
     }
 
     public function consume(): ?RecordInterface

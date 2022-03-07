@@ -2,24 +2,12 @@
 namespace Tests\Integration\Dummies;
 
 use Illuminate\Support\Facades\Log;
-use Metamorphosis\TopicHandler\Producer\AbstractHandler;
+use Metamorphosis\TopicHandler\Producer\AbstractProducer;
 use RdKafka\Message;
 use RuntimeException;
 
-class MessageProducer extends AbstractHandler
+class MessageProducer extends AbstractProducer
 {
-    /**
-     * @var string
-     */
-    public $topic = 'default';
-
-    public function __construct($record, string $topic = null, string $key = null, int $partition = null)
-    {
-        $this->record = $record;
-        $this->topic = $topic ?? 'default';
-        $this->key = 'recordId123';
-    }
-
     public function success(Message $message): void
     {
         Log::info('Record successfully sent to broker.', [

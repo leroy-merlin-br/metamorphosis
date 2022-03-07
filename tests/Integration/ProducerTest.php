@@ -5,6 +5,9 @@ namespace Tests\Integration;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Metamorphosis\Facades\Metamorphosis;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Tests\Integration\Dummies\MessageConsumer;
 use Tests\Integration\Dummies\MessageProducer;
 use Tests\LaravelTestCase;
@@ -17,11 +20,13 @@ class ProducerTest extends LaravelTestCase
 
     protected string $secondLowLevelMessage;
 
+    /**
+     * @group runProducer
+     */
     public function testShouldRunAProducerAndReceiveMessagesWithAHighLevelConsumer(): void
     {
         // Given That I
         $this->haveAConsumerHandlerConfigured();
-        $this->haveNoPartitionConfigured();
         $this->haveSomeRandomMessagesProduced();
 
         // I Expect That
@@ -128,13 +133,9 @@ class ProducerTest extends LaravelTestCase
     private function haveSomeRandomMessagesProduced(): void
     {
         $this->highLevelMessage = Str::random(10);
-        $producer = app(
-            MessageProducer::class,
-            [
-                'record' => $this->highLevelMessage,
-                'topic' => 'default',
-            ]
-        );
+        $configOptionsProducer = $this->createConfigOptionsProducer('kafka-test');
+        //$producer = app(MessageProducer::class, ['record' => $this->highLevelMessage, 'configOptions'=> $configOptionsProducer]);
+        $producer = new MessageProducer($this->highLevelMessage, $configOptionsProducer, 'recordId123');
 
         Metamorphosis::produce($producer);
         Metamorphosis::produce($producer);
@@ -142,8 +143,10 @@ class ProducerTest extends LaravelTestCase
 
     private function produceRecordMessage(string $record): string
     {
-        $topic = 'low_level';
-        $producer = app(MessageProducer::class, compact('record', 'topic'));
+        $configOptionsProducer = $this->createConfigOptionsProducer('low_level');
+        $producer = new MessageProducer($record, $configOptionsProducer, 'recordId123');
+        //$producer = app(MessageProducer::class, ['record'=>$record, 'configOptions' => $a]);
+        //$producer->topic = 'low_level';
 
         Metamorphosis::produce($producer);
         Metamorphosis::produce($producer);
@@ -183,10 +186,20 @@ class ProducerTest extends LaravelTestCase
         $this->produceRecordMessage($this->secondLowLevelMessage);
     }
 
-    private function haveNoPartitionConfigured(): void
+    private function createConfigOptionsProducer(string $topicId = 'kafka-test'): ProducerConfigOptions
     {
-        config(
-            ['kafka.topics.default.consumer.consumer_groups.test-consumer-group.partition' => -1]
+        $brokerOptions = new Broker('kafka:9092', new None());
+        return new ProducerConfigOptions(
+            $topicId,
+            $brokerOptions,
+            null,
+            null,
+            [],
+            20000,
+            false,
+            true,
+            10,
+            500
         );
     }
 }

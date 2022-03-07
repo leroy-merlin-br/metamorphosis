@@ -12,7 +12,6 @@ use Metamorphosis\ProducerConfigManager;
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
 use Metamorphosis\TopicHandler\ConfigOptions\Broker;
 use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
-use Metamorphosis\TopicHandler\Producer\AbstractHandler;
 use Metamorphosis\TopicHandler\Producer\AbstractProducer;
 use Mockery as m;
 use RdKafka\Producer as KafkaProducer;
@@ -38,7 +37,7 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $producerHandler = new class ($record, $topic) extends AbstractHandler {
+        $producerHandler = new class($record, $topic) extends AbstractProducer {
         };
 
         // Expectations
@@ -95,7 +94,7 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $producerHandler = new class ($record, $topic) extends AbstractHandler {
+        $producerHandler = new class($record, $topic) extends AbstractProducer {
         };
 
         // Expectations
@@ -128,7 +127,10 @@ class ProducerTest extends LaravelTestCase
             ->withAnyArgs();
 
         // Actions
-        $producer->produce($producerHandler);
+        $result = $producer->produce($producerHandler);
+
+        // Assertions
+        $this->assertNull($result);
     }
 
     public function testItShouldThrowJsonExceptionWhenPassingMalFormattedArray(): void
@@ -147,7 +149,7 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $producerHandler = new class ($record, $topic) extends AbstractHandler {
+        $producerHandler = new class($record, $topic) extends AbstractProducer {
         };
 
         // Expectations
@@ -223,7 +225,7 @@ class ProducerTest extends LaravelTestCase
         $producerTopic = m::mock(ProducerTopic::class);
         $configManager = m::mock(ProducerConfigManager::class);
 
-        $producerHandler = new class ($record, $topic) extends AbstractHandler {
+        $producerHandler = new class($record, $topic) extends AbstractProducer {
         };
 
         // Expectations
@@ -298,7 +300,7 @@ class ProducerTest extends LaravelTestCase
         $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
         $broker = new Broker($connections, new None());
         $configOptions = new ProducerConfigOptions($topicId, $broker);
-        $producerHandler = new class ($record, $configOptions) extends AbstractProducer {
+        $producerHandler = new class($record, $configOptions) extends AbstractProducer {
         };
 
         // Expectations

@@ -3,7 +3,7 @@ namespace Metamorphosis\TopicHandler\Producer;
 
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Record\ProducerRecord;
-use Metamorphosis\TopicHandler\ConfigOptions\Producer as ConfigOptionsProducer;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer;
 
 class AbstractProducer implements HandlerInterface
 {
@@ -18,20 +18,20 @@ class AbstractProducer implements HandlerInterface
     protected $key;
 
     /**
-     * @var ConfigOptionsProducer
+     * @var Producer
      */
-    private $configOptions;
+    protected $producer;
 
-    public function __construct($record, ConfigOptionsProducer $configOptions, string $key = null)
+    public function __construct($record, Producer $producer, string $key = null)
     {
         $this->record = $record;
         $this->key = $key;
-        $this->configOptions = $configOptions;
+        $this->producer = $producer;
     }
 
-    public function getConfigOptions(): ConfigOptionsProducer
+    public function getConfigOptions(): Producer
     {
-        return $this->configOptions;
+        return $this->producer;
     }
 
     public function getRecord()

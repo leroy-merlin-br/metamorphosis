@@ -59,16 +59,13 @@ class ConsumerTest extends LaravelTestCase
         $saleOrderDispatcher = Metamorphosis::build($messageProducer);
         $saleOrderDispatcher->handle($messageProducer->createRecord());
 
-        $consumer = $this->app->make(
-            Consumer::class,
-            ['configOptions' => $consumerConfigOptions]
-        );
-        $expected = ['id' => 'MESSAGE_ID'];
+        $consumer = $this->app->make(Consumer::class, ['configOptions' => $consumerConfigOptions]);
+        $expected = '{"id":"MESSAGE_ID"}';
 
         // Actions
-        $result = $consumer->consume();
+        $result = $consumer->consume()->getPayload();
 
         // Assertions
-        $this->assertSame($expected, $result->getPayload());
+        $this->assertSame($expected, $result);
     }
 }

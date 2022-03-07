@@ -6,6 +6,7 @@ use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer;
 use Metamorphosis\TopicHandler\ConfigOptions\Factories\ConsumerFactory;
 
 /**
@@ -48,7 +49,7 @@ class Config extends AbstractConfig
         return $configManager;
     }
 
-    public function make(array $options, array $arguments): AbstractConfigManager
+    public function make(array $options, array $arguments): Consumer
     {
         $configName = $options['config_name'] ?? 'kafka';
         $topicConfig = $this->getTopicConfig($configName, $arguments['topic']);

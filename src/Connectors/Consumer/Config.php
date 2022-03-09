@@ -1,12 +1,14 @@
 <?php
 namespace Metamorphosis\Connectors\Consumer;
 
+use InvalidArgumentException;
 use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\AbstractConfig;
 use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer;
 use Metamorphosis\TopicHandler\ConfigOptions\Factories\ConsumerFactory;
+use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
 /**
  * This class is responsible for handling all configuration made on the
@@ -40,12 +42,21 @@ class Config extends AbstractConfig
         'middlewares' => 'array',
     ];
 
-    public function makeWithConfigOptions(string $handlerClass, ?int $times = null): AbstractConfigManager
+    /**
+     * @param string $handlerClass
+     * @param int|null $times
+     * @return Consumer
+     */
+    public function makeWithConfigOptions(string $handlerClass, ?int $times = null): ?Consumer
     {
-        $configManager = app(ConsumerConfigManager::class);
-        $configManager->set(['handler' => $handlerClass], ['times' => $times]);
+        /** @var  AbstractHandler */
+        $handler = app($handlerClass);
+        $configOptions = $handler->getConfigOptions();
+        if(is_null($configOptions)){
+            throw new InvalidArgumentException('Handler class cannot be null');
+        }
 
-        return $configManager;
+        return $configOptions;
     }
 
     public function make(array $options, array $arguments): Consumer

@@ -5,7 +5,7 @@ namespace Metamorphosis\Avro;
 use GuzzleHttp\Client as GuzzleHttp;
 use Psr\Http\Message\ResponseInterface;
 
-class Client
+class Client implements AvroClientInterface
 {
     private GuzzleHttp $client;
 

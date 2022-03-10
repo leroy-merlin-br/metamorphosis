@@ -5,7 +5,7 @@ namespace Metamorphosis\Avro;
 use AvroSchemaParseException;
 use RuntimeException;
 
-class CachedSchemaRegistryClient
+class CachedSchemaRegistryClient implements CachedSchemaRegistryClientInterface
 {
     private Client $client;
 
@@ -20,7 +20,7 @@ class CachedSchemaRegistryClient
      */
     private array $subjectVersionToSchema = [];
 
-    public function __construct(Client $client)
+    public function __construct(AvroClientInterface $client)
     {
         $this->client = $client;
     }

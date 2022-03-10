@@ -5,6 +5,7 @@ use AvroIOBinaryEncoder;
 use AvroIODatumWriter;
 use AvroStringIO;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Metamorphosis\Avro\CachedSchemaRegistryClientInterface;
 use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\SchemaFormats;
 
@@ -15,7 +16,7 @@ class SchemaId implements EncoderInterface
      */
     private $registry;
 
-    public function __construct(CachedSchemaRegistryClient $registry)
+    public function __construct(CachedSchemaRegistryClientInterface $registry)
     {
         $this->registry = $registry;
     }
@@ -42,5 +43,10 @@ class SchemaId implements EncoderInterface
         $writer->write($message, $encoder);
 
         return $io->string();
+    }
+
+    public function getRegistry()
+    {
+        return $this->registry;
     }
 }

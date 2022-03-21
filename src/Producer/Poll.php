@@ -2,7 +2,7 @@
 
 namespace Metamorphosis\Producer;
 
-use Metamorphosis\TopicHandler\ConfigOptions\Producer as ConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use RdKafka\Producer;
 use RuntimeException;
 
@@ -24,13 +24,13 @@ class Poll
 
     private Producer $producer;
 
-    public function __construct(Producer $producer, ConfigOptions $configOptions)
+    public function __construct(Producer $producer, ProducerConfigOptions $producerConfigOptions)
     {
-        $this->isAsync = $configOptions->isAsync();
-        $this->maxPollRecords = $configOptions->getMaxPollRecords();
-        $this->requiredAcknowledgment = $configOptions->isRequiredAcknowledgment();
-        $this->maxFlushAttempts = $configOptions->getFlushAttempts();
-        $this->timeout = $configOptions->getTimeout();
+        $this->isAsync = $producerConfigOptions->isAsync();
+        $this->maxPollRecords = $producerConfigOptions->getMaxPollRecords();
+        $this->requiredAcknowledgment = $producerConfigOptions->isRequiredAcknowledgment();
+        $this->maxFlushAttempts = $producerConfigOptions->getFlushAttempts();
+        $this->timeout = $producerConfigOptions->getTimeout();
 
         $this->producer = $producer;
     }

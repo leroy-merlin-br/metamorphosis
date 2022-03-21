@@ -33,6 +33,7 @@ class ConsumerFactoryTest extends LaravelTestCase
         ];
         $topicData = [
             'topic_id' => 'kafka-test',
+            'consumer_group' => 'test-consumer-group',
             'consumer' => [
                 'consumer_groups' => [
                     'test-consumer-group' => [

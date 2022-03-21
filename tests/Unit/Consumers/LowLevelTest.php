@@ -4,6 +4,10 @@ namespace Tests\Unit\Consumers;
 
 use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Consumers\LowLevel;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\AvroSchema as AvroSchemaConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 use Mockery as m;
 use RdKafka\ConsumerTopic;
 use RdKafka\Message;
@@ -19,10 +23,23 @@ class LowLevelTest extends LaravelTestCase
         $configManager = new ConsumerConfigManager();
         $configManager->set(compact('timeout', 'partition'));
 
+        $brokerOptions = new Broker('kafka:9092', new None());
+        $consumerConfigOptions = new ConsumerConfigOptions(
+            'kafka-test',
+            $brokerOptions,
+            null,
+            $partition,
+            null,
+            '',
+            new AvroSchemaConfigOptions('http://url.teste'),
+            [],
+            $timeout
+        );
+
         $consumerTopic = m::mock(ConsumerTopic::class);
         $message = new Message();
 
-        $lowLevelConsumer = new LowLevel($consumerTopic, $configManager);
+        $lowLevelConsumer = new LowLevel($consumerTopic, $consumerConfigOptions);
 
         // Expectations
         $consumerTopic->expects()

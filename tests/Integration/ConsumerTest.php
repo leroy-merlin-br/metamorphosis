@@ -51,7 +51,7 @@ class ConsumerTest extends LaravelTestCase
             MessageProducerWithConfigOptions::class,
             [
                 'record' => ['id' => 'MESSAGE_ID'],
-                'configOptions' => $producerConfigOptions,
+                'producer' => $producerConfigOptions,
                 'key' => 1,
             ]
         );

@@ -1,6 +1,8 @@
 <?php
 namespace Tests\Unit\Middlewares;
 
+use AvroSchema;
+use Closure;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Schema;
@@ -8,7 +10,7 @@ use Metamorphosis\Avro\Serializer\Encoders\SchemaId;
 use Metamorphosis\Middlewares\AvroSchemaMixedEncoder;
 use Metamorphosis\Record\ProducerRecord;
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
-use Metamorphosis\TopicHandler\ConfigOptions\AvroSchema;
+use Metamorphosis\TopicHandler\ConfigOptions\AvroSchema as AvroSchemaConfigOptions;
 use Metamorphosis\TopicHandler\ConfigOptions\Broker;
 use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Mockery as m;
@@ -16,53 +18,80 @@ use Tests\LaravelTestCase;
 
 class AvroSchemaMixedEncoderTest extends LaravelTestCase
 {
-    public function testConstructAvroSchemaMixedEncoder()
+    public function testShouldEncodeRecord()
     {
-        //arrange
-        $closure = function () {
-        };
-
-        $schemaTest = $this->getSchemaTest();
-        $configOptionsProducer = $this->createProducer();
-
-        $record = new ProducerRecord($schemaTest, 'kafka-test');
-        $cachedSchemaRegistryClient = m::mock(CachedSchemaRegistryClient::class);
-
-        $schema = (new Schema())->parse($schemaTest, '123');
-        $clientFactory = new ClientFactory();
-        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedSchemaRegistryClient])->makePartial();
-
-        $avroSchemaMixedEncoder = new AvroSchemaMixedEncoder($schemaIdEncoder, $clientFactory, $configOptionsProducer);
-
-        //expect
-        $cachedSchemaRegistryClient->shouldReceive('getBySubjectAndVersion')->andReturn($schema);
-        $schemaIdEncoder->shouldReceive('encode')->andReturn('string');
-
-        //act
-        $avroSchemaMixedEncoder->process($record, $closure);
-
-        //assert
-        $this->assertInstanceOf(AvroSchemaMixedEncoder::class, $avroSchemaMixedEncoder);
-    }
-
-    private function createProducer()
-    {
-        $brokerOptions = new Broker('kafka:9092', new None());
-        return new ProducerConfigOptions(
+        // Set
+        $avroSchema = $this->getSchemaFixture();
+        $broker = new Broker('kafka:9092', new None());
+        $producerConfigOptions = new ProducerConfigOptions(
             'kafka-test',
-            $brokerOptions,
+            $broker,
             null,
-            new AvroSchema('http://url.teste', []),
-            [],
-            20000,
-            false,
-            true,
-            10,
-            500
+            new AvroSchemaConfigOptions('subjects/kafka-test-value/versions/latest', [])
         );
+        $avroSchemaConfigOptions = $producerConfigOptions->getAvroSchema();
+
+        $clientFactory = m::mock(ClientFactory::class);
+
+        $cachedSchemaRegistryClient = m::mock(CachedSchemaRegistryClient::class);
+        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedSchemaRegistryClient]);
+
+        $schema = new Schema();
+        $parsedSchema = $schema->parse($avroSchema, '123', 'kafka-test-value', 'latest');
+        $record = $this->getRecord($parsedSchema->getAvroSchema());
+        $producerRecord = new ProducerRecord($record, 'kafka-test');
+
+        $closure = Closure::fromCallable(function ($producerRecord) {
+            return $producerRecord;
+        });
+
+        $payload = json_decode($producerRecord->getPayload(), true);
+        $encodedMessage = 'binary_message';
+
+        // Expectations
+        $clientFactory->expects()
+            ->make($avroSchemaConfigOptions)
+            ->andReturn($cachedSchemaRegistryClient);
+
+        $cachedSchemaRegistryClient->expects()
+            ->getBySubjectAndVersion('kafka-test-value', 'latest')
+            ->andReturn($schema);
+
+        $schemaIdEncoder->expects()
+            ->encode($schema, $payload)
+            ->andReturn($encodedMessage);
+
+        // Actions
+        $avroSchemaMixedEncoder = new AvroSchemaMixedEncoder($schemaIdEncoder, $clientFactory, $producerConfigOptions);
+        $result = $avroSchemaMixedEncoder->process($producerRecord, $closure);
+
+        // Assertions
+        $this->assertSame($record, $result->getOriginal());
+        $this->assertSame($encodedMessage, $result->getPayload());
     }
 
-    private function getSchemaTest(): string
+    private function getRecord(AvroSchema $avroSchema): string
+    {
+        $defaultValues = [
+            'null' => null,
+            'boolean' => true,
+            'string' => 'abc',
+            'int' => 1,
+            'long' => 1.0,
+            'float' => 1.0,
+            'double' => 1.0,
+            'array' => [],
+        ];
+
+        $result = [];
+        foreach ($avroSchema->fields() as $field) {
+            $result[$field->name()] = $defaultValues[$field->type->type];
+        }
+
+        return json_encode($result);
+    }
+
+    private function getSchemaFixture(): string
     {
         return file_get_contents(__DIR__.'/../fixtures/schemas/sales_price.avsc');
     }

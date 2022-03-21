@@ -2,8 +2,11 @@
 namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\LowLevel;
-use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Consumers\LowLevel as LowLevelConsumer;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\AvroSchema as AvroSchemaConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 use Tests\LaravelTestCase;
 
 class LowLevelTest extends LaravelTestCase
@@ -11,19 +14,20 @@ class LowLevelTest extends LaravelTestCase
     public function testItShouldMakeConnectorSetup(): void
     {
         // Set
-        $configManager = new ConsumerConfigManager();
-        $configManager->set([
-            'connections' => 'kafka:123',
-            'consumer_group' => 'some-group',
-            'topic' => 'some_topic',
-            'offset_reset' => 'earliest',
-            'offset' => 0,
-            'partition' => 1,
-        ]);
         $connector = new LowLevel();
+        $brokerOptions = new Broker('kafka:9092', new None());
+        $consumerConfigOptions = new ConsumerConfigOptions(
+            'kafka-test',
+            $brokerOptions,
+            null,
+            1,
+            0,
+            'some-group',
+            new AvroSchemaConfigOptions('http://url.teste')
+        );
 
         // Actions
-        $result = $connector->getConsumer(true, $configManager);
+        $result = $connector->getConsumer(true, $consumerConfigOptions);
 
         // Assertions
         $this->assertInstanceOf(LowLevelConsumer::class, $result);

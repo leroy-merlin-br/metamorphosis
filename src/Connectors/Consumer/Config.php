@@ -2,13 +2,10 @@
 namespace Metamorphosis\Connectors\Consumer;
 
 use InvalidArgumentException;
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\AbstractConfig;
-use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer;
 use Metamorphosis\TopicHandler\ConfigOptions\Factories\ConsumerFactory;
-use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
 
 /**
  * This class is responsible for handling all configuration made on the
@@ -42,17 +39,11 @@ class Config extends AbstractConfig
         'middlewares' => 'array',
     ];
 
-    /**
-     * @param string $handlerClass
-     * @param int|null $times
-     * @return Consumer
-     */
     public function makeWithConfigOptions(string $handlerClass, ?int $times = null): ?Consumer
     {
-        /** @var  AbstractHandler */
         $handler = app($handlerClass);
         $configOptions = $handler->getConfigOptions();
-        if(is_null($configOptions)){
+        if (is_null($configOptions)) {
             throw new InvalidArgumentException('Handler class cannot be null');
         }
 
@@ -76,8 +67,10 @@ class Config extends AbstractConfig
         );
 
         $this->validate(array_merge($config, $override));
+        if (isset($topicConfig['consumer']['consumer_groups'][$consumerConfig['consumer_group']]['partition'])) {
+            $topicConfig['consumer']['consumer_groups'][$consumerConfig['consumer_group']]['partition'] = $consumerConfig['partition'];
+        }
 
-        $topicConfig['consumer']['consumer_groups'][$consumerConfig['consumer_group']]['partition'] = $consumerConfig['partition'];
         $topicConfig['consumer_group'] = $consumerGroupId;
 
         return ConsumerFactory::make($brokerConfig, $topicConfig, $schemaConfig);
@@ -104,7 +97,7 @@ class Config extends AbstractConfig
 
         $consumerConfig['consumer_group'] = $consumerGroupId;
 
-        if(isset($arguments['partition'])){
+        if (isset($arguments['partition'])) {
             $consumerConfig['partition'] = $arguments['partition'];
         }
 

@@ -7,7 +7,7 @@ use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer\Poll;
-use Metamorphosis\TopicHandler\ConfigOptions\Producer as ConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Metamorphosis\TopicHandler\Producer\AbstractProducer;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
@@ -41,21 +41,26 @@ class Producer
 
     public function build(HandlerInterface $producerHandler): Dispatcher
     {
-        $configOptions = $producerHandler->getConfigOptions();
+        $producerConfigOptions = $producerHandler->getConfigOptions();
 
-        $middlewares = $configOptions->getMiddlewares();
-        $middlewares[] = $this->getProducerMiddleware($producerHandler, $configOptions);
+        $middlewares = $producerConfigOptions->getMiddlewares();
+
+        foreach ($middlewares as &$middleware) {
+            $middleware = is_string($middleware) ? app($middleware, ['producerConfigOptions' => $producerConfigOptions]) : $middleware;
+        }
+
+        $middlewares[] = $this->getProducerMiddleware($producerHandler, $producerConfigOptions);
 
         return new Dispatcher($middlewares);
     }
 
-    public function getProducerMiddleware(HandlerInterface $producerHandler, ConfigOptions $configOptions): ProducerMiddleware
+    public function getProducerMiddleware(HandlerInterface $producerHandler, ProducerConfigOptions $producerConfigOptions): ProducerMiddleware
     {
-        $producer = $this->connector->getProducerTopic($producerHandler, $configOptions);
+        $producer = $this->connector->getProducerTopic($producerHandler, $producerConfigOptions);
 
-        $topic = $producer->newTopic($configOptions->getTopicId());
-        $poll = app(Poll::class, ['producer' => $producer, 'configOptions' => $configOptions]);
-        $partition = $configOptions->getPartition();
+        $topic = $producer->newTopic($producerConfigOptions->getTopicId());
+        $poll = app(Poll::class, ['producer' => $producer, 'producerConfigOptions' => $producerConfigOptions]);
+        $partition = $producerConfigOptions->getPartition();
 
         return app(ProducerMiddleware::class, compact('topic', 'poll', 'partition'));
     }

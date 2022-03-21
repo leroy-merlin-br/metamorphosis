@@ -77,6 +77,8 @@ class ProducerTest extends LaravelTestCase
 
     protected function runTheConsumer(): void
     {
+        config(['kafka.topics.default.topic_id' => $this->topicId]);
+
         $this->artisan(
             'kafka:consume',
             [
@@ -139,9 +141,13 @@ class ProducerTest extends LaravelTestCase
     private function haveSomeRandomMessagesProduced(): void
     {
         $this->highLevelMessage = Str::random(10);
-        $producerConfigOptions = $this->createProducerConfigOptions('kafka-test');
-//        $producer = app(MessageProducer::class, ['record' => $this->highLevelMessage, 'producer'=> $producerConfigOptions]);
-        $producer = new MessageProducer($this->highLevelMessage, $producerConfigOptions, 'recordId123');
+        $this->topicId = 'kafka-test-'.Str::random(5);
+        $producerConfigOptions = $this->createProducerConfigOptions();
+        $producer = app(MessageProducer::class, [
+            'record' => $this->highLevelMessage,
+            'producer' => $producerConfigOptions,
+            'key' => 'recordId123',
+        ]);
 
         Metamorphosis::produce($producer);
         Metamorphosis::produce($producer);
@@ -150,7 +156,11 @@ class ProducerTest extends LaravelTestCase
     private function produceRecordMessage(string $record): string
     {
         $producerConfigOptions = $this->createProducerConfigOptions('low_level');
-        $producer = new MessageProducer($record, $producerConfigOptions, 'recordId123');
+        $producer = app(MessageProducer::class, [
+            'record' => $record,
+            'producer' => $producerConfigOptions,
+            'key' => 'recordId123'
+        ]);
 
         Metamorphosis::produce($producer);
         Metamorphosis::produce($producer);
@@ -190,15 +200,18 @@ class ProducerTest extends LaravelTestCase
         $this->produceRecordMessage($this->secondLowLevelMessage);
     }
 
-    private function createProducerConfigOptions(string $topicId = 'kafka-test'): ProducerConfigOptions
+    private function createProducerConfigOptions(): ProducerConfigOptions
     {
         $broker = new Broker('kafka:9092', new None());
         return new ProducerConfigOptions(
-            $topicId,
+            $this->topicId,
             $broker,
             null,
             null,
-            []
+            [],
+            2000,
+            false,
+            true
         );
     }
 }

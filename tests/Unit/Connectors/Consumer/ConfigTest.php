@@ -78,10 +78,10 @@ class ConfigTest extends LaravelTestCase
             ]);
 
         // Actions
-        $configManager = $config->make($options, $arguments);
+        $configManager = $config->makeWithConfigOptions(ConsumerHandlerDummy::class);
 
         // Assertions
-        $this->assertArraySubset($expected, $configManager->get());
+        $this->assertArraySubset($expected, $configManager->toArray());
     }
 
     public function testShouldNotSetRuntimeConfigWhenOptionsIsInvalid(): void
@@ -103,7 +103,7 @@ class ConfigTest extends LaravelTestCase
         $configManager = $config->make($options, $arguments);
 
         // Assertions
-        $this->assertEmpty($configManager->get());
+        $this->assertEmpty($configManager->toArray());
     }
 
     public function testShouldNotSetRuntimeConfigWhenKafkaConfigIsInvalid(): void
@@ -126,6 +126,6 @@ class ConfigTest extends LaravelTestCase
         $configManager = $config->make($options, $arguments);
 
         // Assertions
-        $this->assertEmpty($configManager->get());
+        $this->assertEmpty($configManager->toArray());
     }
 }

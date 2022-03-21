@@ -2,7 +2,8 @@
 namespace Tests\Unit\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Connector;
-use Metamorphosis\ProducerConfigManager;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
 use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Metamorphosis\TopicHandler\Producer\AbstractProducer;
 use Metamorphosis\TopicHandler\Producer\HandleableResponseInterface;
@@ -26,11 +27,12 @@ class ConnectorTest extends LaravelTestCase
             KafkaProducer::class,
             m::mock(KafkaProducer::class)
         );
-        $configManager = m::mock(ProducerConfigManager::class);
-        $configOptions = m::mock(ProducerConfigOptions::class);
+
+        $broker = new Broker('kafka:9092', new None());
+        $producerConfigOptions = m::mock(ProducerConfigOptions::class);
 
         $connector = new Connector();
-        $handler = new class('record', $configOptions) extends AbstractProducer implements HandleableResponseInterface {
+        $handler = new class('record', $producerConfigOptions) extends AbstractProducer implements HandleableResponseInterface {
             public function success(Message $message): void
             {
             }
@@ -48,16 +50,12 @@ class ConnectorTest extends LaravelTestCase
         $conf->expects()
             ->set('metadata.broker.list', 0);
 
-        $configManager->expects()
-            ->get('connections')
-            ->andReturn('kafka:9092');
-
-        $configManager->expects()
-            ->get('auth.type')
-            ->andReturn('none');
+        $producerConfigOptions->expects()
+            ->getBroker()
+            ->andReturn($broker);
 
         // Actions
-        $result = $connector->getProducerTopic($handler, $configManager);
+        $result = $connector->getProducerTopic($handler, $producerConfigOptions);
 
         // Assertions
         $this->assertInstanceOf(KafkaProducer::class, $result);
@@ -74,11 +72,12 @@ class ConnectorTest extends LaravelTestCase
             KafkaProducer::class,
             m::mock(KafkaProducer::class)
         );
-        $configManager = m::mock(ProducerConfigManager::class);
-        $configOptions = m::mock(ProducerConfigOptions::class);
+
+        $broker = new Broker('kafka:9092', new None());
+        $producerConfigOptions = m::mock(ProducerConfigOptions::class);
 
         $connector = new Connector();
-        $handler = new class('record', $configOptions) extends AbstractProducer implements HandlerInterface {
+        $handler = new class('record', $producerConfigOptions) extends AbstractProducer implements HandlerInterface {
             public function success(Message $message): void
             {
             }
@@ -95,16 +94,12 @@ class ConnectorTest extends LaravelTestCase
         $conf->expects()
             ->set('metadata.broker.list', 0);
 
-        $configManager->expects()
-            ->get('connections')
-            ->andReturn('kafka:9092');
-
-        $configManager->expects()
-            ->get('auth.type')
-            ->andReturn('none');
+        $producerConfigOptions->expects()
+            ->getBroker()
+            ->andReturn($broker);
 
         // Actions
-        $result = $connector->getProducerTopic($handler, $configManager);
+        $result = $connector->getProducerTopic($handler, $producerConfigOptions);
 
         // Assertions
         $this->assertInstanceOf(KafkaProducer::class, $result);

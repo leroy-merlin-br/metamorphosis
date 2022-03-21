@@ -44,7 +44,6 @@ class Producer
         $producerConfigOptions = $producerHandler->getConfigOptions();
 
         $middlewares = $producerConfigOptions->getMiddlewares();
-
         foreach ($middlewares as &$middleware) {
             $middleware = is_string($middleware) ? app($middleware, ['producerConfigOptions' => $producerConfigOptions]) : $middleware;
         }

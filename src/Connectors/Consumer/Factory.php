@@ -2,6 +2,7 @@
 namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 
@@ -22,9 +23,17 @@ class Factory
         $commitAsync = $configOptions->isCommitASync();
 
         $consumer = self::getConsumer($autoCommit, $configOptions);
+
         $handler = app($configOptions->getHandler());
 
-        $dispatcher = self::getMiddlewareDispatcher($configOptions->getMiddlewares());
+        $middlewares = $configOptions->getMiddlewares();
+        foreach ($middlewares as &$middleware) {
+            $middleware = is_string($middleware) ? app($middleware, ['consumerConfigOptions' => $configOptions]) : $middleware;
+        }
+
+        $middlewares[] = app(ConsumerMiddleware::class, ['consumerTopicHandler' => $handler]);
+
+        $dispatcher = self::getMiddlewareDispatcher($middlewares);
 
         return new Manager($consumer, $handler, $dispatcher, $autoCommit, $commitAsync);
     }

@@ -35,12 +35,6 @@ class ConsumerCommand extends BaseCommand
     public function handle(Config $config)
     {
         $consumer = $config->make($this->option(), $this->argument());
-
-        $middlewares = $consumer->getMiddlewares();
-        foreach ($middlewares as &$middleware) {
-            $middleware = is_string($middleware) ? app($middleware, ['consumerConfigOptions' => $consumer]) : $middleware;
-        }
-
         $this->writeStartingConsumer($consumer);
 
         $manager = Factory::make($consumer);

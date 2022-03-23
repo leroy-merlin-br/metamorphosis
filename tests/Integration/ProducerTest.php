@@ -28,10 +28,16 @@ class ProducerTest extends LaravelTestCase
      */
     protected $secondLowLevelMessage;
 
+    /**
+     * @var string
+     */
+    protected $topicId;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->withoutAuthentication();
+        $this->topicId = 'kafka-test-'.Str::random(5);
     }
 
     /**
@@ -146,8 +152,8 @@ class ProducerTest extends LaravelTestCase
     private function haveSomeRandomMessagesProduced(): void
     {
         $this->highLevelMessage = Str::random(10);
-        $this->topicId = 'kafka-test-'.Str::random(5);
-        $producerConfigOptions = $this->createProducerConfigOptions();
+
+        $producerConfigOptions = $this->createProducerConfigOptions($this->topicId);
         $producer = app(MessageProducer::class, [
             'record' => $this->highLevelMessage,
             'producer' => $producerConfigOptions,
@@ -164,7 +170,7 @@ class ProducerTest extends LaravelTestCase
         $producer = app(MessageProducer::class, [
             'record' => $record,
             'producer' => $producerConfigOptions,
-            'key' => 'recordId123'
+            'key' => 'recordId123',
         ]);
 
         Metamorphosis::produce($producer);
@@ -205,11 +211,11 @@ class ProducerTest extends LaravelTestCase
         $this->produceRecordMessage($this->secondLowLevelMessage);
     }
 
-    private function createProducerConfigOptions(): ProducerConfigOptions
+    private function createProducerConfigOptions(string $topicId): ProducerConfigOptions
     {
         $broker = new Broker('kafka:9092', new None());
         return new ProducerConfigOptions(
-            $this->topicId,
+            $topicId,
             $broker,
             null,
             null,

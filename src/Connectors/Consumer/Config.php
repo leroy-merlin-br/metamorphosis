@@ -55,7 +55,7 @@ class Config extends AbstractConfig
         $configName = $options['config_name'] ?? 'kafka';
         $topicConfig = $this->getTopicConfig($configName, $arguments['topic']);
         $consumerGroupId = $this->getConsumerGroup($topicConfig, $arguments['consumer_group']);
-        $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments, $consumerGroupId);
+        $consumerConfig = $this->getConsumerConfig($topicConfig, $options, $consumerGroupId);
         $brokerConfig = $this->getBrokerConfig($configName, $topicConfig['broker']);
         $schemaConfig = $this->getSchemaConfig($configName, $arguments['topic']);
         $override = array_merge($this->filterValues($options), $this->filterValues($arguments));
@@ -67,8 +67,19 @@ class Config extends AbstractConfig
         );
 
         $this->validate(array_merge($config, $override));
-        if (isset($topicConfig['consumer']['consumer_groups'][$consumerConfig['consumer_group']]['partition'])) {
-            $topicConfig['consumer']['consumer_groups'][$consumerConfig['consumer_group']]['partition'] = $consumerConfig['partition'];
+
+        if (isset($topicConfig['consumer']['consumer_groups'][$consumerGroupId])) {
+            if (isset($options['partition'])) {
+                $topicConfig['consumer']['consumer_groups'][$consumerGroupId]['partition'] = $options['partition'];
+            }
+
+            if (isset($options['offset'])) {
+                $topicConfig['consumer']['consumer_groups'][$consumerGroupId]['offset'] = $options['offset'];
+            }
+
+            if (isset($options['timeout'])) {
+                $topicConfig['consumer']['consumer_groups'][$consumerGroupId]['timeout'] = $options['timeout'];
+            }
         }
 
         $topicConfig['consumer_group'] = $consumerGroupId;
@@ -88,7 +99,7 @@ class Config extends AbstractConfig
         return $topicConfig;
     }
 
-    private function getConsumerConfig(array $topicConfig, array $arguments, string $consumerGroupId): array
+    private function getConsumerConfig(array $topicConfig, array $options, string $consumerGroupId): array
     {
         $consumerConfig = $topicConfig['consumer']['consumer_groups'][$consumerGroupId] ?? null;
         if (!$consumerConfig) {
@@ -96,10 +107,6 @@ class Config extends AbstractConfig
         }
 
         $consumerConfig['consumer_group'] = $consumerGroupId;
-
-        if (isset($arguments['partition'])) {
-            $consumerConfig['partition'] = $arguments['partition'];
-        }
 
         return $consumerConfig;
     }

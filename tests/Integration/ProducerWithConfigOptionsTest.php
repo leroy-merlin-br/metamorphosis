@@ -88,7 +88,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
             MessageProducerWithConfigOptions::class,
             [
                 'record' => ['saleOrderId' => 'SALE_ORDER_ID'],
-                'producer' => $this->producerConfigOptions,
+                'configOptions' => $this->producerConfigOptions,
                 'key' => 1,
             ]
         );

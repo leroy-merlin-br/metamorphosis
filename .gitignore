@@ -6,3 +6,5 @@ storage/
 composer.lock
 .phpcs-cache
 .phpunit.result.cache
+.phpdoc
+ast.dump

@@ -111,11 +111,11 @@ class ProducerWithAvroTest extends LaravelTestCase
 
         $saleOrderProducer = app(MessageProducer::class, [
             'record' => ['saleOrderId' => 'SALE_ORDER_ID'],
-            'producer' => $producerConfigOptionsSale,
+            'configOptions' => $producerConfigOptionsSale,
         ]);
         $productProducer = app(MessageProducer::class, [
             'record' => ['productId' => 'PRODUCT_ID'],
-            'producer' => $producerConfigOptionsProduct,
+            'configOptions' => $producerConfigOptionsProduct,
         ]);
 
         $saleOrderSchemaResponse = '{

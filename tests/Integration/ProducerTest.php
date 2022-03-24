@@ -156,7 +156,7 @@ class ProducerTest extends LaravelTestCase
         $producerConfigOptions = $this->createProducerConfigOptions($this->topicId);
         $producer = app(MessageProducer::class, [
             'record' => $this->highLevelMessage,
-            'producer' => $producerConfigOptions,
+            'configOptions' => $producerConfigOptions,
             'key' => 'recordId123',
         ]);
 
@@ -169,7 +169,7 @@ class ProducerTest extends LaravelTestCase
         $producerConfigOptions = $this->createProducerConfigOptions('low_level');
         $producer = app(MessageProducer::class, [
             'record' => $record,
-            'producer' => $producerConfigOptions,
+            'configOptions' => $producerConfigOptions,
             'key' => 'recordId123',
         ]);
 

@@ -22,11 +22,11 @@ class AbstractProducer implements HandlerInterface
      */
     protected $producer;
 
-    public function __construct($record, Producer $producer, string $key = null)
+    public function __construct($record, Producer $configOptions, string $key = null)
     {
         $this->record = $record;
         $this->key = $key;
-        $this->producer = $producer;
+        $this->producer = $configOptions;
     }
 
     public function getConfigOptions(): Producer

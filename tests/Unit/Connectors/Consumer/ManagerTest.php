@@ -3,7 +3,6 @@ namespace Tests\Unit\Connectors\Consumer;
 
 use Exception;
 use Metamorphosis\Connectors\Consumer\Manager;
-use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
@@ -13,28 +12,9 @@ use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerHandler;
 use Mockery as m;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
-use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class ManagerTest extends LaravelTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $configManager = new ConsumerConfigManager();
-        $configManager->set([
-            'connections' => 'kafka:2019',
-            'topic' => 'topic_key',
-            'broker' => 'default',
-            'offset_reset' => 'earliest',
-            'offset' => 0,
-            'timeout' => 30,
-            'handler' => ConsumerHandlerDummy::class,
-            'middlewares' => [],
-            'consumer_group' => 'consumer-id',
-        ]);
-    }
-
     public function testShouldHandleMultiplesMessages(): void
     {
         // Set

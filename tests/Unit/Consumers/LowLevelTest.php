@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Unit\Consumers;
 
-use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Consumers\LowLevel;
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
 use Metamorphosis\TopicHandler\ConfigOptions\AvroSchema as AvroSchemaConfigOptions;
@@ -19,8 +18,6 @@ class LowLevelTest extends LaravelTestCase
         // Set
         $timeout = 2;
         $partition = 3;
-        $configManager = new ConsumerConfigManager();
-        $configManager->set(compact('timeout', 'partition'));
 
         $brokerOptions = new Broker('kafka:9092', new None());
         $consumerConfigOptions = new ConsumerConfigOptions(

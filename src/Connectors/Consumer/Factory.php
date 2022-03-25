@@ -13,9 +13,6 @@ use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
  * means that we will use the low level approach.
  */
 
-/**
- * TODO Rename this class to ConsumerFactory, it will improve semantics
- */
 class Factory
 {
     public static function make(ConsumerConfigOptions $configOptions): Manager

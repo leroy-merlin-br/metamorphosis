@@ -15,10 +15,8 @@ class Consumer
 
     private Dispatcher $dispatcher;
 
-    public function __construct(ConsumerConfigManager $configManager, ConsumerConfigOptions $configOptions)
+    public function __construct(ConsumerConfigOptions $configOptions)
     {
-        $configManager->set($configOptions->toArray());
-
         $this->consumer = Factory::getConsumer(true, $configOptions);
         $this->dispatcher = new Dispatcher($configOptions->getMiddlewares());
     }

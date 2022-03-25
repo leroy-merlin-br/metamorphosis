@@ -4,7 +4,6 @@ namespace Tests\Unit\Connectors\Consumer;
 
 use Exception;
 use Metamorphosis\Connectors\Consumer\Manager;
-use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
@@ -14,7 +13,6 @@ use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerHandler;
 use Mockery as m;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
-use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class ManagerTest extends LaravelTestCase
 {

@@ -4,7 +4,6 @@ namespace Tests\Unit\Middlewares\Handler;
 use Closure;
 use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Producer\Poll;
-use Metamorphosis\ProducerConfigManager;
 use Metamorphosis\Record\ProducerRecord;
 use Mockery as m;
 use RdKafka\ProducerTopic as KafkaTopicProducer;
@@ -12,22 +11,6 @@ use Tests\LaravelTestCase;
 
 class ProducerTest extends LaravelTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $configManager = new ProducerConfigManager();
-        $configManager->set([
-            'topic_id' => 'topic_name',
-            'timeout' => 4000,
-            'is_async' => true,
-            'max_poll_records' => 500,
-            'flush_attempts' => 10,
-            'required_acknowledgment' => true,
-            'partition' => 0,
-        ]);
-    }
-
     public function testItShouldSendMessageToKafkaBroker(): void
     {
         // Set

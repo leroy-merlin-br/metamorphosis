@@ -5,7 +5,6 @@ namespace Tests\Unit\Middlewares\Handler;
 use Closure;
 use Metamorphosis\Middlewares\Handler\Producer;
 use Metamorphosis\Producer\Poll;
-use Metamorphosis\ProducerConfigManager;
 use Metamorphosis\Record\ProducerRecord;
 use Mockery as m;
 use RdKafka\ProducerTopic as KafkaTopicProducer;

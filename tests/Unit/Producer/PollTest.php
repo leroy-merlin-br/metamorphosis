@@ -3,7 +3,6 @@
 namespace Tests\Unit\Producer;
 
 use Metamorphosis\Producer\Poll;
-use Metamorphosis\ProducerConfigManager;
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
 use Metamorphosis\TopicHandler\ConfigOptions\AvroSchema as AvroSchemaConfigOptions;
 use Metamorphosis\TopicHandler\ConfigOptions\Broker;
@@ -48,17 +47,6 @@ class PollTest extends LaravelTestCase
     public function testShouldThrowExceptionWhenFlushFailed(): void
     {
         // Set
-        $configManager = new ProducerConfigManager();
-        $configManager->set([
-            'topic_id' => 'topic_name',
-            'timeout' => 1000,
-            'is_async' => false,
-            'max_poll_records' => 500,
-            'flush_attempts' => 3,
-            'required_acknowledgment' => true,
-            'partition' => 0,
-        ]);
-
         $broker = new Broker('kafka:9092', new None());
         $producerConfigOptions = new ProducerConfigOptions(
             'topic_name',

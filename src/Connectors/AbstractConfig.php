@@ -7,20 +7,17 @@ use Metamorphosis\Exceptions\ConfigurationException;
 
 abstract class AbstractConfig
 {
-    /**
-     * @var mixed[]
-     */
-    protected array $rules = [];
-
-    protected function getBrokerConfig(string $configName, string $brokerId): array
+    protected function getBrokerConfig(string $servicesFile): array
     {
-        if (!$brokerConfig = config("{$configName}.brokers.{$brokerId}")) {
-            throw new ConfigurationException(
-                "Broker '{$brokerId}' configuration not found"
-            );
+        if (!$brokerConfig = config($servicesFile.'.broker')) {
+            throw new ConfigurationException("Broker configuration not found on '{$servicesFile}'");
         }
+        return $brokerConfig;
+    }
 
-        return (array) $brokerConfig;
+    protected function getSchemaConfig(string $servicesFile): array
+    {
+        return config($servicesFile.'.avro_schema', []);
     }
 
     protected function validate(array $config): void
@@ -30,10 +27,5 @@ abstract class AbstractConfig
         if (!$validator->errors()->isEmpty()) {
             throw new ConfigurationException($validator->errors()->toJson());
         }
-    }
-
-    protected function getSchemaConfig(string $configName, string $topicId): array
-    {
-        return config($configName . '.avro_schemas.' . $topicId, []);
     }
 }

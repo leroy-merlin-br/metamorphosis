@@ -21,10 +21,8 @@ class ConsumerFactory
     private static function getConsumerGroupConfig(array $topicData): array
     {
         $topicData['topicId'] = $topicData['topic_id'];
-        $topicData['consumerGroup'] = $topicData['consumer_group'];
-
-        $consumerGroup = $topicData['consumerGroup'];
-        $consumer = current($topicData['consumer'])[$consumerGroup];
+        $consumer = $topicData['consumer'];
+        $topicData['consumerGroup'] = $consumer['consumer_group'];
 
         return array_merge_recursive($topicData, self::convertConfigAttributes($consumer));
     }

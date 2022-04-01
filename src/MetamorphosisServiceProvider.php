@@ -14,9 +14,11 @@ class MetamorphosisServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../config/kafka.php' => config_path('kafka.php'),
+            __DIR__.'/../config/service.php' => config_path('service.php'),
         ], 'config');
 
         $this->mergeConfigFrom(__DIR__.'/../config/kafka.php', 'kafka');
+        $this->mergeConfigFrom(__DIR__.'/../config/service.php', 'service');
     }
 
     public function register()

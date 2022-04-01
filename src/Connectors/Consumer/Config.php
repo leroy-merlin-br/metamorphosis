@@ -53,36 +53,25 @@ class Config extends AbstractConfig
     public function make(array $options, array $arguments): Consumer
     {
         $configName = $options['config_name'] ?? 'kafka';
+        $service = $options['service'] ?? 'service';
+
         $topicConfig = $this->getTopicConfig($configName, $arguments['topic']);
-        $consumerGroupId = $this->getConsumerGroup($topicConfig, $arguments['consumer_group']);
-        $consumerConfig = $this->getConsumerConfig($topicConfig, $options, $consumerGroupId);
-        $brokerConfig = $this->getBrokerConfig($configName, $topicConfig['broker']);
-        $schemaConfig = $this->getSchemaConfig($configName, $arguments['topic']);
-        $override = array_merge($this->filterValues($options), $this->filterValues($arguments));
-        $config = array_merge(
-            $topicConfig,
-            $brokerConfig,
-            $consumerConfig,
-            $schemaConfig
-        );
+        $brokerConfig = $this->getBrokerConfig($service);
+        $schemaConfig = $this->getSchemaConfig($service);
 
-        $this->validate(array_merge($config, $override));
-
-        if (isset($topicConfig['consumer']['consumer_groups'][$consumerGroupId])) {
+        if (isset($topicConfig['consumer'])) {
             if (isset($options['partition'])) {
-                $topicConfig['consumer']['consumer_groups'][$consumerGroupId]['partition'] = $options['partition'];
+                $topicConfig['consumer']['partition'] = $options['partition'];
             }
 
             if (isset($options['offset'])) {
-                $topicConfig['consumer']['consumer_groups'][$consumerGroupId]['offset'] = $options['offset'];
+                $topicConfig['consumer']['offset'] = $options['offset'];
             }
 
             if (isset($options['timeout'])) {
-                $topicConfig['consumer']['consumer_groups'][$consumerGroupId]['timeout'] = $options['timeout'];
+                $topicConfig['consumer']['timeout'] = $options['timeout'];
             }
         }
-
-        $topicConfig['consumer_group'] = $consumerGroupId;
 
         return ConsumerFactory::make($brokerConfig, $topicConfig, $schemaConfig);
     }
@@ -94,38 +83,7 @@ class Config extends AbstractConfig
             throw new ConfigurationException("Topic '{$topicId}' not found");
         }
 
-        $topicConfig['middlewares'] = $this->getMiddlewares($configName, $topicConfig);
-
         return $topicConfig;
-    }
-
-    private function getConsumerConfig(array $topicConfig, array $options, string $consumerGroupId): array
-    {
-        $consumerConfig = $topicConfig['consumer']['consumer_groups'][$consumerGroupId] ?? null;
-        if (!$consumerConfig) {
-            throw new ConfigurationException("Consumer group '{$consumerGroupId}' not found");
-        }
-
-        $consumerConfig['consumer_group'] = $consumerGroupId;
-
-        return $consumerConfig;
-    }
-
-    private function getConsumerGroup(array $topicConfig, ?string $consumerGroupId): string
-    {
-        if (!$consumerGroupId && 1 === count($topicConfig['consumer']['consumer_groups'])) {
-            $consumerGroupId = current(array_keys($topicConfig['consumer']['consumer_groups']));
-        }
-
-        return $consumerGroupId ?? 'default';
-    }
-
-    private function getMiddlewares(string $configName, array $topicConfig): array
-    {
-        return array_merge(
-            config($configName.'.middlewares.consumer', []),
-            $topicConfig['consumer']['middlewares'] ?? []
-        );
     }
 
     /**

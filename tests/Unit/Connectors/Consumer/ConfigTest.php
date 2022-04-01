@@ -7,6 +7,7 @@ use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 use Mockery as m;
 use Tests\LaravelTestCase;
 use Tests\Unit\Dummies\ConsumerHandlerDummy;
+use TypeError;
 
 class ConfigTest extends LaravelTestCase
 {
@@ -98,8 +99,10 @@ class ConfigTest extends LaravelTestCase
             'consumer_group' => 'default',
         ];
 
+        // Expectations
+        $this->expectException(TypeError::class);
+
         // Actions
-        $this->expectException(ConfigurationException::class);
         $configManager = $config->make($options, $arguments);
 
         // Assertions
@@ -109,7 +112,7 @@ class ConfigTest extends LaravelTestCase
     public function testShouldNotSetRuntimeConfigWhenKafkaConfigIsInvalid(): void
     {
         // Set
-        config(['kafka.brokers.default.connections' => null]);
+        config(['service.broker' => null]);
         $config = new Config();
         $options = [
             'partition' => 0,

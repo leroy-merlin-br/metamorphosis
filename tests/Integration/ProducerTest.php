@@ -73,17 +73,17 @@ class ProducerTest extends LaravelTestCase
 
     protected function withoutAuthentication(): void
     {
-        config(['kafka.brokers.default.auth' => []]);
+        config(['service.broker.auth' => []]);
     }
 
     protected function haveAConsumerHandlerConfigured(): void
     {
-        config(['kafka.topics.default.consumer.consumer_groups.test-consumer-group.handler' => MessageConsumer::class]);
+        config(['kafka.topics.default.consumer.handler' => MessageConsumer::class]);
     }
 
     protected function haveAConsumerPartitionConfigured(): void
     {
-        config(['kafka.topics.default.consumer.consumer_groups.test-consumer-group.partition' => -1]);
+        config(['kafka.topics.default.consumer.partition' => -1]);
     }
 
     protected function runTheConsumer(): void
@@ -110,15 +110,12 @@ class ProducerTest extends LaravelTestCase
                         'topic_id' => 'low_level',
                         'broker' => 'default',
                         'consumer' => [
-                            'consumer_groups' => [
-                                'test-consumer-group' => [
-                                    'offset_reset' => 'earliest',
-                                    'offset' => 0,
-                                    'handler' => MessageConsumer::class,
-                                    'timeout' => 20000,
-                                    'middlewares' => [],
-                                ],
-                            ],
+                            'consumer_group' => 'test-consumer-group',
+                            'offset_reset' => 'earliest',
+                            'offset' => 0,
+                            'handler' => MessageConsumer::class,
+                            'timeout' => 20000,
+                            'middlewares' => [],
                         ],
                         'producer' => [
                             'required_acknowledgment' => true,

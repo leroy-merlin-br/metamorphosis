@@ -32,20 +32,16 @@ class ConsumerFactoryTest extends LaravelTestCase
         ];
         $topicData = [
             'topic_id' => 'kafka-test',
-            'consumer_group' => 'test-consumer-group',
             'consumer' => [
-                'consumer_groups' => [
-                    'test-consumer-group' => [
-                        'middlewares' => [],
-                        'auto_commit' => true,
-                        'commit_async' => true,
-                        'offset_reset' => 'earliest',
-                        'handler' => '\App\Kafka\Consumers\ConsumerExample',
-                        'partition' => 0,
-                        'offset' => 0,
-                        'timeout' => 20000,
-                    ],
-                ],
+                'consumer_group' => 'test-consumer-group',
+                'middlewares' => [],
+                'auto_commit' => true,
+                'commit_async' => true,
+                'offset_reset' => 'earliest',
+                'handler' => '\App\Kafka\Consumers\ConsumerExample',
+                'partition' => 0,
+                'offset' => 0,
+                'timeout' => 20000,
             ],
         ];
         $expected = [

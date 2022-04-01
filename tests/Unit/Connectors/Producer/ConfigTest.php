@@ -23,7 +23,6 @@ class ConfigTest extends LaravelTestCase
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'partition' => -1,
-            'broker' => 'default',
             'topic' => 'default',
             'connections' => 'kafka:9092',
             'auth' => [
@@ -69,7 +68,6 @@ class ConfigTest extends LaravelTestCase
             'required_acknowledgment' => true,
             'max_poll_records' => 3000,
             'flush_attempts' => 10,
-            'broker' => 'default',
             'topic' => 'default',
             'connections' => 'kafka:9092',
             'auth' => [

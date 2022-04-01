@@ -50,15 +50,9 @@ class Config extends AbstractConfig
     public function makeByTopic(string $topicId): AbstractConfigManager
     {
         $topicConfig = $this->getTopicConfig($topicId);
-        $topicConfig['middlewares'] = array_merge(
-            config('kafka.middlewares.producer', []),
-            $topicConfig['producer']['middlewares'] ?? []
-        );
-        $brokerConfig = $this->getBrokerConfig(
-            'kafka',
-            $topicConfig['broker']
-        );
-        $schemaConfig = $this->getSchemaConfig('kafka', $topicId);
+        $topicConfig['middlewares'] = $topicConfig['producer']['middlewares'] ?? [];
+        $brokerConfig = $this->getBrokerConfig('service');
+        $schemaConfig = $this->getSchemaConfig('service');
         $config = array_merge($topicConfig, $brokerConfig, $schemaConfig);
 
         $this->validate($config);

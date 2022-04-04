@@ -34,7 +34,8 @@ class ConsumerCommand extends BaseCommand
         {--broker= : Override broker connection from config.}
         {--timeout= : Sets timeout for consumer.}
         {--times= : Amount of messages to be consumed.}
-        {--config_name= : Change default name for laravel config file.}';
+        {--config_name= : Change default name for laravel config file.}
+        {--service_name= : Change default name for services config file.}';
 
     public function handle(Config $config)
     {

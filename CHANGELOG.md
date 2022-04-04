@@ -9,14 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added file `config/service.php` to configure broker and authentication
-- Added AvroSchemaMixedEncoderTest
-- Added AvroSchemaDecoderTest
-- Added ProducerWithConfigOptionsTest
-- Added ConfigOptionsCommand to run commands with ConfigOptions class
-- Added pt_BR contributing section
-- Added setup-dev script on composer
-- Added grumphp commit validation 
+-  Added file `config/service.php` to configure broker and authentication
+-  Added AvroSchemaMixedEncoderTest
+-  Added AvroSchemaDecoderTest
+-  Added ProducerWithConfigOptionsTest
+-  Added ConfigOptionsCommand to run commands with ConfigOptions class
+-  Added pt_BR contributing section
+-  Added setup-dev script on composer
+-  Added grumphp commit validation 
 
 ### Fixed
 

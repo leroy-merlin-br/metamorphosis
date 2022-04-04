@@ -180,9 +180,6 @@ To configure and consume using classes:
     $consumer->consume();
 ```
 
-
-
-
 That's it. For more information about usage, middlewares, broker authentication, consumer groups and other advanced topics, please have a look at our [Advanced Usage Guide](advanced.md).
 
 <a name="produce-message"></a>

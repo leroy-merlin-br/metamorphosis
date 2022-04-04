@@ -9,36 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 
-
-### Fixed
-
--
-
-### Changed
-
--
-
-### Removed
-- Remove deprecated class AbstractHandler
-
-## [4.1.0] - 2022-03-23
-
-### Added
+- Added file `config/service.php` to configure broker and authentication
 - Added AvroSchemaMixedEncoderTest
 - Added AvroSchemaDecoderTest
 - Added ProducerWithConfigOptionsTest
 - Added ConfigOptionsCommand to run commands with ConfigOptions class
 - Added pt_BR contributing section
 - Added setup-dev script on composer
-- Added grumphp commit validation
+- Added grumphp commit validation 
 
-### Fixed 
+### Fixed
+
 - Fixed parameters and options override on Consumer\Config class
 - Update instructions on contribute section
 - Update project install section
 
 ### Changed
+
 - Updated class from ConfigManager to ConfigOptions on unit tests
 - Updated class from ConfigManager to ConfigOptions where any config request was made
 - Consumer and Producer middlewares resolution
+
+### Removed

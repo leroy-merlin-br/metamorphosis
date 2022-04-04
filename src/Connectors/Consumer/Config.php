@@ -85,18 +85,4 @@ class Config extends AbstractConfig
 
         return $topicConfig;
     }
-
-    /**
-     * Sometimes that user may pass `--partition=0` as argument.
-     * So if we just use array_filter here, this option will
-     * be removed.
-     *
-     * This code makes sure that only null values will be removed.
-     */
-    private function filterValues(array $options = []): array
-    {
-        return array_filter($options, function ($value) {
-            return !is_null($value);
-        });
-    }
 }

@@ -162,7 +162,8 @@ redirect_stderr=true
 stdout_logfile=/var/log/default/kafka-consumer-price-update.log
 ```
 
-### Using data objects
+<a name="config-dto"></a>
+#### Using data objects
 
 To configure and consume using classes:
 

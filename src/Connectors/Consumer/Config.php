@@ -53,7 +53,7 @@ class Config extends AbstractConfig
     public function make(array $options, array $arguments): Consumer
     {
         $configName = $options['config_name'] ?? 'kafka';
-        $service = $options['service'] ?? 'service';
+        $service = $options['service_name'] ?? 'service';
 
         $topicConfig = $this->getTopicConfig($configName, $arguments['topic']);
         $brokerConfig = $this->getBrokerConfig($service);

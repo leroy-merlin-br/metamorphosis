@@ -2,8 +2,14 @@
 
 return [
     'topics' => [
+        // This is your topic "keyword" where you will put all configurations needed
+        // on this specific topic.
         'default' => [
+            // The topic id is where you want to send or consume
+            // your messages from kafka.
             'topic_id' => 'kafka-test',
+
+            //your consumer configurations
             'consumer' => [
                 'consumer_group' => 'test-consumer-group',
                 // Action to take when there is no initial

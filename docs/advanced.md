@@ -181,10 +181,17 @@ $ php artisan make:kafka-consumer PriceUpdateHandler
 This will create a KafkaConsumer class inside the application, on the `app/Kafka/Consumers/` directory.
 
 There, you'll have a `handler` method, which will send all records from the topic to the Consumer.
-Methods will be available for handling exceptions:
+
+Available methods:
+
  - `warning` method will be call whenever something not critical is received from the topic.
     Like a message informing that there's no more records to consume.
- - `failure` method will be call whenever something critical happens, like an error to decode the record.
+
+
+ - `failure` will be call whenever something critical happens, like an error to decode the record.
+
+
+ - `finished`  will be call when queue finishes
 
 ```php
 use App\Repository;
@@ -230,6 +237,11 @@ class PriceUpdateHandler extends AbstractHandler
     {
         // handle failure exception
     }
+    
+    public function finished(): void
+    {
+        //handle queue end
+    }    
 }
 ```
 

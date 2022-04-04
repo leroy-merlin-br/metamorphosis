@@ -1,6 +1,7 @@
 ## Quick Usage Guide
 
-- [Config file](#config)
+- [Configure with files](#config)
+- [Configure using data objects](#config-dto)
 - [Consumer](#consumer)
    - [Creating Consumer](#creating-consumer)
    - [Running](#running-consumer)
@@ -90,7 +91,6 @@ return [
 ];
 ```
 
-
 <a name="consumer"></a>
 ### Consumer
 
@@ -144,7 +144,7 @@ To start consuming the topic, the simplest way to see it working is by running t
 
 ```bash
 $ php artisan kafka:consume this_is_your_topic_name --config_name=config.file --service_name=service.file
-```
+``` 
 
 This command will run in a `while true`, that means, it will never stop running.
 But, errors can happen, so we strongly advice you to run this command along with [supervisor](http://supervisord.org/running.html),
@@ -161,6 +161,27 @@ numprocs=6
 redirect_stderr=true
 stdout_logfile=/var/log/default/kafka-consumer-price-update.log
 ```
+
+### Using data objects
+
+To configure and consume using classes:
+
+```php
+    use Metamorphosis\Consumer;
+    use Metamorphosis\TopicHandler\ConfigOptions\Factories\ConsumerFactory;
+    
+    $topic = config('yourConfig.topics.topic-id');
+    $broker = config('yourService.broker');
+    $avro = config('yourService.avro_schema');
+    
+    $consumerConfiguration = ConsumerFactory::make($broker, $topic, $avro);
+    $consumer = app(Consumer::class, ['configOptions' => $consumerConfiguration]);
+    
+    $consumer->consume();
+```
+
+
+
 
 That's it. For more information about usage, middlewares, broker authentication, consumer groups and other advanced topics, please have a look at our [Advanced Usage Guide](advanced.md).
 

@@ -136,8 +136,7 @@ If you wish, you may set a middleware to run of a topic level or a consumer grou
 ],
 ```
 
-The order matters here, they'll be execute as queue, from the most global scope to the most specific (global scope > topic scope > group_consumers scope).
-
+The order matters here, they'll execute as queue, from the most global scope to the most specific (global scope > topic scope > group_consumers scope).
 
 <a name="schemas"></a>
 ### Schemas
@@ -245,7 +244,6 @@ class PriceUpdateHandler extends AbstractHandler
 }
 ```
 
-
 <a name="commands-middleware"></a>
 #### Creating Middleware
 You can create a middleware class, that works between the received data from broker and before being passed into consumers, using the follow command:
@@ -287,7 +285,6 @@ stdout_logfile=/var/log/default/kafka-consumer-price-update.log
 
 Although you can run this simple command, it provides some options you can pass to make it more flexible to your needs.
 
-
 - `--offset=`
 
     And if you need to start the consumption of a topic in a specific offset (it can be useful for debug purposes)
@@ -323,6 +320,7 @@ Although you can run this simple command, it provides some options you can pass 
 
 - `--service_name=`
 
-    Specify from what file services configurations should be read.
+    Specify from what file services configurations should be read. 
 
-    `$ php artisan kafka:consume price-update --service_name=config.file`
+
+    $ php artisan kafka:consume price-update --service_name=config.file

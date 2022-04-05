@@ -19,7 +19,6 @@ configuration and a file to keep the broker and schema configuration. In this ex
 This file keeps configurations about topics, consumers and producers.
 It should return an array of topics containing the topic name, topic_id,  consumer, producer and the settings for each one of them:
 
-
 ```php
 <?php
 
@@ -56,7 +55,6 @@ return [
 ### File `config/service.php`
 
 This file keeps configurations about **broker** and **schema** utilized.
-
 
 ```php
 <?php

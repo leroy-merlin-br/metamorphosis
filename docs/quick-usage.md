@@ -12,7 +12,8 @@
 ### Configure using  files
 
 To get started using configuration files, at least two files are needed. A file to keep the topics
-configuration and a file to keep the broker and schema configuration. In this example, we will use the files  `config/kafka.php` and `config/service.php`.
+configuration and a file to keep the broker and schema configuration. In this example, we will use the files 
+`config/kafka.php` and `config/service.php`.
 
 ### File `config/kafka.php`:
 

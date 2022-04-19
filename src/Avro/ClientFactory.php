@@ -7,7 +7,7 @@ use Metamorphosis\TopicHandler\ConfigOptions\AvroSchema;
 
 class ClientFactory
 {
-    const REQUEST_TIMEOUT = 2000;
+    protected const REQUEST_TIMEOUT = 2000;
 
     public function make(AvroSchema $avroSchema): CachedSchemaRegistryClient
     {

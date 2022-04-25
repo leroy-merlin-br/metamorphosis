@@ -40,7 +40,7 @@ class Config extends AbstractConfig
         'middlewares' => 'array',
     ];
 
-    public function makeWithConfigOptions(string $handlerClass, ?int $times = null): ?Consumer
+    public function makeWithConfigOptions(string $handlerClass): ?Consumer
     {
         $handler = app($handlerClass);
         $configOptions = $handler->getConfigOptions();

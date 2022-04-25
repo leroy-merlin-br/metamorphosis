@@ -7,17 +7,11 @@ use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Serializer\MessageDecoder;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\Record\RecordInterface;
-use Metamorphosis\TopicHandler\ConfigOptions\AvroSchema;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 
 class AvroSchemaDecoder implements MiddlewareInterface
 {
     private MessageDecoder $decoder;
-
-    /**
-     * @var AvroSchema
-     */
-    private $avroSchema;
 
     public function __construct(ClientFactory $factory, ConsumerConfigOptions $consumerConfigOptions)
     {

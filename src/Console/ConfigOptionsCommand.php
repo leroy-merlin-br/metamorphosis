@@ -2,7 +2,6 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
-use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Consumers\Runner;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConfigOptions;
@@ -26,7 +25,7 @@ class ConfigOptionsCommand extends BaseCommand
         {handler : handler.}
         {--times= : Amount of messages to be consumed.}';
 
-    public function handle(Config $config)
+    public function handle()
     {
         $consumerHandler = app($this->argument('handler'));
 

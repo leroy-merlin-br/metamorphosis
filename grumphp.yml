@@ -1,4 +1,6 @@
 grumphp:
+  git_hook_variables:
+    EXEC_GRUMPHP_COMMAND: 'docker-compose run --rm -e COLUMNS=$COLUMNS -e LINES=$LINES -e TERM=$TERM -T php'
   stop_on_failure: true
   process_timeout: 120
   ascii:

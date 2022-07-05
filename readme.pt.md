@@ -71,9 +71,7 @@ Após a instalação, adicione a extensão ao arquivo .ini:
 ```
 extension=rdkafka.so
 ```
-> **Importante:** Quando existem múltiplas versões do PHP instaladas, a PECL instala os pacotes apenas para a última versão do PHP.
-Para especificar uma versão do PHP durante a instalação dos pacotes, 
-baixe o código-fonte e compile o pacote especificando a versão do PHP desejada.
+> **Importante:** Quando existem múltiplas versões do PHP instaladas, a PECL instala os pacotes apenas para a última versão do PHP. Para especificar uma versão do PHP durante a instalação dos pacotes, baixe o código-fonte e compile o pacote especificando a versão do PHP desejada.
 
 Exemplo para o PHP 7.4:
 

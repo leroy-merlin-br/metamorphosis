@@ -74,8 +74,7 @@ then add the following to your .ini file:
 ```
 extension=rdkafka.so
 ```
-> **Important:** When using multiple PHP versions, PECL will install the package for the latest PHP version only.
-To set a PHP version, download the source code and compile it specifying the target PHP version.
+> **Important:** When using multiple PHP versions, PECL will install the package for the latest PHP version only. To set a PHP version, download the source code and compile it specifying the target PHP version.
 
 PHP 7.4 example:
 

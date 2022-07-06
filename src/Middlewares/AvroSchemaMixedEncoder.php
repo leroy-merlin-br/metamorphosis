@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Middlewares;
 
 use Closure;
@@ -16,25 +17,18 @@ use Metamorphosis\Record\RecordInterface;
  */
 class AvroSchemaMixedEncoder implements MiddlewareInterface
 {
-    /**
-     * @var SchemaId
-     */
-    private $schemaIdEncoder;
+    private SchemaId $schemaIdEncoder;
 
-    /**
-     * @var CachedSchemaRegistryClient
-     */
-    private $schemaRegistry;
+    private CachedSchemaRegistryClient $schemaRegistry;
 
-    /**
-     * @var AbstractConfigManager
-     */
-    private $configManager;
+    private AbstractConfigManager $configManager;
 
     public function __construct(SchemaId $schemaIdEncoder, ClientFactory $factory, AbstractConfigManager $configManager)
     {
         if (!$configManager->get('url')) {
-            throw new ConfigurationException("Avro schema url not found, it's required to use AvroSchemaEncoder Middleware");
+            throw new ConfigurationException(
+                "Avro schema url not found, it's required to use AvroSchemaEncoder Middleware"
+            );
         }
 
         $schemaRegistry = $factory->make($configManager);
@@ -46,10 +40,16 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
     public function process(RecordInterface $record, Closure $next)
     {
         $topic = $this->configManager->get('topic_id');
-        $schema = $this->schemaRegistry->getBySubjectAndVersion("{$topic}-value", 'latest');
+        $schema = $this->schemaRegistry->getBySubjectAndVersion(
+            "{$topic}-value",
+            'latest'
+        );
 
         $arrayPayload = json_decode($record->getPayload(), true);
-        $encodedPayload = $this->schemaIdEncoder->encode($schema, $arrayPayload);
+        $encodedPayload = $this->schemaIdEncoder->encode(
+            $schema,
+            $arrayPayload
+        );
 
         $record->setPayload($encodedPayload);
 

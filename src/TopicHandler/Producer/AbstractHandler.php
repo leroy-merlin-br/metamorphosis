@@ -1,35 +1,28 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\Producer;
 
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Record\ProducerRecord;
 
 /**
- * @deprecated
+ * @deprecated deprecated
  */
 abstract class AbstractHandler implements HandlerInterface
 {
     /**
      * @var mixed
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      */
     protected $record;
 
-    /**
-     * @var string
-     */
-    protected $topic;
+    protected string $topic;
 
-    /**
-     * @var string
-     */
-    protected $key;
+    protected string $key;
 
-    /**
-     * @var int
-     */
-    protected $partition;
+    protected int $partition;
 
-    public function __construct($record, string $topic = null, string $key = null, int $partition = null)
+    public function __construct($record, ?string $topic = null, ?string $key = null, ?int $partition = null)
     {
         $this->record = $record;
         $this->topic = $topic;
@@ -77,7 +70,9 @@ abstract class AbstractHandler implements HandlerInterface
         $record = json_encode($record, JSON_PRESERVE_ZERO_FRACTION);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new JsonException('Cannot convert data into a valid JSON. Reason: '.json_last_error_msg());
+            throw new JsonException(
+                'Cannot convert data into a valid JSON. Reason: ' . json_last_error_msg()
+            );
         }
 
         return $record;

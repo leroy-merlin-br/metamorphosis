@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\AbstractConfigManager;
@@ -25,9 +26,15 @@ class LowLevel implements ConnectorInterface
         $consumer->addBrokers($configManager->get('connections'));
 
         $topicConf = $this->getTopicConfigs($configManager);
-        $topicConsumer = $consumer->newTopic($configManager->get('topic_id'), $topicConf);
+        $topicConsumer = $consumer->newTopic(
+            $configManager->get('topic_id'),
+            $topicConf
+        );
 
-        $topicConsumer->consumeStart($configManager->get('partition'), $configManager->get('offset'));
+        $topicConsumer->consumeStart(
+            $configManager->get('partition'),
+            $configManager->get('offset')
+        );
 
         return new LowLevelConsumer($topicConsumer, $configManager);
     }
@@ -39,7 +46,10 @@ class LowLevel implements ConnectorInterface
         // Set where to start consuming messages when there is no initial offset in
         // offset store or the desired offset is out of range.
         // 'smallest': start from the beginning
-        $topicConfig->set('auto.offset.reset', $configManager->get('offset_reset'));
+        $topicConfig->set(
+            'auto.offset.reset',
+            $configManager->get('offset_reset')
+        );
 
         return $topicConfig;
     }

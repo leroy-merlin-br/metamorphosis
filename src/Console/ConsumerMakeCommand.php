@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\GeneratorCommand;
@@ -8,23 +9,20 @@ class ConsumerMakeCommand extends GeneratorCommand
     /**
      * The console command name.
      *
-     * @var string
      */
-    protected $name = 'make:kafka-consumer';
+    protected string $name = 'make:kafka-consumer';
 
     /**
      * The console command description.
      *
-     * @var string
      */
-    protected $description = 'Create a new kafka consumer';
+    protected string $description = 'Create a new kafka consumer';
 
     /**
      * The type of class being generated.
      *
-     * @var string
      */
-    protected $type = 'KafkaConsumer';
+    protected string $type = 'KafkaConsumer';
 
     /**
      * Get the stub file for the generator.
@@ -33,7 +31,7 @@ class ConsumerMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/consumer.stub';
+        return __DIR__ . '/stubs/consumer.stub';
     }
 
     /**
@@ -45,6 +43,6 @@ class ConsumerMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Kafka\Consumers';
+        return $rootNamespace . '\Kafka\Consumers';
     }
 }

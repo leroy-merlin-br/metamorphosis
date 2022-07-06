@@ -1,72 +1,42 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\ConfigOptions;
 
 class Consumer
 {
-    /**
-     * @var Broker
-     */
-    private $broker;
+    private Broker $broker;
 
-    /**
-     * @var AvroSchema
-     */
-    private $avroSchema;
+    private AvroSchema $avroSchema;
 
     /**
      * Middlewares specific for this producer.
      *
-     * @var array
+     * @var array<mixed>
      */
-    private $middlewares;
+    private array $middlewares;
 
     /**
      * We need to set a timeout when polling the messages.
      * That means: how long we'll wait a response from poll
      *
-     * @var int
      */
-    private $timeout;
+    private int $timeout;
 
-    /**
-     * @var ?int
-     */
-    private $partition;
+    private ?int $partition = null;
 
-    /**
-     * @var string
-     */
-    private $topicId;
+    private string $topicId;
 
-    /**
-     * @var string
-     */
-    private $consumerGroup;
+    private string $consumerGroup;
 
-    /**
-     * @var string
-     */
-    private $handler;
+    private string $handler;
 
-    /**
-     * @var bool
-     */
-    private $autoCommit;
+    private bool $autoCommit;
 
-    /**
-     * @var bool
-     */
-    private $commitASync;
+    private bool $commitASync;
 
-    /**
-     * @var string
-     */
-    private $offsetReset;
+    private string $offsetReset;
 
-    /**
-     * @var int|null
-     */
-    private $offset;
+    private ?int $offset = null;
 
     public function __construct(
         string $topicId,

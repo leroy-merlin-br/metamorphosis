@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Integration;
 
 use Illuminate\Support\Facades\Log;
@@ -13,15 +14,9 @@ use Tests\LaravelTestCase;
 
 class ProducerWithConfigOptionsTest extends LaravelTestCase
 {
-    /**
-     * @var ProducerConfigOptions
-     */
-    private $producerConfigOptions;
+    private ProducerConfigOptions $producerConfigOptions;
 
-    /**
-     * @var ConsumerConfigOptions
-     */
-    private $consumerConfigOptions;
+    private ConsumerConfigOptions $consumerConfigOptions;
 
     public function testShouldRunAProducerMessagesWithConfigOptions(): void
     {

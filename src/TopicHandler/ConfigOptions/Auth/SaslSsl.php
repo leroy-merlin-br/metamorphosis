@@ -1,22 +1,14 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\ConfigOptions\Auth;
 
 class SaslSsl implements AuthInterface
 {
-    /**
-     * @var string
-     */
-    private $mechanisms;
+    private string $mechanisms;
 
-    /**
-     * @var string
-     */
-    private $username;
+    private string $username;
 
-    /**
-     * @var string
-     */
-    private $password;
+    private string $password;
 
     public function __construct(string $mechanisms, string $username, string $password)
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis;
 
 use Metamorphosis\Connectors\Consumer\Factory;
@@ -10,15 +11,9 @@ use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 
 class Consumer
 {
-    /**
-     * @var ConsumerInterface
-     */
-    private $consumer;
+    private ConsumerInterface $consumer;
 
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
+    private Dispatcher $dispatcher;
 
     public function __construct(ConsumerConfigManager $configManager, ConsumerConfigOptions $configOptions)
     {

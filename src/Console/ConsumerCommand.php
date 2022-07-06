@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
@@ -11,16 +12,19 @@ class ConsumerCommand extends BaseCommand
 {
     /**
      * @var {inheritdoc}
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $name = 'kafka:consume';
 
     /**
      * @var {inheritdoc}
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $description = 'Consumes something';
 
     /**
      * @var {inheritdoc}
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $signature = 'kafka:consume
         {topic : topic.}
@@ -46,9 +50,15 @@ class ConsumerCommand extends BaseCommand
 
     private function writeStartingConsumer(AbstractConfigManager $configManager)
     {
-        $text = 'Starting consumer for topic: '.$configManager->get('topic').PHP_EOL;
-        $text .= ' on consumer group: '.$configManager->get('consumer_group').PHP_EOL;
-        $text .= 'Connecting in '.$configManager->get('connections').PHP_EOL;
+        $text = 'Starting consumer for topic: ' . $configManager->get(
+            'topic'
+        ) . PHP_EOL;
+        $text .= ' on consumer group: ' . $configManager->get(
+            'consumer_group'
+        ) . PHP_EOL;
+        $text .= 'Connecting in ' . $configManager->get(
+            'connections'
+        ) . PHP_EOL;
         $text .= 'Running consumer..';
 
         $this->output->writeln($text);

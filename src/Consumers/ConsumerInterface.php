@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Consumers;
 
 use RdKafka\Message;

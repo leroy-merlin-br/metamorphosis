@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Middlewares;
 
 use Closure;

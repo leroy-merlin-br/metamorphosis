@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\TopicHandler\ConfigOptions\Factories;
 
 use Metamorphosis\TopicHandler\ConfigOptions\Broker;

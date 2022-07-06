@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Connector;
@@ -30,11 +31,13 @@ class ConnectorTest extends LaravelTestCase
         $configOptions = m::mock(ProducerConfigOptions::class);
 
         $connector = new Connector();
-        $handler = new class('record', $configOptions) extends AbstractProducer implements HandleableResponseInterface {
+        $handler = new class ('record', $configOptions) extends AbstractProducer implements HandleableResponseInterface {
+            /** @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter */
             public function success(Message $message): void
             {
             }
 
+            /** @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter */
             public function failed(Message $message): void
             {
             }
@@ -78,11 +81,13 @@ class ConnectorTest extends LaravelTestCase
         $configOptions = m::mock(ProducerConfigOptions::class);
 
         $connector = new Connector();
-        $handler = new class('record', $configOptions) extends AbstractProducer implements HandlerInterface {
+        $handler = new class ('record', $configOptions) extends AbstractProducer implements HandlerInterface {
+            /** @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter */
             public function success(Message $message): void
             {
             }
 
+            /** @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter */
             public function failed(Message $message): void
             {
             }

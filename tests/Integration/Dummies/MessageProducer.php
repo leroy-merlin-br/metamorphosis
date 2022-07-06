@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Integration\Dummies;
 
 use Illuminate\Support\Facades\Log;
@@ -8,12 +9,9 @@ use RuntimeException;
 
 class MessageProducer extends AbstractHandler
 {
-    /**
-     * @var string
-     */
-    public $topic = 'default';
+    public string $topic = 'default';
 
-    public function __construct($record, string $topic = null, string $key = null, int $partition = null)
+    public function __construct($record, ?string $topic = null, ?string $key = null, ?int $partition = null)
     {
         $this->record = $record;
         $this->topic = $topic ?? 'default';

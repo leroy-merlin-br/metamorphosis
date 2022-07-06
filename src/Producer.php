@@ -1,9 +1,9 @@
 <?php
+
 namespace Metamorphosis;
 
 use Metamorphosis\Connectors\Producer\Config;
 use Metamorphosis\Connectors\Producer\Connector;
-use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer\Poll;
@@ -12,15 +12,9 @@ use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
 class Producer
 {
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
-    /**
-     * @var Connector
-     */
-    private $connector;
+    private Connector $connector;
 
     public function __construct(Config $config, Connector $connector)
     {
@@ -28,9 +22,6 @@ class Producer
         $this->connector = $connector;
     }
 
-    /**
-     * @throws JsonException When an array is passed and something wrong happens while encoding it into json
-     */
     public function produce(HandlerInterface $producerHandler): void
     {
         $middlewareDispatcher = $this->build($producerHandler);
@@ -43,20 +34,34 @@ class Producer
         $configManager = $this->getConfigManager($producerHandler);
 
         $middlewares = $configManager->middlewares();
-        $middlewares[] = $this->getProducerMiddleware($producerHandler, $configManager);
+        $middlewares[] = $this->getProducerMiddleware(
+            $producerHandler,
+            $configManager
+        );
 
         return new Dispatcher($middlewares);
     }
 
-    public function getProducerMiddleware(HandlerInterface $producerHandler, AbstractConfigManager $configManager): ProducerMiddleware
-    {
-        $producer = $this->connector->getProducerTopic($producerHandler, $configManager);
+    public function getProducerMiddleware(
+        HandlerInterface $producerHandler,
+        AbstractConfigManager $configManager
+    ): ProducerMiddleware {
+        $producer = $this->connector->getProducerTopic(
+            $producerHandler,
+            $configManager
+        );
 
         $topic = $producer->newTopic($configManager->get('topic_id'));
-        $poll = app(Poll::class, ['producer' => $producer, 'configManager' => $configManager]);
+        $poll = app(
+            Poll::class,
+            ['producer' => $producer, 'configManager' => $configManager]
+        );
         $partition = $configManager->get('partition');
 
-        return app(ProducerMiddleware::class, compact('topic', 'poll', 'partition'));
+        return app(
+            ProducerMiddleware::class,
+            compact('topic', 'poll', 'partition')
+        );
     }
 
     private function getConfigManager(HandlerInterface $producerHandler): AbstractConfigManager

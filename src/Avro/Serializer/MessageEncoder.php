@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Avro\Serializer;
 
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
@@ -11,27 +12,18 @@ use RuntimeException;
 class MessageEncoder
 {
     /**
-     * @var array [int Magic Byte => string Schema Decoder Class]
+     * @var array<int, string> [int Magic Byte => string Schema Decoder Class]
      */
-    private $encoders = [
+    private array $encoders = [
         SchemaFormats::MAGIC_BYTE_SCHEMAID => SchemaId::class,
         SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION => SchemaSubjectAndVersion::class,
     ];
 
-    /**
-     * @var CachedSchemaRegistryClient
-     */
-    private $registry;
+    private CachedSchemaRegistryClient $registry;
 
-    /**
-     * @var bool
-     */
-    private $registerMissingSchemas;
+    private bool $registerMissingSchemas;
 
-    /**
-     * @var int
-     */
-    private $defaultEncodingFormat;
+    private int $defaultEncodingFormat;
 
     public function __construct(CachedSchemaRegistryClient $registry, array $options = [])
     {
@@ -60,10 +52,10 @@ class MessageEncoder
         Schema $schema,
         $message,
         bool $isKey = false,
-        int $format = null
+        ?int $format = null
     ): string {
         $suffix = $isKey ? '-key' : '-value';
-        $subject = $topic.$suffix;
+        $subject = $topic . $suffix;
         $format = $format ?? $this->defaultEncodingFormat;
 
         $encoder = $this->getEncoder($format);
@@ -74,7 +66,7 @@ class MessageEncoder
     private function getEncoder(int $format): EncoderInterface
     {
         if (!$class = $this->encoders[$format] ?? null) {
-            throw new RuntimeException('Unsuported format: '.$format);
+            throw new RuntimeException('Unsuported format: ' . $format);
         }
 
         return app($class, ['registry' => $this->registry]);

@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Facades;
 
 use Illuminate\Support\Facades\Facade;

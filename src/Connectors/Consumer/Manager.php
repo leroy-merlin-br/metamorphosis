@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Connectors\Consumer;
 
 use Exception;
@@ -12,35 +13,17 @@ use RdKafka\Message;
 
 class Manager
 {
-    /**
-     * @var ConsumerInterface
-     */
-    private $consumer;
+    private ConsumerInterface $consumer;
 
-    /**
-     * @var ConsumerHandler
-     */
-    private $consumerHandler;
+    private ConsumerHandler $consumerHandler;
 
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
+    private Dispatcher $dispatcher;
 
-    /**
-     * @var bool
-     */
-    private $autoCommit;
+    private bool $autoCommit;
 
-    /**
-     * @var bool
-     */
-    private $commitAsync;
+    private bool $commitAsync;
 
-    /**
-     * @var Message
-     */
-    private $lastResponse;
+    private Message $lastResponse;
 
     public function __construct(
         ConsumerInterface $consumer,
@@ -78,9 +61,11 @@ class Manager
             $response = null;
         } catch (ResponseWarningException $exception) {
             $this->consumerHandler->warning($exception);
+
             return;
         } catch (Exception $exception) {
             $this->consumerHandler->failed($exception);
+
             return;
         }
 
@@ -95,6 +80,7 @@ class Manager
 
         if ($this->commitAsync) {
             $this->consumer->commitAsync();
+
             return;
         }
 

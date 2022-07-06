@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Integration;
 
 use Metamorphosis\Consumer;
@@ -57,7 +58,10 @@ class ConsumerTest extends LaravelTestCase
         $saleOrderDispatcher = Metamorphosis::build($messageProducer);
         $saleOrderDispatcher->handle($messageProducer->createRecord());
 
-        $consumer = $this->app->make(Consumer::class, ['configOptions' => $consumerConfigOptions]);
+        $consumer = $this->app->make(
+            Consumer::class,
+            ['configOptions' => $consumerConfigOptions]
+        );
         $expected = ['id' => 'MESSAGE_ID'];
 
         // Actions

@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\ConfigOptions\Factories;
 
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer;
@@ -25,7 +26,10 @@ class ConsumerFactory
         $consumer = current($topicData['consumer']);
         $topicData['consumerGroup'] = key($consumer);
 
-        return array_merge($topicData, self::convertConfigAttributes($consumer));
+        return array_merge(
+            $topicData,
+            self::convertConfigAttributes($consumer)
+        );
     }
 
     private static function convertConfigAttributes(array $topic): array

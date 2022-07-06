@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Exceptions;
 
 use Exception;

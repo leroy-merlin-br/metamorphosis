@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\Config;
@@ -13,8 +14,13 @@ class ConfigTest extends LaravelTestCase
     public function testShouldValidateConsumerConfig(): void
     {
         // Set
-        config(['kafka.topics.default.consumer.consumer_groups.test-consumer-group.handler' => ConsumerHandlerDummy::class]);
-        $consumerHandler = $this->instance(ConsumerHandlerDummy::class, m::mock(ConsumerHandlerDummy::class));
+        config(
+            ['kafka.topics.default.consumer.consumer_groups.test-consumer-group.handler' => ConsumerHandlerDummy::class]
+        );
+        $consumerHandler = $this->instance(
+            ConsumerHandlerDummy::class,
+            m::mock(ConsumerHandlerDummy::class)
+        );
         $configOptions = m::mock(ConsumerConfigOptions::class);
 
         $config = new Config();

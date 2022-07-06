@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Avro\Serializer\Encoders;
 
 use Metamorphosis\Avro\Schema;

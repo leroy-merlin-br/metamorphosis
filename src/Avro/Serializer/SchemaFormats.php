@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Avro\Serializer;
 
 class SchemaFormats

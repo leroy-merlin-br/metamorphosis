@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Record;
 
 class ProducerRecord implements RecordInterface
@@ -7,36 +8,37 @@ class ProducerRecord implements RecordInterface
      * The message after any transformations that will be send to the topic.
      *
      * @var mixed
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      */
     protected $payload;
 
     /**
      * @var mixed|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      */
     protected $key;
 
     /**
      * The partition which the message will be send inside the topic.
      *
-     * @var int|null
      */
-    protected $partition;
+    protected ?int $partition = null;
 
     /**
      * Original message before passed by any kind of transformations.
      *
      * @var mixed
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      */
     protected $original;
 
     /**
      * Topic which the message will be send to.
      *
-     * @var string
      */
-    protected $topic;
+    protected string $topic;
 
-    public function __construct(string $payload, string $topic, int $partition = null, string $key = null)
+    public function __construct(string $payload, string $topic, ?int $partition = null, ?string $key = null)
     {
         $this->payload = $payload;
         $this->original = $payload;

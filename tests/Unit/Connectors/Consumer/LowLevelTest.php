@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\LowLevel;

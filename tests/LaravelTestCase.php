@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests;
 
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
@@ -9,6 +10,9 @@ class LaravelTestCase extends TestCase
 {
     use ArraySubsetAsserts;
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+     */
     protected function getPackageProviders($app)
     {
         return [MetamorphosisServiceProvider::class];

@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit;
 
 use Exception;
@@ -22,9 +23,11 @@ class RunnerTest extends LaravelTestCase
             ->andReturnUsing(function () use (&$count) {
                 if (3 === $count) {
                     $exception = new Exception('Error when consuming.');
+
                     throw $exception;
                 }
                 $count++;
+
                 return;
             });
 
@@ -45,7 +48,7 @@ class RunnerTest extends LaravelTestCase
         // Expectations
         $manager->shouldReceive('handleMessage')
             ->times(3)
-            ->andReturnUsing(function () use (&$count) {
+            ->andReturnUsing(function () {
                 return;
             });
 
@@ -62,7 +65,7 @@ class RunnerTest extends LaravelTestCase
         // Expectations
         $manager->shouldReceive('handleMessage')
             ->times(1)
-            ->andReturnUsing(function () use (&$count) {
+            ->andReturnUsing(function () {
                 throw new Exception('Error when consuming.');
             });
 

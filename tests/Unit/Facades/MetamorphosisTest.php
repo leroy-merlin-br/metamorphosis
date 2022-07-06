@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Facades;
 
 use Metamorphosis\Facades\Metamorphosis;

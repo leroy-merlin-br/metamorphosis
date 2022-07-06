@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\Producer;
 
 use RdKafka\Message;

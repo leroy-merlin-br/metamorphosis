@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\TopicHandler\Producer;
 
 use Metamorphosis\Record\ProducerRecord;
@@ -14,7 +15,7 @@ class AbstractHandlerTest extends LaravelTestCase
         $topic = 'default';
         $key = 'default_1';
         $partition = 0;
-        $handler = new class($record, $topic, $key, $partition) extends AbstractHandler {
+        $handler = new class ($record, $topic, $key, $partition) extends AbstractHandler {
         };
 
         // Actions
@@ -35,7 +36,7 @@ class AbstractHandlerTest extends LaravelTestCase
         $topic = 'default';
         $key = 'default_1';
         $partition = 1;
-        $handler = new class($record, $topic, $key, $partition) extends AbstractHandler {
+        $handler = new class ($record, $topic, $key, $partition) extends AbstractHandler {
         };
 
         // Actions

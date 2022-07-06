@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Record;
 
 use Metamorphosis\Exceptions\ResponseErrorException;
@@ -12,24 +13,18 @@ class ConsumerRecord implements RecordInterface
      * List of error codes that stop record processing,
      * but are handled gracefully.
      */
-    const KAFKA_ERROR_WHITELIST = [
+    private const KAFKA_ERROR_WHITELIST = [
         RD_KAFKA_RESP_ERR__PARTITION_EOF,
     ];
 
-    /**
-     * @var Message
-     */
-    protected $original;
+    protected Message $original;
 
     /**
      * @var mixed
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      */
     protected $payload;
 
-    /**
-     * @throws \Metamorphosis\Exceptions\ResponseErrorException
-     * @throws \Metamorphosis\Exceptions\ResponseWarningException
-     */
     public function __construct(Message $response)
     {
         $this->original = $response;
@@ -116,20 +111,20 @@ class ConsumerRecord implements RecordInterface
     {
         if (RD_KAFKA_RESP_ERR__TIMED_OUT === $this->original->err) {
             throw new ResponseTimeoutException(
-                'Consumer finished to process or timed out: '.$this->original->errstr(),
+                'Consumer finished to process or timed out: ' . $this->original->errstr(),
                 $this->original->err
             );
         }
 
         if (in_array($this->original->err, self::KAFKA_ERROR_WHITELIST)) {
             throw new ResponseWarningException(
-                'Invalid response: '.$this->original->errstr(),
+                'Invalid response: ' . $this->original->errstr(),
                 $this->original->err
             );
         }
 
         throw new ResponseErrorException(
-            'Error response: '.$this->original->errstr(),
+            'Error response: ' . $this->original->errstr(),
             $this->original->err
         );
     }

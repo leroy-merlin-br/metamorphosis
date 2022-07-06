@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Middlewares;
 
 use Closure;
@@ -7,10 +8,7 @@ use Psr\Log\LoggerInterface;
 
 class Log implements MiddlewareInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    protected $log;
+    protected LoggerInterface $log;
 
     public function __construct(LoggerInterface $log)
     {
@@ -19,9 +17,12 @@ class Log implements MiddlewareInterface
 
     public function process(RecordInterface $record, Closure $next)
     {
-        $this->log->info('Processing kafka record: '.$record->getPayload(), [
-            'original' => (array) $record->getOriginal(),
-        ]);
+        $this->log->info(
+            'Processing kafka record: ' . $record->getPayload(),
+            [
+                'original' => (array) $record->getOriginal(),
+            ]
+        );
 
         return $next($record);
     }

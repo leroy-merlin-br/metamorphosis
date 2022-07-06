@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit;
 
 use Metamorphosis\ConsumerConfigManager;
@@ -14,7 +15,10 @@ class ConsumerConfigManagerTest extends LaravelTestCase
 {
     public function testShouldOverrideConsumerConfigManager(): void
     {
-        $handler = $this->instance(AbstractHandler::class, m::mock(AbstractHandler::class));
+        $handler = $this->instance(
+            AbstractHandler::class,
+            m::mock(AbstractHandler::class)
+        );
         $config = [
             'middlewares' => [],
             'handler' => AbstractHandler::class,

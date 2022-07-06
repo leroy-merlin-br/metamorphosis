@@ -20,4 +20,7 @@
     <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName">
         <exclude-pattern>config</exclude-pattern>
     </rule>
+    <rule ref="SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter">
+        <exclude-pattern>tests/*/Dummies/*.php</exclude-pattern>
+    </rule>
 </ruleset>

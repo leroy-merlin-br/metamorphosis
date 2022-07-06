@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Config;
@@ -92,7 +93,10 @@ class ConfigTest extends LaravelTestCase
         // Set
         config(['kafka.topics.default.producer.max_poll_records' => 3000]);
         $config = new Config();
-        $broker = new Broker('kafka:9092', new SaslSsl('PLAIN', 'USERNAME', 'PASSWORD'));
+        $broker = new Broker(
+            'kafka:9092',
+            new SaslSsl('PLAIN', 'USERNAME', 'PASSWORD')
+        );
         $configOptions = new ProducerConfigOptions('TOPIC-ID', $broker);
 
         $expected = [

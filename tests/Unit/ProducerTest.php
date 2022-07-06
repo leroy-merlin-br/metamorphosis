@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit;
 
 use Metamorphosis\Connectors\Producer\Config;
@@ -37,7 +38,7 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        $producerHandler = new class ($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
@@ -94,7 +95,7 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        $producerHandler = new class ($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
@@ -146,7 +147,7 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        $producerHandler = new class ($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
@@ -222,7 +223,7 @@ class ProducerTest extends LaravelTestCase
         $producerTopic = m::mock(ProducerTopic::class);
         $configManager = m::mock(ProducerConfigManager::class);
 
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        $producerHandler = new class ($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
@@ -296,7 +297,7 @@ class ProducerTest extends LaravelTestCase
         $configManager = m::mock(ProducerConfigManager::class);
         $broker = new Broker('kafka:9092', new None());
         $configOptions = new ProducerConfigOptions($topicId, $broker);
-        $producerHandler = new class($record, $configOptions) extends AbstractProducer {
+        $producerHandler = new class ($record, $configOptions) extends AbstractProducer {
         };
 
         // Expectations

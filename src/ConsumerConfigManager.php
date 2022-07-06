@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis;
 
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
@@ -21,7 +22,12 @@ class ConsumerConfigManager extends AbstractConfigManager
         $this->remove('middlewares');
 
         foreach ($middlewares as $middleware) {
-            $this->middlewares[] = is_string($middleware) ? app($middleware, ['configManager' => $this]) : $middleware;
+            $this->middlewares[] = is_string($middleware)
+                ? app(
+                    $middleware,
+                    ['configManager' => $this]
+                )
+                : $middleware;
         }
 
         if (!$consumerHandler) {

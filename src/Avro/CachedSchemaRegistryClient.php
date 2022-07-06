@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Avro;
 
 use AvroSchemaParseException;
@@ -6,21 +7,18 @@ use RuntimeException;
 
 class CachedSchemaRegistryClient
 {
-    /**
-     * @var Client
-     */
-    private $client;
+    private Client $client;
 
     /**
      * @var Schema[]
      */
-    private $idToSchema = [];
+    private array $idToSchema = [];
 
     /** Schemas by Version
      *
      * @var Schema[][]
      */
-    private $subjectVersionToSchema = [];
+    private array $subjectVersionToSchema = [];
 
     public function __construct(Client $client)
     {
@@ -45,8 +43,12 @@ class CachedSchemaRegistryClient
 
         if (404 === $status) {
             throw new RuntimeException('Schema not found');
-        } elseif (!($status >= 200 && $status < 300)) {
-            throw new RuntimeException('Unable to get schema for the specific ID: '.$status);
+        }
+
+        if (!($status >= 200 && $status < 300)) {
+            throw new RuntimeException(
+                'Unable to get schema for the specific ID: ' . $status
+            );
         }
 
         $schema = $schema->parse($response['schema'], $schemaId);
@@ -76,12 +78,21 @@ class CachedSchemaRegistryClient
 
         if (404 === $status) {
             throw new RuntimeException('Schema not found');
-        } elseif (!($status >= 200 && $status < 300)) {
-            throw new RuntimeException('Unable to get schema for the specific ID: '.$status);
+        }
+
+        if (!($status >= 200 && $status < 300)) {
+            throw new RuntimeException(
+                'Unable to get schema for the specific ID: ' . $status
+            );
         }
 
         $schemaId = $response['id'];
-        $schema = $schema->parse($response['schema'], $schemaId, $subject, $version);
+        $schema = $schema->parse(
+            $response['schema'],
+            $schemaId,
+            $subject,
+            $version
+        );
 
         $this->cacheSchema($schema);
 

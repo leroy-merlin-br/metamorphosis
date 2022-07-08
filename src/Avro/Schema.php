@@ -8,9 +8,9 @@ class Schema
 {
     private string $schemaId;
 
-    private string $subject;
+    private ?string $subject;
 
-    private string $version;
+    private ?string $version;
 
     private AvroSchema $avroSchema;
 

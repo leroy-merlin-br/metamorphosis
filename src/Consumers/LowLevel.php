@@ -12,7 +12,7 @@ class LowLevel implements ConsumerInterface
 
     private int $partition;
 
-    private int $timeout;
+    private ?int $timeout;
 
     public function __construct(ConsumerTopic $consumer, AbstractConfigManager $configManager)
     {

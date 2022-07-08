@@ -22,6 +22,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $schema = new Schema();
         $schema->setAvroSchema($parsedSchema);
         $schema->setSchemaId('123');
+        $schema->setSubject(null);
+        $schema->setVersion(null);
 
         $response = [
             'schema' => $schemaString,

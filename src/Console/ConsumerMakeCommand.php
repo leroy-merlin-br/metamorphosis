@@ -8,21 +8,24 @@ class ConsumerMakeCommand extends GeneratorCommand
 {
     /**
      * The console command name.
-     *
+     * @string
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $name = 'make:kafka-consumer';
+    protected $name = 'make:kafka-consumer';
 
     /**
      * The console command description.
-     *
+     * @string
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $description = 'Create a new kafka consumer';
+    protected $description = 'Create a new kafka consumer';
 
     /**
      * The type of class being generated.
-     *
+     * @string
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $type = 'KafkaConsumer';
+    protected $type = 'KafkaConsumer';
 
     /**
      * Get the stub file for the generator.

@@ -6,7 +6,7 @@ class Consumer
 {
     private Broker $broker;
 
-    private AvroSchema $avroSchema;
+    private ?AvroSchema $avroSchema;
 
     /**
      * Middlewares specific for this producer.
@@ -28,7 +28,7 @@ class Consumer
 
     private string $consumerGroup;
 
-    private string $handler;
+    private ?string $handler;
 
     private bool $autoCommit;
 

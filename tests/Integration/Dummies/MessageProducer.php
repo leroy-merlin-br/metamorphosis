@@ -15,7 +15,8 @@ class MessageProducer extends AbstractHandler
     {
         $this->record = $record;
         $this->topic = $topic ?? 'default';
-        $this->key = 'recordId123';
+        $this->key = $key ?? 'recordId123';
+        $this->partition = $partition;
     }
 
     public function success(Message $message): void

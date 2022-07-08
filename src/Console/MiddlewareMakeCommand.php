@@ -8,21 +8,21 @@ class MiddlewareMakeCommand extends GeneratorCommand
 {
     /**
      * The console command name.
-     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $name = 'make:kafka-middleware';
+    protected $name = 'make:kafka-middleware';
 
     /**
      * The console command description.
-     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $description = 'Create a new kafka middleware';
+    protected $description = 'Create a new kafka middleware';
 
     /**
      * The type of class being generated.
-     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $type = 'KafkaMiddleware';
+    protected $type = 'KafkaMiddleware';
 
     /**
      * Get the stub file for the generator.

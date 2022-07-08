@@ -49,7 +49,7 @@ class ConnectorTest extends LaravelTestCase
             ->withAnyArgs();
 
         $conf->expects()
-            ->set('metadata.broker.list', 0);
+            ->set('metadata.broker.list', 'kafka:9092');
 
         $configManager->expects()
             ->get('connections')
@@ -98,7 +98,7 @@ class ConnectorTest extends LaravelTestCase
             ->never();
 
         $conf->expects()
-            ->set('metadata.broker.list', 0);
+            ->set('metadata.broker.list', 'kafka:9092');
 
         $configManager->expects()
             ->get('connections')

@@ -23,20 +23,22 @@ class Manager
 
     private bool $commitAsync;
 
-    private Message $lastResponse;
+    private ?Message $lastResponse;
 
     public function __construct(
         ConsumerInterface $consumer,
         ConsumerHandler $consumerHandler,
         Dispatcher $dispatcher,
         bool $autoCommit,
-        bool $commitAsync
+        bool $commitAsync,
+        ?Message $lastResponse = null
     ) {
         $this->consumer = $consumer;
         $this->consumerHandler = $consumerHandler;
         $this->dispatcher = $dispatcher;
         $this->autoCommit = $autoCommit;
         $this->commitAsync = $commitAsync;
+        $this->lastResponse = $lastResponse;
     }
 
     public function getConsumer(): ConsumerInterface

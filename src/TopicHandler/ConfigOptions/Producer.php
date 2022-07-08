@@ -6,7 +6,7 @@ class Producer
 {
     private Broker $broker;
 
-    private AvroSchema $avroSchema;
+    private ?AvroSchema $avroSchema;
 
     /**
      * The amount of attempts we will try to run the flush.

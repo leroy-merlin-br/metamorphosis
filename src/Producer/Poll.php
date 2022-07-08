@@ -12,15 +12,15 @@ class Poll
 
     private int $processedMessagesCount = 0;
 
-    private bool $isAsync;
+    private ?bool $isAsync;
 
-    private int $maxPollRecords;
+    private ?int $maxPollRecords;
 
-    private bool $requiredAcknowledgment;
+    private ?bool $requiredAcknowledgment;
 
-    private int $maxFlushAttempts;
+    private ?int $maxFlushAttempts;
 
-    private int $timeout;
+    private ?int $timeout;
 
     private Producer $producer;
 

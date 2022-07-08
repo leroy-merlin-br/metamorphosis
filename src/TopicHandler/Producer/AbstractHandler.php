@@ -18,9 +18,9 @@ abstract class AbstractHandler implements HandlerInterface
 
     protected string $topic;
 
-    protected string $key;
+    protected ?string $key;
 
-    protected int $partition;
+    protected ?int $partition;
 
     public function __construct($record, ?string $topic = null, ?string $key = null, ?int $partition = null)
     {

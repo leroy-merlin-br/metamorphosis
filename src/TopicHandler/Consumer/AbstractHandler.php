@@ -12,7 +12,7 @@ abstract class AbstractHandler implements Handler
      * Merge and override config from kafka file.
      *
      */
-    private ConsumerConfigOptions $configOptions;
+    private ?ConsumerConfigOptions $configOptions;
 
     public function __construct(?ConsumerConfigOptions $configOptions = null)
     {

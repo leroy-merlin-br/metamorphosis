@@ -14,7 +14,7 @@ class AbstractProducer implements HandlerInterface
      */
     protected $record;
 
-    protected string $key;
+    protected ?string $key;
 
     private ConfigOptionsProducer $configOptions;
 

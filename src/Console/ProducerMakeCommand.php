@@ -8,21 +8,21 @@ class ProducerMakeCommand extends GeneratorCommand
 {
     /**
      * The console command name.
-     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $name = 'make:kafka-producer';
+    protected $name = 'make:kafka-producer';
 
     /**
      * The console command description.
-     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $description = 'Create a new kafka producer';
+    protected $description = 'Create a new kafka producer';
 
     /**
      * The type of class being generated.
-     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
-    protected string $type = 'KafkaProducer';
+    protected $type = 'KafkaProducer';
 
     /**
      * Get the stub file for the generator.

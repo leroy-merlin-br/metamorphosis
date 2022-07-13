@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6f57d9ed1bb3086e3155d3ac4204fdfe",
+    "content-hash": "444a711d7f5153ce611e44ee7a13b484",
     "packages": [
         {
             "name": "brick/math",
@@ -749,16 +749,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.83.18",
+            "version": "v8.83.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "db8188e9cc8359a5c6706fa9d9f55aad7f235077"
+                "reference": "4264f2ee12330bdb1be050998f58ba7271236395"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/db8188e9cc8359a5c6706fa9d9f55aad7f235077",
-                "reference": "db8188e9cc8359a5c6706fa9d9f55aad7f235077",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/4264f2ee12330bdb1be050998f58ba7271236395",
+                "reference": "4264f2ee12330bdb1be050998f58ba7271236395",
                 "shasum": ""
             },
             "require": {
@@ -918,7 +918,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2022-06-28T14:30:38+00:00"
+            "time": "2022-07-13T13:23:09+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -5113,16 +5113,16 @@
         },
         {
             "name": "amphp/process",
-            "version": "v1.1.3",
+            "version": "v1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/process.git",
-                "reference": "f09e3ed3b0a953ccbfff1140f12be4a884f0aa83"
+                "reference": "76e9495fd6818b43a20167cb11d8a67f7744ee0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/process/zipball/f09e3ed3b0a953ccbfff1140f12be4a884f0aa83",
-                "reference": "f09e3ed3b0a953ccbfff1140f12be4a884f0aa83",
+                "url": "https://api.github.com/repos/amphp/process/zipball/76e9495fd6818b43a20167cb11d8a67f7744ee0f",
+                "reference": "76e9495fd6818b43a20167cb11d8a67f7744ee0f",
                 "shasum": ""
             },
             "require": {
@@ -5166,7 +5166,7 @@
             "homepage": "https://github.com/amphp/process",
             "support": {
                 "issues": "https://github.com/amphp/process/issues",
-                "source": "https://github.com/amphp/process/tree/v1.1.3"
+                "source": "https://github.com/amphp/process/tree/v1.1.4"
             },
             "funding": [
                 {
@@ -5174,7 +5174,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-17T19:09:33+00:00"
+            "time": "2022-07-06T23:50:12+00:00"
         },
         {
             "name": "amphp/serialization",
@@ -6184,23 +6184,23 @@
         },
         {
             "name": "kwn/php-rdkafka-stubs",
-            "version": "1.1.1",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kwn/php-rdkafka-stubs.git",
-                "reference": "7084dd5973d5ef72b5312edae41553ded3d38bb3"
+                "reference": "68f59168246cff1b64bf750f6ef8624f6a2defeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kwn/php-rdkafka-stubs/zipball/7084dd5973d5ef72b5312edae41553ded3d38bb3",
-                "reference": "7084dd5973d5ef72b5312edae41553ded3d38bb3",
+                "url": "https://api.github.com/repos/kwn/php-rdkafka-stubs/zipball/68f59168246cff1b64bf750f6ef8624f6a2defeb",
+                "reference": "68f59168246cff1b64bf750f6ef8624f6a2defeb",
                 "shasum": ""
             },
             "require": {
-                "ext-rdkafka": "*"
+                "ext-rdkafka": ">=4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8"
+                "phpunit/phpunit": "^8.2.4"
             },
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
@@ -6216,9 +6216,9 @@
             "description": "Rdkafka extension stubs for your IDE",
             "support": {
                 "issues": "https://github.com/kwn/php-rdkafka-stubs/issues",
-                "source": "https://github.com/kwn/php-rdkafka-stubs/tree/master"
+                "source": "https://github.com/kwn/php-rdkafka-stubs/tree/v2.2.0"
             },
-            "time": "2018-03-13T19:02:21+00:00"
+            "time": "2021-12-03T21:08:51+00:00"
         },
         {
             "name": "leroy-merlin-br/coding-standard",

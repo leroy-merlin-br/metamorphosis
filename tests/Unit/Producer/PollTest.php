@@ -26,7 +26,7 @@ class PollTest extends LaravelTestCase
         $poll = new Poll($kafkaProducer, $configManager);
 
         // Expectations
-        $kafkaProducer->shouldReceive('poll')
+        $kafkaProducer->shouldReceive('flush')
             ->never();
 
         // Actions
@@ -51,8 +51,8 @@ class PollTest extends LaravelTestCase
         $poll = new Poll($kafkaProducer, $configManager);
 
         // Expectations
-        $kafkaProducer->expects()
-            ->poll(4000)
+        $kafkaProducer->expects('flush')
+            ->with(4000)
             ->times(10)
             ->andReturn(1);
 
@@ -79,8 +79,8 @@ class PollTest extends LaravelTestCase
         $poll = new Poll($kafkaProducer, $configManager);
 
         // Expectations
-        $kafkaProducer->expects()
-            ->poll(4000)
+        $kafkaProducer->expects('flush')
+            ->with(4000)
             ->times(3)
             ->andReturn(0);
 

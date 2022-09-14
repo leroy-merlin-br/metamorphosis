@@ -41,36 +41,35 @@ class ProducerTest extends LaravelTestCase
         };
 
         // Expectations
-        $config->expects()
-            ->makeByTopic($topic)
+        $config->expects('makeByTopic')
+            ->with($topic)
             ->andReturn($configManager);
 
-        $configManager->expects()
-            ->middlewares()
+        $configManager->expects('middlewares')
+            ->withNoArgs()
             ->andReturn([]);
 
-        $configManager->expects()
-            ->get('topic_id')
+        $configManager->expects('get')
+            ->with('topic_id')
             ->andReturn($topic);
 
-        $configManager->expects()
-            ->get('partition')
+        $configManager->expects('get')
+            ->with('partition')
             ->andReturn(0);
 
-        $configManager->expects()
-            ->get('timeout')
+        $configManager->expects('get')
+            ->with('timeout')
             ->andReturn(1000);
 
-        $connector->expects()
-            ->getProducerTopic($producerHandler, $configManager)
+        $connector->expects('getProducerTopic')
+            ->with($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
-        $kafkaProducer->expects()
-            ->newTopic($topic)
+        $kafkaProducer->expects('newTopic')
+            ->with($topic)
             ->andReturn($producerTopic);
 
-        $producerMiddleware->expects()
-            ->process()
+        $producerMiddleware->expects('process')
             ->withAnyArgs();
 
         // Actions
@@ -98,39 +97,35 @@ class ProducerTest extends LaravelTestCase
         };
 
         // Expectations
-        $config->expects()
-            ->makeByTopic($topic)
+        $config->expects('makeByTopic')
+            ->with($topic)
             ->andReturn($configManager);
 
-        $configManager->expects()
-            ->middlewares()
+        $configManager->expects('middlewares')
+            ->withNoArgs()
             ->andReturn([]);
 
-        $configManager->expects()
-            ->get('topic_id')
+        $configManager->expects('get')
+            ->with('topic_id')
             ->andReturn($topic);
 
-        $configManager->expects()
-            ->get('partition')
+        $configManager->expects('get')
+            ->with('partition')
             ->andReturn(0);
 
-        $connector->expects()
-            ->getProducerTopic($producerHandler, $configManager)
+        $connector->expects('getProducerTopic')
+            ->with($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
-        $kafkaProducer->expects()
-            ->newTopic($topic)
+        $kafkaProducer->expects('newTopic')
+            ->with($topic)
             ->andReturn($producerTopic);
 
-        $producerMiddleware->expects()
-            ->process()
+        $producerMiddleware->expects('process')
             ->withAnyArgs();
 
         // Actions
-        $result = $producer->produce($producerHandler);
-
-        // Assertions
-        $this->assertNull($result);
+        $producer->produce($producerHandler);
     }
 
     public function testItShouldThrowJsonExceptionWhenPassingMalFormattedArray(): void
@@ -153,56 +148,55 @@ class ProducerTest extends LaravelTestCase
         };
 
         // Expectations
-        $configManager->expects()
-            ->middlewares()
+        $configManager->expects('middlewares')
+            ->withNoArgs()
             ->andReturn([]);
 
-        $configManager->expects()
-            ->get('topic_id')
+        $configManager->expects('get')
+            ->with('topic_id')
             ->andReturn($topic);
 
-        $configManager->expects()
-            ->get('partition')
+        $configManager->expects('get')
+            ->with('partition')
             ->andReturn(0);
 
-        $configManager->expects()
-            ->get('max_poll_records')
+        $configManager->expects('get')
+            ->with('max_poll_records')
             ->andReturn(500);
 
-        $configManager->expects()
-            ->get('required_acknowledgment')
+        $configManager->expects('get')
+            ->with('required_acknowledgment')
             ->andReturn(true);
 
-        $configManager->expects()
-            ->get('flush_attempts')
+        $configManager->expects('get')
+            ->with('flush_attempts')
             ->andReturn(1);
 
-        $configManager->expects()
-            ->get('timeout')
+        $configManager->expects('get')
+            ->with('timeout')
             ->andReturn(1000);
 
-        $configManager->expects()
-            ->get('is_async')
+        $configManager->expects('get')
+            ->with('is_async')
             ->andReturn(false);
 
-        $config->expects()
-            ->makeByTopic($topic)
+        $config->expects('makeByTopic')
+            ->with($topic)
             ->andReturn($configManager);
 
-        $connector->expects()
-            ->getProducerTopic($producerHandler, $configManager)
+        $connector->expects('getProducerTopic')
+            ->with($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
-        $kafkaProducer->expects()
-            ->newTopic($topic)
+        $kafkaProducer->expects('newTopic')
+            ->with($topic)
             ->andReturn($producerTopic);
 
-        $kafkaProducer->expects()
-            ->poll(1000)
+        $kafkaProducer->expects('flush')
+            ->with(1000)
             ->andReturn(0);
 
-        $producerMiddleware->expects()
-            ->process()
+        $producerMiddleware->expects('process')
             ->never();
 
         $this->expectException(JsonException::class);
@@ -229,52 +223,52 @@ class ProducerTest extends LaravelTestCase
         };
 
         // Expectations
-        $config->expects()
-            ->makeByTopic($topic)
+        $config->expects('makeByTopic')
+            ->with($topic)
             ->andReturn($configManager);
 
-        $configManager->expects()
-            ->middlewares()
+        $configManager->expects('middlewares')
+            ->withNoArgs()
             ->andReturn([]);
 
-        $configManager->expects()
-            ->get('topic_id')
+        $configManager->expects('get')
+            ->with('topic_id')
             ->andReturn($topic);
 
-        $configManager->expects()
-            ->get('partition')
+        $configManager->expects('get')
+            ->with('partition')
             ->andReturn(0);
 
-        $configManager->expects()
-            ->get('max_poll_records')
+        $configManager->expects('get')
+            ->with('max_poll_records')
             ->andReturn(500);
 
-        $configManager->expects()
-            ->get('is_async')
+        $configManager->expects('get')
+            ->with('is_async')
             ->andReturn(true);
 
-        $configManager->expects()
-            ->get('required_acknowledgment')
+        $configManager->expects('get')
+            ->with('required_acknowledgment')
             ->andReturn(true);
 
-        $configManager->expects()
-            ->get('flush_attempts')
+        $configManager->expects('get')
+            ->with('flush_attempts')
             ->andReturn(1);
 
-        $configManager->expects()
-            ->get('timeout')
+        $configManager->expects('get')
+            ->with('timeout')
             ->andReturn(1000);
 
-        $connector->expects()
-            ->getProducerTopic($producerHandler, $configManager)
+        $connector->expects('getProducerTopic')
+            ->with($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
-        $kafkaProducer->expects()
-            ->newTopic($topic)
+        $kafkaProducer->expects('newTopic')
+            ->with($topic)
             ->andReturn($producerTopic);
 
-        $kafkaProducer->expects()
-            ->poll(1000)
+        $kafkaProducer->expects('flush')
+            ->with(1000)
             ->andReturn(0);
 
         // Actions
@@ -303,52 +297,52 @@ class ProducerTest extends LaravelTestCase
         };
 
         // Expectations
-        $config->expects()
-            ->make($configOptions)
+        $config->expects('make')
+            ->with($configOptions)
             ->andReturn($configManager);
 
-        $configManager->expects()
-            ->middlewares()
+        $configManager->expects('middlewares')
+            ->withNoArgs()
             ->andReturn([]);
 
-        $configManager->expects()
-            ->get('topic_id')
+        $configManager->expects('get')
+            ->with('topic_id')
             ->andReturn($topicId);
 
-        $configManager->expects()
-            ->get('partition')
+        $configManager->expects('get')
+            ->with('partition')
             ->andReturn(0);
 
-        $configManager->expects()
-            ->get('max_poll_records')
+        $configManager->expects('get')
+            ->with('max_poll_records')
             ->andReturn(500);
 
-        $configManager->expects()
-            ->get('is_async')
+        $configManager->expects('get')
+            ->with('is_async')
             ->andReturn(true);
 
-        $configManager->expects()
-            ->get('required_acknowledgment')
+        $configManager->expects('get')
+            ->with('required_acknowledgment')
             ->andReturn(true);
 
-        $configManager->expects()
-            ->get('flush_attempts')
+        $configManager->expects('get')
+            ->with('flush_attempts')
             ->andReturn(1);
 
-        $configManager->expects()
-            ->get('timeout')
+        $configManager->expects('get')
+            ->with('timeout')
             ->andReturn(1000);
 
-        $connector->expects()
-            ->getProducerTopic($producerHandler, $configManager)
+        $connector->expects('getProducerTopic')
+            ->with($producerHandler, $configManager)
             ->andReturn($kafkaProducer);
 
-        $kafkaProducer->expects()
-            ->newTopic($topicId)
+        $kafkaProducer->expects('newTopic')
+            ->with($topicId)
             ->andReturn($producerTopic);
 
-        $kafkaProducer->expects()
-            ->poll(1000)
+        $kafkaProducer->expects('flush')
+            ->with(1000)
             ->andReturn(0);
 
         // Actions

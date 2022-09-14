@@ -35,6 +35,7 @@ class ProducerTest extends LaravelTestCase
     {
         // Given That I
         $this->haveAConsumerHandlerConfigured();
+        $this->haveNoPartitionConfigured();
         $this->haveSomeRandomMessagesProduced();
 
         // I Expect That
@@ -179,5 +180,10 @@ class ProducerTest extends LaravelTestCase
     {
         $this->produceRecordMessage($this->firstLowLevelMessage);
         $this->produceRecordMessage($this->secondLowLevelMessage);
+    }
+
+    private function haveNoPartitionConfigured(): void
+    {
+        config(['kafka.topics.default.consumer.consumer_groups.test-consumer-group.partition' => -1]);
     }
 }

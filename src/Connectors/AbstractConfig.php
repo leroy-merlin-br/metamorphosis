@@ -7,15 +7,20 @@ use Metamorphosis\Exceptions\ConfigurationException;
 
 abstract class AbstractConfig
 {
+    /**
+     * @var mixed[]
+     */
+    protected array $rules = [];
+
     protected function getBrokerConfig(string $configName, string $brokerId): array
     {
-        if (!$brokerConfig = config($configName . ".brokers.{$brokerId}")) {
+        if (!$brokerConfig = config("{$configName}.brokers.{$brokerId}")) {
             throw new ConfigurationException(
                 "Broker '{$brokerId}' configuration not found"
             );
         }
 
-        return $brokerConfig;
+        return (array) $brokerConfig;
     }
 
     protected function validate(array $config): void

@@ -7,12 +7,12 @@ use Illuminate\Support\Arr;
 abstract class AbstractConfigManager
 {
     /**
-     * @var array<mixed>
+     * @var mixed[]
      */
     protected array $setting = [];
 
     /**
-     * @var array<mixed>
+     * @var mixed[]
      */
     protected array $middlewares = [];
 

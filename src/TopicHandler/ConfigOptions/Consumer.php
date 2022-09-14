@@ -11,7 +11,7 @@ class Consumer
     /**
      * Middlewares specific for this producer.
      *
-     * @var array<mixed>
+     * @var mixed[]
      */
     private array $middlewares;
 

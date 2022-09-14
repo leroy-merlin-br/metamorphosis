@@ -29,7 +29,7 @@ class AvroSchema
      *       ],
      * ],
      *
-     * @var array<mixed>
+     * @var mixed[]
      */
     private array $requestOptions;
 

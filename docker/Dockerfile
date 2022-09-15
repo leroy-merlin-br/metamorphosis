@@ -1,4 +1,4 @@
-FROM leroymerlinbr/php:7.3
+FROM leroymerlinbr/php:7.4
 LABEL maintainer="boitata@leroymerlin.com.br"
 
 USER root:root

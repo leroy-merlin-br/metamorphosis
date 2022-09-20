@@ -18,7 +18,7 @@ class FactoryTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'connections' => 'kafka:123',
+                        'connections' => 'kafka:9092',
                     ],
                 ],
                 'topics' => [

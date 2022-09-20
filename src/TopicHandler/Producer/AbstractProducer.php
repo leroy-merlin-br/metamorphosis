@@ -10,7 +10,6 @@ class AbstractProducer implements HandlerInterface
 {
     /**
      * @var mixed
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      */
     protected $record;
 

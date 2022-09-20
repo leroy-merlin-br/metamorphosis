@@ -21,7 +21,6 @@ class ConsumerRecord implements RecordInterface
 
     /**
      * @var mixed
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      */
     protected $payload;
 

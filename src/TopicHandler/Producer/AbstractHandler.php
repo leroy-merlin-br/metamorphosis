@@ -12,7 +12,6 @@ abstract class AbstractHandler implements HandlerInterface
 {
     /**
      * @var mixed
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      */
     protected $record;
 

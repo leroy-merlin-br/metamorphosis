@@ -182,6 +182,8 @@ class ProducerTest extends LaravelTestCase
 
     private function haveNoPartitionConfigured(): void
     {
-        config(['kafka.topics.default.consumer.consumer_groups.test-consumer-group.partition' => -1]);
+        config(
+            ['kafka.topics.default.consumer.consumer_groups.test-consumer-group.partition' => -1]
+        );
     }
 }

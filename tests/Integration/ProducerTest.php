@@ -130,7 +130,10 @@ class ProducerTest extends LaravelTestCase
         $this->highLevelMessage = Str::random(10);
         $producer = app(
             MessageProducer::class,
-            ['record' => $this->highLevelMessage]
+            [
+                'record' => $this->highLevelMessage,
+                'topic' => 'default',
+            ]
         );
 
         Metamorphosis::produce($producer);
@@ -139,8 +142,8 @@ class ProducerTest extends LaravelTestCase
 
     private function produceRecordMessage(string $record): string
     {
-        $producer = app(MessageProducer::class, compact('record'));
-        $producer->topic = 'low_level';
+        $topic = 'low_level';
+        $producer = app(MessageProducer::class, compact('record', 'topic'));
 
         Metamorphosis::produce($producer);
         Metamorphosis::produce($producer);

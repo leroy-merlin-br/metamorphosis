@@ -11,10 +11,10 @@ class MessageProducer extends AbstractHandler
 {
     public string $topic = 'default';
 
-    public function __construct($record, ?string $topic = null, ?string $key = null, ?int $partition = null)
+    public function __construct($record, string $topic, ?string $key = null, ?int $partition = null)
     {
         $this->record = $record;
-        $this->topic = $topic ?? 'default';
+        $this->topic = $topic;
         $this->key = $key ?? 'recordId123';
         $this->partition = $partition;
     }

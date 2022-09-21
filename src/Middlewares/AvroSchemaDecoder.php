@@ -5,14 +5,13 @@ namespace Metamorphosis\Middlewares;
 use Closure;
 use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Avro\ClientFactory;
-use Metamorphosis\Avro\Serializer\Decoders\DecoderInterface;
 use Metamorphosis\Avro\Serializer\MessageDecoder;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\Record\RecordInterface;
 
 class AvroSchemaDecoder implements MiddlewareInterface
 {
-    private DecoderInterface $decoder;
+    private MessageDecoder $decoder;
 
     private AbstractConfigManager $configManager;
 

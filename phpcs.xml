@@ -23,4 +23,10 @@
     <rule ref="SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter">
         <exclude-pattern>tests/*/Dummies/*.php</exclude-pattern>
     </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint">
+        <exclude-pattern>src/Record/ConsumerRecord.php</exclude-pattern>
+        <exclude-pattern>src/Record/ProducerRecord.php</exclude-pattern>
+        <exclude-pattern>src/TopicHandler/Producer/AbstractHandler.php</exclude-pattern>
+        <exclude-pattern>src/TopicHandler/Producer/AbstractProducer.php</exclude-pattern>
+    </rule>
 </ruleset>

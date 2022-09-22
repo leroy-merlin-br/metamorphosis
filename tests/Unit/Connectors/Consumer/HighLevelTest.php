@@ -12,9 +12,10 @@ class HighLevelTest extends LaravelTestCase
     public function testItShouldMakeConnectorSetup(): void
     {
         // Set
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
         $configManager = new ConsumerConfigManager();
         $configManager->set([
-            'connections' => 'kafka:9092',
+            'connections' => $connections,
             'consumer_group' => 'some-group',
             'topic_id' => 'some_topic',
             'offset_reset' => 'earliest',

@@ -31,7 +31,10 @@ class ProducerWithAvroTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'test' => [
-                        'connections' => 'kafka:9092',
+                        'connections' => env(
+                            'KAFKA_BROKER_CONNECTIONS',
+                            'kafka:9092'
+                        ),
                     ],
                 ],
                 'topics' => [

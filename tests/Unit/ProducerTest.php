@@ -295,7 +295,8 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
         $configManager = m::mock(ProducerConfigManager::class);
-        $broker = new Broker('kafka:9092', new None());
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $broker = new Broker($connections, new None());
         $configOptions = new ProducerConfigOptions($topicId, $broker);
         $producerHandler = new class ($record, $configOptions) extends AbstractProducer {
         };

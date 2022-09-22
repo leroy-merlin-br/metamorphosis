@@ -1,0 +1,86 @@
+name: Continuous Integration
+
+on:
+  - push
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  testing:
+    name: Testing and Code Quality for PHP
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php:
+          - '7.4'
+          - '8.0'
+          - '8.1'
+    env:
+      KAFKA_BROKER_CONNECTIONS: 'localhost:9092'
+    services:
+      zookeeper:
+        image: bitnami/zookeeper
+        env:
+          ALLOW_ANONYMOUS_LOGIN: yes
+      kafka:
+        image: bitnami/kafka
+        ports:
+          - '9092:9092'
+        env:
+          KAFKA_LISTENERS: 'PLAINTEXT://:9092'
+          KAFKA_CFG_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:9092'
+          KAFKA_CFG_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+          ALLOW_PLAINTEXT_LISTENER: yes
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP cache environment
+        id: php-ext-cache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: rdkafka-arnaud-lb/php-rdkafka@6.0.3
+          key: metamorphosis-php-extensions-${{ matrix.php }}
+
+      - name: Cache PHP extensions
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.php-ext-cache.outputs.dir }}
+          key: ${{ steps.php-ext-cache.outputs.key }}
+          restore-keys: ${{ steps.php-ext-cache.outputs.key }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        env:
+          RDKAFKA_LIBS: librdkafka-dev
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: rdkafka-arnaud-lb/php-rdkafka@6.0.3
+          tools: cs2pr
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: metamorphosis-vendor-${{ hashFiles('composer.lock') }}
+
+      - name: Composer
+        uses: ramsey/composer-install@v2
+
+      - name: Run code standards
+        run: vendor/bin/phpcs -q --report=checkstyle | cs2pr
+
+      - name: Run psalm
+        run: vendor/bin/psalm --php-version=${{ matrix.php }} --output-format=github
+
+      - name: Run tests
+        run: vendor/bin/phpunit
+
+      - name: Report Coverage
+        continue-on-error: true
+        run: CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} bash <(curl -Ls https://coverage.codacy.com/get.sh) report

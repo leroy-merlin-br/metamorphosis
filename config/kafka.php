@@ -46,7 +46,7 @@ return [
 
     'brokers' => [
         'default' => [
-            'connections' => 'kafka:9092',
+            'connections' => env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092'),
 
             // If your broker doest not have authentication, you can
             // remove this configuration, or set as empty.

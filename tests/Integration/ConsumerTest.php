@@ -17,7 +17,8 @@ class ConsumerTest extends LaravelTestCase
     public function testItShouldSetup(): void
     {
         // Set
-        $brokerOptions = new Broker('kafka:9092', new None());
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $brokerOptions = new Broker($connections, new None());
         $consumerConfigOptions = new ConsumerConfigOptions(
             'single_consumer_test',
             $brokerOptions,

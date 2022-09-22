@@ -11,7 +11,7 @@ RUN cd /tmp \
   && make install \
   && rm -rf /tmp/*
 
-RUN pecl install rdkafka \
+RUN pecl install rdkafka-6.0.3 \
   && docker-php-ext-enable \
     rdkafka \
     xdebug \

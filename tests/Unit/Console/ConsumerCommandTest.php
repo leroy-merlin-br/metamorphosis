@@ -140,7 +140,10 @@ class ConsumerCommandTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'connections' => 'test_kafka:6680',
+                        'connections' => env(
+                            'KAFKA_BROKER_CONNECTIONS',
+                            'kafka:9092'
+                        ),
                         'auth' => [],
                     ],
                 ],

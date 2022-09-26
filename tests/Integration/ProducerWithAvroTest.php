@@ -21,7 +21,6 @@ class ProducerWithAvroTest extends LaravelTestCase
 
         // When I
         $this->haveSomeRandomMessagesProduced();
-        $this->expectNotToPerformAssertions();
     }
 
     protected function haveAHandlerConfigured(): void

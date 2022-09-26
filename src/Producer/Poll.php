@@ -75,7 +75,7 @@ class Poll
         }
 
         for ($flushAttempts = 0; $flushAttempts < $this->maxFlushAttempts; $flushAttempts++) {
-            if (0 === $this->producer->flush($this->timeout)) {
+            if (0 === $this->producer->poll($this->timeout)) {
                 return;
             }
 

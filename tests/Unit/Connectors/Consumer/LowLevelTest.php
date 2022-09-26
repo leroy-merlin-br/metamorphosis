@@ -13,7 +13,7 @@ class LowLevelTest extends LaravelTestCase
         // Set
         $configManager = new ConsumerConfigManager();
         $configManager->set([
-            'connections' => 'kafka:9092',
+            'connections' => 'kafka:123',
             'consumer_group' => 'some-group',
             'topic' => 'some_topic',
             'offset_reset' => 'earliest',

@@ -127,7 +127,10 @@ class ProducerTest extends LaravelTestCase
             ->withAnyArgs();
 
         // Actions
-        $producer->produce($producerHandler);
+        $result = $producer->produce($producerHandler);
+
+        // Assertions
+        $this->assertNull($result);
     }
 
     public function testItShouldThrowJsonExceptionWhenPassingMalFormattedArray(): void
@@ -195,7 +198,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->flush(1000)
+            ->poll(1000)
             ->andReturn(0);
 
         $producerMiddleware->expects()
@@ -271,7 +274,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->flush(1000)
+            ->poll(1000)
             ->andReturn(0);
 
         // Actions
@@ -345,7 +348,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->flush(1000)
+            ->poll(1000)
             ->andReturn(0);
 
         // Actions

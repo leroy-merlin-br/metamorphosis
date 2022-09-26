@@ -11,6 +11,7 @@ grumphp:
       standard: [ phpcs.xml ]
     psalm:
       config: psalm.xml
+      ignore_patterns: [ 'tests' ]
       threads: 4
     git_commit_message:
       enforce_capitalized_subject: false

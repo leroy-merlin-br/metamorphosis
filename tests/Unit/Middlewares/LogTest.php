@@ -30,14 +30,13 @@ class LogTest extends LaravelTestCase
                 'original' => [
                     'err' => RD_KAFKA_RESP_ERR_NO_ERROR,
                     'topic_name' => null,
+                    'timestamp' => null,
                     'partition' => null,
                     'payload' => 'original record',
                     'len' => null,
                     'key' => null,
                     'offset' => null,
-                    'timestamp' => null,
                     'headers' => null,
-                    'opaque' => null,
                 ],
             ]);
 

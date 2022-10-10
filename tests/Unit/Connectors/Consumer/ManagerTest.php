@@ -1,7 +1,9 @@
 <?php
 namespace Tests\Unit\Connectors\Consumer;
 
+use Error;
 use Exception;
+use InvalidArgumentException;
 use Metamorphosis\Connectors\Consumer\Manager;
 use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
@@ -14,6 +16,8 @@ use Mockery as m;
 use RdKafka\Message as KafkaMessage;
 use Tests\LaravelTestCase;
 use Tests\Unit\Dummies\ConsumerHandlerDummy;
+use Throwable;
+use TypeError;
 
 class ManagerTest extends LaravelTestCase
 {
@@ -33,6 +37,30 @@ class ManagerTest extends LaravelTestCase
             'middlewares' => [],
             'consumer_group' => 'consumer-id',
         ]);
+    }
+
+    /**
+     * @dataProvider getThrowableScenarios
+     */
+    public function testShouldHandlerAnyThrowable(Throwable $throwable): void
+    {
+        // Set
+        $consumer = m::mock(ConsumerInterface::class);
+        $consumerHandler = m::mock(ConsumerHandler::class);
+        $dispatcher = m::mock(Dispatcher::class);
+
+        $runner = new Manager($consumer, $consumerHandler, $dispatcher, true, false);
+
+        // Expectations
+        $consumer->expects()
+            ->consume()
+            ->andThrow($throwable);
+
+        $consumerHandler->expects()
+            ->failed($throwable);
+
+        // Actions
+        $runner->handleMessage();
     }
 
     public function testShouldHandleMultiplesMessages(): void
@@ -58,32 +86,17 @@ class ManagerTest extends LaravelTestCase
         $kafkaMessage3->payload = 'original message 3';
         $kafkaMessage3->err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-        $messages = [$kafkaMessage1, $kafkaMessage2, $kafkaMessage3];
-        $count = 0;
-        $exception = new Exception('Exception occurs when consuming.');
-
         // Expectations
-        $consumer->shouldReceive('consume')
-            ->times(4)
-            ->andReturnUsing(function () use ($messages, &$count, $exception) {
-                $message = $messages[$count] ?? null;
-                if (!$message) {
-                    throw $exception;
-                }
-                $count++;
-
-                return $message;
-            });
-
-        $consumerHandler->expects()
-            ->failed($exception);
+        $consumer->shouldReceive()
+            ->consume()
+            ->times(3)
+            ->andReturn($kafkaMessage1, $kafkaMessage2, $kafkaMessage3);
 
         $dispatcher->expects()
             ->handle($consumerRecord)
             ->times(3);
 
         // Actions
-        $runner->handleMessage();
         $runner->handleMessage();
         $runner->handleMessage();
         $runner->handleMessage();
@@ -170,5 +183,23 @@ class ManagerTest extends LaravelTestCase
         $runner->handleMessage();
         $runner->handleMessage();
         $runner->handleMessage();
+    }
+
+    public function getThrowableScenarios(): array
+    {
+        return [
+            'Exception' => [
+                'throwable' => new Exception(),
+            ],
+            'Error' => [
+                'throwable' => new Error(),
+            ],
+            'InvalidArgumentException' => [
+                'throwable' => new InvalidArgumentException(),
+            ],
+            'TypeError' => [
+                'throwable' => new TypeError(),
+            ],
+        ];
     }
 }

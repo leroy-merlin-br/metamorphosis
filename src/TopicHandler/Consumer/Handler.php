@@ -1,9 +1,9 @@
 <?php
 namespace Metamorphosis\TopicHandler\Consumer;
 
-use Exception;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Record\RecordInterface;
+use Throwable;
 
 interface Handler
 {
@@ -25,5 +25,5 @@ interface Handler
     /**
      * Handle failure process.
      */
-    public function failed(Exception $exception): void;
+    public function failed(Throwable $throwable): void;
 }

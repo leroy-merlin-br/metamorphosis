@@ -1,11 +1,11 @@
 <?php
 namespace Tests\Integration\Dummies;
 
-use Exception;
 use Illuminate\Support\Facades\Log;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
+use Throwable;
 
 class MessageConsumer extends AbstractHandler
 {
@@ -23,10 +23,10 @@ class MessageConsumer extends AbstractHandler
         ]);
     }
 
-    public function failed(Exception $exception): void
+    public function failed(Throwable $throwable): void
     {
         Log::error('Failed to handle kafka record for sku.', [
-            'exception' => $exception,
+            'exception' => $throwable,
         ]);
     }
 }

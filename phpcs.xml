@@ -29,4 +29,7 @@
         <exclude-pattern>src/TopicHandler/Producer/AbstractHandler.php</exclude-pattern>
         <exclude-pattern>src/TopicHandler/Producer/AbstractProducer.php</exclude-pattern>
     </rule>
+    <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility.MissingConstantVisibility">
+        <exclude-pattern>src/Producer/Poll.php</exclude-pattern>
+    </rule>
 </ruleset>

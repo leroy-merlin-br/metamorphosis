@@ -60,7 +60,11 @@ class Poll
         }
 
         for ($flushAttempts = 0; $flushAttempts < $this->maxFlushAttempts; $flushAttempts++) {
-            if (RD_KAFKA_RESP_ERR_NO_ERROR === $this->producer->flush($this->timeout)) {
+            if (
+                RD_KAFKA_RESP_ERR_NO_ERROR === $this->producer->flush(
+                    $this->timeout
+                )
+            ) {
                 return;
             }
 

@@ -20,9 +20,4 @@
     <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName">
         <exclude-pattern>config</exclude-pattern>
     </rule>
-    <!-- To be fixed with https://github.com/leroy-merlin-br/php-coding-standard/pull/7 -->
-    <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment">
-        <exclude-pattern>src/Producer.php</exclude-pattern>
-        <exclude-pattern>src/Record/ConsumerRecord.php</exclude-pattern>
-    </rule>
 </ruleset>

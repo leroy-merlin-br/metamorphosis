@@ -7,6 +7,8 @@ use RuntimeException;
 
 class Poll
 {
+    const NON_BLOCKING_POLL = 0;
+
     /**
      * @var int
      */
@@ -55,6 +57,7 @@ class Poll
 
     public function handleResponse(): void
     {
+        $this->producer->poll(self::NON_BLOCKING_POLL);
         $this->processedMessagesCount++;
 
         if (!$this->isAsync) {
@@ -75,7 +78,7 @@ class Poll
         }
 
         for ($flushAttempts = 0; $flushAttempts < $this->maxFlushAttempts; $flushAttempts++) {
-            if (0 === $this->producer->poll($this->timeout)) {
+            if (RD_KAFKA_RESP_ERR_NO_ERROR === $this->producer->flush($this->timeout)) {
                 return;
             }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\TopicHandler\ConfigOptions\Factories;
 
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer;
@@ -76,7 +77,11 @@ class ConsumerFactoryTest extends LaravelTestCase
             'offset_reset' => 'earliest',
         ];
         // Actions
-        $result = ConsumerFactory::make($brokerData, $topicData, $avroSchemaData);
+        $result = ConsumerFactory::make(
+            $brokerData,
+            $topicData,
+            $avroSchemaData
+        );
 
         // Assertions
         $this->assertInstanceOf(Consumer::class, $result);

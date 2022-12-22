@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Middlewares\Handler;
 
 use Closure;
@@ -8,16 +9,17 @@ use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerTopicHandler;
 
 class Consumer implements MiddlewareInterface
 {
-    /**
-     * @var ConsumerTopicHandler
-     */
-    protected $consumerTopicHandler;
+    protected ConsumerTopicHandler $consumerTopicHandler;
 
     public function __construct(ConsumerTopicHandler $consumerTopicHandler)
     {
         $this->consumerTopicHandler = $consumerTopicHandler;
     }
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+     * @return mixed
+     */
     public function process(RecordInterface $record, Closure $next)
     {
         $this->consumerTopicHandler->handle($record);

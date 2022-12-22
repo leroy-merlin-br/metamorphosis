@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Middlewares\Handler;
 
 use Metamorphosis\Record\RecordInterface;

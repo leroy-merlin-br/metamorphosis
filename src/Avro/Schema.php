@@ -1,29 +1,18 @@
 <?php
+
 namespace Metamorphosis\Avro;
 
 use AvroSchema;
 
 class Schema
 {
-    /**
-     * @var string
-     */
-    private $schemaId;
+    private string $schemaId;
 
-    /**
-     * @var string
-     */
-    private $subject;
+    private ?string $subject;
 
-    /**
-     * @var string
-     */
-    private $version;
+    private ?string $version;
 
-    /**
-     * @var AvroSchema
-     */
-    private $avroSchema;
+    private AvroSchema $avroSchema;
 
     public function parse($schema, string $id, ?string $subject = null, ?string $version = null): self
     {

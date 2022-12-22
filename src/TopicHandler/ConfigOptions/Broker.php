@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\ConfigOptions;
 
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\AuthInterface;
@@ -8,18 +9,16 @@ class Broker
     /**
      * @example 'kafka:9092'
      *
-     * @var string
      */
-    private $connections;
+    private string $connections;
 
     /**
      * If your broker doest not have authentication, you can
      * remove this configuration, or set as empty.
      * The Authentication types may be "ssl" "sasl_ssl" or "none"
      *
-     * @var AuthInterface
      */
-    private $auth;
+    private AuthInterface $auth;
 
     public function __construct(string $connections, AuthInterface $auth)
     {

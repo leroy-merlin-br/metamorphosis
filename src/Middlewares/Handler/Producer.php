@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Middlewares\Handler;
 
 use Closure;
@@ -9,20 +10,11 @@ use RdKafka\ProducerTopic;
 
 class Producer implements MiddlewareInterface
 {
-    /**
-     * @var int
-     */
-    private $partition;
+    private int $partition;
 
-    /**
-     * @var \RdKafka\ProducerTopic
-     */
-    private $topic;
+    private ProducerTopic $topic;
 
-    /**
-     * @var Poll
-     */
-    private $poll;
+    private Poll $poll;
 
     public function __construct(ProducerTopic $topic, Poll $poll, int $partition)
     {
@@ -31,20 +23,32 @@ class Producer implements MiddlewareInterface
         $this->partition = $partition;
     }
 
-    public function process(RecordInterface $record, Closure $next): void
-    {
-        $this->topic->produce($this->getPartition($record), 0, $record->getPayload(), $record->getKey());
-
-        $this->poll->handleResponse();
-    }
-
     public function __destruct()
     {
         $this->poll->flushMessage();
     }
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+     */
+    public function process(RecordInterface $record, Closure $next): void
+    {
+        $this->topic->produce(
+            $this->getPartition($record),
+            0,
+            $record->getPayload(),
+            $record->getKey()
+        );
+
+        $this->poll->handleResponse();
+    }
+
     public function getPartition(RecordInterface $record): int
     {
-        return is_null($record->getPartition()) ? $this->partition : $record->getPartition();
+        return is_null(
+            $record->getPartition()
+        )
+            ? $this->partition
+            : $record->getPartition();
     }
 }

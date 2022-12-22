@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Producer;
 
 use Metamorphosis\Producer\Poll;

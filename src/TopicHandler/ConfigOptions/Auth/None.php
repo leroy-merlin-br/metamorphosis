@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\ConfigOptions\Auth;
 
 class None implements AuthInterface

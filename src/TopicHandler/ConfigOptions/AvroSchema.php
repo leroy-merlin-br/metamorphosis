@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\ConfigOptions;
 
 class AvroSchema
@@ -6,16 +7,14 @@ class AvroSchema
     /**
      * @example 'http://schema-registry:8081'
      *
-     * @var string
      */
-    private $url;
+    private string $url;
 
     /**
      * Disable SSL verification on schema request.
      *
-     * @var bool
      */
-    private $sslVerify;
+    private bool $sslVerify;
 
     /**
      * This option will be put directly into a Guzzle http request
@@ -30,9 +29,9 @@ class AvroSchema
      *       ],
      * ],
      *
-     * @var array
+     * @var mixed[]
      */
-    private $requestOptions;
+    private array $requestOptions;
 
     public function __construct(string $url, array $requestOptions = [], bool $sslVerify = true)
     {

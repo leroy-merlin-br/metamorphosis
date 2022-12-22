@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Consumers;
 
 use Metamorphosis\AbstractConfigManager;
@@ -7,20 +8,11 @@ use RdKafka\Message;
 
 class LowLevel implements ConsumerInterface
 {
-    /**
-     * @var ConsumerTopic
-     */
-    protected $consumer;
+    protected ConsumerTopic $consumer;
 
-    /**
-     * @var int
-     */
-    private $partition;
+    private int $partition;
 
-    /**
-     * @var int
-     */
-    private $timeout;
+    private ?int $timeout;
 
     public function __construct(ConsumerTopic $consumer, AbstractConfigManager $configManager)
     {

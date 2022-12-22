@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Avro;
 
 use GuzzleHttp\Client as GuzzleHttp;
@@ -6,10 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class Client
 {
-    /**
-     * @var GuzzleHttp
-     */
-    private $client;
+    private GuzzleHttp $client;
 
     public function __construct(GuzzleHttp $client)
     {
@@ -52,7 +50,11 @@ class Client
 
     private function parseResponse(ResponseInterface $response): array
     {
-        return [$response->getStatusCode(), json_decode($response->getBody(), true)];
+        return [$response->getStatusCode(), json_decode(
+            $response->getBody(),
+            true
+        ),
+        ];
     }
 
     private function getContentTypeForPostRequest(): array

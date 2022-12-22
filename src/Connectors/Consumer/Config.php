@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\AbstractConfigManager;
@@ -17,9 +18,9 @@ use Metamorphosis\Exceptions\ConfigurationException;
 class Config extends AbstractConfig
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
-    protected $rules = [
+    protected array $rules = [
         'topic' => 'required',
         'broker' => 'required',
         'offset_reset' => 'required', // latest, earliest, none
@@ -42,10 +43,22 @@ class Config extends AbstractConfig
     {
         $configName = $options['config_name'] ?? 'kafka';
         $topicConfig = $this->getTopicConfig($configName, $arguments['topic']);
-        $consumerConfig = $this->getConsumerConfig($topicConfig, $arguments['consumer_group']);
-        $brokerConfig = $this->getBrokerConfig($configName, $topicConfig['broker']);
-        $schemaConfig = $this->getSchemaConfig($configName, $arguments['topic']);
-        $override = array_merge($this->filterValues($options), $this->filterValues($arguments));
+        $consumerConfig = $this->getConsumerConfig(
+            $topicConfig,
+            $arguments['consumer_group']
+        );
+        $brokerConfig = $this->getBrokerConfig(
+            $configName,
+            $topicConfig['broker']
+        );
+        $schemaConfig = $this->getSchemaConfig(
+            $configName,
+            $arguments['topic']
+        );
+        $override = array_merge(
+            $this->filterValues($options),
+            $this->filterValues($arguments)
+        );
         $config = array_merge(
             $topicConfig,
             $brokerConfig,
@@ -60,22 +73,34 @@ class Config extends AbstractConfig
         return $configManager;
     }
 
+    /**
+     * @psalm-suppress InvalidReturnStatement
+     */
     private function getTopicConfig(string $configName, string $topicId): array
     {
-        $topicConfig = config($configName.'.topics.'.$topicId);
+        $topicConfig = config($configName . '.topics.' . $topicId);
         if (!$topicConfig) {
             throw new ConfigurationException("Topic '{$topicId}' not found");
         }
 
-        $topicConfig['middlewares'] = $this->getMiddlewares($configName, $topicConfig);
+        $topicConfig['middlewares'] = $this->getMiddlewares(
+            $configName,
+            $topicConfig
+        );
 
         return $topicConfig;
     }
 
-    private function getConsumerConfig(array $topicConfig, string $consumerGroupId = null): array
+    private function getConsumerConfig(array $topicConfig, ?string $consumerGroupId = null): array
     {
-        if (!$consumerGroupId && 1 === count($topicConfig['consumer']['consumer_groups'])) {
-            $consumerGroupId = current(array_keys($topicConfig['consumer']['consumer_groups']));
+        if (
+            !$consumerGroupId && 1 === count(
+                $topicConfig['consumer']['consumer_groups']
+            )
+        ) {
+            $consumerGroupId = current(
+                array_keys($topicConfig['consumer']['consumer_groups'])
+            );
         }
 
         $consumerGroupId = $consumerGroupId ?? 'default';
@@ -83,7 +108,9 @@ class Config extends AbstractConfig
         $consumerConfig['consumer_group'] = $consumerGroupId;
 
         if (!$consumerConfig) {
-            throw new ConfigurationException("Consumer group '{$consumerGroupId}' not found");
+            throw new ConfigurationException(
+                "Consumer group '{$consumerGroupId}' not found"
+            );
         }
 
         return $consumerConfig;
@@ -92,7 +119,7 @@ class Config extends AbstractConfig
     private function getMiddlewares(string $configName, array $topicConfig): array
     {
         return array_merge(
-            config($configName.'.middlewares.consumer', []),
+            config($configName . '.middlewares.consumer', []),
             $topicConfig['consumer']['middlewares'] ?? []
         );
     }

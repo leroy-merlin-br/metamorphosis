@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Record;
 
 class ProducerRecord implements RecordInterface
@@ -18,9 +19,8 @@ class ProducerRecord implements RecordInterface
     /**
      * The partition which the message will be send inside the topic.
      *
-     * @var int|null
      */
-    protected $partition;
+    protected ?int $partition = null;
 
     /**
      * Original message before passed by any kind of transformations.
@@ -32,11 +32,10 @@ class ProducerRecord implements RecordInterface
     /**
      * Topic which the message will be send to.
      *
-     * @var string
      */
-    protected $topic;
+    protected string $topic;
 
-    public function __construct(string $payload, string $topic, int $partition = null, string $key = null)
+    public function __construct(string $payload, string $topic, ?int $partition = null, ?string $key = null)
     {
         $this->payload = $payload;
         $this->original = $payload;

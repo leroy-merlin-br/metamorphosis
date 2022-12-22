@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Connectors\Consumer;
 
 use Metamorphosis\Connectors\Consumer\Config;
@@ -10,15 +11,58 @@ use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class FactoryTest extends LaravelTestCase
 {
+    public function testItMakesManagerWithLowLevelConsumer(): void
+    {
+        // Set
+        $config = new Config();
+        $configManager = $config->make(
+            ['timeout' => 61],
+            ['topic' => 'topic_key', 'consumer_group' => 'with-partition']
+        );
+        $manager = Factory::make($configManager);
+
+        // Assertions
+        $this->assertInstanceOf(LowLevel::class, $manager->getConsumer());
+    }
+
+    public function testItMakesManagerWithLowLevelConsumerWhenPartitionIsNotValid(): void
+    {
+        // Set
+        $config = new Config();
+        $configManager = $config->make(
+            ['timeout' => 61],
+            ['topic' => 'topic_key', 'consumer_group' => 'with-partition', 'partition' => -1]
+        );
+        $manager = Factory::make($configManager);
+
+        // Assertions
+        $this->assertInstanceOf(HighLevel::class, $manager->getConsumer());
+    }
+
+    public function testItMakesHighLevelClass(): void
+    {
+        // Set
+        $config = new Config();
+        $configManager = $config->make(
+            ['timeout' => 61],
+            ['topic' => 'topic_key', 'consumer_group' => 'without-partition']
+        );
+        $manager = Factory::make($configManager);
+
+        // Assertions
+        $this->assertInstanceOf(HighLevel::class, $manager->getConsumer());
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
 
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
         config([
             'kafka' => [
                 'brokers' => [
                     'default' => [
-                        'connections' => 'kafka:9092',
+                        'connections' => $connections,
                     ],
                 ],
                 'topics' => [
@@ -43,38 +87,5 @@ class FactoryTest extends LaravelTestCase
                 ],
             ],
         ]);
-    }
-
-    public function testItMakesManagerWithLowLevelConsumer(): void
-    {
-        // Set
-        $config = new Config();
-        $configManager = $config->make(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
-        $manager = Factory::make($configManager);
-
-        // Assertions
-        $this->assertInstanceOf(LowLevel::class, $manager->getConsumer());
-    }
-
-    public function testItMakesManagerWithLowLevelConsumerWhenPartitionIsNotValid(): void
-    {
-        // Set
-        $config = new Config();
-        $configManager = $config->make(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition', 'partition' => -1]);
-        $manager = Factory::make($configManager);
-
-        // Assertions
-        $this->assertInstanceOf(HighLevel::class, $manager->getConsumer());
-    }
-
-    public function testItMakesHighLevelClass(): void
-    {
-        // Set
-        $config = new Config();
-        $configManager = $config->make(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'without-partition']);
-        $manager = Factory::make($configManager);
-
-        // Assertions
-        $this->assertInstanceOf(HighLevel::class, $manager->getConsumer());
     }
 }

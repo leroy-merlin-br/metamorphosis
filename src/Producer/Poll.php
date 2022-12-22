@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Producer;
 
 use Metamorphosis\AbstractConfigManager;
@@ -9,46 +10,27 @@ class Poll
 {
     const NON_BLOCKING_POLL = 0;
 
-    /**
-     * @var int
-     */
-    private $processedMessagesCount = 0;
+    private int $processedMessagesCount = 0;
 
-    /**
-     * @var bool
-     */
-    private $isAsync;
+    private ?bool $isAsync;
 
-    /**
-     * @var int
-     */
-    private $maxPollRecords;
+    private ?int $maxPollRecords;
 
-    /**
-     * @var bool
-     */
-    private $requiredAcknowledgment;
+    private ?bool $requiredAcknowledgment;
 
-    /**
-     * @var int
-     */
-    private $maxFlushAttempts;
+    private ?int $maxFlushAttempts;
 
-    /**
-     * @var int
-     */
-    private $timeout;
+    private ?int $timeout;
 
-    /**
-     * @var \RdKafka\Producer
-     */
-    private $producer;
+    private Producer $producer;
 
     public function __construct(Producer $producer, AbstractConfigManager $configManager)
     {
         $this->isAsync = $configManager->get('is_async');
         $this->maxPollRecords = $configManager->get('max_poll_records');
-        $this->requiredAcknowledgment = $configManager->get('required_acknowledgment');
+        $this->requiredAcknowledgment = $configManager->get(
+            'required_acknowledgment'
+        );
         $this->maxFlushAttempts = $configManager->get('flush_attempts');
         $this->timeout = $configManager->get('timeout');
 
@@ -78,7 +60,11 @@ class Poll
         }
 
         for ($flushAttempts = 0; $flushAttempts < $this->maxFlushAttempts; $flushAttempts++) {
-            if (RD_KAFKA_RESP_ERR_NO_ERROR === $this->producer->flush($this->timeout)) {
+            if (
+                RD_KAFKA_RESP_ERR_NO_ERROR === $this->producer->flush(
+                    $this->timeout
+                )
+            ) {
                 return;
             }
 

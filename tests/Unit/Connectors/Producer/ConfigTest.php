@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Connectors\Producer;
 
 use Metamorphosis\Connectors\Producer\Config;
@@ -25,12 +26,12 @@ class ConfigTest extends LaravelTestCase
             'partition' => -1,
             'broker' => 'default',
             'topic' => 'default',
-            'connections' => 'kafka:9092',
+            'connections' => env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092'),
             'auth' => [
                 'type' => 'ssl',
-                'ca' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/ca.pem',
-                'certificate' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.cert',
-                'key' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.key',
+                'ca' => base_path('storage/ca.pem'),
+                'certificate' => base_path('storage/kafka.cert'),
+                'key' => base_path('storage/kafka.key'),
             ],
         ];
 
@@ -71,12 +72,12 @@ class ConfigTest extends LaravelTestCase
             'flush_attempts' => 10,
             'broker' => 'default',
             'topic' => 'default',
-            'connections' => 'kafka:9092',
+            'connections' => env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092'),
             'auth' => [
                 'type' => 'ssl',
-                'ca' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/ca.pem',
-                'certificate' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.cert',
-                'key' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/kafka.key',
+                'ca' => base_path('storage/ca.pem'),
+                'certificate' => base_path('storage/kafka.cert'),
+                'key' => base_path('storage/kafka.key'),
             ],
         ];
 
@@ -92,7 +93,10 @@ class ConfigTest extends LaravelTestCase
         // Set
         config(['kafka.topics.default.producer.max_poll_records' => 3000]);
         $config = new Config();
-        $broker = new Broker('kafka:9092', new SaslSsl('PLAIN', 'USERNAME', 'PASSWORD'));
+        $broker = new Broker(
+            'kafka:9092',
+            new SaslSsl('PLAIN', 'USERNAME', 'PASSWORD')
+        );
         $configOptions = new ProducerConfigOptions('TOPIC-ID', $broker);
 
         $expected = [

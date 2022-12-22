@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\Producer;
 
 use Metamorphosis\Exceptions\JsonException;
@@ -12,17 +13,11 @@ class AbstractProducer implements HandlerInterface
      */
     protected $record;
 
-    /**
-     * @var string
-     */
-    protected $key;
+    protected ?string $key;
 
-    /**
-     * @var ConfigOptionsProducer
-     */
-    private $configOptions;
+    private ConfigOptionsProducer $configOptions;
 
-    public function __construct($record, ConfigOptionsProducer $configOptions, string $key = null)
+    public function __construct($record, ConfigOptionsProducer $configOptions, ?string $key = null)
     {
         $this->record = $record;
         $this->key = $key;
@@ -64,7 +59,9 @@ class AbstractProducer implements HandlerInterface
         $record = json_encode($record, JSON_PRESERVE_ZERO_FRACTION);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new JsonException('Cannot convert data into a valid JSON. Reason: '.json_last_error_msg());
+            throw new JsonException(
+                'Cannot convert data into a valid JSON. Reason: ' . json_last_error_msg()
+            );
         }
 
         return $record;

@@ -1,22 +1,14 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\ConfigOptions\Auth;
 
 class Ssl implements AuthInterface
 {
-    /**
-     * @var string
-     */
-    private $ca;
+    private string $ca;
 
-    /**
-     * @var string
-     */
-    private $certificate;
+    private string $certificate;
 
-    /**
-     * @var string
-     */
-    private $key;
+    private string $key;
 
     public function __construct(string $ca, string $certificate, string $key)
     {

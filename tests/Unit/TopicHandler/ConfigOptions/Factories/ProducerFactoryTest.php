@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\TopicHandler\ConfigOptions\Factories;
 
 use Metamorphosis\TopicHandler\ConfigOptions\Factories\ProducerFactory;
@@ -51,7 +52,11 @@ class ProducerFactoryTest extends LaravelTestCase
         ];
 
         // Actions
-        $result = ProducerFactory::make($brokerData, $topicData, $avroSchemaData);
+        $result = ProducerFactory::make(
+            $brokerData,
+            $topicData,
+            $avroSchemaData
+        );
 
         // Assertions
         $this->assertInstanceOf(Producer::class, $result);

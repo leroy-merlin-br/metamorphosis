@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Connectors;
 
 use Illuminate\Support\Facades\Validator;
@@ -6,13 +7,20 @@ use Metamorphosis\Exceptions\ConfigurationException;
 
 abstract class AbstractConfig
 {
+    /**
+     * @var mixed[]
+     */
+    protected array $rules = [];
+
     protected function getBrokerConfig(string $configName, string $brokerId): array
     {
-        if (!$brokerConfig = config($configName.".brokers.{$brokerId}")) {
-            throw new ConfigurationException("Broker '{$brokerId}' configuration not found");
+        if (!$brokerConfig = config("{$configName}.brokers.{$brokerId}")) {
+            throw new ConfigurationException(
+                "Broker '{$brokerId}' configuration not found"
+            );
         }
 
-        return $brokerConfig;
+        return (array) $brokerConfig;
     }
 
     protected function validate(array $config): void
@@ -26,6 +34,6 @@ abstract class AbstractConfig
 
     protected function getSchemaConfig(string $configName, string $topicId): array
     {
-        return config($configName.'.avro_schemas.'.$topicId, []);
+        return config($configName . '.avro_schemas.' . $topicId, []);
     }
 }

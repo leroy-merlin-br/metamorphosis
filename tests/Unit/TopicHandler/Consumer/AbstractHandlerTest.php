@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\TopicHandler\Consumer;
 
 use Exception;
@@ -12,7 +13,8 @@ class AbstractHandlerTest extends LaravelTestCase
     public function testItShouldHandleWarningConsumer(): void
     {
         // Set
-        $consumerHandler = new class() extends AbstractHandler {
+        $consumerHandler = new class () extends AbstractHandler {
+            /** @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter */
             public function handle(RecordInterface $record): void
             {
             }
@@ -28,7 +30,8 @@ class AbstractHandlerTest extends LaravelTestCase
     public function testItShouldHandleFailedConsumer(): void
     {
         // Set
-        $consumerHandler = new class() extends AbstractHandler {
+        $consumerHandler = new class () extends AbstractHandler {
+            /** @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter */
             public function handle(RecordInterface $record): void
             {
             }

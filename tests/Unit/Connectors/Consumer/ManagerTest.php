@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Connectors\Consumer;
 
 use Exception;
@@ -17,34 +18,25 @@ use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class ManagerTest extends LaravelTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $configManager = new ConsumerConfigManager();
-        $configManager->set([
-            'connections' => 'kafka:2019',
-            'topic' => 'topic_key',
-            'broker' => 'default',
-            'offset_reset' => 'earliest',
-            'offset' => 0,
-            'timeout' => 30,
-            'handler' => ConsumerHandlerDummy::class,
-            'middlewares' => [],
-            'consumer_group' => 'consumer-id',
-        ]);
-    }
-
     public function testShouldHandleMultiplesMessages(): void
     {
         // Set
-        $consumerRecord = $this->instance(ConsumerRecord::class, m::mock(ConsumerRecord::class));
+        $consumerRecord = $this->instance(
+            ConsumerRecord::class,
+            m::mock(ConsumerRecord::class)
+        );
 
         $consumer = m::mock(ConsumerInterface::class);
         $consumerHandler = m::mock(ConsumerHandler::class);
         $dispatcher = m::mock(Dispatcher::class);
 
-        $runner = new Manager($consumer, $consumerHandler, $dispatcher, true, false);
+        $runner = new Manager(
+            $consumer,
+            $consumerHandler,
+            $dispatcher,
+            true,
+            false
+        );
 
         $kafkaMessage1 = new KafkaMessage();
         $kafkaMessage1->payload = 'original message 1';
@@ -65,15 +57,17 @@ class ManagerTest extends LaravelTestCase
         // Expectations
         $consumer->shouldReceive('consume')
             ->times(4)
-            ->andReturnUsing(function () use ($messages, &$count, $exception) {
-                $message = $messages[$count] ?? null;
-                if (!$message) {
-                    throw $exception;
-                }
-                $count++;
+            ->andReturnUsing(
+                function () use ($messages, &$count, $exception) {
+                    $message = $messages[$count] ?? null;
+                    if (!$message) {
+                        throw $exception;
+                    }
+                    $count++;
 
-                return $message;
-            });
+                    return $message;
+                }
+            );
 
         $consumerHandler->expects()
             ->failed($exception);
@@ -96,9 +90,17 @@ class ManagerTest extends LaravelTestCase
         $consumerHandler = m::mock(ConsumerHandler::class);
         $dispatcher = m::mock(Dispatcher::class);
 
-        $runner = new Manager($consumer, $consumerHandler, $dispatcher, true, false);
+        $runner = new Manager(
+            $consumer,
+            $consumerHandler,
+            $dispatcher,
+            true,
+            false
+        );
 
-        $exception = new ResponseWarningException('Error occurs when consuming.');
+        $exception = new ResponseWarningException(
+            'Error occurs when consuming.'
+        );
 
         // Expectations
         $consumer->shouldReceive('consume')
@@ -117,13 +119,22 @@ class ManagerTest extends LaravelTestCase
     public function testShouldHandleAsyncCommit(): void
     {
         // Set
-        $consumerRecord = $this->instance(ConsumerRecord::class, m::mock(ConsumerRecord::class));
+        $consumerRecord = $this->instance(
+            ConsumerRecord::class,
+            m::mock(ConsumerRecord::class)
+        );
 
         $consumer = m::mock(ConsumerInterface::class);
         $consumerHandler = m::mock(ConsumerHandler::class);
         $dispatcher = m::mock(Dispatcher::class);
 
-        $runner = new Manager($consumer, $consumerHandler, $dispatcher, false, true);
+        $runner = new Manager(
+            $consumer,
+            $consumerHandler,
+            $dispatcher,
+            false,
+            true
+        );
 
         $kafkaMessage1 = new KafkaMessage();
         $kafkaMessage1->payload = 'original message 1';
@@ -135,20 +146,24 @@ class ManagerTest extends LaravelTestCase
 
         $messages = [$kafkaMessage1, $kafkaMessage2];
         $count = 0;
-        $exception = new ResponseTimeoutException('Consume timeout or finished to processed.');
+        $exception = new ResponseTimeoutException(
+            'Consume timeout or finished to processed.'
+        );
 
         // Expectations
         $consumer->shouldReceive('consume')
             ->times(3)
-            ->andReturnUsing(function () use ($messages, &$count, $exception) {
-                $message = $messages[$count] ?? null;
-                if (!$message) {
-                    throw $exception;
-                }
-                $count++;
+            ->andReturnUsing(
+                function () use ($messages, &$count, $exception) {
+                    $message = $messages[$count] ?? null;
+                    if (!$message) {
+                        throw $exception;
+                    }
+                    $count++;
 
-                return $message;
-            });
+                    return $message;
+                }
+            );
 
         $consumer->expects()
             ->commitAsync()
@@ -170,5 +185,23 @@ class ManagerTest extends LaravelTestCase
         $runner->handleMessage();
         $runner->handleMessage();
         $runner->handleMessage();
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $configManager = new ConsumerConfigManager();
+        $configManager->set([
+            'connections' => 'kafka:2019',
+            'topic' => 'topic_key',
+            'broker' => 'default',
+            'offset_reset' => 'earliest',
+            'offset' => 0,
+            'timeout' => 30,
+            'handler' => ConsumerHandlerDummy::class,
+            'middlewares' => [],
+            'consumer_group' => 'consumer-id',
+        ]);
     }
 }

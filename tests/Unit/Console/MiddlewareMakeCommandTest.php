@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Console;
 
 use Illuminate\Support\Facades\Artisan;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Integration;
 
 use GuzzleHttp\Client as GuzzleClient;
@@ -21,6 +22,7 @@ class ProducerWithAvroTest extends LaravelTestCase
 
         // When I
         $this->haveSomeRandomMessagesProduced();
+        $this->expectNotToPerformAssertions();
     }
 
     protected function haveAHandlerConfigured(): void
@@ -29,7 +31,10 @@ class ProducerWithAvroTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'test' => [
-                        'connections' => 'kafka:9092',
+                        'connections' => env(
+                            'KAFKA_BROKER_CONNECTIONS',
+                            'kafka:9092'
+                        ),
                     ],
                 ],
                 'topics' => [
@@ -88,8 +93,14 @@ class ProducerWithAvroTest extends LaravelTestCase
 
     private function haveSomeRandomMessagesProduced(): void
     {
-        $saleOrderProducer = app(MessageProducer::class, ['record' => ['saleOrderId' => 'SALE_ORDER_ID'], 'topic' => 'sale_order']);
-        $productProducer = app(MessageProducer::class, ['record' => ['productId' => 'PRODUCT_ID'], 'topic' => 'product']);
+        $saleOrderProducer = app(
+            MessageProducer::class,
+            ['record' => ['saleOrderId' => 'SALE_ORDER_ID'], 'topic' => 'sale_order']
+        );
+        $productProducer = app(
+            MessageProducer::class,
+            ['record' => ['productId' => 'PRODUCT_ID'], 'topic' => 'product']
+        );
 
         $saleOrderSchemaResponse = '{
            "subject":"sale_order-value",

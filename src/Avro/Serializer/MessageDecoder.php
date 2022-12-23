@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Avro\Serializer;
 
 use AvroStringIO;
@@ -11,17 +12,14 @@ use RuntimeException;
 class MessageDecoder
 {
     /**
-     * @var array [int Magic Byte => string Schema Decoder Class]
+     * @var array<int, string> [int Magic Byte => string Schema Decoder Class]
      */
-    private $decoders = [
+    private array $decoders = [
         SchemaFormats::MAGIC_BYTE_SCHEMAID => SchemaId::class,
         SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION => SchemaSubjectAndVersion::class,
     ];
 
-    /**
-     * @var CachedSchemaRegistryClient
-     */
-    private $registry;
+    private CachedSchemaRegistryClient $registry;
 
     public function __construct(CachedSchemaRegistryClient $registry)
     {

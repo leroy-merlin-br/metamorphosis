@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Middlewares;
 
 use Closure;

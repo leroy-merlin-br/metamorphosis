@@ -1,21 +1,19 @@
 <?php
+
 namespace Metamorphosis\Consumers;
 
 use Metamorphosis\Connectors\Consumer\Manager;
 
 class Runner
 {
-    /**
-     * @var Manager
-     */
-    private $manager;
+    private Manager $manager;
 
     public function __construct(Manager $manager)
     {
         $this->manager = $manager;
     }
 
-    public function run(int $times = null): void
+    public function run(?int $times = null): void
     {
         if ($times) {
             for ($i = 0; $i < $times; $i++) {

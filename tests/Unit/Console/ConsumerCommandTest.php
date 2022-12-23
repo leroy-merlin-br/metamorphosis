@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Console;
 
 use Metamorphosis\Consumers\Runner;
@@ -9,37 +10,6 @@ use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class ConsumerCommandTest extends LaravelTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        config([
-            'kafka' => [
-                'brokers' => [
-                    'default' => [
-                        'connections' => 'test_kafka:6680',
-                        'auth' => [],
-                    ],
-                ],
-                'topics' => [
-                    'topic_key' => [
-                        'topic_id' => 'topic_name',
-                        'broker' => 'default',
-                        'consumer' => [
-                            'consumer_groups' => [
-                                'default' => [
-                                    'offset_reset' => 'earliest',
-                                    'handler' => ConsumerHandlerDummy::class,
-                                    'timeout' => 123,
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ]);
-    }
-
     public function testItCallsCommandWithInvalidTopic(): void
     {
         // Set
@@ -160,5 +130,39 @@ class ConsumerCommandTest extends LaravelTestCase
             ->once();
 
         $this->artisan($command, $parameters);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config([
+            'kafka' => [
+                'brokers' => [
+                    'default' => [
+                        'connections' => env(
+                            'KAFKA_BROKER_CONNECTIONS',
+                            'kafka:9092'
+                        ),
+                        'auth' => [],
+                    ],
+                ],
+                'topics' => [
+                    'topic_key' => [
+                        'topic_id' => 'topic_name',
+                        'broker' => 'default',
+                        'consumer' => [
+                            'consumer_groups' => [
+                                'default' => [
+                                    'offset_reset' => 'earliest',
+                                    'handler' => ConsumerHandlerDummy::class,
+                                    'timeout' => 123,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
     }
 }

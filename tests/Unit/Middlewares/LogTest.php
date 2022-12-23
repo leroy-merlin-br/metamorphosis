@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Middlewares;
 
 use Closure;
@@ -26,20 +27,32 @@ class LogTest extends LaravelTestCase
 
         // Expectations
         $log->expects()
-            ->info('Processing kafka record: original record', [
-                'original' => [
-                    'err' => RD_KAFKA_RESP_ERR_NO_ERROR,
-                    'topic_name' => null,
-                    'partition' => null,
-                    'payload' => 'original record',
-                    'len' => null,
-                    'key' => null,
-                    'offset' => null,
-                    'timestamp' => null,
-                    'headers' => null,
-                    'opaque' => null,
-                ],
-            ]);
+            ->info('Processing kafka record: original record', m::on(
+                static function (array $context): bool {
+                    $original = $context['original'];
+                    $expected = [
+                        'err' => RD_KAFKA_RESP_ERR_NO_ERROR,
+                        'topic_name' => null,
+                        'timestamp' => null,
+                        'payload' => 'original record',
+                        'len' => null,
+                        'key' => null,
+                        'opaque' => null,
+                    ];
+
+                    foreach ($expected as $key => $expectedValue) {
+                        if (!array_key_exists($key, $original)) {
+                            return false;
+                        }
+
+                        if ($original[$key] !== $expectedValue) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            ));
 
         // Actions
         $middleware->process($record, $closure);

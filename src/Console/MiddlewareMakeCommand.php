@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\GeneratorCommand;
@@ -7,22 +8,19 @@ class MiddlewareMakeCommand extends GeneratorCommand
 {
     /**
      * The console command name.
-     *
-     * @var string
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $name = 'make:kafka-middleware';
 
     /**
      * The console command description.
-     *
-     * @var string
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $description = 'Create a new kafka middleware';
 
     /**
      * The type of class being generated.
-     *
-     * @var string
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $type = 'KafkaMiddleware';
 
@@ -33,7 +31,7 @@ class MiddlewareMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/middleware.stub';
+        return __DIR__ . '/stubs/middleware.stub';
     }
 
     /**
@@ -45,6 +43,6 @@ class MiddlewareMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Kafka\Middlewares';
+        return $rootNamespace . '\Kafka\Middlewares';
     }
 }

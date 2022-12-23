@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Producer;
 
 use Metamorphosis\Producer\Poll;
@@ -26,7 +27,10 @@ class PollTest extends LaravelTestCase
         $poll = new Poll($kafkaProducer, $configManager);
 
         // Expectations
-        $kafkaProducer->shouldReceive('poll')
+        $kafkaProducer->expects()
+            ->poll(0);
+
+        $kafkaProducer->shouldReceive('flush')
             ->never();
 
         // Actions
@@ -39,10 +43,10 @@ class PollTest extends LaravelTestCase
         $configManager = new ProducerConfigManager();
         $configManager->set([
             'topic_id' => 'topic_name',
-            'timeout' => 4000,
+            'timeout' => 1000,
             'is_async' => false,
             'max_poll_records' => 500,
-            'flush_attempts' => 10,
+            'flush_attempts' => 3,
             'required_acknowledgment' => true,
             'partition' => 0,
         ]);
@@ -52,8 +56,11 @@ class PollTest extends LaravelTestCase
 
         // Expectations
         $kafkaProducer->expects()
-            ->poll(4000)
-            ->times(10)
+            ->poll(0);
+
+        $kafkaProducer->expects()
+            ->flush(1000)
+            ->times(3)
             ->andReturn(1);
 
         $this->expectException(RuntimeException::class);
@@ -80,7 +87,11 @@ class PollTest extends LaravelTestCase
 
         // Expectations
         $kafkaProducer->expects()
-            ->poll(4000)
+            ->poll(0)
+            ->times(3);
+
+        $kafkaProducer->expects()
+            ->flush(4000)
             ->times(3)
             ->andReturn(0);
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Authentication;
 
 use Metamorphosis\AbstractConfigManager;
@@ -7,11 +8,11 @@ use RdKafka\Conf;
 
 class Factory
 {
-    const TYPE_SSL = 'ssl';
+    private const TYPE_SSL = 'ssl';
 
-    const TYPE_SASL_SSL = 'sasl_ssl';
+    private const TYPE_SASL_SSL = 'sasl_ssl';
 
-    const TYPE_NONE = 'none';
+    private const TYPE_NONE = 'none';
 
     public static function authenticate(Conf $conf, AbstractConfigManager $configManager): void
     {
@@ -23,15 +24,23 @@ class Factory
 
                 break;
             case self::TYPE_SSL:
-                app(SSLAuthentication::class, compact('conf', 'configManager'));
+                app(
+                    SSLAuthentication::class,
+                    compact('conf', 'configManager')
+                );
 
                 break;
             case self::TYPE_SASL_SSL:
-                app(SASLAuthentication::class, compact('conf', 'configManager'));
+                app(
+                    SASLAuthentication::class,
+                    compact('conf', 'configManager')
+                );
 
                 break;
             default:
-                throw new AuthenticationException('Invalid Protocol Configuration.');
+                throw new AuthenticationException(
+                    'Invalid Protocol Configuration.'
+                );
         }
     }
 }

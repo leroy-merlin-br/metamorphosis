@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Record;
 
 use Metamorphosis\Record\ProducerRecord as Record;

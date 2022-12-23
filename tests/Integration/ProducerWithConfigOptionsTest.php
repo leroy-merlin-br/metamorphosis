@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Integration;
 
 use Illuminate\Support\Facades\Log;
@@ -13,15 +14,9 @@ use Tests\LaravelTestCase;
 
 class ProducerWithConfigOptionsTest extends LaravelTestCase
 {
-    /**
-     * @var ProducerConfigOptions
-     */
-    private $producerConfigOptions;
+    private ProducerConfigOptions $producerConfigOptions;
 
-    /**
-     * @var ConsumerConfigOptions
-     */
-    private $consumerConfigOptions;
+    private ConsumerConfigOptions $consumerConfigOptions;
 
     public function testShouldRunAProducerMessagesWithConfigOptions(): void
     {
@@ -30,6 +25,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
 
         // I Expect That
         $this->myMessagesHaveBeenProduced();
+        $this->expectNotToPerformAssertions();
 
         // When I
         $this->haveSomeRandomMessageProduced();
@@ -49,7 +45,10 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
             'kafka_new_config' => [
                 'brokers' => [
                     'override' => [
-                        'connections' => 'kafka:9092',
+                        'connections' => env(
+                            'KAFKA_BROKER_CONNECTIONS',
+                            'kafka:9092'
+                        ),
                     ],
                 ],
                 'topics' => [
@@ -81,7 +80,8 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
 
     protected function haveAHandlerConfigured(): void
     {
-        $broker = new Broker('kafka:9092', new None());
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $broker = new Broker($connections, new None());
         $this->producerConfigOptions = new ProducerConfigOptions(
             'sale_order_override',
             $broker,

@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Avro;
 
 use AvroSchema;
@@ -21,6 +22,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
         $schema = new Schema();
         $schema->setAvroSchema($parsedSchema);
         $schema->setSchemaId('123');
+        $schema->setSubject(null);
+        $schema->setVersion(null);
 
         $response = [
             'schema' => $schemaString,
@@ -112,7 +115,9 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
 
         // Expectations
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage("Unable to get schema for the specific ID: {$status}");
+        $this->expectExceptionMessage(
+            "Unable to get schema for the specific ID: {$status}"
+        );
         $httpClient->expects()
             ->get('schemas/ids/123')
             ->andReturn([$status, $response]);
@@ -197,7 +202,9 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
 
         // Expectations
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage("Unable to get schema for the specific ID: {$status}");
+        $this->expectExceptionMessage(
+            "Unable to get schema for the specific ID: {$status}"
+        );
         $httpClient->expects()
             ->get('subjects/some-kafka-topic/versions/1')
             ->andReturn([$status, $response]);
@@ -236,6 +243,8 @@ class CachedSchemaRegistryClientTest extends LaravelTestCase
 
     private function getSchemaTest(): string
     {
-        return file_get_contents(__DIR__.'/../fixtures/schemas/sales_price.avsc');
+        return file_get_contents(
+            __DIR__ . '/../fixtures/schemas/sales_price.avsc'
+        );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Integration\Dummies;
 
 use Illuminate\Support\Facades\Log;

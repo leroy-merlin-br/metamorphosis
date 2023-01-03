@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Middlewares\Handler;
 
 use Metamorphosis\Middlewares\Handler\Dispatcher;

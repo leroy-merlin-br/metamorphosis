@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\GeneratorCommand;
@@ -7,22 +8,19 @@ class ProducerMakeCommand extends GeneratorCommand
 {
     /**
      * The console command name.
-     *
-     * @var string
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $name = 'make:kafka-producer';
 
     /**
      * The console command description.
-     *
-     * @var string
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $description = 'Create a new kafka producer';
 
     /**
      * The type of class being generated.
-     *
-     * @var string
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $type = 'KafkaProducer';
 
@@ -33,7 +31,7 @@ class ProducerMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/producer.stub';
+        return __DIR__ . '/stubs/producer.stub';
     }
 
     /**
@@ -45,6 +43,6 @@ class ProducerMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Kafka\Producers';
+        return $rootNamespace . '\Kafka\Producers';
     }
 }

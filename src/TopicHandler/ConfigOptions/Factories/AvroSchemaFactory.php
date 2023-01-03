@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\ConfigOptions\Factories;
 
 use Metamorphosis\TopicHandler\ConfigOptions\AvroSchema;
@@ -11,7 +12,10 @@ class AvroSchemaFactory
             return null;
         }
 
-        return app(AvroSchema::class, self::convertConfigAttributes($avroSchemaData));
+        return app(
+            AvroSchema::class,
+            self::convertConfigAttributes($avroSchemaData)
+        );
     }
 
     private static function convertConfigAttributes(array $config): array

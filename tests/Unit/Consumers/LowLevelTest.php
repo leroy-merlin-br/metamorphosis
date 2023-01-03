@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Consumers;
 
 use Metamorphosis\ConsumerConfigManager;

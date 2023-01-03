@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit;
 
 use Metamorphosis\Connectors\Producer\Config;
@@ -37,7 +38,7 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        $producerHandler = new class ($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
@@ -94,7 +95,7 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        $producerHandler = new class ($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
@@ -127,10 +128,7 @@ class ProducerTest extends LaravelTestCase
             ->withAnyArgs();
 
         // Actions
-        $result = $producer->produce($producerHandler);
-
-        // Assertions
-        $this->assertNull($result);
+        $producer->produce($producerHandler);
     }
 
     public function testItShouldThrowJsonExceptionWhenPassingMalFormattedArray(): void
@@ -149,7 +147,7 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        $producerHandler = new class ($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
@@ -198,7 +196,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->poll(1000)
+            ->flush(1000)
             ->andReturn(0);
 
         $producerMiddleware->expects()
@@ -225,7 +223,7 @@ class ProducerTest extends LaravelTestCase
         $producerTopic = m::mock(ProducerTopic::class);
         $configManager = m::mock(ProducerConfigManager::class);
 
-        $producerHandler = new class($record, $topic) extends AbstractHandler {
+        $producerHandler = new class ($record, $topic) extends AbstractHandler {
         };
 
         // Expectations
@@ -274,7 +272,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->poll(1000)
+            ->flush(1000)
             ->andReturn(0);
 
         // Actions
@@ -297,9 +295,10 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
         $configManager = m::mock(ProducerConfigManager::class);
-        $broker = new Broker('kafka:9092', new None());
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $broker = new Broker($connections, new None());
         $configOptions = new ProducerConfigOptions($topicId, $broker);
-        $producerHandler = new class($record, $configOptions) extends AbstractProducer {
+        $producerHandler = new class ($record, $configOptions) extends AbstractProducer {
         };
 
         // Expectations
@@ -348,7 +347,7 @@ class ProducerTest extends LaravelTestCase
             ->andReturn($producerTopic);
 
         $kafkaProducer->expects()
-            ->poll(1000)
+            ->flush(1000)
             ->andReturn(0);
 
         // Actions

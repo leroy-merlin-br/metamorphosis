@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Avro\Serializer;
 
 use AvroSchema;
@@ -43,7 +44,10 @@ class MessageEncoderTest extends LaravelTestCase
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
-        $serializer = new MessageEncoder($registry, ['register_missing_schemas' => true, 'default_encoding_format' => SchemaFormats::MAGIC_BYTE_SCHEMAID]);
+        $serializer = new MessageEncoder(
+            $registry,
+            ['register_missing_schemas' => true, 'default_encoding_format' => SchemaFormats::MAGIC_BYTE_SCHEMAID]
+        );
         $topic = 'my-topic';
         $schema = m::mock(Schema::class);
         $avroSchema = new AvroSchema('array');
@@ -60,7 +64,13 @@ class MessageEncoderTest extends LaravelTestCase
             ->andReturn($avroSchema);
 
         // Actions
-        $result = $serializer->encodeMessage($topic, $schema, $record, true, SchemaFormats::MAGIC_BYTE_SCHEMAID);
+        $result = $serializer->encodeMessage(
+            $topic,
+            $schema,
+            $record,
+            true,
+            SchemaFormats::MAGIC_BYTE_SCHEMAID
+        );
 
         // Assertions
         $this->assertSame("\x00\x00\x00\x00\x00\x00", $result);
@@ -92,10 +102,19 @@ class MessageEncoderTest extends LaravelTestCase
             ->andReturn($avroSchema);
 
         // Actions
-        $result = $serializer->encodeMessage($topic, $schema, $record, false, SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION);
+        $result = $serializer->encodeMessage(
+            $topic,
+            $schema,
+            $record,
+            false,
+            SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION
+        );
 
         // Assertions
-        $this->assertSame("\x01\x00\x00\x00\x0Emy-topic-value\x00\x00\x00\x00\x00", $result);
+        $this->assertSame(
+            "\x01\x00\x00\x00\x0Emy-topic-value\x00\x00\x00\x00\x00",
+            $result
+        );
     }
 
     public function testShouldNotEncodeRecordWithInvalidFormat(): void
@@ -120,7 +139,10 @@ class MessageEncoderTest extends LaravelTestCase
     {
         // Set
         $registry = m::mock(CachedSchemaRegistryClient::class);
-        $serializer = new MessageEncoder($registry, ['register_missing_schemas' => true]);
+        $serializer = new MessageEncoder(
+            $registry,
+            ['register_missing_schemas' => true]
+        );
         $topic = 'my-topic';
         $subject = "{$topic}-value";
         $schema = m::mock(Schema::class);
@@ -142,9 +164,18 @@ class MessageEncoderTest extends LaravelTestCase
             ->andReturn($avroSchema);
 
         // Actions
-        $result = $serializer->encodeMessage($topic, $schema, $record, true, SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION);
+        $result = $serializer->encodeMessage(
+            $topic,
+            $schema,
+            $record,
+            true,
+            SchemaFormats::MAGIC_BYTE_SUBJECT_VERSION
+        );
 
         // Assertions
-        $this->assertSame("\x01\x00\x00\x00\x0Emy-topic-value\x00\x00\x00\x00\$my awesome message", $result);
+        $this->assertSame(
+            "\x01\x00\x00\x00\x0Emy-topic-value\x00\x00\x00\x00\$my awesome message",
+            $result
+        );
     }
 }

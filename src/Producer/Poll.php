@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Producer;
 
 use Metamorphosis\AbstractConfigManager;
@@ -7,46 +8,29 @@ use RuntimeException;
 
 class Poll
 {
-    /**
-     * @var int
-     */
-    private $processedMessagesCount = 0;
+    const NON_BLOCKING_POLL = 0;
 
-    /**
-     * @var bool
-     */
-    private $isAsync;
+    private int $processedMessagesCount = 0;
 
-    /**
-     * @var int
-     */
-    private $maxPollRecords;
+    private ?bool $isAsync;
 
-    /**
-     * @var bool
-     */
-    private $requiredAcknowledgment;
+    private ?int $maxPollRecords;
 
-    /**
-     * @var int
-     */
-    private $maxFlushAttempts;
+    private ?bool $requiredAcknowledgment;
 
-    /**
-     * @var int
-     */
-    private $timeout;
+    private ?int $maxFlushAttempts;
 
-    /**
-     * @var \RdKafka\Producer
-     */
-    private $producer;
+    private ?int $timeout;
+
+    private Producer $producer;
 
     public function __construct(Producer $producer, AbstractConfigManager $configManager)
     {
         $this->isAsync = $configManager->get('is_async');
         $this->maxPollRecords = $configManager->get('max_poll_records');
-        $this->requiredAcknowledgment = $configManager->get('required_acknowledgment');
+        $this->requiredAcknowledgment = $configManager->get(
+            'required_acknowledgment'
+        );
         $this->maxFlushAttempts = $configManager->get('flush_attempts');
         $this->timeout = $configManager->get('timeout');
 
@@ -55,6 +39,7 @@ class Poll
 
     public function handleResponse(): void
     {
+        $this->producer->poll(self::NON_BLOCKING_POLL);
         $this->processedMessagesCount++;
 
         if (!$this->isAsync) {
@@ -75,7 +60,11 @@ class Poll
         }
 
         for ($flushAttempts = 0; $flushAttempts < $this->maxFlushAttempts; $flushAttempts++) {
-            if (0 === $this->producer->poll($this->timeout)) {
+            if (
+                RD_KAFKA_RESP_ERR_NO_ERROR === $this->producer->flush(
+                    $this->timeout
+                )
+            ) {
                 return;
             }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\Consumers\ConsumerInterface;
@@ -12,48 +13,32 @@ use Throwable;
 
 class Manager
 {
-    /**
-     * @var ConsumerInterface
-     */
-    private $consumer;
+    private ConsumerInterface $consumer;
 
-    /**
-     * @var ConsumerHandler
-     */
-    private $consumerHandler;
+    private ConsumerHandler $consumerHandler;
 
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
+    private Dispatcher $dispatcher;
 
-    /**
-     * @var bool
-     */
-    private $autoCommit;
+    private bool $autoCommit;
 
-    /**
-     * @var bool
-     */
-    private $commitAsync;
+    private bool $commitAsync;
 
-    /**
-     * @var Message
-     */
-    private $lastResponse;
+    private ?Message $lastResponse;
 
     public function __construct(
         ConsumerInterface $consumer,
         ConsumerHandler $consumerHandler,
         Dispatcher $dispatcher,
         bool $autoCommit,
-        bool $commitAsync
+        bool $commitAsync,
+        ?Message $lastResponse = null
     ) {
         $this->consumer = $consumer;
         $this->consumerHandler = $consumerHandler;
         $this->dispatcher = $dispatcher;
         $this->autoCommit = $autoCommit;
         $this->commitAsync = $commitAsync;
+        $this->lastResponse = $lastResponse;
     }
 
     public function getConsumer(): ConsumerInterface
@@ -78,9 +63,11 @@ class Manager
             $response = null;
         } catch (ResponseWarningException $exception) {
             $this->consumerHandler->warning($exception);
+
             return;
         } catch (Throwable $throwable) {
             $this->consumerHandler->failed($throwable);
+
             return;
         }
 
@@ -95,6 +82,7 @@ class Manager
 
         if ($this->commitAsync) {
             $this->consumer->commitAsync();
+
             return;
         }
 

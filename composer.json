@@ -7,25 +7,26 @@
     ],
     "description": "Kafka package for laravel applications",
     "require": {
-        "ext-rdkafka": "*",
+        "ext-rdkafka": ">=4.0",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.5.0 || ^7.0",
         "illuminate/support": "^5.5 || ^6.0 || ^7.0 || ^8.0",
         "illuminate/console": "^5.5 || ^6.0 || ^7.0 || ^8.0",
         "illuminate/config": "^5.5 || ^6.0 || ^7.0 || ^8.0",
-        "php": ">=7.1",
-        "wikimedia/avro": "^1.7"
+        "php": ">=7.4",
+        "wikimedia/avro": "^1.9.0"
     },
     "require-dev": {
-        "leroy-merlin-br/coding-standard": "^1.0.1",
-        "phpunit/phpunit": "^9.4.3",
-        "mockery/mockery": "^1.3.0",
-        "kwn/php-rdkafka-stubs": "~1.1.0",
-        "orchestra/testbench": "^6.0",
+        "leroy-merlin-br/coding-standard": "^v3.1.0",
+        "phpunit/phpunit": "^9.5.27",
+        "mockery/mockery": "^1.5.1",
+        "kwn/php-rdkafka-stubs": "^2.2.1",
+        "orchestra/testbench": "^6.25.1",
         "dms/phpunit-arraysubset-asserts": "^0.2.1",
-        "phpro/grumphp": "^1.5",
-        "vimeo/psalm": "^4.18",
-        "psalm/plugin-mockery": "^0.9.1"
+        "phpro/grumphp": "^1.13.0",
+        "vimeo/psalm": "^4.30.0",
+        "psalm/plugin-mockery": "^0.9.1",
+        "rector/rector": "^0.13.10"
     },
     "autoload": {
         "psr-4": {
@@ -58,5 +59,11 @@
             "@composer install",
             "vendor/bin/grumphp git:init"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpro/grumphp": true
+        }
     }
 }

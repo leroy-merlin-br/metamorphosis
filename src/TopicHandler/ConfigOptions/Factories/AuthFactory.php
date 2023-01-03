@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\ConfigOptions\Factories;
 
 use Exception;

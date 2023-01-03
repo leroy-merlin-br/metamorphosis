@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis;
 
 use Illuminate\Support\Arr;
@@ -6,14 +7,14 @@ use Illuminate\Support\Arr;
 abstract class AbstractConfigManager
 {
     /**
-     * @var array
+     * @var mixed[]
      */
-    protected $setting = [];
+    protected array $setting = [];
 
     /**
-     * @var array
+     * @var mixed[]
      */
-    protected $middlewares = [];
+    protected array $middlewares = [];
 
     abstract public function set(array $config, ?array $commandConfig = null): void;
 
@@ -22,7 +23,7 @@ abstract class AbstractConfigManager
      *
      * @return mixed
      */
-    public function get(string $key = null, $default = null)
+    public function get(?string $key = null, $default = null)
     {
         if (!$key) {
             return $this->setting;

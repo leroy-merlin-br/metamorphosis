@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit;
 
 use Metamorphosis\ProducerConfigManager;
@@ -38,6 +39,9 @@ class ProducerConfigManagerTest extends LaravelTestCase
 
         // Expectations
         $this->assertSame($expected, $configManager->get());
-        $this->assertInstanceOf(MiddlewareDummy::class, current($configManager->middlewares()));
+        $this->assertInstanceOf(
+            MiddlewareDummy::class,
+            current($configManager->middlewares())
+        );
     }
 }

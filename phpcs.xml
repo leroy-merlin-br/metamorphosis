@@ -20,9 +20,16 @@
     <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName">
         <exclude-pattern>config</exclude-pattern>
     </rule>
-    <!-- To be fixed with https://github.com/leroy-merlin-br/php-coding-standard/pull/7 -->
-    <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment">
-        <exclude-pattern>src/Producer.php</exclude-pattern>
+    <rule ref="SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter">
+        <exclude-pattern>tests/*/Dummies/*.php</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint">
         <exclude-pattern>src/Record/ConsumerRecord.php</exclude-pattern>
+        <exclude-pattern>src/Record/ProducerRecord.php</exclude-pattern>
+        <exclude-pattern>src/TopicHandler/Producer/AbstractHandler.php</exclude-pattern>
+        <exclude-pattern>src/TopicHandler/Producer/AbstractProducer.php</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility.MissingConstantVisibility">
+        <exclude-pattern>src/Producer/Poll.php</exclude-pattern>
     </rule>
 </ruleset>

@@ -1,73 +1,57 @@
 <?php
+
 namespace Metamorphosis\TopicHandler\ConfigOptions;
 
 class Producer
 {
-    /**
-     * @var Broker
-     */
-    private $broker;
+    private Broker $broker;
 
-    /**
-     * @var AvroSchema
-     */
-    private $avroSchema;
+    private ?AvroSchema $avroSchema;
 
     /**
      * The amount of attempts we will try to run the flush.
      * There's no magic number here, it depends on any factor
      * Try yourself a good number.
      *
-     * @var int
      */
-    private $flushAttempts;
+    private int $flushAttempts;
 
     /**
      * Whether if you want to receive the response asynchronously.
      *
-     * @var bool
      */
-    private $isAsync;
+    private bool $isAsync;
 
     /**
      * The amount of records to be sent in every iteration
      * That means that at each 500 messages we check if messages was sent.
      *
-     * @var int
      */
-    private $maxPollRecords;
+    private int $maxPollRecords;
 
     /**
      * Middlewares specific for this producer.
      *
-     * @var array
+     * @var mixed[]
      */
-    private $middlewares;
+    private array $middlewares;
 
     /**
      * Sets to true if you want to know if a message was successfully posted.
      *
-     * @var bool
      */
-    private $requiredAcknowledgment;
+    private bool $requiredAcknowledgment;
 
     /**
      * We need to set a timeout when polling the messages.
      * That means: how long we'll wait a response from poll
      *
-     * @var int
      */
-    private $timeout;
+    private int $timeout;
 
-    /**
-     * @var string
-     */
-    private $topicId;
+    private string $topicId;
 
-    /**
-     * @var int|null
-     */
-    private $partition;
+    private ?int $partition = null;
 
     public function __construct(
         string $topicId,

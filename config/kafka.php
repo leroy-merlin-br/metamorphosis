@@ -23,8 +23,10 @@ return [
             'request_options' => [
                 'headers' => [
                     'Authorization' => [
-                        'Basic '.base64_encode(
-                            env('AVRO_SCHEMA_USERNAME').':'.env('AVRO_SCHEMA_PASSWORD')
+                        'Basic ' . base64_encode(
+                            env('AVRO_SCHEMA_USERNAME')
+                            . ':'
+                            . env('AVRO_SCHEMA_PASSWORD')
                         ),
                     ],
                 ],
@@ -44,7 +46,7 @@ return [
 
     'brokers' => [
         'default' => [
-            'connections' => 'kafka:9092',
+            'connections' => env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092'),
 
             // If your broker doest not have authentication, you can
             // remove this configuration, or set as empty.
@@ -141,7 +143,9 @@ return [
 
                 // Here you can configure which partition you want to send the message
                 // it can be -1 (RD_KAFKA_PARTITION_UA) to let Kafka decide, or an int with the partition number
-                'partition' => constant('RD_KAFKA_PARTITION_UA') ?? -1,
+                'partition' => defined('RD_KAFKA_PARTITION_UA')
+                    ? constant('RD_KAFKA_PARTITION_UA')
+                    : -1,
             ],
         ],
     ],

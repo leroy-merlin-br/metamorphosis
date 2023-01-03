@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Middlewares;
 
 use Closure;
@@ -13,7 +14,7 @@ class JsonDecode implements MiddlewareInterface
 
         if (null === $payload && JSON_ERROR_NONE !== json_last_error()) {
             throw new Exception(
-                'Malformed JSON. Error: '.json_last_error_msg()
+                'Malformed JSON. Error: ' . json_last_error_msg()
             );
         }
 

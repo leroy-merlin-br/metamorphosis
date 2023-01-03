@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Avro\Serializer\Decoders;
 
 use AvroIOBinaryDecoder;
@@ -8,10 +9,7 @@ use Metamorphosis\Avro\CachedSchemaRegistryClient;
 
 class SchemaId implements DecoderInterface
 {
-    /**
-     * @var CachedSchemaRegistryClient
-     */
-    private $registry;
+    private CachedSchemaRegistryClient $registry;
 
     public function __construct(CachedSchemaRegistryClient $registry)
     {

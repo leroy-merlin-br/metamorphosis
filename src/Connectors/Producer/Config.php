@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Connectors\Producer;
 
 use Metamorphosis\AbstractConfigManager;
@@ -10,9 +11,9 @@ use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 class Config extends AbstractConfig
 {
     /**
-     * @var array
+     * @var string[]
      */
-    protected $rules = [
+    protected array $rules = [
         'topic_id' => 'required',
         'connections' => 'required|string',
         'timeout' => 'int',
@@ -26,9 +27,9 @@ class Config extends AbstractConfig
     ];
 
     /**
-     * @var array
+     * @var mixed[]
      */
-    protected $default = [
+    protected array $default = [
         'timeout' => 1000,
         'is_async' => true,
         'required_acknowledgment' => true,
@@ -53,7 +54,10 @@ class Config extends AbstractConfig
             config('kafka.middlewares.producer', []),
             $topicConfig['producer']['middlewares'] ?? []
         );
-        $brokerConfig = $this->getBrokerConfig('kafka', $topicConfig['broker']);
+        $brokerConfig = $this->getBrokerConfig(
+            'kafka',
+            $topicConfig['broker']
+        );
         $schemaConfig = $this->getSchemaConfig('kafka', $topicId);
         $config = array_merge($topicConfig, $brokerConfig, $schemaConfig);
 
@@ -69,8 +73,8 @@ class Config extends AbstractConfig
     private function getTopicConfig(string $topicId): array
     {
         $topicConfig = array_merge(
-            config('kafka.topics.'.$topicId, []),
-            config('kafka.topics.'.$topicId.'.producer', [])
+            config('kafka.topics.' . $topicId, []),
+            config('kafka.topics.' . $topicId . '.producer', [])
         );
         if (!$topicConfig) {
             throw new ConfigurationException("Topic '{$topicId}' not found");

@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\AbstractConfigManager;
@@ -20,9 +21,29 @@ class Factory
         $consumer = self::getConsumer($autoCommit, $configManager);
         $handler = app($configManager->get('handler'));
 
-        $dispatcher = self::getMiddlewareDispatcher($configManager->middlewares());
+        $dispatcher = self::getMiddlewareDispatcher(
+            $configManager->middlewares()
+        );
 
-        return new Manager($consumer, $handler, $dispatcher, $autoCommit, $commitAsync);
+        return new Manager(
+            $consumer,
+            $handler,
+            $dispatcher,
+            $autoCommit,
+            $commitAsync
+        );
+    }
+
+    public static function getConsumer(bool $autoCommit, AbstractConfigManager $configManager): ConsumerInterface
+    {
+        if (self::requiresPartition($configManager)) {
+            return app(LowLevel::class)->getConsumer(
+                $autoCommit,
+                $configManager
+            );
+        }
+
+        return app(HighLevel::class)->getConsumer($autoCommit, $configManager);
     }
 
     protected static function requiresPartition(AbstractConfigManager $configManager): bool
@@ -30,15 +51,6 @@ class Factory
         $partition = $configManager->get('partition');
 
         return !is_null($partition) && $partition >= 0;
-    }
-
-    public static function getConsumer(bool $autoCommit, AbstractConfigManager $configManager): ConsumerInterface
-    {
-        if (self::requiresPartition($configManager)) {
-            return app(LowLevel::class)->getConsumer($autoCommit, $configManager);
-        }
-
-        return app(HighLevel::class)->getConsumer($autoCommit, $configManager);
     }
 
     private static function getMiddlewareDispatcher(array $middlewares): Dispatcher

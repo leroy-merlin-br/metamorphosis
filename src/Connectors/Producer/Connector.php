@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Connectors\Producer;
 
 use Metamorphosis\AbstractConfigManager;
@@ -16,13 +17,16 @@ class Connector
         $conf = resolve(Conf::class);
 
         if ($this->canHandleResponse($handler)) {
-            $conf->setDrMsgCb(function ($kafka, Message $message) use ($handler) {
-                if ($message->err) {
-                    $handler->failed($message);
-                } else {
-                    $handler->success($message);
+            $conf->setDrMsgCb(
+                /** @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter */
+                function ($kafka, Message $message) use ($handler) {
+                    if ($message->err) {
+                        $handler->failed($message);
+                    } else {
+                        $handler->success($message);
+                    }
                 }
-            });
+            );
         }
 
         $conf->set('metadata.broker.list', $configManager->get('connections'));

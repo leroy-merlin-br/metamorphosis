@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Connectors\Consumer;
 
 use Metamorphosis\AbstractConfigManager;

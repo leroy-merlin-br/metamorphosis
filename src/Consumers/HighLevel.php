@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Consumers;
 
 use RdKafka\KafkaConsumer;
@@ -6,15 +7,9 @@ use RdKafka\Message;
 
 class HighLevel implements ConsumerInterface
 {
-    /**
-     * @var KafkaConsumer
-     */
-    protected $consumer;
+    protected KafkaConsumer $consumer;
 
-    /**
-     * @var int
-     */
-    private $timeout;
+    private int $timeout;
 
     public function __construct(KafkaConsumer $consumer, int $timeout)
     {

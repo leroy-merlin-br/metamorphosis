@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Avro;
 
 use GuzzleHttp\Client as GuzzleClient;

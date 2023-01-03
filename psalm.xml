@@ -4,7 +4,9 @@
        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
        errorLevel="6"
        cacheDirectory="storage/psalm/cache"
-       resolveFromConfigFile="true">
+       resolveFromConfigFile="true"
+       errorBaseline="psalm-baseline.xml"
+>
   <projectFiles>
     <directory name="src"/>
 

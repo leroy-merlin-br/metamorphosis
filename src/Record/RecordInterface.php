@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Record;
 
 interface RecordInterface

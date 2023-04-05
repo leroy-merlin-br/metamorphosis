@@ -94,4 +94,12 @@ class Config extends AbstractConfig
 
         return $topicConfig;
     }
+
+    private function getMiddlewares(string $configName, array $topicConfig): array
+    {
+        return array_merge(
+            config($configName . '.middlewares.consumer', []),
+            $topicConfig['consumer']['middlewares'] ?? []
+        );
+    }
 }

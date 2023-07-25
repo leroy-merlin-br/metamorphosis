@@ -14,24 +14,18 @@ jobs:
     strategy:
       matrix:
         php:
-          - '7.4'
           - '8.0'
           - '8.1'
+          - '8.2'
     env:
       KAFKA_BROKER_CONNECTIONS: 'localhost:9092'
     services:
-      zookeeper:
-        image: bitnami/zookeeper
-        env:
-          ALLOW_ANONYMOUS_LOGIN: yes
       kafka:
         image: bitnami/kafka
         ports:
           - '9092:9092'
         env:
-          KAFKA_LISTENERS: 'PLAINTEXT://:9092'
           KAFKA_CFG_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:9092'
-          KAFKA_CFG_ZOOKEEPER_CONNECT: 'zookeeper:2181'
           ALLOW_PLAINTEXT_LISTENER: yes
     steps:
       - name: Checkout

@@ -14,16 +14,16 @@
         "illuminate/console": "^9.0 || ^10.0",
         "illuminate/config": "^9.0 || ^10.0",
         "php": "^8.0",
-        "wikimedia/avro": "^1.9.0"
+        "rg/avro-php": "^3.0"
     },
     "require-dev": {
         "leroy-merlin-br/coding-standard": "^v3.1.0",
-        "phpunit/phpunit": "^9.5.27",
-        "mockery/mockery": "^1.5.1",
+        "phpunit/phpunit": "^9.6.10",
+        "mockery/mockery": "^1.6.6",
         "kwn/php-rdkafka-stubs": "^2.2.1",
         "orchestra/testbench": "^7.0|^8.0",
         "dms/phpunit-arraysubset-asserts": "^0.2.1",
-        "phpro/grumphp": "^1.13.0",
+        "phpro/grumphp": "^1.16.0",
         "vimeo/psalm": "^4.30.0",
         "psalm/plugin-mockery": "^0.9.1",
         "rector/rector": "^0.13.10"

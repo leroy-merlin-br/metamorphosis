@@ -19,6 +19,7 @@ class LowLevelTest extends LaravelTestCase
             'consumer_group' => 'some-group',
             'topic' => 'some_topic',
             'offset_reset' => 'earliest',
+            'max_poll_interval_ms' => 900000,
             'offset' => 0,
             'partition' => 1,
         ]);

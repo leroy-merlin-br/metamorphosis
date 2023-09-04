@@ -14,9 +14,15 @@ class HighLevel implements ConnectorInterface
     public function getConsumer(bool $autoCommit, AbstractConfigManager $configManager): ConsumerInterface
     {
         $conf = $this->getConf($configManager);
+        $maxPollIntervalMs = (int) $configManager->get('max_poll_interval_ms');
 
         $conf->set('group.id', $configManager->get('consumer_group'));
         $conf->set('auto.offset.reset', $configManager->get('offset_reset'));
+        $conf->set(
+            'max.poll.interval.ms',
+            $maxPollIntervalMs ?: 300000
+        );
+
         if (!$autoCommit) {
             $conf->set('enable.auto.commit', 'false');
         }

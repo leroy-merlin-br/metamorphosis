@@ -20,6 +20,7 @@ class HighLevelTest extends LaravelTestCase
             'topic_id' => 'some_topic',
             'offset_reset' => 'earliest',
             'timeout' => 1000,
+            'max_poll_interval_ms' => 900000,
         ]);
         $connector = new HighLevel();
 

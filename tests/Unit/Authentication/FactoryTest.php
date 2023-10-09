@@ -16,7 +16,11 @@ class FactoryTest extends LaravelTestCase
     public function testItMakesSslAuthenticationClass(): void
     {
         // Set
-        $configOptionsSsl = new Ssl('path/to/ca', 'path/to/certificate', 'path/to/key');
+        $configOptionsSsl = new Ssl(
+            'path/to/ca',
+            'path/to/certificate',
+            'path/to/key'
+        );
         $conf = new Conf();
         $expected = [
             'security.protocol' => 'ssl',

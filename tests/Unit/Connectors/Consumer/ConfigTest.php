@@ -85,7 +85,9 @@ class ConfigTest extends LaravelTestCase
             ]);
 
         // Actions
-        $configManager = $config->makeWithConfigOptions(ConsumerHandlerDummy::class);
+        $configManager = $config->makeWithConfigOptions(
+            ConsumerHandlerDummy::class
+        );
 
         // Assertions
         $this->assertArraySubset($expected, $configManager->toArray());

@@ -33,7 +33,7 @@ class ConnectorTest extends LaravelTestCase
         $producerConfigOptions = m::mock(ProducerConfigOptions::class);
 
         $connector = new Connector();
-        $handler = new class('record', $producerConfigOptions) extends AbstractProducer implements HandleableResponseInterface {
+        $handler = new class ('record', $producerConfigOptions) extends AbstractProducer implements HandleableResponseInterface {
             public function success(Message $message): void
             {
             }
@@ -57,7 +57,10 @@ class ConnectorTest extends LaravelTestCase
             ->andReturn($broker);
 
         // Actions
-        $result = $connector->getProducerTopic($handler, $producerConfigOptions);
+        $result = $connector->getProducerTopic(
+            $handler,
+            $producerConfigOptions
+        );
 
         // Assertions
         $this->assertInstanceOf(KafkaProducer::class, $result);
@@ -79,7 +82,7 @@ class ConnectorTest extends LaravelTestCase
         $producerConfigOptions = m::mock(ProducerConfigOptions::class);
 
         $connector = new Connector();
-        $handler = new class('record', $producerConfigOptions) extends AbstractProducer implements HandlerInterface {
+        $handler = new class ('record', $producerConfigOptions) extends AbstractProducer implements HandlerInterface {
             public function success(Message $message): void
             {
             }
@@ -102,7 +105,10 @@ class ConnectorTest extends LaravelTestCase
             ->andReturn($broker);
 
         // Actions
-        $result = $connector->getProducerTopic($handler, $producerConfigOptions);
+        $result = $connector->getProducerTopic(
+            $handler,
+            $producerConfigOptions
+        );
 
         // Assertions
         $this->assertInstanceOf(KafkaProducer::class, $result);

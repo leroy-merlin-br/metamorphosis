@@ -22,11 +22,12 @@ class ProducerWithAvroTest extends LaravelTestCase
     /**
      * @var string[]
      */
-    protected $records;
+    protected array $records;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->records = ['saleOrderId' => 'SALE_ORDER_ID', 'productId' => 'PRODUCT_ID'];
     }
 
@@ -110,8 +111,12 @@ class ProducerWithAvroTest extends LaravelTestCase
 
     private function haveSomeRandomMessagesProduced(): void
     {
-        $producerConfigOptionsSale = $this->createProducerConfigOptions('sale_order');
-        $producerConfigOptionsProduct = $this->createProducerConfigOptions('product');
+        $producerConfigOptionsSale = $this->createProducerConfigOptions(
+            'sale_order'
+        );
+        $producerConfigOptionsProduct = $this->createProducerConfigOptions(
+            'product'
+        );
 
         $saleOrderProducer = app(MessageProducer::class, [
             'record' => ['saleOrderId' => 'SALE_ORDER_ID'],
@@ -166,6 +171,7 @@ class ProducerWithAvroTest extends LaravelTestCase
     private function createProducerConfigOptions(string $topicId): ProducerConfigOptions
     {
         $broker = new Broker('kafka:9092', new None());
+
         return new ProducerConfigOptions(
             $topicId,
             $broker,

@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Middlewares;
 
 use AvroSchema;
@@ -35,7 +36,9 @@ class AvroSchemaDecoderTest extends LaravelTestCase
         $avroSchema = new AvroSchema('string');
         $decoder = m::mock(Schema::class);
         $clientFactory = m::mock(ClientFactory::class);
-        $cachedSchemaRegistryClient = m::mock(CachedSchemaRegistryClient::class);
+        $cachedSchemaRegistryClient = m::mock(
+            CachedSchemaRegistryClient::class
+        );
         $expected = 'my awesome message';
 
         $message = new Message();
@@ -61,7 +64,10 @@ class AvroSchemaDecoderTest extends LaravelTestCase
             ->getAvroSchema()
             ->andReturn($avroSchema);
 
-        $avroSchemaDecoder = new AvroSchemaDecoder($clientFactory, $consumerConfigOptions);
+        $avroSchemaDecoder = new AvroSchemaDecoder(
+            $clientFactory,
+            $consumerConfigOptions
+        );
 
         $result = $avroSchemaDecoder->process($consumerRecord, $closure);
 

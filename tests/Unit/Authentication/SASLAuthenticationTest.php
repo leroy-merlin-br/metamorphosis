@@ -12,7 +12,11 @@ class SASLAuthenticationTest extends LaravelTestCase
     public function testItShouldValidateAuthenticationConfigurations(): void
     {
         // Set
-        $configSaslSsl = new SaslSsl('PLAIN', 'some-username', 'some-password');
+        $configSaslSsl = new SaslSsl(
+            'PLAIN',
+            'some-username',
+            'some-password'
+        );
         $conf = new Conf();
 
         $expected = [

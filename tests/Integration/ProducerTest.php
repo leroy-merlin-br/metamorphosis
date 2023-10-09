@@ -18,22 +18,9 @@ class ProducerTest extends LaravelTestCase
 
     protected string $firstLowLevelMessage;
 
-    /**
-     * @var string
-     */
-    protected $secondLowLevelMessage;
+    protected string $secondLowLevelMessage;
 
-    /**
-     * @var string
-     */
-    protected $topicId;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->withoutAuthentication();
-        $this->topicId = 'kafka-test-'.Str::random(5);
-    }
+    protected string $topicId;
 
     /**
      * @group runProducer
@@ -66,6 +53,14 @@ class ProducerTest extends LaravelTestCase
         $this->runTheLowLevelConsumerSkippingTheFirstTwoMessagesAndLimitingToTwoMessagesConsumed();
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->withoutAuthentication();
+        $this->topicId = 'kafka-test-' . Str::random(5);
+    }
+
     protected function withoutAuthentication(): void
     {
         config(['service.broker.auth' => []]);
@@ -73,7 +68,9 @@ class ProducerTest extends LaravelTestCase
 
     protected function haveAConsumerHandlerConfigured(): void
     {
-        config(['kafka.topics.default.consumer.handler' => MessageConsumer::class]);
+        config(
+            ['kafka.topics.default.consumer.handler' => MessageConsumer::class]
+        );
     }
 
     protected function haveAConsumerPartitionConfigured(): void
@@ -145,7 +142,9 @@ class ProducerTest extends LaravelTestCase
     {
         $this->highLevelMessage = Str::random(10);
 
-        $producerConfigOptions = $this->createProducerConfigOptions($this->topicId);
+        $producerConfigOptions = $this->createProducerConfigOptions(
+            $this->topicId
+        );
         $producer = app(MessageProducer::class, [
             'record' => $this->highLevelMessage,
             'configOptions' => $producerConfigOptions,
@@ -158,7 +157,9 @@ class ProducerTest extends LaravelTestCase
 
     private function produceRecordMessage(string $record): string
     {
-        $producerConfigOptions = $this->createProducerConfigOptions('low_level');
+        $producerConfigOptions = $this->createProducerConfigOptions(
+            'low_level'
+        );
         $producer = app(MessageProducer::class, [
             'record' => $record,
             'configOptions' => $producerConfigOptions,
@@ -206,6 +207,7 @@ class ProducerTest extends LaravelTestCase
     private function createProducerConfigOptions(string $topicId): ProducerConfigOptions
     {
         $broker = new Broker('kafka:9092', new None());
+
         return new ProducerConfigOptions(
             $topicId,
             $broker,

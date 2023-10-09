@@ -9,15 +9,18 @@ abstract class AbstractConfig
 {
     protected function getBrokerConfig(string $servicesFile): array
     {
-        if (!$brokerConfig = config($servicesFile.'.broker')) {
-            throw new ConfigurationException("Broker configuration not found on '{$servicesFile}'");
+        if (!$brokerConfig = config($servicesFile . '.broker')) {
+            throw new ConfigurationException(
+                "Broker configuration not found on '{$servicesFile}'"
+            );
         }
+
         return $brokerConfig;
     }
 
     protected function getSchemaConfig(string $servicesFile): array
     {
-        return config($servicesFile.'.avro_schema', []);
+        return config($servicesFile . '.avro_schema', []);
     }
 
     protected function validate(array $config): void

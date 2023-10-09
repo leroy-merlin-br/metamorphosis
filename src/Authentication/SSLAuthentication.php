@@ -9,10 +9,7 @@ class SSLAuthentication implements AuthenticationInterface
 {
     private Conf $conf;
 
-    /**
-     * @var Ssl
-     */
-    private $configOptions;
+    private Ssl $configOptions;
 
     public function __construct(Conf $conf, Ssl $configOptions)
     {
@@ -26,7 +23,10 @@ class SSLAuthentication implements AuthenticationInterface
     {
         $this->conf->set('security.protocol', $this->configOptions->getType());
         $this->conf->set('ssl.ca.location', $this->configOptions->getCa());
-        $this->conf->set('ssl.certificate.location', $this->configOptions->getCertificate());
+        $this->conf->set(
+            'ssl.certificate.location',
+            $this->configOptions->getCertificate()
+        );
         $this->conf->set('ssl.key.location', $this->configOptions->getKey());
     }
 }

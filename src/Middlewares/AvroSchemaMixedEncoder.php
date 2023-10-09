@@ -21,18 +21,22 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
 
     private CachedSchemaRegistryClient $schemaRegistry;
 
-    /**
-     * @var ProducerConfigOptions
-     */
-    private $producerConfigOptions;
+    private ProducerConfigOptions $producerConfigOptions;
 
-    public function __construct(SchemaId $schemaIdEncoder, ClientFactory $factory, ProducerConfigOptions $producerConfigOptions)
-    {
+    public function __construct(
+        SchemaId $schemaIdEncoder,
+        ClientFactory $factory,
+        ProducerConfigOptions $producerConfigOptions
+    ) {
         if (!$producerConfigOptions->getAvroSchema()->getUrl()) {
-            throw new ConfigurationException("Avro schema url not found, it's required to use AvroSchemaEncoder Middleware");
+            throw new ConfigurationException(
+                "Avro schema url not found, it's required to use AvroSchemaEncoder Middleware"
+            );
         }
 
-        $schemaRegistry = $factory->make($producerConfigOptions->getAvroSchema());
+        $schemaRegistry = $factory->make(
+            $producerConfigOptions->getAvroSchema()
+        );
         $this->schemaIdEncoder = $schemaIdEncoder;
         $this->schemaRegistry = $schemaRegistry;
         $this->producerConfigOptions = $producerConfigOptions;
@@ -41,7 +45,10 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
     public function process(RecordInterface $record, Closure $next)
     {
         $topic = $this->producerConfigOptions->getTopicId();
-        $schema = $this->schemaRegistry->getBySubjectAndVersion("{$topic}-value", 'latest');
+        $schema = $this->schemaRegistry->getBySubjectAndVersion(
+            "{$topic}-value",
+            'latest'
+        );
         $arrayPayload = json_decode($record->getPayload(), true);
         $encodedPayload = $this->schemaIdEncoder->encode(
             $schema,

@@ -51,9 +51,9 @@ class ConsumerCommand extends BaseCommand
 
     private function writeStartingConsumer(Consumer $consumer)
     {
-        $text = 'Starting consumer for topic: '.$consumer->getTopicId().PHP_EOL;
-        $text .= ' on consumer group: '.$consumer->getConsumerGroup().PHP_EOL;
-        $text .= 'Connecting in '.$consumer->getBroker()->getConnections().PHP_EOL;
+        $text = 'Starting consumer for topic: ' . $consumer->getTopicId() . PHP_EOL;
+        $text .= ' on consumer group: ' . $consumer->getConsumerGroup() . PHP_EOL;
+        $text .= 'Connecting in ' . $consumer->getBroker()->getConnections() . PHP_EOL;
         $text .= 'Running consumer..';
 
         $this->output->writeln($text);

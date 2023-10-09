@@ -27,9 +27,15 @@ class LowLevel implements ConnectorInterface
         $consumer->addBrokers($broker->getConnections());
 
         $topicConf = $this->getTopicConfigs($configOptions);
-        $topicConsumer = $consumer->newTopic($configOptions->getTopicId(), $topicConf);
+        $topicConsumer = $consumer->newTopic(
+            $configOptions->getTopicId(),
+            $topicConf
+        );
 
-        $topicConsumer->consumeStart($configOptions->getPartition(), $configOptions->getOffset());
+        $topicConsumer->consumeStart(
+            $configOptions->getPartition(),
+            $configOptions->getOffset()
+        );
 
         return new LowLevelConsumer($topicConsumer, $configOptions);
     }
@@ -41,7 +47,10 @@ class LowLevel implements ConnectorInterface
         // Set where to start consuming messages when there is no initial offset in
         // offset store or the desired offset is out of range.
         // 'smallest': start from the beginning
-        $topicConfig->set('auto.offset.reset', $configOptions->getOffsetReset());
+        $topicConfig->set(
+            'auto.offset.reset',
+            $configOptions->getOffsetReset()
+        );
 
         return $topicConfig;
     }

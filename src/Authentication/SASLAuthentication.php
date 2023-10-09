@@ -9,10 +9,7 @@ class SASLAuthentication implements AuthenticationInterface
 {
     private Conf $conf;
 
-    /**
-     * @var SaslSsl
-     */
-    private $configOptions;
+    private SaslSsl $configOptions;
 
     public function __construct(Conf $conf, SaslSsl $configOptions)
     {
@@ -29,7 +26,10 @@ class SASLAuthentication implements AuthenticationInterface
         // The mechanisms key is optional when configuring this kind of authentication
         // If the user does not specify the mechanism, the default will be 'PLAIN'.
         // But, to make config more clear, we are asking the user every time.
-        $this->conf->set('sasl.mechanisms', $this->configOptions->getMechanisms());
+        $this->conf->set(
+            'sasl.mechanisms',
+            $this->configOptions->getMechanisms()
+        );
         $this->conf->set('sasl.username', $this->configOptions->getUsername());
         $this->conf->set('sasl.password', $this->configOptions->getPassword());
     }

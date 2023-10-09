@@ -19,7 +19,7 @@ use Metamorphosis\TopicHandler\ConfigOptions\Factories\ConsumerFactory;
 class Config extends AbstractConfig
 {
     /**
-     * @var array<string, string>
+     * @var string[]
      */
     protected array $rules = [
         'topic' => 'required',

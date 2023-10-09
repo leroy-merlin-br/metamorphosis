@@ -34,6 +34,7 @@ class ConnectorTest extends LaravelTestCase
 
         $connector = new Connector();
         $handler = new class ('record', $producerConfigOptions) extends AbstractProducer implements HandleableResponseInterface {
+            /** @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter */
             public function success(Message $message): void
             {
             }
@@ -83,6 +84,7 @@ class ConnectorTest extends LaravelTestCase
 
         $connector = new Connector();
         $handler = new class ('record', $producerConfigOptions) extends AbstractProducer implements HandlerInterface {
+            /** @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter */
             public function success(Message $message): void
             {
             }

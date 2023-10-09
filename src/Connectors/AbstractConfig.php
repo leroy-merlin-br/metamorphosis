@@ -7,6 +7,11 @@ use Metamorphosis\Exceptions\ConfigurationException;
 
 abstract class AbstractConfig
 {
+    /**
+     * @var string[]
+     */
+    protected array $rules;
+
     protected function getBrokerConfig(string $servicesFile): array
     {
         if (!$brokerConfig = config($servicesFile . '.broker')) {
@@ -15,7 +20,7 @@ abstract class AbstractConfig
             );
         }
 
-        return $brokerConfig;
+        return $brokerConfig->all();
     }
 
     protected function getSchemaConfig(string $servicesFile): array

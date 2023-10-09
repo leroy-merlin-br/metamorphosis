@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Middlewares;
 
 use AvroSchema;
@@ -27,17 +28,30 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
             'kafka-test',
             $broker,
             null,
-            new AvroSchemaConfigOptions('subjects/kafka-test-value/versions/latest', [])
+            new AvroSchemaConfigOptions(
+                'subjects/kafka-test-value/versions/latest',
+                []
+            )
         );
         $avroSchemaConfigOptions = $producerConfigOptions->getAvroSchema();
 
         $clientFactory = m::mock(ClientFactory::class);
 
-        $cachedSchemaRegistryClient = m::mock(CachedSchemaRegistryClient::class);
-        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedSchemaRegistryClient]);
+        $cachedSchemaRegistryClient = m::mock(
+            CachedSchemaRegistryClient::class
+        );
+        $schemaIdEncoder = m::mock(
+            SchemaId::class,
+            [$cachedSchemaRegistryClient]
+        );
 
         $schema = new Schema();
-        $parsedSchema = $schema->parse($avroSchema, '123', 'kafka-test-value', 'latest');
+        $parsedSchema = $schema->parse(
+            $avroSchema,
+            '123',
+            'kafka-test-value',
+            'latest'
+        );
         $record = $this->getRecord($parsedSchema->getAvroSchema());
         $producerRecord = new ProducerRecord($record, 'kafka-test');
 
@@ -62,7 +76,11 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
             ->andReturn($encodedMessage);
 
         // Actions
-        $avroSchemaMixedEncoder = new AvroSchemaMixedEncoder($schemaIdEncoder, $clientFactory, $producerConfigOptions);
+        $avroSchemaMixedEncoder = new AvroSchemaMixedEncoder(
+            $schemaIdEncoder,
+            $clientFactory,
+            $producerConfigOptions
+        );
         $result = $avroSchemaMixedEncoder->process($producerRecord, $closure);
 
         // Assertions
@@ -93,6 +111,8 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
 
     private function getSchemaFixture(): string
     {
-        return file_get_contents(__DIR__.'/../fixtures/schemas/sales_price.avsc');
+        return file_get_contents(
+            __DIR__ . '/../fixtures/schemas/sales_price.avsc'
+        );
     }
 }

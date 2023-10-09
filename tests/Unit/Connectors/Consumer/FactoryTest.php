@@ -11,6 +11,52 @@ use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
 class FactoryTest extends LaravelTestCase
 {
+    public function testItMakesManagerWithLowLevelConsumer(): void
+    {
+        // Set
+        $this->haveAConsumerWithPartitionConfigured();
+
+        $config = new Config();
+        $configConsumer = $config->make(
+            ['timeout' => 61],
+            ['topic' => 'topic_key', 'consumer_group' => 'with-partition']
+        );
+        $manager = Factory::make($configConsumer);
+
+        // Assertions
+        $this->assertInstanceOf(LowLevel::class, $manager->getConsumer());
+    }
+
+    public function testItMakesManagerWithHighLevelConsumerWhenPartitionIsNotValid(): void
+    {
+        // Set
+        $this->haveAConsumerWithoutPartitionConfigured();
+        $config = new Config();
+        $configConsumer = $config->make(
+            ['timeout' => 61, 'partition' => -1],
+            ['topic' => 'topic_key', 'consumer_group' => 'with-partition']
+        );
+        $manager = Factory::make($configConsumer);
+
+        // Assertions
+        $this->assertInstanceOf(HighLevel::class, $manager->getConsumer());
+    }
+
+    public function testItMakesHighLevelClass(): void
+    {
+        // Set
+        $this->haveAConsumerWithoutPartitionConfigured();
+        $config = new Config();
+        $configConsumer = $config->make(
+            ['timeout' => 61],
+            ['topic' => 'topic_key', 'consumer_group' => 'without-partition']
+        );
+        $manager = Factory::make($configConsumer);
+
+        // Assertions
+        $this->assertInstanceOf(HighLevel::class, $manager->getConsumer());
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -45,43 +91,6 @@ class FactoryTest extends LaravelTestCase
                 ],
             ],
         ]);
-    }
-
-    public function testItMakesManagerWithLowLevelConsumer(): void
-    {
-        // Set
-        $this->haveAConsumerWithPartitionConfigured();
-
-        $config = new Config();
-        $configConsumer = $config->make(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
-        $manager = Factory::make($configConsumer);
-
-        // Assertions
-        $this->assertInstanceOf(LowLevel::class, $manager->getConsumer());
-    }
-
-    public function testItMakesManagerWithHighLevelConsumerWhenPartitionIsNotValid(): void
-    {
-        // Set
-        $this->haveAConsumerWithoutPartitionConfigured();
-        $config = new Config();
-        $configConsumer = $config->make(['timeout' => 61, 'partition' => -1], ['topic' => 'topic_key', 'consumer_group' => 'with-partition']);
-        $manager = Factory::make($configConsumer);
-
-        // Assertions
-        $this->assertInstanceOf(HighLevel::class, $manager->getConsumer());
-    }
-
-    public function testItMakesHighLevelClass(): void
-    {
-        // Set
-        $this->haveAConsumerWithoutPartitionConfigured();
-        $config = new Config();
-        $configConsumer = $config->make(['timeout' => 61], ['topic' => 'topic_key', 'consumer_group' => 'without-partition']);
-        $manager = Factory::make($configConsumer);
-
-        // Assertions
-        $this->assertInstanceOf(HighLevel::class, $manager->getConsumer());
     }
 
     private function haveAConsumerWithPartitionConfigured()

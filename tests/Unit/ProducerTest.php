@@ -41,7 +41,7 @@ class ProducerTest extends LaravelTestCase
             $topic,
             $broker
         );
-        $producerHandler = new class($record, $producerConfigOptions, $topic) extends AbstractProducer {
+        $producerHandler = new class ($record, $producerConfigOptions, $topic) extends AbstractProducer {
         };
 
         // Expectations
@@ -85,7 +85,7 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $producerHandler = new class($record, $producerConfigOptions, $topic) extends AbstractProducer {
+        $producerHandler = new class ($record, $producerConfigOptions, $topic) extends AbstractProducer {
         };
 
         // Expectations
@@ -134,7 +134,7 @@ class ProducerTest extends LaravelTestCase
             500,
             1
         );
-        $producerHandler = new class($record, $producerConfigOptions, $topic) extends AbstractProducer {
+        $producerHandler = new class ($record, $producerConfigOptions, $topic) extends AbstractProducer {
         };
 
         // Expectations
@@ -187,7 +187,7 @@ class ProducerTest extends LaravelTestCase
             1
         );
 
-        $producerHandler = new class($record, $producerConfigOptions, $topic) extends AbstractProducer {
+        $producerHandler = new class ($record, $producerConfigOptions, $topic) extends AbstractProducer {
         };
 
         // Expectations
@@ -236,7 +236,7 @@ class ProducerTest extends LaravelTestCase
             500,
             1
         );
-        $producerHandler = new class($record, $producerConfigOptions, $topic) extends AbstractProducer {
+        $producerHandler = new class ($record, $producerConfigOptions, $topic) extends AbstractProducer {
         };
 
         // Expectations

@@ -13,7 +13,11 @@ class SSLAuthenticationTest extends LaravelTestCase
     {
         // Set
         $conf = new Conf();
-        $configSsl = new Ssl('path/to/ca', 'path/to/certificate', 'path/to/key');
+        $configSsl = new Ssl(
+            'path/to/ca',
+            'path/to/certificate',
+            'path/to/key'
+        );
         $expected = [
             'security.protocol' => 'ssl',
             'ssl.ca.location' => 'path/to/ca',

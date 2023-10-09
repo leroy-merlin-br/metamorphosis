@@ -36,7 +36,10 @@ class LowLevelTest extends LaravelTestCase
         $consumerTopic = m::mock(ConsumerTopic::class);
         $message = new Message();
 
-        $lowLevelConsumer = new LowLevel($consumerTopic, $consumerConfigOptions);
+        $lowLevelConsumer = new LowLevel(
+            $consumerTopic,
+            $consumerConfigOptions
+        );
 
         // Expectations
         $consumerTopic->expects()

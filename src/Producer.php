@@ -36,20 +36,36 @@ class Producer
 
         $middlewares = $producerConfigOptions->getMiddlewares();
         foreach ($middlewares as &$middleware) {
-            $middleware = is_string($middleware) ? app($middleware, ['producerConfigOptions' => $producerConfigOptions]) : $middleware;
+            $middleware = is_string($middleware)
+                ? app(
+                    $middleware,
+                    ['producerConfigOptions' => $producerConfigOptions]
+                )
+                : $middleware;
         }
 
-        $middlewares[] = $this->getProducerMiddleware($producerHandler, $producerConfigOptions);
+        $middlewares[] = $this->getProducerMiddleware(
+            $producerHandler,
+            $producerConfigOptions
+        );
 
         return new Dispatcher($middlewares);
     }
 
-    public function getProducerMiddleware(HandlerInterface $producerHandler, ProducerConfigOptions $producerConfigOptions): ProducerMiddleware
-    {
-        $producer = $this->connector->getProducerTopic($producerHandler, $producerConfigOptions);
+    public function getProducerMiddleware(
+        HandlerInterface $producerHandler,
+        ProducerConfigOptions $producerConfigOptions
+    ): ProducerMiddleware {
+        $producer = $this->connector->getProducerTopic(
+            $producerHandler,
+            $producerConfigOptions
+        );
 
         $topic = $producer->newTopic($producerConfigOptions->getTopicId());
-        $poll = app(Poll::class, ['producer' => $producer, 'producerConfigOptions' => $producerConfigOptions]);
+        $poll = app(
+            Poll::class,
+            ['producer' => $producer, 'producerConfigOptions' => $producerConfigOptions]
+        );
         $partition = $producerConfigOptions->getPartition();
 
         return app(

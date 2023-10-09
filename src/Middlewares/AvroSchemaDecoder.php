@@ -16,10 +16,14 @@ class AvroSchemaDecoder implements MiddlewareInterface
     public function __construct(ClientFactory $factory, ConsumerConfigOptions $consumerConfigOptions)
     {
         if (!$consumerConfigOptions->getAvroSchema()->getUrl()) {
-            throw new ConfigurationException("Avro schema url not found, it's required to use AvroSchemaDecoder Middleware");
+            throw new ConfigurationException(
+                "Avro schema url not found, it's required to use AvroSchemaDecoder Middleware"
+            );
         }
 
-        $this->decoder = new MessageDecoder($factory->make($consumerConfigOptions->getAvroSchema()));
+        $this->decoder = new MessageDecoder(
+            $factory->make($consumerConfigOptions->getAvroSchema())
+        );
     }
 
     public function process(RecordInterface $record, Closure $next)

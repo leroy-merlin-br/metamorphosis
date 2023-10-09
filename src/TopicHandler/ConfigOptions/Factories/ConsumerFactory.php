@@ -25,7 +25,10 @@ class ConsumerFactory
         $consumer = $topicData['consumer'];
         $topicData['consumerGroup'] = $consumer['consumer_group'];
 
-        return array_merge_recursive($topicData, self::convertConfigAttributes($consumer));
+        return array_merge_recursive(
+            $topicData,
+            self::convertConfigAttributes($consumer)
+        );
     }
 
     private static function convertConfigAttributes(array $consumerConfig): array

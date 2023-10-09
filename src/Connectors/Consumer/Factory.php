@@ -26,14 +26,40 @@ class Factory
 
         $middlewares = $configOptions->getMiddlewares();
         foreach ($middlewares as &$middleware) {
-            $middleware = is_string($middleware) ? app($middleware, ['consumerConfigOptions' => $configOptions]) : $middleware;
+            $middleware = is_string($middleware)
+                ? app(
+                    $middleware,
+                    ['consumerConfigOptions' => $configOptions]
+                )
+                : $middleware;
         }
 
-        $middlewares[] = app(ConsumerMiddleware::class, ['consumerTopicHandler' => $handler]);
+        $middlewares[] = app(
+            ConsumerMiddleware::class,
+            ['consumerTopicHandler' => $handler]
+        );
 
         $dispatcher = self::getMiddlewareDispatcher($middlewares);
 
-        return new Manager($consumer, $handler, $dispatcher, $autoCommit, $commitAsync);
+        return new Manager(
+            $consumer,
+            $handler,
+            $dispatcher,
+            $autoCommit,
+            $commitAsync
+        );
+    }
+
+    public static function getConsumer(bool $autoCommit, ConsumerConfigOptions $configOptions): ConsumerInterface
+    {
+        if (self::requiresPartition($configOptions)) {
+            return app(LowLevel::class)->getConsumer(
+                $autoCommit,
+                $configOptions
+            );
+        }
+
+        return app(HighLevel::class)->getConsumer($autoCommit, $configOptions);
     }
 
     protected static function requiresPartition(ConsumerConfigOptions $configOptions): bool
@@ -41,15 +67,6 @@ class Factory
         $partition = $configOptions->getPartition();
 
         return !is_null($partition) && $partition >= 0;
-    }
-
-    public static function getConsumer(bool $autoCommit, ConsumerConfigOptions $configOptions): ConsumerInterface
-    {
-        if (self::requiresPartition($configOptions)) {
-            return app(LowLevel::class)->getConsumer($autoCommit, $configOptions);
-        }
-
-        return app(HighLevel::class)->getConsumer($autoCommit, $configOptions);
     }
 
     private static function getMiddlewareDispatcher(array $middlewares): Dispatcher

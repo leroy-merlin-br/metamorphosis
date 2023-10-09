@@ -1,4 +1,5 @@
 <?php
+
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
@@ -41,9 +42,9 @@ class ConfigOptionsCommand extends BaseCommand
 
     private function writeStartingConsumer(ConfigOptions $configOptions)
     {
-        $text = 'Starting consumer for topic: '.$configOptions->getTopicId().PHP_EOL;
-        $text .= ' on consumer group: '.$configOptions->getConsumerGroup().PHP_EOL;
-        $text .= 'Connecting in '.$configOptions->getBroker()->getConnections().PHP_EOL;
+        $text = 'Starting consumer for topic: ' . $configOptions->getTopicId() . PHP_EOL;
+        $text .= ' on consumer group: ' . $configOptions->getConsumerGroup() . PHP_EOL;
+        $text .= 'Connecting in ' . $configOptions->getBroker()->getConnections() . PHP_EOL;
         $text .= 'Running consumer..';
 
         $this->output->writeln($text);

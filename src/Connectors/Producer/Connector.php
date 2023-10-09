@@ -12,8 +12,10 @@ use RdKafka\Producer as KafkaProducer;
 
 class Connector
 {
-    public function getProducerTopic(HandlerInterface $handler, ProducerConfigOptions $producerConfigOptions): KafkaProducer
-    {
+    public function getProducerTopic(
+        HandlerInterface $handler,
+        ProducerConfigOptions $producerConfigOptions
+    ): KafkaProducer {
         $conf = resolve(Conf::class);
 
         if ($this->canHandleResponse($handler)) {

@@ -74,7 +74,11 @@ class Config extends AbstractConfig
             }
         }
 
-        return ConsumerFactory::make($brokerConfig, $topicConfig, $schemaConfig);
+        return ConsumerFactory::make(
+            $brokerConfig,
+            $topicConfig,
+            $schemaConfig
+        );
     }
 
     /**

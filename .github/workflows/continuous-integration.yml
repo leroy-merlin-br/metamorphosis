@@ -18,7 +18,7 @@ jobs:
           - '8.0'
           - '8.1'
     env:
-      KAFKA_BROKER_CONNECTIONS: 'kafka:9092'
+      KAFKA_BROKER_CONNECTIONS: 'localhost:9092'
     services:
       zookeeper:
         image: bitnami/zookeeper

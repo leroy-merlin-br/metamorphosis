@@ -184,22 +184,4 @@ class ManagerTest extends LaravelTestCase
         $runner->handleMessage();
         $runner->handleMessage();
     }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $configManager = new ConsumerConfigManager();
-        $configManager->set([
-            'connections' => 'kafka:2019',
-            'topic' => 'topic_key',
-            'broker' => 'default',
-            'offset_reset' => 'earliest',
-            'offset' => 0,
-            'timeout' => 30,
-            'handler' => ConsumerHandlerDummy::class,
-            'middlewares' => [],
-            'consumer_group' => 'consumer-id',
-        ]);
-    }
 }

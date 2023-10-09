@@ -68,8 +68,8 @@ class PollTest extends LaravelTestCase
             ->poll(0);
 
         $kafkaProducer->expects()
-            ->flush(1000)
-            ->times(3)
+            ->flush(100)
+            ->times(10)
             ->andReturn(1);
 
         $this->expectException(RuntimeException::class);

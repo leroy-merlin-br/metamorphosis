@@ -37,20 +37,4 @@ class ProducerTest extends LaravelTestCase
         $producerHandler = new Producer($producerTopic, $poll, 1);
         $producerHandler->process($record, $closure);
     }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $configManager = new ProducerConfigManager();
-        $configManager->set([
-            'topic_id' => 'topic_name',
-            'timeout' => 4000,
-            'is_async' => true,
-            'max_poll_records' => 500,
-            'flush_attempts' => 10,
-            'required_acknowledgment' => true,
-            'partition' => 0,
-        ]);
-    }
 }

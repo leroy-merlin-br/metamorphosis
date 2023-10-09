@@ -11,16 +11,19 @@ class ConfigOptionsCommand extends BaseCommand
 {
     /**
      * @var {inheritdoc}
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $name = 'kafka:consume-config-class';
 
     /**
      * @var {inheritdoc}
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $description = 'Consumes something with a based class config';
 
     /**
      * @var {inheritdoc}
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     protected $signature = 'kafka:consume-config-class
         {handler : handler.}

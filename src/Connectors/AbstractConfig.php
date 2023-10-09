@@ -20,7 +20,7 @@ abstract class AbstractConfig
             );
         }
 
-        return $brokerConfig->all();
+        return $brokerConfig;
     }
 
     protected function getSchemaConfig(string $servicesFile): array

@@ -12,6 +12,9 @@ abstract class AbstractConfig
      */
     protected array $rules;
 
+    /**
+     * @psalm-suppress InvalidReturnStatement
+     */
     protected function getBrokerConfig(string $servicesFile): array
     {
         if (!$brokerConfig = config($servicesFile . '.broker')) {

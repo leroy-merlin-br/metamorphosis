@@ -206,7 +206,8 @@ class ProducerTest extends LaravelTestCase
 
     private function createProducerConfigOptions(string $topicId): ProducerConfigOptions
     {
-        $broker = new Broker('kafka:9092', new None());
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $broker = new Broker($connections, new None());
 
         return new ProducerConfigOptions(
             $topicId,

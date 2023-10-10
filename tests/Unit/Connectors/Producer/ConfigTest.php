@@ -14,8 +14,9 @@ class ConfigTest extends LaravelTestCase
     public function testShouldValidateProducerConfig(): void
     {
         // Set
-        $config = new Config();
+
         $topicId = 'default';
+        $config = new Config();
 
         $expected = [
             'timeout' => 10000,

@@ -52,7 +52,7 @@ class ConnectorTest extends LaravelTestCase
             ->withAnyArgs();
 
         $conf->expects()
-            ->set('metadata.broker.list', 0);
+            ->set('metadata.broker.list', $connections);
 
         $producerConfigOptions->expects()
             ->getBroker()
@@ -102,7 +102,7 @@ class ConnectorTest extends LaravelTestCase
             ->never();
 
         $conf->expects()
-            ->set('metadata.broker.list', 0);
+            ->set('metadata.broker.list', $connections);
 
         $producerConfigOptions->expects()
             ->getBroker()

@@ -31,6 +31,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
 
         // I Expect That
         $this->myMessagesHaveBeenLogged();
+        $this->expectNotToPerformAssertions();
 
         // When I
         $this->runTheConsumer();

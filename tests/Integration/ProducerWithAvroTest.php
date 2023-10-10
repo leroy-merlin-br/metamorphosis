@@ -41,6 +41,7 @@ class ProducerWithAvroTest extends LaravelTestCase
 
         // I expect that
         $this->myMessagesHaveBeenLogged();
+        $this->expectNotToPerformAssertions();
     }
 
     protected function haveAHandlerConfigured(): void

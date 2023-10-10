@@ -29,7 +29,8 @@ class ConnectorTest extends LaravelTestCase
             m::mock(KafkaProducer::class)
         );
 
-        $broker = new Broker('kafka:9092', new None());
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $broker = new Broker($connections, new None());
         $producerConfigOptions = m::mock(ProducerConfigOptions::class);
 
         $connector = new Connector();
@@ -79,7 +80,8 @@ class ConnectorTest extends LaravelTestCase
             m::mock(KafkaProducer::class)
         );
 
-        $broker = new Broker('kafka:9092', new None());
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $broker = new Broker($connections, new None());
         $producerConfigOptions = m::mock(ProducerConfigOptions::class);
 
         $connector = new Connector();

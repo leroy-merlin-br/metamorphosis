@@ -2,9 +2,9 @@
 
 namespace Metamorphosis\TopicHandler\Consumer;
 
-use Exception;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
+use Throwable;
 
 abstract class AbstractHandler implements Handler
 {
@@ -29,7 +29,7 @@ abstract class AbstractHandler implements Handler
     /**
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
-    public function failed(Exception $exception): void
+    public function failed(Throwable $throwable): void
     {
     }
 

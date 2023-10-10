@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Dummies;
 
-use Exception;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\Consumer\AbstractHandler;
+use Throwable;
 
 class ConsumerHandlerDummy extends AbstractHandler
 {
@@ -12,7 +12,7 @@ class ConsumerHandlerDummy extends AbstractHandler
     {
     }
 
-    public function failed(Exception $exception): void
+    public function failed(Throwable $throwable): void
     {
     }
 }

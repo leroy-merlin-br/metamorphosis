@@ -2,7 +2,6 @@
 
 namespace Metamorphosis\Connectors\Consumer;
 
-use Exception;
 use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
@@ -10,6 +9,7 @@ use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Record\ConsumerRecord;
 use Metamorphosis\TopicHandler\Consumer\Handler as ConsumerHandler;
 use RdKafka\Message;
+use Throwable;
 
 class Manager
 {
@@ -65,8 +65,8 @@ class Manager
             $this->consumerHandler->warning($exception);
 
             return;
-        } catch (Exception $exception) {
-            $this->consumerHandler->failed($exception);
+        } catch (Throwable $throwable) {
+            $this->consumerHandler->failed($throwable);
 
             return;
         }

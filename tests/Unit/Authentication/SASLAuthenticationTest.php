@@ -3,7 +3,7 @@
 namespace Tests\Unit\Authentication;
 
 use Metamorphosis\Authentication\SASLAuthentication;
-use Metamorphosis\ConsumerConfigManager;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\SaslSsl;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
@@ -12,16 +12,13 @@ class SASLAuthenticationTest extends LaravelTestCase
     public function testItShouldValidateAuthenticationConfigurations(): void
     {
         // Set
-        $configManager = new ConsumerConfigManager();
-        $configManager->set([
-            'auth' => [
-                'type' => 'sasl_ssl',
-                'mechanisms' => 'PLAIN',
-                'username' => 'some-username',
-                'password' => 'some-password',
-            ],
-        ]);
+        $configSaslSsl = new SaslSsl(
+            'PLAIN',
+            'some-username',
+            'some-password'
+        );
         $conf = new Conf();
+
         $expected = [
             'security.protocol' => 'sasl_ssl',
             'sasl.username' => 'some-username',
@@ -30,7 +27,7 @@ class SASLAuthenticationTest extends LaravelTestCase
         ];
 
         // Actions
-        new SASLAuthentication($conf, $configManager);
+        new SASLAuthentication($conf, $configSaslSsl);
 
         // Assertions
         $this->assertArraySubset($expected, $conf->dump());

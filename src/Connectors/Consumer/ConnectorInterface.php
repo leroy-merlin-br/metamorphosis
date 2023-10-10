@@ -2,10 +2,10 @@
 
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Consumers\ConsumerInterface;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConfigOptions;
 
 interface ConnectorInterface
 {
-    public function getConsumer(bool $autoCommit, AbstractConfigManager $configManager): ConsumerInterface;
+    public function getConsumer(bool $autoCommit, ConfigOptions $configOptions): ConsumerInterface;
 }

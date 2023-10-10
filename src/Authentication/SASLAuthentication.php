@@ -2,44 +2,35 @@
 
 namespace Metamorphosis\Authentication;
 
-use Metamorphosis\AbstractConfigManager;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\SaslSsl;
 use RdKafka\Conf;
 
 class SASLAuthentication implements AuthenticationInterface
 {
     private Conf $conf;
 
-    private AbstractConfigManager $configManager;
+    private SaslSsl $configOptions;
 
-    public function __construct(Conf $conf, AbstractConfigManager $configManager)
+    public function __construct(Conf $conf, SaslSsl $configOptions)
     {
         $this->conf = $conf;
-        $this->configManager = $configManager;
+        $this->configOptions = $configOptions;
 
         $this->authenticate();
     }
 
     private function authenticate(): void
     {
-        $this->conf->set(
-            'security.protocol',
-            $this->configManager->get('auth.type')
-        );
+        $this->conf->set('security.protocol', $this->configOptions->getType());
 
         // The mechanisms key is optional when configuring this kind of authentication
         // If the user does not specify the mechanism, the default will be 'PLAIN'.
         // But, to make config more clear, we are asking the user every time.
         $this->conf->set(
             'sasl.mechanisms',
-            $this->configManager->get('auth.mechanisms')
+            $this->configOptions->getMechanisms()
         );
-        $this->conf->set(
-            'sasl.username',
-            $this->configManager->get('auth.username')
-        );
-        $this->conf->set(
-            'sasl.password',
-            $this->configManager->get('auth.password')
-        );
+        $this->conf->set('sasl.username', $this->configOptions->getUsername());
+        $this->conf->set('sasl.password', $this->configOptions->getPassword());
     }
 }

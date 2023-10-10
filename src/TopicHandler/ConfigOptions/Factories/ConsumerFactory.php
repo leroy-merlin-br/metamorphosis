@@ -22,20 +22,17 @@ class ConsumerFactory
     private static function getConsumerGroupConfig(array $topicData): array
     {
         $topicData['topicId'] = $topicData['topic_id'];
+        $consumer = $topicData['consumer'];
+        $topicData['consumerGroup'] = $consumer['consumer_group'];
 
-        $consumer = current($topicData['consumer']);
-        $topicData['consumerGroup'] = key($consumer);
-
-        return array_merge(
+        return array_merge_recursive(
             $topicData,
             self::convertConfigAttributes($consumer)
         );
     }
 
-    private static function convertConfigAttributes(array $topic): array
+    private static function convertConfigAttributes(array $consumerConfig): array
     {
-        $consumerConfig = current($topic);
-
         if (isset($consumerConfig['auto_commit'])) {
             $consumerConfig['autoCommit'] = $consumerConfig['auto_commit'];
         }

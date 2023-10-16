@@ -14,7 +14,7 @@ class HighLevel implements ConnectorInterface
     public function getConsumer(bool $autoCommit, ConfigOptions $configOptions): ConsumerInterface
     {
         $conf = $this->getConf($configOptions);
-        $maxPollIntervalMs = (int) $configOptions->getTimeout();
+        $maxPollIntervalMs = $configOptions->getMaxPollInterval();
         $conf->set('group.id', $configOptions->getConsumerGroup());
         $conf->set('auto.offset.reset', $configOptions->getOffsetReset());
         if (!$autoCommit) {
@@ -22,7 +22,7 @@ class HighLevel implements ConnectorInterface
         }
         $conf->set(
             'max.poll.interval.ms',
-            $maxPollIntervalMs ?: 300000
+            $maxPollIntervalMs
         );
 
         $consumer = app(KafkaConsumer::class, ['conf' => $conf]);

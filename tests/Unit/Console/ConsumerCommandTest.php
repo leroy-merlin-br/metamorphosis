@@ -131,7 +131,6 @@ class ConsumerCommandTest extends LaravelTestCase
 
         $this->artisan($command, $parameters);
     }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -146,6 +145,7 @@ class ConsumerCommandTest extends LaravelTestCase
                             'offset_reset' => 'earliest',
                             'handler' => ConsumerHandlerDummy::class,
                             'timeout' => 123,
+                            'max_poll_interval_ms' => 300000,
                         ],
                     ],
                 ],

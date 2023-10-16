@@ -44,6 +44,10 @@ return [
 
                 // An array of middlewares applied only for this consumer_group
                 'middlewares' => [],
+
+                // A max interval for consumer to make poll calls. That means: how much
+                // time we need to wait for poll calls until consider the consumer has inactive.
+                'max_poll_interval_ms' => 300000,
             ],
 
             'producer' => [

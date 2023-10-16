@@ -53,6 +53,11 @@ class ConsumerFactory
             $consumerConfig['offsetReset'] = $consumerConfig['offset_reset'];
         }
 
+
+        if (isset($consumerConfig['max_poll_interval_ms'])) {
+            $consumerConfig['maxPollInterval'] = $consumerConfig['max_poll_interval_ms'];
+        }
+
         return $consumerConfig;
     }
 }

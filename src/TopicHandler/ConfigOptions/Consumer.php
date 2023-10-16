@@ -138,6 +138,7 @@ class Consumer
             'auto_commit' => $this->isAutoCommit(),
             'commit_async' => $this->isCommitASync(),
             'offset_reset' => $this->getOffsetReset(),
+            'max_poll_interval' => $this->getMaxPollInterval(),
         ];
 
         if ($avroSchema = $this->getAvroSchema()) {

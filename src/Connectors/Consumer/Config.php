@@ -91,14 +91,9 @@ class Config extends AbstractConfig
             throw new ConfigurationException("Topic '{$topicId}' not found");
         }
 
-        $globalMiddlewares = config(
+        $topicConfig['middlewares'] = config(
             'kafka.middlewares.consumer',
             []
-        );
-
-        $topicConfig['middlewares'] = array_merge(
-            $globalMiddlewares,
-            $topicConfig['consumer']['middlewares'] ?? []
         );
 
         return $topicConfig;

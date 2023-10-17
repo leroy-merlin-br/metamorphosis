@@ -84,7 +84,7 @@ class Config extends AbstractConfig
     /**
      * @psalm-suppress InvalidReturnStatement
      */
-    protected function getTopicConfig(string $configName, string $topicId): array
+    private function getTopicConfig(string $configName, string $topicId): array
     {
         $topicConfig = config($configName . '.topics.' . $topicId);
         if (!$topicConfig) {

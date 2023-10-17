@@ -84,26 +84,23 @@ class Config extends AbstractConfig
     /**
      * @psalm-suppress InvalidReturnStatement
      */
-    private function getTopicConfig(string $configName, string $topicId): array
+    protected function getTopicConfig(string $configName, string $topicId): array
     {
         $topicConfig = config($configName . '.topics.' . $topicId);
         if (!$topicConfig) {
             throw new ConfigurationException("Topic '{$topicId}' not found");
         }
 
-        $topicConfig['middlewares'] = $this->getMiddlewares(
-            $configName,
-            $topicConfig
+        $globalMiddlewares = config(
+            'kafka.middlewares.consumer',
+            []
+        );
+
+        $topicConfig['middlewares'] = array_merge(
+            $globalMiddlewares,
+            $topicConfig['consumer']['middlewares'] ?? []
         );
 
         return $topicConfig;
-    }
-
-    private function getMiddlewares(string $configName, array $topicConfig): array
-    {
-        return array_merge(
-            config($configName . '.middlewares.consumer', []),
-            $topicConfig['consumer']['middlewares'] ?? []
-        );
     }
 }

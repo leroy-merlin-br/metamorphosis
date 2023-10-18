@@ -25,7 +25,7 @@ class ConsumerTest extends LaravelTestCase
             [],
             200,
             false,
-            true
+            true,
         );
 
         $expected = [
@@ -41,6 +41,7 @@ class ConsumerTest extends LaravelTestCase
             'auto_commit' => false,
             'commit_async' => true,
             'offset_reset' => 'smallest',
+            'max_poll_interval_ms' => 300000,
         ];
 
         // Actions

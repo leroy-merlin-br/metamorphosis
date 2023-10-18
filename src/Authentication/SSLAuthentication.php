@@ -2,40 +2,31 @@
 
 namespace Metamorphosis\Authentication;
 
-use Metamorphosis\AbstractConfigManager;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\Ssl;
 use RdKafka\Conf;
 
 class SSLAuthentication implements AuthenticationInterface
 {
     private Conf $conf;
 
-    private AbstractConfigManager $configManager;
+    private Ssl $configOptions;
 
-    public function __construct(Conf $conf, AbstractConfigManager $configManager)
+    public function __construct(Conf $conf, Ssl $configOptions)
     {
         $this->conf = $conf;
-        $this->configManager = $configManager;
+        $this->configOptions = $configOptions;
 
         $this->authenticate();
     }
 
     private function authenticate(): void
     {
-        $this->conf->set(
-            'security.protocol',
-            $this->configManager->get('auth.type')
-        );
-        $this->conf->set(
-            'ssl.ca.location',
-            $this->configManager->get('auth.ca')
-        );
+        $this->conf->set('security.protocol', $this->configOptions->getType());
+        $this->conf->set('ssl.ca.location', $this->configOptions->getCa());
         $this->conf->set(
             'ssl.certificate.location',
-            $this->configManager->get('auth.certificate')
+            $this->configOptions->getCertificate()
         );
-        $this->conf->set(
-            'ssl.key.location',
-            $this->configManager->get('auth.key')
-        );
+        $this->conf->set('ssl.key.location', $this->configOptions->getKey());
     }
 }

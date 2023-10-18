@@ -3,12 +3,12 @@
 namespace Metamorphosis\Middlewares;
 
 use Closure;
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Serializer\Encoders\SchemaId;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\Record\RecordInterface;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 
 /**
  * Fetches a schema for a topic by subject and version (currently only 'latest')
@@ -21,30 +21,34 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
 
     private CachedSchemaRegistryClient $schemaRegistry;
 
-    private AbstractConfigManager $configManager;
+    private ProducerConfigOptions $producerConfigOptions;
 
-    public function __construct(SchemaId $schemaIdEncoder, ClientFactory $factory, AbstractConfigManager $configManager)
-    {
-        if (!$configManager->get('url')) {
+    public function __construct(
+        SchemaId $schemaIdEncoder,
+        ClientFactory $factory,
+        ProducerConfigOptions $producerConfigOptions
+    ) {
+        if (!$producerConfigOptions->getAvroSchema()->getUrl()) {
             throw new ConfigurationException(
                 "Avro schema url not found, it's required to use AvroSchemaEncoder Middleware"
             );
         }
 
-        $schemaRegistry = $factory->make($configManager);
+        $schemaRegistry = $factory->make(
+            $producerConfigOptions->getAvroSchema()
+        );
         $this->schemaIdEncoder = $schemaIdEncoder;
         $this->schemaRegistry = $schemaRegistry;
-        $this->configManager = $configManager;
+        $this->producerConfigOptions = $producerConfigOptions;
     }
 
     public function process(RecordInterface $record, Closure $next)
     {
-        $topic = $this->configManager->get('topic_id');
+        $topic = $this->producerConfigOptions->getTopicId();
         $schema = $this->schemaRegistry->getBySubjectAndVersion(
             "{$topic}-value",
             'latest'
         );
-
         $arrayPayload = json_decode($record->getPayload(), true);
         $encodedPayload = $this->schemaIdEncoder->encode(
             $schema,

@@ -6,15 +6,31 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Facades\Log;
 use Metamorphosis\Facades\Metamorphosis;
 use Metamorphosis\Middlewares\AvroSchemaDecoder;
 use Metamorphosis\Middlewares\AvroSchemaMixedEncoder;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Tests\Integration\Dummies\MessageConsumer;
 use Tests\Integration\Dummies\MessageProducer;
 use Tests\LaravelTestCase;
 
 class ProducerWithAvroTest extends LaravelTestCase
 {
+    /**
+     * @var string[]
+     */
+    protected array $records;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->records = ['saleOrderId' => 'SALE_ORDER_ID', 'productId' => 'PRODUCT_ID'];
+    }
+
     public function testShouldRunAProducerMessagesWithAAvroSchema(): void
     {
         // Given That I
@@ -22,6 +38,9 @@ class ProducerWithAvroTest extends LaravelTestCase
 
         // When I
         $this->haveSomeRandomMessagesProduced();
+
+        // I expect that
+        $this->myMessagesHaveBeenLogged();
         $this->expectNotToPerformAssertions();
     }
 
@@ -93,14 +112,21 @@ class ProducerWithAvroTest extends LaravelTestCase
 
     private function haveSomeRandomMessagesProduced(): void
     {
-        $saleOrderProducer = app(
-            MessageProducer::class,
-            ['record' => ['saleOrderId' => 'SALE_ORDER_ID'], 'topic' => 'sale_order']
+        $producerConfigOptionsSale = $this->createProducerConfigOptions(
+            'sale_order'
         );
-        $productProducer = app(
-            MessageProducer::class,
-            ['record' => ['productId' => 'PRODUCT_ID'], 'topic' => 'product']
+        $producerConfigOptionsProduct = $this->createProducerConfigOptions(
+            'product'
         );
+
+        $saleOrderProducer = app(MessageProducer::class, [
+            'record' => ['saleOrderId' => 'SALE_ORDER_ID'],
+            'configOptions' => $producerConfigOptionsSale,
+        ]);
+        $productProducer = app(MessageProducer::class, [
+            'record' => ['productId' => 'PRODUCT_ID'],
+            'configOptions' => $producerConfigOptionsProduct,
+        ]);
 
         $saleOrderSchemaResponse = '{
            "subject":"sale_order-value",
@@ -129,7 +155,34 @@ class ProducerWithAvroTest extends LaravelTestCase
 
         $productDispatcher = Metamorphosis::build($productProducer);
         $productDispatcher->handle($productProducer->createRecord());
+    }
 
-        $saleOrderDispatcher->handle($saleOrderProducer->createRecord());
+    private function myMessagesHaveBeenLogged(): void
+    {
+        $this->setLogExpectationsFor($this->records['saleOrderId']);
+        $this->setLogExpectationsFor($this->records['productId']);
+    }
+
+    private function setLogExpectationsFor(string $message): void
+    {
+        Log::shouldReceive('info')
+            ->with($message);
+    }
+
+    private function createProducerConfigOptions(string $topicId): ProducerConfigOptions
+    {
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $broker = new Broker($connections, new None());
+
+        return new ProducerConfigOptions(
+            $topicId,
+            $broker,
+            null,
+            null,
+            [],
+            2000,
+            false,
+            true
+        );
     }
 }

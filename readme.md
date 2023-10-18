@@ -15,6 +15,7 @@
 - [Installation](#installation)
 - [Quick Usage Guide](docs/quick-usage.md)
 - [Advanced Usage Guide](docs/advanced.md)
+- [Upgrade Guide](docs/upgrade.md)
 - [Contributing](docs/CONTRIBUTING.md)
 - [License](#license)
 

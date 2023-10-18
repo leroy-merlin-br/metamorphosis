@@ -136,8 +136,7 @@ If you wish, you may set a middleware to run of a topic level or a consumer grou
 ],
 ```
 
-The order matters here, they'll be execute as queue, from the most global scope to the most specific (global scope > topic scope > group_consumers scope).
-
+The order matters here, they'll execute as queue, from the most global scope to the most specific (global scope > topic scope > group_consumers scope).
 
 <a name="schemas"></a>
 ### Schemas
@@ -181,10 +180,17 @@ $ php artisan make:kafka-consumer PriceUpdateHandler
 This will create a KafkaConsumer class inside the application, on the `app/Kafka/Consumers/` directory.
 
 There, you'll have a `handler` method, which will send all records from the topic to the Consumer.
-Methods will be available for handling exceptions:
+
+Available methods:
+
  - `warning` method will be call whenever something not critical is received from the topic.
     Like a message informing that there's no more records to consume.
- - `failure` method will be call whenever something critical happens, like an error to decode the record.
+
+
+ - `failure` will be call whenever something critical happens, like an error to decode the record.
+
+
+ - `finished`  will be call when queue finishes
 
 ```php
 use App\Repository;
@@ -230,9 +236,13 @@ class PriceUpdateHandler extends AbstractHandler
     {
         // handle failure exception
     }
+    
+    public function finished(): void
+    {
+        //handle queue end
+    }    
 }
 ```
-
 
 <a name="commands-middleware"></a>
 #### Creating Middleware
@@ -275,29 +285,42 @@ stdout_logfile=/var/log/default/kafka-consumer-price-update.log
 
 Although you can run this simple command, it provides some options you can pass to make it more flexible to your needs.
 
-- `--broker=`
-
-    Sometimes, you may want to change which broker the consumer should connect to (maybe for testing/debug purposes).
-    For that, you just nedd to call the `--broker` option with another broker connection key already set in the `config/kafka.php` file.
-
-    `$ php artisan kafka:consume price-update --broker='some-other-broker'`
-
 - `--offset=`
 
     And if you need to start the consumption of a topic in a specific offset (it can be useful for debug purposes)
     you can pass the `--offset=` option, but for this, it will be required to specify the partition too.
 
-    `$ php artisan kafka:consume price-update --partition=2 --offset=34`
+
+    $ php artisan kafka:consume price-update --partition=2 --offset=34
+
 
 - `--partition=`
 
-    If you wish do specify in which partition the consumer must be attached, you can set the option `--partition=`.
+    Set in which partition the consumer must be attached.
 
-    `$ php artisan kafka:consume price-update --partition=2 --offset=34`
+
+    $ php artisan kafka:consume price-update --partition=2 --offset=34
+
 
 - `--timeout=`
 
-   You can specify what would be the timeout for the consumer, by using the `--timeout=` option, the time is in milliseconds.
+   Set the timeout for the consumer in milliseconds.
 
-   `$ php artisan kafka:consume price-update --timeout=23000`
 
+   $ php artisan kafka:consume price-update --timeout=23000
+
+
+- `--config_name=`
+
+   Specify from what file topics configuration should be read.
+
+
+    $ php artisan kafka:consume topic-name --config_name=config.file
+
+
+- `--service_name=`
+
+    Specify from what file services configurations should be read. 
+
+
+    $ php artisan kafka:consume price-update --service_name=config.file

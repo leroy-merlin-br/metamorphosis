@@ -3,10 +3,10 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\Command as BaseCommand;
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Consumers\Runner;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer;
 
 class ConsumerCommand extends BaseCommand
 {
@@ -34,31 +34,26 @@ class ConsumerCommand extends BaseCommand
         {--broker= : Override broker connection from config.}
         {--timeout= : Sets timeout for consumer.}
         {--times= : Amount of messages to be consumed.}
-        {--config_name= : Change default name for laravel config file.}';
+        {--config_name= : Change default name for laravel config file.}
+        {--service_name= : Change default name for services config file.}';
 
     public function handle(Config $config)
     {
-        $configManager = $config->make($this->option(), $this->argument());
+        $consumer = $config->make($this->option(), $this->argument());
 
-        $this->writeStartingConsumer($configManager);
+        $this->writeStartingConsumer($consumer);
 
-        $manager = Factory::make($configManager);
+        $manager = Factory::make($consumer);
 
         $runner = app(Runner::class, compact('manager'));
-        $runner->run($configManager->get('times'));
+        $runner->run($this->option('times'));
     }
 
-    private function writeStartingConsumer(AbstractConfigManager $configManager)
+    private function writeStartingConsumer(Consumer $consumer)
     {
-        $text = 'Starting consumer for topic: ' . $configManager->get(
-            'topic'
-        ) . PHP_EOL;
-        $text .= ' on consumer group: ' . $configManager->get(
-            'consumer_group'
-        ) . PHP_EOL;
-        $text .= 'Connecting in ' . $configManager->get(
-            'connections'
-        ) . PHP_EOL;
+        $text = 'Starting consumer for topic: ' . $consumer->getTopicId() . PHP_EOL;
+        $text .= ' on consumer group: ' . $consumer->getConsumerGroup() . PHP_EOL;
+        $text .= 'Connecting in ' . $consumer->getBroker()->getConnections() . PHP_EOL;
         $text .= 'Running consumer..';
 
         $this->output->writeln($text);

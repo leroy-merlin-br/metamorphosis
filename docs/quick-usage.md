@@ -1,6 +1,7 @@
 ## Quick Usage Guide
 
-- [Config file](#config)
+- [Configure with files](#config)
+- [Configure using data objects](#config-dto)
 - [Consumer](#consumer)
    - [Creating Consumer](#creating-consumer)
    - [Running](#running-consumer)
@@ -8,76 +9,102 @@
   - [Produce Message](#produce-message)
 
 <a name="config"></a>
-### Config file: `config/kafka.php`
+### Configure using  files
 
-The config file holds all information about brokers, topics, consumer groups and middlewares.
+To get started using configuration files, at least two files are needed. A file to keep the topics
+configuration and a file to keep the broker and schema configuration. In this example, we will use the files 
+`config/kafka.php` and `config/service.php`.
 
-To quickly start using, we can focus in two sections:
-- Brokers
+### File `config/kafka.php`:
 
-    An array of brokers, with connection and authentication configurations:
+This file keeps configurations about topics, consumers and producers.
+It should return an array of topics containing the topic name, topic_id,  consumer, producer and the settings for each one of them:
 
-    - `connections`: *required*. can be a `string` with multiple connections separated by comma or an `array` of connections (as `string`)
+```php
+<?php
 
-    - `auth`: *optional*. out of the box, the package can connect with SSL Authentication only or without any authentication
+return [
+    'topics' => [
+        'this_is_your_topic_name' => [
+            'topic_id' => "this_is_your_topic_id",
+            'consumer' => [
+                'consumer_group' => 'your-consumer-group',
+                'offset_reset' => 'earliest',
+                'offset' => 0,
+                'partition' => 0,
+                'handler' => '\App\Kafka\Consumers\ConsumerExample',
+                'timeout' => 20000,
+                'auto_commit' => true,
+                'commit_async' => false,
+                'middlewares' => [],
+            ],
+  
+            'producer' => [
+                'required_acknowledgment' => true,
+                'is_async' => true,
+                'max_poll_records' => 500,
+                'flush_attempts' => 10,
+                'middlewares' => [],
+                'timeout' => 10000,
+                'partition' => constant('RD_KAFKA_PARTITION_UA') ?? -1,
+            ],
+        ]
+    ],
+];
+```
 
-    ```php
-      'brokers' => [
-          'price_brokers' => [
-              'connections' => 'localhost:8091,localhost:8092',
-              'auth' => [
-                  'type' => 'ssl',
-                  'ca' => storage_path('ca.pem'),
-                  'certificate' => storage_path('kafka.cert'),
-                  'key' => storage_path('kafka.key'),
-              ],
-          ],
-          'stock_brokers' => [
-              'connections' => ['localhost:8091', 'localhost:8092'],
-              'auth' => [], // can be an empty array or even don't have this key in the broker config
-          ],
-      ],
-    ```
+### File `config/service.php`
 
-- Topics
+This file keeps configurations about **broker** and **schema** utilized.
 
-    An array of topics configuration, such as the topic name, which broker connection should use, consumer groups and middlewares.
+```php
+<?php
 
-    Here we can specify the group consumers, each topic can have multiple groups,
-    and each group holds the configuration for which consumer, offset_reset (for setting initial offset) and middleware it must use.
+return [
+    'avro_schema' => [
+        'url' => '',
+        'request_options' => [
+            'headers' => [
+                'Authorization' => [
+                    'Basic ' . base64_encode(
+                        env('AVRO_SCHEMA_USERNAME').':'.env('AVRO_SCHEMA_PASSWORD')
+                    ),
+                ],
+            ],
+        ],
 
-    ```php
-      'topics' => [
-          'price_update' => [
-              'topic' => 'products.price.update',
-              'broker' => 'price_brokers',
-              'consumer_groups' => [
-                  'default' => [
-                      'offset_reset' => 'smallest',
-                      'handler' => '\App\Kafka\Consumers\PriceUpdateConsumer',
-                  ],
-              ],
-          ],
-      ],
-    ```
+        'ssl_verify' => true,
+        'username' => 'USERNAME',
+        'password' => 'PASSWORD',
+    ],
+    
+    'broker' => [
+        'connections' => 'kafka:9092',
+        'auth' => [
+            'type' => 'ssl', 
+            'ca' => storage_path('ca.pem'),
+            'certificate' => storage_path('kafka.cert'),
+            'key' => storage_path('kafka.key'),
+        ],
+    ],
+];
+```
 
 <a name="consumer"></a>
 ### Consumer
 
-After setting up the required configs, you need to create the consumer, which will handle all records received
-from the topic specified in the config.
+After setting up the required configuration, you must create a consumer to handle records received
+from the specified topic in your configuration.
 
 <a name="creating-consumer"></a>
-#### Creating Consumer
+#### Creating a Consumer
 
-Creating the consumer is easy as running the following command:
+To create a consumer run the following command:
 ```bash
 $ php artisan make:kafka-consumer PriceUpdateConsumer
 ```
-This will create a KafkaConsumer class inside the application, on the app/Kafka/Consumers/ directory
-
-There, you'll have a handler method, which will send all records from the topic to the Consumer,
-also, methods will be available for handling exceptions
+This will create a KafkaConsumer class on the app/Kafka/Consumers/ directory with the following
+content:
 
 ```php
 use App\Kafka\Consumers\PriceUpdateConsumer;
@@ -109,20 +136,19 @@ class PriceUpdateConsumer extends AbstractHandler
 ```
 
 <a name="running-consumer"></a>
-#### Running consumer
+#### Running the consumer
 
-Now you just need to start consuming the topic.
+To start consuming the topic, the simplest way to see it working is by running the kafka:consume command along with the topic name, topic configuration file and service configuration file:
 
-The simplest way to see it working is by running the kafka:consume command along with the topic name
-declared in the topics config key:
 
 ```bash
-$ php artisan kafka:consume price-update
-```
+$ php artisan kafka:consume this_is_your_topic_name --config_name=config.file --service_name=service.file
+``` 
 
 This command will run in a `while true`, that means, it will never stop running.
 But, errors can happen, so we strongly advice you to run this command along with [supervisor](http://supervisord.org/running.html),
 like this example below:
+
 ```bash
 [program:kafka-consumer-price-update]
 process_name=%(program_name)s_%(process_num)02d
@@ -135,32 +161,31 @@ redirect_stderr=true
 stdout_logfile=/var/log/default/kafka-consumer-price-update.log
 ```
 
-That's it. For more information about usage, middlewares, broker authentication, consumer groups and other advanced topics, please have a look at our [Advanced Usage Guide](advanced.md).
+<a name="config-dto"></a>
+#### Using data objects
 
-<a name="producer"></a>
-### Producer
-
-Producer also required configs, which will produce all records using parameters specified in the config.
+To configure and consume using classes:
 
 ```php
-    'brokers' => [
-        'local-dev' => [
-            'connections' => 'kafka:9092',
-        ],
-    ],
-    'topics' => [
-        'product-updated' => [
-            'topic_id' => 'product_updated',
-            'broker' => 'local-dev',
-        ],
-    ],
+    use Metamorphosis\Consumer;
+    use Metamorphosis\TopicHandler\ConfigOptions\Factories\ConsumerFactory;
+    
+    $topic = config('yourConfig.topics.topic-id');
+    $broker = config('yourService.broker');
+    $avro = config('yourService.avro_schema');
+    
+    $consumerConfiguration = ConsumerFactory::make($broker, $topic, $avro);
+    $consumer = app(Consumer::class, ['configOptions' => $consumerConfiguration]);
+    
+    $consumer->consume();
 ```
+
+That's it. For more information about usage, middlewares, broker authentication, consumer groups and other advanced topics, please have a look at our [Advanced Usage Guide](advanced.md).
+
 <a name="produce-message"></a>
 ### Produce Message
 
-Creating Producer handler.
-
-The Producer must extends AbstractHandler class and can be empty.
+To create a producer handler, create a class that extends `Metamorphosis\TopicHandler\Producer\AbstractHandler` class:
 
 ```php
 <?php

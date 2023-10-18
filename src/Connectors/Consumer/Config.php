@@ -2,10 +2,11 @@
 
 namespace Metamorphosis\Connectors\Consumer;
 
-use Metamorphosis\AbstractConfigManager;
+use InvalidArgumentException;
 use Metamorphosis\Connectors\AbstractConfig;
-use Metamorphosis\ConsumerConfigManager;
 use Metamorphosis\Exceptions\ConfigurationException;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer;
+use Metamorphosis\TopicHandler\ConfigOptions\Factories\ConsumerFactory;
 
 /**
  * This class is responsible for handling all configuration made on the
@@ -18,7 +19,7 @@ use Metamorphosis\Exceptions\ConfigurationException;
 class Config extends AbstractConfig
 {
     /**
-     * @var array<string, string>
+     * @var string[]
      */
     protected array $rules = [
         'topic' => 'required',
@@ -39,38 +40,45 @@ class Config extends AbstractConfig
         'middlewares' => 'array',
     ];
 
-    public function make(array $options, array $arguments): AbstractConfigManager
+    public function makeWithConfigOptions(string $handlerClass): ?Consumer
+    {
+        $handler = app($handlerClass);
+        $configOptions = $handler->getConfigOptions();
+        if (is_null($configOptions)) {
+            throw new InvalidArgumentException('Handler class cannot be null');
+        }
+
+        return $configOptions;
+    }
+
+    public function make(array $options, array $arguments): Consumer
     {
         $configName = $options['config_name'] ?? 'kafka';
+        $service = $options['service_name'] ?? 'service';
+
         $topicConfig = $this->getTopicConfig($configName, $arguments['topic']);
-        $consumerConfig = $this->getConsumerConfig(
-            $topicConfig,
-            $arguments['consumer_group']
-        );
-        $brokerConfig = $this->getBrokerConfig(
-            $configName,
-            $topicConfig['broker']
-        );
-        $schemaConfig = $this->getSchemaConfig(
-            $configName,
-            $arguments['topic']
-        );
-        $override = array_merge(
-            $this->filterValues($options),
-            $this->filterValues($arguments)
-        );
-        $config = array_merge(
-            $topicConfig,
+        $brokerConfig = $this->getBrokerConfig($service);
+        $schemaConfig = $this->getSchemaConfig($service);
+
+        if (isset($topicConfig['consumer'])) {
+            if (isset($options['partition'])) {
+                $topicConfig['consumer']['partition'] = $options['partition'];
+            }
+
+            if (isset($options['offset'])) {
+                $topicConfig['consumer']['offset'] = $options['offset'];
+            }
+
+            if (isset($options['timeout'])) {
+                $topicConfig['consumer']['timeout'] = $options['timeout'];
+            }
+        }
+
+        return ConsumerFactory::make(
             $brokerConfig,
-            $consumerConfig,
+            $topicConfig,
             $schemaConfig
         );
-
-        $this->validate(array_merge($config, $override));
-        $configManager = app(ConsumerConfigManager::class);
-        $configManager->set($config, $override);
-
-        return $configManager;
     }
 
     /**
@@ -83,58 +91,11 @@ class Config extends AbstractConfig
             throw new ConfigurationException("Topic '{$topicId}' not found");
         }
 
-        $topicConfig['middlewares'] = $this->getMiddlewares(
-            $configName,
-            $topicConfig
+        $topicConfig['middlewares'] = config(
+            'kafka.middlewares.consumer',
+            []
         );
 
         return $topicConfig;
-    }
-
-    private function getConsumerConfig(array $topicConfig, ?string $consumerGroupId = null): array
-    {
-        if (
-            !$consumerGroupId && 1 === count(
-                $topicConfig['consumer']['consumer_groups']
-            )
-        ) {
-            $consumerGroupId = current(
-                array_keys($topicConfig['consumer']['consumer_groups'])
-            );
-        }
-
-        $consumerGroupId = $consumerGroupId ?? 'default';
-        $consumerConfig = $topicConfig['consumer']['consumer_groups'][$consumerGroupId] ?? null;
-        $consumerConfig['consumer_group'] = $consumerGroupId;
-
-        if (!$consumerConfig) {
-            throw new ConfigurationException(
-                "Consumer group '{$consumerGroupId}' not found"
-            );
-        }
-
-        return $consumerConfig;
-    }
-
-    private function getMiddlewares(string $configName, array $topicConfig): array
-    {
-        return array_merge(
-            config($configName . '.middlewares.consumer', []),
-            $topicConfig['consumer']['middlewares'] ?? []
-        );
-    }
-
-    /**
-     * Sometimes that user may pass `--partition=0` as argument.
-     * So if we just use array_filter here, this option will
-     * be removed.
-     *
-     * This code makes sure that only null values will be removed.
-     */
-    private function filterValues(array $options = []): array
-    {
-        return array_filter($options, function ($value) {
-            return !is_null($value);
-        });
     }
 }

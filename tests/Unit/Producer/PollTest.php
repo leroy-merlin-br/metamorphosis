@@ -3,7 +3,10 @@
 namespace Tests\Unit\Producer;
 
 use Metamorphosis\Producer\Poll;
-use Metamorphosis\ProducerConfigManager;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
+use Metamorphosis\TopicHandler\ConfigOptions\AvroSchema as AvroSchemaConfigOptions;
+use Metamorphosis\TopicHandler\ConfigOptions\Broker;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Mockery as m;
 use RdKafka\Producer as KafkaProducer;
 use RuntimeException;
@@ -14,17 +17,21 @@ class PollTest extends LaravelTestCase
     public function testItShouldHandleMessageWithoutAcknowledgment(): void
     {
         // Set
-        $configManager = new ProducerConfigManager();
-        $configManager->set([
-            'topic_id' => 'topic_name',
-            'timeout' => 4000,
-            'is_async' => true,
-            'max_poll_records' => 500,
-            'flush_attempts' => 10,
-            'required_acknowledgment' => false,
-        ]);
+        $broker = new Broker('kafka:9092', new None());
+        $producerConfigOptions = new ProducerConfigOptions(
+            'topic_name',
+            $broker,
+            null,
+            new AvroSchemaConfigOptions('string', []),
+            [],
+            4000,
+            true,
+            false,
+            500,
+            10
+        );
         $kafkaProducer = m::mock(KafkaProducer::class);
-        $poll = new Poll($kafkaProducer, $configManager);
+        $poll = new Poll($kafkaProducer, $producerConfigOptions);
 
         // Expectations
         $kafkaProducer->expects()
@@ -40,27 +47,29 @@ class PollTest extends LaravelTestCase
     public function testShouldThrowExceptionWhenFlushFailed(): void
     {
         // Set
-        $configManager = new ProducerConfigManager();
-        $configManager->set([
-            'topic_id' => 'topic_name',
-            'timeout' => 1000,
-            'is_async' => false,
-            'max_poll_records' => 500,
-            'flush_attempts' => 3,
-            'required_acknowledgment' => true,
-            'partition' => 0,
-        ]);
-
+        $broker = new Broker('kafka:9092', new None());
+        $producerConfigOptions = new ProducerConfigOptions(
+            'topic_name',
+            $broker,
+            null,
+            new AvroSchemaConfigOptions('string', []),
+            [],
+            100,
+            false,
+            true,
+            500,
+            10
+        );
         $kafkaProducer = m::mock(KafkaProducer::class);
-        $poll = new Poll($kafkaProducer, $configManager);
+        $poll = new Poll($kafkaProducer, $producerConfigOptions);
 
         // Expectations
         $kafkaProducer->expects()
             ->poll(0);
 
         $kafkaProducer->expects()
-            ->flush(1000)
-            ->times(3)
+            ->flush(100)
+            ->times(10)
             ->andReturn(1);
 
         $this->expectException(RuntimeException::class);
@@ -72,18 +81,22 @@ class PollTest extends LaravelTestCase
     public function testItShouldHandleResponseEveryTimeWhenAsyncModeIsTrue(): void
     {
         // Set
-        $configManager = new ProducerConfigManager();
-        $configManager->set([
-            'topic_id' => 'topic_name',
-            'timeout' => 4000,
-            'is_async' => false,
-            'max_poll_records' => 500,
-            'flush_attempts' => 10,
-            'required_acknowledgment' => true,
-            'partition' => 0,
-        ]);
+        $broker = new Broker('kafka:9092', new None());
+        $producerConfigOptions = new ProducerConfigOptions(
+            'topic_name',
+            $broker,
+            null,
+            new AvroSchemaConfigOptions('string', []),
+            [],
+            4000,
+            false,
+            true,
+            10,
+            500
+        );
+
         $kafkaProducer = m::mock(KafkaProducer::class);
-        $poll = new Poll($kafkaProducer, $configManager);
+        $poll = new Poll($kafkaProducer, $producerConfigOptions);
 
         // Expectations
         $kafkaProducer->expects()

@@ -3,7 +3,7 @@
 namespace Tests\Unit\Authentication;
 
 use Metamorphosis\Authentication\SSLAuthentication;
-use Metamorphosis\ConsumerConfigManager;
+use Metamorphosis\TopicHandler\ConfigOptions\Auth\Ssl;
 use RdKafka\Conf;
 use Tests\LaravelTestCase;
 
@@ -12,16 +12,12 @@ class SSLAuthenticationTest extends LaravelTestCase
     public function testItShouldValidateAuthenticationConfigurations(): void
     {
         // Set
-        $configManager = new ConsumerConfigManager();
-        $configManager->set([
-            'auth' => [
-                'type' => 'ssl',
-                'ca' => 'path/to/ca',
-                'certificate' => 'path/to/certificate',
-                'key' => 'path/to/key',
-            ],
-        ]);
         $conf = new Conf();
+        $configSsl = new Ssl(
+            'path/to/ca',
+            'path/to/certificate',
+            'path/to/key'
+        );
         $expected = [
             'security.protocol' => 'ssl',
             'ssl.ca.location' => 'path/to/ca',
@@ -30,7 +26,7 @@ class SSLAuthenticationTest extends LaravelTestCase
         ];
 
         // Actions
-        new SSLAuthentication($conf, $configManager);
+        new SSLAuthentication($conf, $configSsl);
 
         // Assertions
         $this->assertArraySubset($expected, $conf->dump());

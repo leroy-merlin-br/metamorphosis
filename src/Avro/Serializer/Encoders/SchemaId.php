@@ -41,4 +41,9 @@ class SchemaId implements EncoderInterface
 
         return $io->string();
     }
+
+    public function getRegistry()
+    {
+        return $this->registry;
+    }
 }

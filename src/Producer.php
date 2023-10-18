@@ -8,7 +8,6 @@ use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer\Poll;
 use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
-use Metamorphosis\TopicHandler\Producer\AbstractProducer;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
 class Producer
@@ -72,14 +71,5 @@ class Producer
             ProducerMiddleware::class,
             compact('topic', 'poll', 'partition')
         );
-    }
-
-    private function getConfigManager(HandlerInterface $producerHandler): AbstractConfigManager
-    {
-        if ($producerHandler instanceof AbstractProducer) {
-            return $this->config->make($producerHandler->getConfigOptions());
-        }
-
-        return $this->config->makeByTopic($producerHandler->getTopic());
     }
 }

@@ -72,6 +72,7 @@ class ConsumerFactoryTest extends LaravelTestCase
             'auto_commit' => true,
             'commit_async' => true,
             'offset_reset' => 'earliest',
+            'max_poll_interval_ms' => 300000,
         ];
         // Actions
         $result = ConsumerFactory::make(

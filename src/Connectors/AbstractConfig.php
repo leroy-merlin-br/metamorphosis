@@ -14,6 +14,7 @@ abstract class AbstractConfig
 
     /**
      * @psalm-suppress InvalidReturnStatement
+     * @throws ConfigurationException
      */
     protected function getBrokerConfig(string $servicesFile): array
     {

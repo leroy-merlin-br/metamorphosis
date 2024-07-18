@@ -15,10 +15,7 @@ class AbstractProducer implements HandlerInterface
 
     protected ?string $key;
 
-    /**
-     * @var Producer
-     */
-    protected $producer;
+    protected Producer $producer;
 
     public function __construct($record, Producer $configOptions, ?string $key = null)
     {

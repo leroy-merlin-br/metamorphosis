@@ -18,11 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 -   Fixed parameters and options override on Consumer\Config class
--   Update instructions on contribute section
+-   Update instructions in the contributions section
 -   Update project install section
 
 ### Changed
 
--   Updated class from ConfigManager to ConfigOptions on unit tests
--   Updated class from ConfigManager to ConfigOptions where any config request was made
+-   Updated ConfigManager class for ConfigOptions in unit tests and wherever any configuration requests are made
 -   Consumer and Producer middlewares resolution

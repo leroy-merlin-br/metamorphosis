@@ -131,6 +131,7 @@ class ConsumerCommandTest extends LaravelTestCase
 
         $this->artisan($command, $parameters);
     }
+
     protected function setUp(): void
     {
         parent::setUp();

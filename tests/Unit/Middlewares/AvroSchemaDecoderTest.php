@@ -19,7 +19,7 @@ use Tests\LaravelTestCase;
 
 class AvroSchemaDecoderTest extends LaravelTestCase
 {
-    public function testShouldDecodeRecord()
+    public function testShouldDecodeRecord(): void
     {
         $brokerOptions = new Broker('kafka:9092', new None());
         $consumerConfigOptions = new ConsumerConfigOptions(

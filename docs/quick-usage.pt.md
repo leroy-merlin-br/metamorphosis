@@ -1,4 +1,4 @@
-## Quick Usage Guide
+## Guia Rápido
 
 - [Configurar usando arquivos](#config)
 - [Configurar usando objetos](#config-dto)
@@ -55,7 +55,7 @@ return [
 ];
 ```
 
-### File `config/service.php`
+### Arquivo `config/service.php`
 
 Esse arquivo possui as configurações de **broker** e **schema** utilizados.
 

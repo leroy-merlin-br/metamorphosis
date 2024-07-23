@@ -29,7 +29,7 @@ class ConfigOptionsCommand extends BaseCommand
         {handler : handler.}
         {--times= : Amount of messages to be consumed.}';
 
-    public function handle()
+    public function handle(): void
     {
         $consumerHandler = app($this->argument('handler'));
 
@@ -43,7 +43,7 @@ class ConfigOptionsCommand extends BaseCommand
         $runner->run($this->option('times'));
     }
 
-    private function writeStartingConsumer(ConfigOptions $configOptions)
+    private function writeStartingConsumer(ConfigOptions $configOptions): void
     {
         $text = 'Starting consumer for topic: ' . $configOptions->getTopicId() . PHP_EOL;
         $text .= ' on consumer group: ' . $configOptions->getConsumerGroup() . PHP_EOL;

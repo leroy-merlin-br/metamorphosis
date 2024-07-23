@@ -37,7 +37,7 @@ class ConsumerCommand extends BaseCommand
         {--config_name= : Change default name for laravel config file.}
         {--service_name= : Change default name for services config file.}';
 
-    public function handle(Config $config)
+    public function handle(Config $config): void
     {
         $consumer = $config->make($this->option(), $this->argument());
 
@@ -49,7 +49,7 @@ class ConsumerCommand extends BaseCommand
         $runner->run($this->option('times'));
     }
 
-    private function writeStartingConsumer(Consumer $consumer)
+    private function writeStartingConsumer(Consumer $consumer): void
     {
         $text = 'Starting consumer for topic: ' . $consumer->getTopicId() . PHP_EOL;
         $text .= ' on consumer group: ' . $consumer->getConsumerGroup() . PHP_EOL;

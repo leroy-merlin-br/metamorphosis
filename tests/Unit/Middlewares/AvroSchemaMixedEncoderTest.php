@@ -19,7 +19,7 @@ use Tests\LaravelTestCase;
 
 class AvroSchemaMixedEncoderTest extends LaravelTestCase
 {
-    public function testShouldEncodeRecord()
+    public function testShouldEncodeRecord(): void
     {
         // Set
         $avroSchema = $this->getSchemaFixture();

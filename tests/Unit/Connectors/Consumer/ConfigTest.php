@@ -8,6 +8,7 @@ use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 use Mockery as m;
 use Tests\LaravelTestCase;
 use Tests\Unit\Dummies\ConsumerHandlerDummy;
+use TypeError;
 
 class ConfigTest extends LaravelTestCase
 {
@@ -84,10 +85,12 @@ class ConfigTest extends LaravelTestCase
             ]);
 
         // Actions
-        $configManager = $config->make($options, $arguments);
+        $configManager = $config->makeWithConfigOptions(
+            ConsumerHandlerDummy::class
+        );
 
         // Assertions
-        $this->assertArraySubset($expected, $configManager->get());
+        $this->assertArraySubset($expected, $configManager->toArray());
     }
 
     public function testShouldNotSetRuntimeConfigWhenOptionsIsInvalid(): void
@@ -104,18 +107,20 @@ class ConfigTest extends LaravelTestCase
             'consumer_group' => 'default',
         ];
 
+        // Expectations
+        $this->expectException(TypeError::class);
+
         // Actions
-        $this->expectException(ConfigurationException::class);
         $configManager = $config->make($options, $arguments);
 
         // Assertions
-        $this->assertEmpty($configManager->get());
+        $this->assertEmpty($configManager->toArray());
     }
 
     public function testShouldNotSetRuntimeConfigWhenKafkaConfigIsInvalid(): void
     {
         // Set
-        config(['kafka.brokers.default.connections' => null]);
+        config(['service.broker' => null]);
         $config = new Config();
         $options = [
             'partition' => 0,
@@ -132,6 +137,6 @@ class ConfigTest extends LaravelTestCase
         $configManager = $config->make($options, $arguments);
 
         // Assertions
-        $this->assertEmpty($configManager->get());
+        $this->assertEmpty($configManager->toArray());
     }
 }

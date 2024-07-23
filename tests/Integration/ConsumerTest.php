@@ -63,12 +63,12 @@ class ConsumerTest extends LaravelTestCase
             Consumer::class,
             ['configOptions' => $consumerConfigOptions]
         );
-        $expected = ['id' => 'MESSAGE_ID'];
+        $expected = '{"id":"MESSAGE_ID"}';
 
         // Actions
-        $result = $consumer->consume();
+        $result = $consumer->consume()->getPayload();
 
         // Assertions
-        $this->assertSame($expected, $result->getPayload());
+        $this->assertSame($expected, $result);
     }
 }

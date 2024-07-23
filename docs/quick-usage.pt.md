@@ -1,64 +1,96 @@
-## Guia rápido
+## Guia Rápido
 
-- [Arquivo de configuração](#config)
-- [Consumer](#consumer)
-   - [Criando um Consumer](#creating-consumer)
-   - [Rodando o Consumer](#running-consumer)
+- [Configurar usando arquivos](#config)
+- [Configurar usando objetos](#config-dto)
+- [Consumidor](#consumer)
+   - [Criando um consumidor](#creating-consumer)
+   - [Executando um consumidor](#running-consumer)
+- [Produtor](#producer)
+  - [Produzindo mensagens](#produce-message)
 
 <a name="config"></a>
-### Arquivo de configuração: `config/kafka.php`
+### Configurar usando arquivos
 
-Esse arquivo contém todas as informações sobre *brokers*, tópicos, *consumer groups* e *middlewares*.
+Para começar a usar arquivos de configuração, são necessários pelo menos dois arquivos. Um arquivo para manter os tópicos
+configuração e um arquivo para manter a configuração do broker e do esquema. Neste exemplo, usaremos os arquivos
+`config/kafka.php` e `config/service.php`.
 
-Para começar a usar, podemos focar em duas seções:
 
-- Brokers
+### Arquivo `config/kafka.php`:
 
-    Uma lista de *brokers*, com configurações de conexão e autenticação.
+Este arquivo mantém configurações sobre tópicos, consumidores e produtores.
+Deve retornar um array de tópicos contendo o nome do tópico, topic_id, consumidor, produtor e as configurações de cada um deles:
 
-    - `connections`: *obrigatório*. Pode ser uma `string` com múltiplas conexões separadas por vírgula ou uma `array` de conexões.
 
-    - `auth`: *opcional*. É possivel se conectar sem autenticação ou usando autenticação SSL.
+```php
+<?php
 
-    ```php
-      'brokers' => [
-          'price_brokers' => [
-              'connections' => 'localhost:8091,localhost:8092',
-              'auth' => [
-                  'type' => 'ssl',
-                  'ca' => storage_path('ca.pem'),
-                  'certificate' => storage_path('kafka.cert'),
-                  'key' => storage_path('kafka.key'),
-              ],
-          ],
-          'stock_brokers' => [
-              'connections' => ['localhost:8091', 'localhost:8092'],
-              'auth' => [], // pode ser uma array vazia ou até mesmo não ter essa chave aqui.
-          ],
-      ],
-    ```
+return [
+    'topics' => [
+        'this_is_your_topic_name' => [
+            'topic_id' => "this_is_your_topic_id",
+            'consumer' => [
+                'consumer_group' => 'your-consumer-group',
+                'offset_reset' => 'earliest',
+                'offset' => 0,
+                'partition' => 0,
+                'handler' => '\App\Kafka\Consumers\ConsumerExample',
+                'timeout' => 20000,
+                'auto_commit' => true,
+                'commit_async' => false,
+                'middlewares' => [],
+            ],
+  
+            'producer' => [
+                'required_acknowledgment' => true,
+                'is_async' => true,
+                'max_poll_records' => 500,
+                'flush_attempts' => 10,
+                'middlewares' => [],
+                'timeout' => 10000,
+                'partition' => constant('RD_KAFKA_PARTITION_UA') ?? -1,
+            ],
+        ]
+    ],
+];
+```
 
-- Tópicos
+### Arquivo `config/service.php`
 
-    Uma lista de configuração de tópicos, como nome, qual *broker* usar, *consumer group* e *middlewares*.
+Esse arquivo possui as configurações de **broker** e **schema** utilizados.
 
-    Aqui você pode especificar os *consumer groups*. Cada tópico pode ter vários grupos,
-    e cada grupo tem a sua configuração para cada *consumer*, *offset_reset* (para definir um *offset* inicial) e *middlewares* que devem ser usados.
+```php
+<?php
 
-    ```php
-      'topics' => [
-          'price_update' => [
-              'topic' => 'products.price.update',
-              'broker' => 'price_brokers',
-              'consumer_groups' => [
-                  'default' => [
-                      'offset_reset' => 'smallest',
-                      'handler' => '\App\Kafka\Consumers\PriceUpdateConsumer',
-                  ],
-              ],
-          ],
-      ],
-    ```
+return [
+    'avro_schema' => [
+        'url' => '',
+        'request_options' => [
+            'headers' => [
+                'Authorization' => [
+                    'Basic ' . base64_encode(
+                        env('AVRO_SCHEMA_USERNAME').':'.env('AVRO_SCHEMA_PASSWORD')
+                    ),
+                ],
+            ],
+        ],
+
+        'ssl_verify' => true,
+        'username' => 'USERNAME',
+        'password' => 'PASSWORD',
+    ],
+    
+    'broker' => [
+        'connections' => 'kafka:9092',
+        'auth' => [
+            'type' => 'ssl', 
+            'ca' => storage_path('ca.pem'),
+            'certificate' => storage_path('kafka.cert'),
+            'key' => storage_path('kafka.key'),
+        ],
+    ],
+];
+```
 
 <a name="consumer"></a>
 ### Consumer
@@ -113,11 +145,11 @@ class PriceUpdateConsumer extends AbstractHandler
 
 Agora é só consumir o tópico.
 
-A forma mais simples de ver tudo isso funcionando é rodando o comando `kafka:consume` com o nome do tópico que foi configurado:
+Para começar a consumir o tópico, a maneira mais simples de vê-lo funcionando é executando o comando kafka:consume junto com o nome do tópico, arquivo de configuração do tópico e arquivo de configuração do serviço:
 
 ```bash
-$ php artisan kafka:consume price-update
-```
+$ php artisan kafka:consume this_is_your_topic_name --config_name=config.file --service_name=service.file
+``` 
 
 Esse comando rodará em um laço infinito (while true), isso significa que ele nunca irá parar de rodar por conta própria.
 Mas erros podem acontecer, então, recomendamos fortemente que você execute este comando com o auxílio de um [supervisor](http://supervisord.org/running.html), como no exemplo abaixo:

@@ -3,28 +3,27 @@
 namespace Metamorphosis\Middlewares;
 
 use Closure;
-use Metamorphosis\AbstractConfigManager;
 use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Serializer\MessageDecoder;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\Record\RecordInterface;
+use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 
 class AvroSchemaDecoder implements MiddlewareInterface
 {
     private MessageDecoder $decoder;
 
-    private AbstractConfigManager $configManager;
-
-    public function __construct(AbstractConfigManager $configManager, ClientFactory $factory)
+    public function __construct(ClientFactory $factory, ConsumerConfigOptions $consumerConfigOptions)
     {
-        $this->configManager = $configManager;
-        if (!$this->configManager->get('url')) {
+        if (!$consumerConfigOptions->getAvroSchema()->getUrl()) {
             throw new ConfigurationException(
                 "Avro schema url not found, it's required to use AvroSchemaDecoder Middleware"
             );
         }
 
-        $this->decoder = new MessageDecoder($factory->make($configManager));
+        $this->decoder = new MessageDecoder(
+            $factory->make($consumerConfigOptions->getAvroSchema())
+        );
     }
 
     public function process(RecordInterface $record, Closure $next)

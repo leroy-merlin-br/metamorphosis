@@ -3,6 +3,7 @@
 namespace Metamorphosis;
 
 use Illuminate\Support\ServiceProvider;
+use Metamorphosis\Console\ConfigOptionsCommand;
 use Metamorphosis\Console\ConsumerCommand;
 use Metamorphosis\Console\ConsumerMakeCommand;
 use Metamorphosis\Console\MiddlewareMakeCommand;
@@ -14,9 +15,11 @@ class MetamorphosisServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../config/kafka.php' => config_path('kafka.php'),
+            __DIR__ . '/../config/service.php' => config_path('service.php'),
         ], 'config');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/kafka.php', 'kafka');
+        $this->mergeConfigFrom(__DIR__ . '/../config/service.php', 'service');
     }
 
     public function register()
@@ -26,6 +29,7 @@ class MetamorphosisServiceProvider extends ServiceProvider
             ConsumerMakeCommand::class,
             MiddlewareMakeCommand::class,
             ProducerMakeCommand::class,
+            ConfigOptionsCommand::class,
         ]);
 
         $this->app->bind('metamorphosis', function ($app) {

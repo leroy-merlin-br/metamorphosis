@@ -138,29 +138,23 @@ class ConsumerCommandTest extends LaravelTestCase
 
         config([
             'kafka' => [
-                'brokers' => [
-                    'default' => [
-                        'connections' => env(
-                            'KAFKA_BROKER_CONNECTIONS',
-                            'kafka:9092'
-                        ),
-                        'auth' => [],
-                    ],
-                ],
                 'topics' => [
                     'topic_key' => [
                         'topic_id' => 'topic_name',
-                        'broker' => 'default',
                         'consumer' => [
-                            'consumer_groups' => [
-                                'default' => [
-                                    'offset_reset' => 'earliest',
-                                    'handler' => ConsumerHandlerDummy::class,
-                                    'timeout' => 123,
-                                ],
-                            ],
+                            'consumer_group' => 'default',
+                            'offset_reset' => 'earliest',
+                            'handler' => ConsumerHandlerDummy::class,
+                            'timeout' => 123,
+                            'max_poll_interval_ms' => 300000,
                         ],
                     ],
+                ],
+            ],
+            'service' => [
+                'broker' => [
+                    'connections' => 'test_kafka:6680',
+                    'auth' => [],
                 ],
             ],
         ]);

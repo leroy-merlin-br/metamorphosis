@@ -7,7 +7,7 @@ use Metamorphosis\Connectors\Producer\Connector;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\Middlewares\Handler\Producer as ProducerMiddleware;
 use Metamorphosis\Producer\Poll;
-use Metamorphosis\TopicHandler\Producer\AbstractProducer;
+use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
 use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
 class Producer
@@ -31,12 +31,21 @@ class Producer
 
     public function build(HandlerInterface $producerHandler): Dispatcher
     {
-        $configManager = $this->getConfigManager($producerHandler);
+        $producerConfigOptions = $producerHandler->getConfigOptions();
 
-        $middlewares = $configManager->middlewares();
+        $middlewares = $producerConfigOptions->getMiddlewares();
+        foreach ($middlewares as &$middleware) {
+            $middleware = is_string($middleware)
+                ? app(
+                    $middleware,
+                    ['producerConfigOptions' => $producerConfigOptions]
+                )
+                : $middleware;
+        }
+
         $middlewares[] = $this->getProducerMiddleware(
             $producerHandler,
-            $configManager
+            $producerConfigOptions
         );
 
         return new Dispatcher($middlewares);
@@ -44,32 +53,23 @@ class Producer
 
     public function getProducerMiddleware(
         HandlerInterface $producerHandler,
-        AbstractConfigManager $configManager
+        ProducerConfigOptions $producerConfigOptions
     ): ProducerMiddleware {
         $producer = $this->connector->getProducerTopic(
             $producerHandler,
-            $configManager
+            $producerConfigOptions
         );
 
-        $topic = $producer->newTopic($configManager->get('topic_id'));
+        $topic = $producer->newTopic($producerConfigOptions->getTopicId());
         $poll = app(
             Poll::class,
-            ['producer' => $producer, 'configManager' => $configManager]
+            ['producer' => $producer, 'producerConfigOptions' => $producerConfigOptions]
         );
-        $partition = $configManager->get('partition');
+        $partition = $producerConfigOptions->getPartition();
 
         return app(
             ProducerMiddleware::class,
             compact('topic', 'poll', 'partition')
         );
-    }
-
-    private function getConfigManager(HandlerInterface $producerHandler): AbstractConfigManager
-    {
-        if ($producerHandler instanceof AbstractProducer) {
-            return $this->config->make($producerHandler->getConfigOptions());
-        }
-
-        return $this->config->makeByTopic($producerHandler->getTopic());
     }
 }

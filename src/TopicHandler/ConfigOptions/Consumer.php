@@ -38,6 +38,8 @@ class Consumer
 
     private ?int $offset = null;
 
+    private int $maxPollInterval = 300000;
+
     public function __construct(
         string $topicId,
         Broker $broker,
@@ -50,7 +52,8 @@ class Consumer
         int $timeout = 1000,
         bool $autoCommit = true,
         bool $commitASync = true,
-        string $offsetReset = 'smallest'
+        string $offsetReset = 'smallest',
+        int $maxPollInterval = 300000
     ) {
         $this->broker = $broker;
         $this->middlewares = $middlewares;
@@ -64,6 +67,7 @@ class Consumer
         $this->autoCommit = $autoCommit;
         $this->commitASync = $commitASync;
         $this->offsetReset = $offsetReset;
+        $this->maxPollInterval = $maxPollInterval;
     }
 
     public function getTimeout(): int
@@ -134,6 +138,7 @@ class Consumer
             'auto_commit' => $this->isAutoCommit(),
             'commit_async' => $this->isCommitASync(),
             'offset_reset' => $this->getOffsetReset(),
+            'max_poll_interval_ms' => $this->getMaxPollInterval(),
         ];
 
         if ($avroSchema = $this->getAvroSchema()) {
@@ -146,5 +151,14 @@ class Consumer
     public function getOffset(): ?int
     {
         return $this->offset;
+    }
+    public function getMaxPollInterval(): int
+    {
+        return $this->maxPollInterval;
+    }
+
+    public function setMaxPollInterval(int $maxPollInterval): void
+    {
+        $this->maxPollInterval = $maxPollInterval;
     }
 }

@@ -17,6 +17,7 @@ class Ssl implements AuthInterface
         $this->key = $key;
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return [
@@ -42,6 +43,7 @@ class Ssl implements AuthInterface
         return $this->key;
     }
 
+    #[\Override]
     public function getType(): string
     {
         return EnumType::SSL_TYPE;

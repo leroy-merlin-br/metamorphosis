@@ -55,7 +55,7 @@ class CachedSchemaRegistryClient
 
         $this->cacheSchema($schema);
 
-        return $this->idToSchema[$schemaId];
+        return $this->idToSchema[(string) $schemaId];
     }
 
     /**

@@ -12,13 +12,13 @@ use Metamorphosis\TopicHandler\Producer\HandlerInterface;
 
 class Producer
 {
-    private Config $config;
-
     private Connector $connector;
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+     */
     public function __construct(Config $config, Connector $connector)
     {
-        $this->config = $config;
         $this->connector = $connector;
     }
 

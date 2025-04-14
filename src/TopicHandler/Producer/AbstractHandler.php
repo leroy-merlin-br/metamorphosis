@@ -4,6 +4,7 @@ namespace Metamorphosis\TopicHandler\Producer;
 
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Record\ProducerRecord;
+use Override;
 
 /**
  * @deprecated deprecated
@@ -29,6 +30,7 @@ abstract class AbstractHandler implements HandlerInterface
         $this->partition = $partition;
     }
 
+    #[Override]
     public function getRecord()
     {
         return $this->record;
@@ -44,11 +46,13 @@ abstract class AbstractHandler implements HandlerInterface
         return $this->partition;
     }
 
+    #[Override]
     public function getKey(): ?string
     {
         return $this->key;
     }
 
+    #[Override]
     public function createRecord(): ProducerRecord
     {
         $record = $this->getRecord();

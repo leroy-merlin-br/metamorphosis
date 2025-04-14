@@ -9,6 +9,7 @@ use Metamorphosis\Avro\Serializer\Encoders\SchemaId;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
+use Override;
 
 /**
  * Fetches a schema for a topic by subject and version (currently only 'latest')
@@ -42,6 +43,7 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
         $this->producerConfigOptions = $producerConfigOptions;
     }
 
+    #[Override]
     public function process(RecordInterface $record, Closure $next)
     {
         $topic = $this->producerConfigOptions->getTopicId();

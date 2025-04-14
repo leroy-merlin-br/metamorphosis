@@ -40,7 +40,12 @@ class ConfigOptionsCommand extends BaseCommand
         $manager = Factory::make($configOptions);
 
         $runner = app(Runner::class, compact('manager'));
-        $runner->run($this->option('times'));
+        $times = is_numeric($this->option('times'))
+            ? (int) $this->option(
+                'times'
+            )
+            : null;
+        $runner->run($times);
     }
 
     private function writeStartingConsumer(ConfigOptions $configOptions): void

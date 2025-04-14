@@ -7,6 +7,7 @@ use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Producer\Poll;
 use Metamorphosis\Record\RecordInterface;
 use RdKafka\ProducerTopic;
+use Override;
 
 class Producer implements MiddlewareInterface
 {
@@ -31,6 +32,7 @@ class Producer implements MiddlewareInterface
     /**
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
+    #[Override]
     public function process(RecordInterface $record, Closure $next): void
     {
         $this->topic->produce(

@@ -3,6 +3,7 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Override;
 
 class ProducerMakeCommand extends GeneratorCommand
 {
@@ -29,6 +30,7 @@ class ProducerMakeCommand extends GeneratorCommand
      *
      * @return string
      */
+    #[Override]
     protected function getStub()
     {
         return __DIR__ . '/stubs/producer.stub';
@@ -41,6 +43,7 @@ class ProducerMakeCommand extends GeneratorCommand
      *
      * @return string
      */
+    #[Override]
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace . '\Kafka\Producers';

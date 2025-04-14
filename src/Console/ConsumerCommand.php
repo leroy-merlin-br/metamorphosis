@@ -46,7 +46,12 @@ class ConsumerCommand extends BaseCommand
         $manager = Factory::make($consumer);
 
         $runner = app(Runner::class, compact('manager'));
-        $runner->run($this->option('times'));
+        $times = is_numeric($this->option('times'))
+            ? (int) $this->option(
+                'times'
+            )
+            : null;
+        $runner->run($times);
     }
 
     private function writeStartingConsumer(Consumer $consumer): void

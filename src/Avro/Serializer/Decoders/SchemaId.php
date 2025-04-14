@@ -6,6 +6,7 @@ use AvroIOBinaryDecoder;
 use AvroIODatumReader;
 use AvroStringIO;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
+use Override;
 
 class SchemaId implements DecoderInterface
 {
@@ -16,6 +17,7 @@ class SchemaId implements DecoderInterface
         $this->registry = $registry;
     }
 
+    #[Override]
     public function decode(AvroStringIO $io)
     {
         $id = unpack('N', $io->read(4));

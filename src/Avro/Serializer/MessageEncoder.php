@@ -21,15 +21,11 @@ class MessageEncoder
 
     private CachedSchemaRegistryClient $registry;
 
-    private bool $registerMissingSchemas;
-
     private int $defaultEncodingFormat;
 
     public function __construct(CachedSchemaRegistryClient $registry, array $options = [])
     {
         $this->registry = $registry;
-
-        $this->registerMissingSchemas = $options['register_missing_schemas'] ?? false;
         $this->defaultEncodingFormat = $options['default_encoding_format'] ?? SchemaFormats::MAGIC_BYTE_SCHEMAID;
     }
 
@@ -46,6 +42,8 @@ class MessageEncoder
      * @throws \AvroIOException
      *
      * @return string Encoded record with schema ID as bytes
+     *
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
     public function encodeMessage(
         string $topic,
@@ -54,8 +52,6 @@ class MessageEncoder
         bool $isKey = false,
         ?int $format = null
     ): string {
-        $suffix = $isKey ? '-key' : '-value';
-        $subject = $topic . $suffix;
         $format = $format ?? $this->defaultEncodingFormat;
 
         $encoder = $this->getEncoder($format);

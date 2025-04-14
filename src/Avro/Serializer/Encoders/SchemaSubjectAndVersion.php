@@ -7,9 +7,11 @@ use AvroIODatumWriter;
 use AvroStringIO;
 use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\SchemaFormats;
+use Override;
 
 class SchemaSubjectAndVersion implements EncoderInterface
 {
+    #[Override]
     public function encode(Schema $schema, $message): string
     {
         $version = $schema->getVersion();

@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:8.2-fpm
 LABEL maintainer="boitata@leroymerlin.com.br"
 
 USER root:root
@@ -12,7 +12,7 @@ RUN apt-get update -qq \
     zlib1g-dev libicu-dev \
     && apt-get clean
 
-RUN pecl install xdebug-3.1.6 \
+RUN pecl install xdebug-3.4.2 \
   && docker-php-ext-enable \
     xdebug \
   && docker-php-ext-configure  \

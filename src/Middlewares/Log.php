@@ -5,6 +5,7 @@ namespace Metamorphosis\Middlewares;
 use Closure;
 use Metamorphosis\Record\RecordInterface;
 use Psr\Log\LoggerInterface;
+use Override;
 
 class Log implements MiddlewareInterface
 {
@@ -15,6 +16,7 @@ class Log implements MiddlewareInterface
         $this->log = $log;
     }
 
+    #[Override]
     public function process(RecordInterface $record, Closure $next)
     {
         $this->log->info(

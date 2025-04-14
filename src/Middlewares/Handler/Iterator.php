@@ -5,9 +5,11 @@ namespace Metamorphosis\Middlewares\Handler;
 use Closure;
 use Metamorphosis\Middlewares\MiddlewareInterface;
 use Metamorphosis\Record\RecordInterface;
+use Override;
 
 class Iterator extends AbstractMiddlewareHandler
 {
+    #[Override]
     public function handle(RecordInterface $record)
     {
         $closure = Closure::fromCallable([$this, 'handle']);

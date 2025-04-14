@@ -7,6 +7,10 @@
        resolveFromConfigFile="true"
        errorBaseline="psalm-baseline.xml"
 >
+  <issueHandlers>
+    <PossiblyUnusedMethod errorLevel="suppress" />
+    <UnusedClass errorLevel="suppress" />
+  </issueHandlers>
   <projectFiles>
     <directory name="src"/>
 

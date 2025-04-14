@@ -8,6 +8,7 @@ use Metamorphosis\Console\ConsumerCommand;
 use Metamorphosis\Console\ConsumerMakeCommand;
 use Metamorphosis\Console\MiddlewareMakeCommand;
 use Metamorphosis\Console\ProducerMakeCommand;
+use Override;
 
 class MetamorphosisServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,7 @@ class MetamorphosisServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/service.php', 'service');
     }
 
+    #[Override]
     public function register()
     {
         $this->commands([

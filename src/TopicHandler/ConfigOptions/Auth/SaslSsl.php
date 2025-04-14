@@ -32,6 +32,7 @@ class SaslSsl implements AuthInterface
         return $this->mechanisms;
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return [
@@ -42,6 +43,7 @@ class SaslSsl implements AuthInterface
         ];
     }
 
+    #[\Override]
     public function getType(): string
     {
         return EnumType::SASL_SSL_TYPE;

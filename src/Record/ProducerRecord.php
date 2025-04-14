@@ -2,6 +2,8 @@
 
 namespace Metamorphosis\Record;
 
+use Override;
+
 class ProducerRecord implements RecordInterface
 {
     /**
@@ -44,31 +46,37 @@ class ProducerRecord implements RecordInterface
         $this->key = $key;
     }
 
+    #[Override]
     public function setPayload($payload): void
     {
         $this->payload = $payload;
     }
 
+    #[Override]
     public function getPayload()
     {
         return $this->payload;
     }
 
+    #[Override]
     public function getTopicName(): string
     {
         return $this->topic;
     }
 
+    #[Override]
     public function getPartition(): ?int
     {
         return $this->partition;
     }
 
+    #[Override]
     public function getKey(): ?string
     {
         return $this->key;
     }
 
+    #[Override]
     public function getOriginal()
     {
         return $this->original;

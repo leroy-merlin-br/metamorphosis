@@ -6,6 +6,7 @@ use Metamorphosis\Exceptions\ResponseErrorException;
 use Metamorphosis\Exceptions\ResponseTimeoutException;
 use Metamorphosis\Exceptions\ResponseWarningException;
 use RdKafka\Message;
+use Override;
 
 class ConsumerRecord implements RecordInterface
 {
@@ -41,6 +42,7 @@ class ConsumerRecord implements RecordInterface
      *
      * @param mixed $payload
      */
+    #[Override]
     public function setPayload($payload): void
     {
         $this->payload = $payload;
@@ -53,6 +55,7 @@ class ConsumerRecord implements RecordInterface
      *
      * @return mixed
      */
+    #[Override]
     public function getPayload()
     {
         return $this->payload;
@@ -64,6 +67,7 @@ class ConsumerRecord implements RecordInterface
      *
      * @see https://arnaud-lb.github.io/php-rdkafka/phpdoc/class.rdkafka-message.html
      */
+    #[Override]
     public function getOriginal(): Message
     {
         return $this->original;
@@ -72,6 +76,7 @@ class ConsumerRecord implements RecordInterface
     /**
      * Get the topic name where the record was published.
      */
+    #[Override]
     public function getTopicName(): string
     {
         return $this->original->topic_name;
@@ -80,6 +85,7 @@ class ConsumerRecord implements RecordInterface
     /**
      * Get the partition number where the record was published.
      */
+    #[Override]
     public function getPartition(): int
     {
         return $this->original->partition;
@@ -88,6 +94,7 @@ class ConsumerRecord implements RecordInterface
     /**
      * Get the record key.
      */
+    #[Override]
     public function getKey(): string
     {
         return $this->original->key;

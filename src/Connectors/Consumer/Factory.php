@@ -6,6 +6,7 @@ use Metamorphosis\Consumers\ConsumerInterface;
 use Metamorphosis\Middlewares\Handler\Consumer as ConsumerMiddleware;
 use Metamorphosis\Middlewares\Handler\Dispatcher;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
+use Metamorphosis\TopicHandler\Consumer\Handler;
 
 /**
  * This factory will determine what kind of connector will be used.
@@ -22,6 +23,7 @@ class Factory
 
         $consumer = self::getConsumer($autoCommit, $configOptions);
 
+        /** @var Handler $handler */
         $handler = app($configOptions->getHandler());
 
         $middlewares = $configOptions->getMiddlewares();

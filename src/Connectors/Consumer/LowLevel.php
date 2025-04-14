@@ -9,16 +9,18 @@ use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConfigOptions;
 use RdKafka\Conf;
 use RdKafka\Consumer;
 use RdKafka\TopicConf;
+use Override;
 
 class LowLevel implements ConnectorInterface
 {
+    #[Override]
     public function getConsumer(bool $autoCommit, ConfigOptions $configOptions): ConsumerInterface
     {
         $conf = $this->getConf();
         $maxPollIntervalMs = $configOptions->getMaxPollInterval();
         $conf->set(
             'max.poll.interval.ms',
-            $maxPollIntervalMs
+            (string) $maxPollIntervalMs
         );
         $conf->set('group.id', $configOptions->getConsumerGroup());
         if (!$autoCommit) {

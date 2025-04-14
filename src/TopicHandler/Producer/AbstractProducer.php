@@ -5,6 +5,7 @@ namespace Metamorphosis\TopicHandler\Producer;
 use Metamorphosis\Exceptions\JsonException;
 use Metamorphosis\Record\ProducerRecord;
 use Metamorphosis\TopicHandler\ConfigOptions\Producer;
+use Override;
 
 class AbstractProducer implements HandlerInterface
 {
@@ -29,16 +30,19 @@ class AbstractProducer implements HandlerInterface
         return $this->producer;
     }
 
+    #[Override]
     public function getRecord()
     {
         return $this->record;
     }
 
+    #[Override]
     public function getKey(): ?string
     {
         return $this->key;
     }
 
+    #[Override]
     public function createRecord(): ProducerRecord
     {
         $record = $this->getRecord();

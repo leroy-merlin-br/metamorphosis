@@ -8,6 +8,7 @@ use Metamorphosis\Avro\Serializer\MessageDecoder;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\Record\RecordInterface;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
+use Override;
 
 class AvroSchemaDecoder implements MiddlewareInterface
 {
@@ -26,6 +27,7 @@ class AvroSchemaDecoder implements MiddlewareInterface
         );
     }
 
+    #[Override]
     public function process(RecordInterface $record, Closure $next)
     {
         $record->setPayload(

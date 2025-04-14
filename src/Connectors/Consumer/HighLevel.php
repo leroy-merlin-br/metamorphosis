@@ -8,9 +8,11 @@ use Metamorphosis\Consumers\HighLevel as HighLevelConsumer;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConfigOptions;
 use RdKafka\Conf;
 use RdKafka\KafkaConsumer;
+use Override;
 
 class HighLevel implements ConnectorInterface
 {
+    #[Override]
     public function getConsumer(bool $autoCommit, ConfigOptions $configOptions): ConsumerInterface
     {
         $conf = $this->getConf($configOptions);
@@ -22,7 +24,7 @@ class HighLevel implements ConnectorInterface
         }
         $conf->set(
             'max.poll.interval.ms',
-            $maxPollIntervalMs
+            (string) $maxPollIntervalMs
         );
 
         $consumer = app(KafkaConsumer::class, ['conf' => $conf]);

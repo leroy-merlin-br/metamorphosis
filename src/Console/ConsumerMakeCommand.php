@@ -3,6 +3,7 @@
 namespace Metamorphosis\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Override;
 
 class ConsumerMakeCommand extends GeneratorCommand
 {
@@ -32,6 +33,7 @@ class ConsumerMakeCommand extends GeneratorCommand
      *
      * @return string
      */
+    #[Override]
     protected function getStub()
     {
         return __DIR__ . '/stubs/consumer.stub';
@@ -44,6 +46,7 @@ class ConsumerMakeCommand extends GeneratorCommand
      *
      * @return string
      */
+    #[Override]
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace . '\Kafka\Consumers';

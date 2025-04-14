@@ -8,6 +8,7 @@ use AvroStringIO;
 use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\SchemaFormats;
+use Override;
 
 class SchemaId implements EncoderInterface
 {
@@ -18,6 +19,7 @@ class SchemaId implements EncoderInterface
         $this->registry = $registry;
     }
 
+    #[Override]
     public function encode(Schema $schema, $message): string
     {
         $schemaId = $schema->getSchemaId();

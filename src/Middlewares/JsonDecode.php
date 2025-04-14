@@ -5,9 +5,11 @@ namespace Metamorphosis\Middlewares;
 use Closure;
 use Exception;
 use Metamorphosis\Record\RecordInterface;
+use Override;
 
 class JsonDecode implements MiddlewareInterface
 {
+    #[Override]
     public function process(RecordInterface $record, Closure $next)
     {
         $payload = json_decode($record->getPayload(), true);

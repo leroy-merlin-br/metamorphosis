@@ -23,6 +23,8 @@ class Config extends AbstractConfig
     ];
 
     /**
+     * @psalm-suppress PossiblyUnusedProperty
+     *
      * @var mixed[]
      */
     protected array $default = [

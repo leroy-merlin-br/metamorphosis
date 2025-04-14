@@ -4,6 +4,7 @@ namespace Metamorphosis\Consumers;
 
 use RdKafka\KafkaConsumer;
 use RdKafka\Message;
+use Override;
 
 class HighLevel implements ConsumerInterface
 {
@@ -18,6 +19,7 @@ class HighLevel implements ConsumerInterface
         $this->timeout = $timeout;
     }
 
+    #[Override]
     public function consume(): ?Message
     {
         return $this->consumer->consume($this->timeout);
@@ -33,6 +35,7 @@ class HighLevel implements ConsumerInterface
         $this->consumer->commitAsync();
     }
 
+    #[Override]
     public function canCommit(): bool
     {
         return true;

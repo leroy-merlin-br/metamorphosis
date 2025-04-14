@@ -5,6 +5,7 @@ namespace Metamorphosis\Consumers;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer as ConsumerConfigOptions;
 use RdKafka\ConsumerTopic;
 use RdKafka\Message;
+use Override;
 
 class LowLevel implements ConsumerInterface
 {
@@ -22,6 +23,7 @@ class LowLevel implements ConsumerInterface
         $this->timeout = $consumerConfigOptions->getTimeout();
     }
 
+    #[Override]
     public function consume(): ?Message
     {
         return $this->consumer->consume($this->partition, $this->timeout);
@@ -31,6 +33,7 @@ class LowLevel implements ConsumerInterface
      *  When running low level consumer, we dont need
      * to commit the messages as they've already been committed.
      */
+    #[Override]
     public function canCommit(): bool
     {
         return false;

@@ -12,7 +12,8 @@ class ProducerTest extends LaravelTestCase
     public function testShouldConvertConfigOptionsToArray(): void
     {
         // Set
-        $broker = new Broker('kafka:9092', new None());
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $broker = new Broker($connections, new None());
         $configOptions = new Producer(
             'topic-id',
             $broker,
@@ -28,7 +29,7 @@ class ProducerTest extends LaravelTestCase
 
         $expected = [
             'topic_id' => 'topic-id',
-            'connections' => 'kafka:9092',
+            'connections' => $connections,
             'auth' => null,
             'timeout' => 4000,
             'is_async' => false,

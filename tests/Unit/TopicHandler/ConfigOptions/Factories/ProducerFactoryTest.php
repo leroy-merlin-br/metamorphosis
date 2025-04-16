@@ -11,8 +11,9 @@ class ProducerFactoryTest extends LaravelTestCase
     public function testShouldMakeProducerConfigOptions(): void
     {
         // Set
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
         $brokerData = [
-            'connections' => 'kafka:9092',
+            'connections' => $connections,
             'auth' => [
                 'type' => 'ssl',
                 'ca' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/ca.pem',
@@ -35,7 +36,7 @@ class ProducerFactoryTest extends LaravelTestCase
         ];
         $expected = [
             'topic_id' => 'kafka-test',
-            'connections' => 'kafka:9092',
+            'connections' => $connections,
             'auth' => [
                 'type' => 'ssl',
                 'ca' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/ca.pem',

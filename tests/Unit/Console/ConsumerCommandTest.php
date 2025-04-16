@@ -204,6 +204,8 @@ class ConsumerCommandTest extends LaravelTestCase
     {
         parent::setUp();
 
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+
         config([
             'kafka' => [
                 'topics' => [
@@ -221,7 +223,7 @@ class ConsumerCommandTest extends LaravelTestCase
             ],
             'service' => [
                 'broker' => [
-                    'connections' => 'test_kafka:6680',
+                    'connections' => $connections,
                     'auth' => [],
                 ],
             ],

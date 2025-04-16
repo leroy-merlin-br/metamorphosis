@@ -18,6 +18,7 @@ class ConfigTest extends LaravelTestCase
         config(
             ['kafka.topics.default.consumer.consumer_groups.test-consumer-group.handler' => ConsumerHandlerDummy::class]
         );
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
         $consumerHandler = $this->instance(
             ConsumerHandlerDummy::class,
             m::mock(ConsumerHandlerDummy::class)
@@ -45,7 +46,7 @@ class ConfigTest extends LaravelTestCase
             'handler' => 'Tests\Unit\Dummies\ConsumerHandlerDummy',
             'timeout' => 20000,
             'consumer_group' => 'test-consumer-group',
-            'connections' => 'kafka:9092',
+            'connections' => $connections,
             'auth' => [
                 'type' => 'ssl',
                 'ca' => storage_path('ca.pem'),
@@ -73,7 +74,7 @@ class ConfigTest extends LaravelTestCase
                 'handler' => 'Tests\Unit\Dummies\ConsumerHandlerDummy',
                 'timeout' => 20000,
                 'consumer_group' => 'test-consumer-group',
-                'connections' => 'kafka:9092',
+                'connections' => $connections,
                 'auth' => [
                     'type' => 'ssl',
                     'ca' => storage_path('ca.pem'),

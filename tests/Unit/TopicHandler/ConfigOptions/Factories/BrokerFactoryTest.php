@@ -11,8 +11,9 @@ class BrokerFactoryTest extends LaravelTestCase
     public function testShouldMakeConfigOptionWithAvroSchema(): void
     {
         // Set
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
         $data = [
-            'connections' => 'kafka:9092',
+            'connections' => $connections,
             'auth' => [
                 'type' => 'ssl',
                 'ca' => '/var/www/html/vendor/orchestra/testbench-core/laravel/storage/ca.pem',

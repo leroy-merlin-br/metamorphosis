@@ -6,9 +6,10 @@ use Illuminate\Console\Command as BaseCommand;
 use Metamorphosis\Connectors\Consumer\Config;
 use Metamorphosis\Connectors\Consumer\Factory;
 use Metamorphosis\Consumers\Runner;
+use Symfony\Component\Console\Command\SignalableCommandInterface;
 use Metamorphosis\TopicHandler\ConfigOptions\Consumer;
 
-class ConsumerCommand extends BaseCommand
+class ConsumerCommand extends BaseCommand implements SignalableCommandInterface
 {
     /**
      * @var {inheritdoc}
@@ -37,23 +38,48 @@ class ConsumerCommand extends BaseCommand
         {--config_name= : Change default name for laravel config file.}
         {--service_name= : Change default name for services config file.}';
 
+    private ?Runner $runner = null;
+    private ?Consumer $consumer = null;
+
     public function handle(Config $config): void
     {
-        $consumer = $config->make($this->option(), $this->argument());
+        $this->consumer = $config->make($this->option(), $this->argument());
 
-        $this->writeStartingConsumer($consumer);
+        $this->writeStartingConsumer();
 
-        $manager = Factory::make($consumer);
+        $manager = Factory::make($this->consumer);
 
-        $runner = app(Runner::class, compact('manager'));
-        $runner->run($this->option('times'));
+        $this->runner = app(Runner::class, compact('manager'));
+        $this->runner->run($this->option('times'));
     }
 
-    private function writeStartingConsumer(Consumer $consumer): void
+    public function getSubscribedSignals(): array
     {
-        $text = 'Starting consumer for topic: ' . $consumer->getTopicId() . PHP_EOL;
-        $text .= ' on consumer group: ' . $consumer->getConsumerGroup() . PHP_EOL;
-        $text .= 'Connecting in ' . $consumer->getBroker()->getConnections() . PHP_EOL;
+        return [SIGINT, SIGTERM];
+    }
+
+    public function handleSignal(int $signal): void
+    {
+        if (null === $this->runner) {
+            $this->error('Consumer is not running.');
+
+            return;
+        }
+
+        $this->info(
+            "Gracefully shutting down the consumer {$this->consumer?->getConsumerGroup()}" .
+            " from topic {$this->consumer?->getTopicId()} at connection {$this->consumer?->getBroker()->getConnections()}" .
+            " with signal {$signal}..."
+        );
+
+        $this->runner->shutdown();
+    }
+
+    private function writeStartingConsumer(): void
+    {
+        $text = 'Starting consumer for topic: ' . $this->consumer?->getTopicId() . PHP_EOL;
+        $text .= ' on consumer group: ' . $this->consumer?->getConsumerGroup() . PHP_EOL;
+        $text .= 'Connecting in ' . $this->consumer?->getBroker()->getConnections() . PHP_EOL;
         $text .= 'Running consumer..';
 
         $this->output->writeln($text);

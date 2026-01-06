@@ -18,21 +18,26 @@ jobs:
           - '8.1'
           - '8.2'
     env:
-      KAFKA_BROKER_CONNECTIONS: 'localhost:29092'
+      KAFKA_BROKER_CONNECTIONS: 'localhost:9092'
     services:
-      zookeeper:
-        image: bitnami/zookeeper
-        env:
-          ALLOW_ANONYMOUS_LOGIN: yes
       kafka:
-        image: bitnami/kafka
+        image: confluentinc/cp-kafka
         ports:
           - '9092:9092'
         env:
-          KAFKA_LISTENERS: 'PLAINTEXT://:9092'
-          KAFKA_CFG_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:9092'
-          KAFKA_CFG_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-          ALLOW_PLAINTEXT_LISTENER: yes
+          KAFKA_NODE_ID: 1
+          KAFKA_PROCESS_ROLES: 'broker,controller'
+          KAFKA_CONTROLLER_QUORUM_VOTERS: '1@localhost:29093'
+          KAFKA_LISTENERS: 'PLAINTEXT://0.0.0.0:29092,CONTROLLER://0.0.0.0:29093,PLAINTEXT_HOST://0.0.0.0:9092'
+          KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092'
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+          KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+          KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+          CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+          KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+          KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+          KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v3

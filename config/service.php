@@ -19,7 +19,7 @@ return [
         'password' => 'PASSWORD',
     ],
     'broker' => [
-        'connections' => env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092'),
+        'connections' => env('KAFKA_BROKER_CONNECTIONS', 'kafka:29092'),
         'auth' => [
             'type' => 'ssl', // ssl and none
             'ca' => storage_path('ca.pem'),

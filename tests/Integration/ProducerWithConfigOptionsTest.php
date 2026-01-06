@@ -53,7 +53,7 @@ class ProducerWithConfigOptionsTest extends LaravelTestCase
 
     protected function haveAHandlerConfigured(): void
     {
-        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:29092');
         $broker = new Broker($connections, new None());
         $this->producerConfigOptions = new ProducerConfigOptions(
             'sale_order_override',

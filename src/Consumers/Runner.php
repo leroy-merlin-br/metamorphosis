@@ -8,6 +8,8 @@ class Runner
 {
     private Manager $manager;
 
+    private bool $shuttingDown = false;
+
     public function __construct(Manager $manager)
     {
         $this->manager = $manager;
@@ -18,6 +20,9 @@ class Runner
         if ($times) {
             for ($i = 0; $i < $times; $i++) {
                 $this->manager->handleMessage();
+                if ($this->shuttingDown) {
+                    return;
+                }
             }
 
             return;
@@ -25,6 +30,14 @@ class Runner
 
         while (true) {
             $this->manager->handleMessage();
+            if ($this->shuttingDown) {
+                return;
+            }
         }
+    }
+
+    public function shutdown(): void
+    {
+        $this->shuttingDown = true;
     }
 }

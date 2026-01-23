@@ -2,9 +2,16 @@
 
 namespace Tests\Unit\Console;
 
+use Illuminate\Console\OutputStyle;
+use Metamorphosis\Connectors\Consumer\Config;
+use Metamorphosis\Console\ConsumerCommand;
 use Metamorphosis\Consumers\Runner;
 use Metamorphosis\Exceptions\ConfigurationException;
 use Mockery as m;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputOption;
 use Tests\LaravelTestCase;
 use Tests\Unit\Dummies\ConsumerHandlerDummy;
 
@@ -130,6 +137,67 @@ class ConsumerCommandTest extends LaravelTestCase
             ->once();
 
         $this->artisan($command, $parameters);
+    }
+
+    public function testHandleSignalWhenConsumerIsNotRunning(): void
+    {
+        // Set
+        $command = new ConsumerCommand();
+        $output = m::mock(OutputStyle::class);
+        $command->setOutput($output);
+
+        // Expectations
+        $output->expects()
+            ->writeln('<error>Consumer is not running.</error>', 32)
+            ->andReturnNull();
+
+        // Actions
+        $command->handleSignal(SIGINT);
+    }
+
+    public function testHandleSignalGracefulShutdown(): void
+    {
+        // Set
+        $config = new Config();
+        $output = m::mock(OutputStyle::class);
+        $command = new ConsumerCommand();
+
+        $command->setOutput($output);
+
+        $inputDefinition = new InputDefinition([
+            new InputArgument('command', InputArgument::REQUIRED),
+            new InputArgument('topic', InputArgument::REQUIRED),
+            new InputOption('times'),
+        ]);
+
+        $command->setInput(
+            new ArrayInput(
+                [
+                    'command' => 'kafka:consume',
+                    'topic' => 'topic_key',
+                    '--times' => 1,
+                ],
+                $inputDefinition
+            ),
+        );
+
+        // Expectations
+        $output->expects()
+            ->writeln(
+                "Starting consumer for topic: topic_name\n on consumer group: default\nConnecting in test_kafka:6680\nRunning consumer.."
+            )
+            ->andReturnNull();
+
+        $output->expects()
+            ->writeln(
+                '<info>Gracefully shutting down the consumer default from topic topic_name at connection test_kafka:6680 with signal 15...</info>',
+                32
+            )
+            ->andReturnNull();
+
+        // Actions
+        $command->handle($config);
+        $command->handleSignal(SIGTERM);
     }
 
     protected function setUp(): void

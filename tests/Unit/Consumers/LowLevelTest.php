@@ -20,7 +20,10 @@ class LowLevelTest extends LaravelTestCase
         $timeout = 2;
         $partition = 3;
 
-        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
         $brokerOptions = new Broker($connections, new None());
         $consumerConfigOptions = new ConsumerConfigOptions(
             'kafka-test',

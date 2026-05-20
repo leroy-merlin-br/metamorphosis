@@ -17,7 +17,10 @@ class ConsumerTest extends LaravelTestCase
     public function testItShouldSetup(): void
     {
         // Set
-        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:29092');
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
         $brokerOptions = new Broker($connections, new None());
         $consumerConfigOptions = new ConsumerConfigOptions(
             'single_consumer_test',
@@ -63,7 +66,7 @@ class ConsumerTest extends LaravelTestCase
             Consumer::class,
             ['configOptions' => $consumerConfigOptions]
         );
-        $expected = '{"id":"MESSAGE_ID"}';
+        $expected = ['id' => 'MESSAGE_ID'];
 
         // Actions
         $result = $consumer->consume()->getPayload();

@@ -8,10 +8,48 @@ use Tests\LaravelTestCase;
 
 class ConsumerFactoryTest extends LaravelTestCase
 {
+    public function testShouldKeepCommitAsyncDisabledWhenConfigured(): void
+    {
+        // Set
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $brokerData = [
+            'connections' => $connections,
+            'auth' => [],
+        ];
+        $topicData = [
+            'topic_id' => 'kafka-test',
+            'consumer' => [
+                'consumer_group' => 'test-consumer-group',
+                'middlewares' => [],
+                'auto_commit' => false,
+                'commit_async' => false,
+                'offset_reset' => 'earliest',
+                'handler' => '\App\Kafka\Consumers\ConsumerExample',
+                'partition' => 0,
+                'offset' => 0,
+                'timeout' => 20000,
+            ],
+        ];
+
+        // Actions
+        $result = ConsumerFactory::make($brokerData, $topicData, []);
+
+        // Assertions
+        $this->assertFalse($result->isAutoCommit());
+        $this->assertFalse($result->isCommitASync());
+        $this->assertFalse($result->toArray()['commit_async']);
+    }
+
     public function testShouldMakeConfigOptionWithAvroSchema(): void
     {
         // Set
-        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
         $brokerData = [
             'connections' => $connections,
             'auth' => [

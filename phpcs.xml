@@ -32,4 +32,11 @@
     <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility.MissingConstantVisibility">
         <exclude-pattern>src/Producer/Poll.php</exclude-pattern>
     </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition.RequiredMultiLineCondition">
+        <type>warning</type>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall">
+        <type>warning</type>
+    </rule>
 </ruleset>

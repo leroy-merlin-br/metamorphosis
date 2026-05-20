@@ -8,6 +8,7 @@ use Metamorphosis\Facades\Metamorphosis;
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
 use Metamorphosis\TopicHandler\ConfigOptions\Broker;
 use Metamorphosis\TopicHandler\ConfigOptions\Producer as ProducerConfigOptions;
+use PHPUnit\Framework\Attributes\Group;
 use Tests\Integration\Dummies\MessageConsumer;
 use Tests\Integration\Dummies\MessageProducer;
 use Tests\LaravelTestCase;
@@ -22,9 +23,7 @@ class ProducerTest extends LaravelTestCase
 
     protected string $topicId;
 
-    /**
-     * @group runProducer
-     */
+    #[Group('runProducer')]
     public function testShouldRunAProducerAndReceiveMessagesWithAHighLevelConsumer(): void
     {
         // Given That I
@@ -206,7 +205,10 @@ class ProducerTest extends LaravelTestCase
 
     private function createProducerConfigOptions(string $topicId): ProducerConfigOptions
     {
-        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:29092');
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
         $broker = new Broker($connections, new None());
 
         return new ProducerConfigOptions(

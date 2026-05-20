@@ -33,7 +33,12 @@ class FactoryTest extends LaravelTestCase
         Factory::authenticate($conf, $configOptionsSsl);
 
         // Assertions
-        $this->assertArraySubset($expected, $conf->dump());
+        $actual = $conf->dump();
+
+        foreach ($expected as $key => $value) {
+            $this->assertArrayHasKey($key, $actual);
+            $this->assertSame($value, $actual[$key]);
+        }
     }
 
     public function testItMakesSASLAuthenticationClass(): void
@@ -56,7 +61,12 @@ class FactoryTest extends LaravelTestCase
         Factory::authenticate($conf, $configOptionsSaslSsl);
 
         // Assertions
-        $this->assertArraySubset($expected, $conf->dump());
+        $actual = $conf->dump();
+
+        foreach ($expected as $key => $value) {
+            $this->assertArrayHasKey($key, $actual);
+            $this->assertSame($value, $actual[$key]);
+        }
     }
 
     public function testItThrowsExceptionWhenInvalidProtocolIsPassed(): void

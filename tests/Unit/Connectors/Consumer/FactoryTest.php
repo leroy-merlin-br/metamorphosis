@@ -61,7 +61,10 @@ class FactoryTest extends LaravelTestCase
     {
         parent::setUp();
 
-        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:29092');
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
         config([
             'kafka' => [
                 'topics' => [

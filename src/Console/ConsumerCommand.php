@@ -41,6 +41,9 @@ class ConsumerCommand extends BaseCommand implements SignalableCommandInterface
     private ?Runner $runner = null;
     private ?Consumer $consumer = null;
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod Laravel resolves this command entrypoint at runtime.
+     */
     public function handle(Config $config): void
     {
         $this->consumer = $config->make($this->option(), $this->argument());
@@ -55,15 +58,19 @@ class ConsumerCommand extends BaseCommand implements SignalableCommandInterface
 
     public function getSubscribedSignals(): array
     {
-        return [SIGINT, SIGTERM];
+        if (!defined('SIGINT') || !defined('SIGTERM')) {
+            return [];
+        }
+
+        return [constant('SIGINT'), constant('SIGTERM')];
     }
 
-    public function handleSignal(int $signal): void
+    public function handleSignal(int $signal, int|false $previousExitCode = 0): int|false
     {
         if (null === $this->runner) {
             $this->error('Consumer is not running.');
 
-            return;
+            return self::FAILURE;
         }
 
         $this->info(
@@ -73,6 +80,8 @@ class ConsumerCommand extends BaseCommand implements SignalableCommandInterface
         );
 
         $this->runner->shutdown();
+
+        return $previousExitCode;
     }
 
     private function writeStartingConsumer(): void

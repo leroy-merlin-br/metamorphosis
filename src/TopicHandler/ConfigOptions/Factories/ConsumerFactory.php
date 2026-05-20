@@ -46,7 +46,7 @@ class ConsumerFactory
         }
 
         if (isset($consumerConfig['commit_async'])) {
-            $consumerConfig['commitAsync'] = $consumerConfig['commit_async'];
+            $consumerConfig['commitASync'] = $consumerConfig['commit_async'];
         }
 
         if (isset($consumerConfig['offset_reset'])) {

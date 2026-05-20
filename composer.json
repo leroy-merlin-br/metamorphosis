@@ -22,9 +22,8 @@
         "mockery/mockery": "^1.6.6",
         "kwn/php-rdkafka-stubs": "^2.2.1",
         "orchestra/testbench": "^9.17",
-        "dms/phpunit-arraysubset-asserts": "^0.5.0",
         "phpro/grumphp": "v2.12.0",
-        "vimeo/psalm": "^6.10.0",
+        "vimeo/psalm": "^6.16",
         "psalm/plugin-mockery": "^1.2.1",
         "rector/rector": "^0.13.10"
     },

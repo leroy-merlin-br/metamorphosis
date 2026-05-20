@@ -3,7 +3,7 @@ LABEL maintainer="boitata@leroymerlin.com.br"
 
 USER root:root
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:2.8 /usr/bin/composer /usr/local/bin/composer
 
 RUN apt-get update -qq \
   && apt-get install -qq --no-install-recommends \

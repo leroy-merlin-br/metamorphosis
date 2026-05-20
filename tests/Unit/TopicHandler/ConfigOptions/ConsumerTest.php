@@ -13,7 +13,10 @@ class ConsumerTest extends LaravelTestCase
     public function testShouldConvertConfigOptionsToArray(): void
     {
         // Set
-        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
         $broker = new Broker($connections, new None());
         $configOptions = new Consumer(
             'topic-id',

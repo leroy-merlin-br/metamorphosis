@@ -18,7 +18,7 @@ class ConfigTest extends LaravelTestCase
         config(
             ['kafka.topics.default.consumer.consumer_groups.test-consumer-group.handler' => ConsumerHandlerDummy::class]
         );
-        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:9092');
+        $connections = 'kafka:29092';
         $consumerHandler = $this->instance(
             ConsumerHandlerDummy::class,
             m::mock(ConsumerHandlerDummy::class)
@@ -91,7 +91,7 @@ class ConfigTest extends LaravelTestCase
         );
 
         // Assertions
-        $this->assertArraySubset($expected, $configManager->toArray());
+        $this->assertEquals($expected, $configManager->toArray());
     }
 
     public function testShouldNotSetRuntimeConfigWhenOptionsIsInvalid(): void

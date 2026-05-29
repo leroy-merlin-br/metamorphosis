@@ -1,9 +1,9 @@
-FROM php:8.0-fpm
+FROM php:8.2-fpm
 LABEL maintainer="boitata@leroymerlin.com.br"
 
 USER root:root
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:2.8 /usr/bin/composer /usr/local/bin/composer
 
 RUN apt-get update -qq \
   && apt-get install -qq --no-install-recommends \
@@ -12,7 +12,7 @@ RUN apt-get update -qq \
     zlib1g-dev libicu-dev \
     && apt-get clean
 
-RUN pecl install xdebug-3.1.6 \
+RUN pecl install xdebug-3.4.2 \
   && docker-php-ext-enable \
     xdebug \
   && docker-php-ext-configure  \

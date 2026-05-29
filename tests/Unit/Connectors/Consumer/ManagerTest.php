@@ -71,7 +71,7 @@ class ManagerTest extends LaravelTestCase
             ->failed($exception);
 
         $dispatcher->expects()
-            ->handle($consumerRecord)
+            ->handle(m::type(ConsumerRecord::class))
             ->times(3);
 
         // Actions
@@ -173,7 +173,7 @@ class ManagerTest extends LaravelTestCase
             ->andReturnTrue();
 
         $dispatcher->expects()
-            ->handle($consumerRecord)
+            ->handle(m::type(ConsumerRecord::class))
             ->times(2);
 
         $consumerHandler->expects()
@@ -182,6 +182,59 @@ class ManagerTest extends LaravelTestCase
         // Actions
         $runner->handleMessage();
         $runner->handleMessage();
+        $runner->handleMessage();
+    }
+
+    public function testShouldHandleSyncCommit(): void
+    {
+        // Set
+        $consumerRecord = $this->instance(
+            ConsumerRecord::class,
+            m::mock(ConsumerRecord::class)
+        );
+
+        $consumer = m::mock(ConsumerInterface::class);
+        $consumerHandler = m::mock(ConsumerHandler::class);
+        $dispatcher = m::mock(Dispatcher::class);
+
+        $runner = new Manager(
+            $consumer,
+            $consumerHandler,
+            $dispatcher,
+            false,
+            false
+        );
+
+        $kafkaMessage = new KafkaMessage();
+        $kafkaMessage->payload = 'original message';
+        $kafkaMessage->err = RD_KAFKA_RESP_ERR_NO_ERROR;
+
+        // Expectations
+        $consumer->expects()
+            ->consume()
+            ->once()
+            ->andReturn($kafkaMessage);
+
+        $consumer->expects()
+            ->canCommit()
+            ->once()
+            ->andReturnTrue();
+
+        $consumer->expects()
+            ->commit()
+            ->once();
+
+        $consumer->shouldReceive('commitAsync')
+            ->never();
+
+        $dispatcher->expects()
+            ->handle(m::type(ConsumerRecord::class))
+            ->once();
+
+        $consumerHandler->shouldReceive('finished')
+            ->never();
+
+        // Actions
         $runner->handleMessage();
     }
 }

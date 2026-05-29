@@ -1,24 +1,382 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.27.0@faf106e717c37b8c81721845dba9de3d8deed8ff">
+<files psalm-version="6.16.1@f1f5de594dc76faf8784e02d3dc4716c91c6f6ac">
+  <file src="src/Authentication/SASLAuthentication.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Authentication/SSLAuthentication.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Avro/CachedSchemaRegistryClient.php">
+    <NoValue>
+      <code><![CDATA[return $this->idToSchema[$schemaId];]]></code>
+    </NoValue>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Avro/Client.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[delete]]></code>
+      <code><![CDATA[post]]></code>
+      <code><![CDATA[put]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Avro/Serializer/Decoders/SchemaId.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function decode(AvroStringIO $io)]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Avro/Serializer/Decoders/SchemaSubjectAndVersion.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function decode(AvroStringIO $io)]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Avro/Serializer/Encoders/SchemaId.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function encode(Schema $schema, $message): string]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[getRegistry]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Avro/Serializer/Encoders/SchemaSubjectAndVersion.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function encode(Schema $schema, $message): string]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Avro/Serializer/MessageEncoder.php">
+    <PossiblyUnusedParam>
+      <code><![CDATA[$topic]]></code>
+    </PossiblyUnusedParam>
+    <UnusedClass>
+      <code><![CDATA[MessageEncoder]]></code>
+    </UnusedClass>
+    <UnusedVariable>
+      <code><![CDATA[$subject]]></code>
+      <code><![CDATA[$suffix]]></code>
+    </UnusedVariable>
+  </file>
+  <file src="src/Connectors/AbstractConfig.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[validate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Connectors/Consumer/Config.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[makeWithConfigOptions]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Connectors/Consumer/Factory.php">
+    <InvalidArgument>
+      <code><![CDATA[$handler]]></code>
+    </InvalidArgument>
+  </file>
+  <file src="src/Connectors/Consumer/HighLevel.php">
+    <InvalidArgument>
+      <code><![CDATA[$maxPollIntervalMs]]></code>
+    </InvalidArgument>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getConsumer(bool $autoCommit, ConfigOptions $configOptions): ConsumerInterface]]></code>
+    </MissingOverrideAttribute>
+  </file>
   <file src="src/Connectors/Consumer/LowLevel.php">
-    <UndefinedMethod occurrences="1">
-      <code>consumeStart</code>
-    </UndefinedMethod>
+    <InvalidArgument>
+      <code><![CDATA[$maxPollIntervalMs]]></code>
+    </InvalidArgument>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getConsumer(bool $autoCommit, ConfigOptions $configOptions): ConsumerInterface]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Connectors/Producer/Config.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$default]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Console/ConfigOptionsCommand.php">
+    <InvalidArgument>
+      <code><![CDATA[$this->option('times')]]></code>
+    </InvalidArgument>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[handle]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Console/ConsumerCommand.php">
+    <InvalidArgument>
+      <code><![CDATA[$this->option('times')]]></code>
+    </InvalidArgument>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getSubscribedSignals(): array]]></code>
+      <code><![CDATA[public function handleSignal(int $signal, int|false $previousExitCode = 0): int|false]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Console/ConsumerMakeCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getDefaultNamespace($rootNamespace)]]></code>
+      <code><![CDATA[protected function getStub()]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Console/MiddlewareMakeCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getDefaultNamespace($rootNamespace)]]></code>
+      <code><![CDATA[protected function getStub()]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Console/ProducerMakeCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getDefaultNamespace($rootNamespace)]]></code>
+      <code><![CDATA[protected function getStub()]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Consumer.php">
+    <UnusedClass>
+      <code><![CDATA[Consumer]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Consumers/HighLevel.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function canCommit(): bool]]></code>
+      <code><![CDATA[public function consume(): ?Message]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[commit]]></code>
+      <code><![CDATA[commitAsync]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Consumers/LowLevel.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function canCommit(): bool]]></code>
+      <code><![CDATA[public function consume(): ?Message]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Consumers/Runner.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Facades/Metamorphosis.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected static function getFacadeAccessor()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[Metamorphosis]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/MetamorphosisServiceProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[MetamorphosisServiceProvider]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Middlewares/AvroSchemaDecoder.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function process(RecordInterface $record, Closure $next)]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AvroSchemaDecoder]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Middlewares/AvroSchemaMixedEncoder.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function process(RecordInterface $record, Closure $next)]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AvroSchemaMixedEncoder]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Middlewares/Handler/AbstractMiddlewareHandler.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[abstract public function handle(RecordInterface $record);]]></code>
+    </MissingOverrideAttribute>
   </file>
   <file src="src/Middlewares/Handler/Consumer.php">
-    <InvalidReturnType occurrences="1">
-      <code>mixed</code>
+    <InvalidReturnType>
+      <code><![CDATA[mixed]]></code>
     </InvalidReturnType>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function process(RecordInterface $record, Closure $next)]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="src/Middlewares/Handler/Dispatcher.php">
-    <InvalidArgument occurrences="1">
-      <code>$this-&gt;queue</code>
-    </InvalidArgument>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function handle(RecordInterface $record)]]></code>
+    </MissingOverrideAttribute>
   </file>
   <file src="src/Middlewares/Handler/Iterator.php">
-    <InvalidArgument occurrences="2">
-      <code>$this-&gt;queue</code>
-      <code>$this-&gt;queue</code>
-    </InvalidArgument>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function handle(RecordInterface $record)]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Middlewares/Handler/Producer.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function process(RecordInterface $record, Closure $next): void]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Middlewares/JsonDecode.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function process(RecordInterface $record, Closure $next)]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[JsonDecode]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Middlewares/Log.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function process(RecordInterface $record, Closure $next)]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[Log]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Producer.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[produce]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedProperty>
+      <code><![CDATA[$config]]></code>
+    </UnusedProperty>
+  </file>
+  <file src="src/Producer/Poll.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Record/ConsumerRecord.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getKey(): ?string]]></code>
+      <code><![CDATA[public function getOriginal(): Message]]></code>
+      <code><![CDATA[public function getPartition(): int]]></code>
+      <code><![CDATA[public function getPayload()]]></code>
+      <code><![CDATA[public function getTopicName(): string]]></code>
+      <code><![CDATA[public function setPayload($payload): void]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[getOffset]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Record/ProducerRecord.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getKey(): ?string]]></code>
+      <code><![CDATA[public function getOriginal()]]></code>
+      <code><![CDATA[public function getPartition(): ?int]]></code>
+      <code><![CDATA[public function getPayload()]]></code>
+      <code><![CDATA[public function getTopicName(): string]]></code>
+      <code><![CDATA[public function setPayload($payload): void]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Record/RecordInterface.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getTopicName]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/TopicHandler/ConfigOptions/Auth/None.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getType(): string]]></code>
+      <code><![CDATA[public function toArray(): array]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/TopicHandler/ConfigOptions/Auth/SaslSsl.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getType(): string]]></code>
+      <code><![CDATA[public function toArray(): array]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/TopicHandler/ConfigOptions/Auth/Ssl.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getType(): string]]></code>
+      <code><![CDATA[public function toArray(): array]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/TopicHandler/ConfigOptions/AvroSchema.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/TopicHandler/ConfigOptions/Broker.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/TopicHandler/ConfigOptions/Consumer.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[setMaxPollInterval]]></code>
+      <code><![CDATA[toArray]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/TopicHandler/ConfigOptions/Factories/ProducerFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ProducerFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/TopicHandler/ConfigOptions/Producer.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[toArray]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/TopicHandler/Consumer/AbstractHandler.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function failed(Exception $exception): void]]></code>
+      <code><![CDATA[public function finished(): void]]></code>
+      <code><![CDATA[public function warning(ResponseWarningException $exception): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AbstractHandler]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/TopicHandler/Producer/AbstractHandler.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function createRecord(): ProducerRecord]]></code>
+      <code><![CDATA[public function getKey(): ?string]]></code>
+      <code><![CDATA[public function getRecord()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AbstractHandler]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/TopicHandler/Producer/AbstractProducer.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function createRecord(): ProducerRecord]]></code>
+      <code><![CDATA[public function getKey(): ?string]]></code>
+      <code><![CDATA[public function getRecord()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AbstractProducer]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/TopicHandler/Producer/HandleableResponseInterface.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[failed]]></code>
+      <code><![CDATA[success]]></code>
+    </PossiblyUnusedMethod>
   </file>
 </files>

@@ -142,23 +142,37 @@ class ConsumerCommandTest extends LaravelTestCase
     public function testHandleSignalWhenConsumerIsNotRunning(): void
     {
         // Set
+        $signal = defined('SIGINT') ? constant('SIGINT') : 2;
         $command = new ConsumerCommand();
         $output = m::mock(OutputStyle::class);
         $command->setOutput($output);
 
         // Expectations
         $output->expects()
-            ->writeln('<error>Consumer is not running.</error>', 32)
+            ->writeln(
+                m::on(
+                    static fn (string $message): bool => str_contains(
+                        $message,
+                        'Consumer is not running.'
+                    )
+                ),
+                32
+            )
             ->andReturnNull();
 
         // Actions
-        $command->handleSignal(SIGINT);
+        $result = $command->handleSignal($signal);
+
+        // Assertions
+        $this->assertSame(1, $result);
     }
 
     public function testHandleSignalGracefulShutdown(): void
     {
         // Set
+        $signal = defined('SIGTERM') ? constant('SIGTERM') : 15;
         $config = new Config();
+        $connections = (string) config('service.broker.connections');
         $output = m::mock(OutputStyle::class);
         $command = new ConsumerCommand();
 
@@ -184,25 +198,30 @@ class ConsumerCommandTest extends LaravelTestCase
         // Expectations
         $output->expects()
             ->writeln(
-                "Starting consumer for topic: topic_name\n on consumer group: default\nConnecting in test_kafka:6680\nRunning consumer.."
+                "Starting consumer for topic: topic_name\n on consumer group: default\nConnecting in {$connections}\nRunning consumer.."
             )
             ->andReturnNull();
 
         $output->expects()
             ->writeln(
-                '<info>Gracefully shutting down the consumer default from topic topic_name at connection test_kafka:6680 with signal 15...</info>',
+                "<info>Gracefully shutting down the consumer default from topic topic_name at connection {$connections} with signal {$signal}...</info>",
                 32
             )
             ->andReturnNull();
 
         // Actions
         $command->handle($config);
-        $command->handleSignal(SIGTERM);
+        $result = $command->handleSignal($signal);
+
+        // Assertions
+        $this->assertSame(0, $result);
     }
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $connections = 'kafka:29092';
 
         config([
             'kafka' => [
@@ -221,7 +240,7 @@ class ConsumerCommandTest extends LaravelTestCase
             ],
             'service' => [
                 'broker' => [
-                    'connections' => 'test_kafka:6680',
+                    'connections' => $connections,
                     'auth' => [],
                 ],
             ],

@@ -16,7 +16,11 @@ class HighLevelTest extends LaravelTestCase
     {
         // Set
         $connector = new HighLevel();
-        $brokerOptions = new Broker('kafka:9092', new None());
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $brokerOptions = new Broker($connections, new None());
         $consumerConfigOptions = new ConsumerConfigOptions(
             'kafka-test',
             $brokerOptions,

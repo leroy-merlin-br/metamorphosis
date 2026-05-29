@@ -29,6 +29,11 @@ class SSLAuthenticationTest extends LaravelTestCase
         new SSLAuthentication($conf, $configSsl);
 
         // Assertions
-        $this->assertArraySubset($expected, $conf->dump());
+        $actual = $conf->dump();
+
+        foreach ($expected as $key => $value) {
+            $this->assertArrayHasKey($key, $actual);
+            $this->assertSame($value, $actual[$key]);
+        }
     }
 }

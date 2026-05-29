@@ -88,7 +88,7 @@ class ConsumerRecord implements RecordInterface
     /**
      * Get the record key.
      */
-    public function getKey(): string
+    public function getKey(): ?string
     {
         return $this->original->key;
     }

@@ -61,14 +61,12 @@ class FactoryTest extends LaravelTestCase
     {
         parent::setUp();
 
-        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:29092');
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
         config([
             'kafka' => [
-                'brokers' => [
-                    'default' => [
-                        'connections' => $connections,
-                    ],
-                ],
                 'topics' => [
                     'topic_key' => [
                         'topic_id' => 'topic_name',
@@ -88,6 +86,11 @@ class FactoryTest extends LaravelTestCase
                             ],
                         ],
                     ],
+                ],
+            ],
+            'service' => [
+                'broker' => [
+                    'connections' => $connections,
                 ],
             ],
         ]);
@@ -110,11 +113,6 @@ class FactoryTest extends LaravelTestCase
                     ],
                 ],
             ],
-            'service' => [
-                'broker' => [
-                    'connections' => 'kafka:123',
-                ],
-            ],
         ]);
     }
 
@@ -131,11 +129,6 @@ class FactoryTest extends LaravelTestCase
                             'handler' => ConsumerHandlerDummy::class,
                         ],
                     ],
-                ],
-            ],
-            'service' => [
-                'broker' => [
-                    'connections' => 'kafka:123',
                 ],
             ],
         ]);

@@ -18,7 +18,7 @@ class Consumer
     public function __construct(ConsumerConfigOptions $configOptions)
     {
         $this->consumer = Factory::getConsumer(true, $configOptions);
-        $this->dispatcher = new Dispatcher($configOptions->getMiddlewares());
+        $this->makeDispatcher($configOptions);
     }
 
     public function consume(): ?RecordInterface
@@ -30,5 +30,20 @@ class Consumer
         }
 
         return null;
+    }
+
+    private function makeDispatcher(ConsumerConfigOptions $configOptions): void
+    {
+        $middlewares = $configOptions->getMiddlewares();
+        foreach ($middlewares as &$middleware) {
+            $middleware = is_string($middleware)
+                ? app(
+                    $middleware,
+                    ['consumerConfigOptions' => $configOptions]
+                )
+                : $middleware;
+        }
+
+        $this->dispatcher = new Dispatcher($middlewares);
     }
 }

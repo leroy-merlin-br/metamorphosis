@@ -23,7 +23,11 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
     {
         // Set
         $avroSchema = $this->getSchemaFixture();
-        $broker = new Broker('kafka:9092', new None());
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $broker = new Broker($connections, new None());
         $producerConfigOptions = new ProducerConfigOptions(
             'kafka-test',
             $broker,

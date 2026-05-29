@@ -17,7 +17,11 @@ class PollTest extends LaravelTestCase
     public function testItShouldHandleMessageWithoutAcknowledgment(): void
     {
         // Set
-        $broker = new Broker('kafka:9092', new None());
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $broker = new Broker($connections, new None());
         $producerConfigOptions = new ProducerConfigOptions(
             'topic_name',
             $broker,
@@ -47,7 +51,11 @@ class PollTest extends LaravelTestCase
     public function testShouldThrowExceptionWhenFlushFailed(): void
     {
         // Set
-        $broker = new Broker('kafka:9092', new None());
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $broker = new Broker($connections, new None());
         $producerConfigOptions = new ProducerConfigOptions(
             'topic_name',
             $broker,
@@ -81,7 +89,11 @@ class PollTest extends LaravelTestCase
     public function testItShouldHandleResponseEveryTimeWhenAsyncModeIsTrue(): void
     {
         // Set
-        $broker = new Broker('kafka:9092', new None());
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $broker = new Broker($connections, new None());
         $producerConfigOptions = new ProducerConfigOptions(
             'topic_name',
             $broker,

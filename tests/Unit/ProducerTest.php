@@ -36,7 +36,11 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $broker = new Broker('kafka:9092', new None());
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $broker = new Broker($connections, new None());
         $producerConfigOptions = new ProducerConfigOptions(
             $topic,
             $broker
@@ -74,7 +78,11 @@ class ProducerTest extends LaravelTestCase
         $config = m::mock(Config::class);
         $connector = m::mock(Connector::class);
 
-        $broker = new Broker('kafka:9092', new None());
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $broker = new Broker($connections, new None());
         $producerConfigOptions = new ProducerConfigOptions(
             $topic,
             $broker
@@ -121,7 +129,11 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $broker = new Broker('kafka:9092', new None());
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $broker = new Broker($connections, new None());
         $producerConfigOptions = new ProducerConfigOptions(
             $topic,
             $broker,
@@ -173,7 +185,11 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $broker = new Broker('kafka:9092', new None());
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $broker = new Broker($connections, new None());
         $producerConfigOptions = new ProducerConfigOptions(
             $topic,
             $broker,
@@ -223,7 +239,11 @@ class ProducerTest extends LaravelTestCase
         $kafkaProducer = m::mock(KafkaProducer::class);
         $producerTopic = m::mock(ProducerTopic::class);
 
-        $broker = new Broker('kafka:9092', new None());
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $broker = new Broker($connections, new None());
         $producerConfigOptions = new ProducerConfigOptions(
             $topic,
             $broker,

@@ -50,8 +50,8 @@ class ProducerWithAvroTest extends LaravelTestCase
             'kafka' => [
                 'brokers' => [
                     'test' => [
-                        'connections' => env(
-                            'KAFKA_BROKER_CONNECTIONS',
+                        'connections' => config(
+                            'service.broker.connections',
                             'kafka:29092'
                         ),
                     ],
@@ -171,7 +171,10 @@ class ProducerWithAvroTest extends LaravelTestCase
 
     private function createProducerConfigOptions(string $topicId): ProducerConfigOptions
     {
-        $connections = env('KAFKA_BROKER_CONNECTIONS', 'kafka:29092');
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
         $broker = new Broker($connections, new None());
 
         return new ProducerConfigOptions(

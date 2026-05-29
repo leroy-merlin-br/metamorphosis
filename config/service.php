@@ -6,7 +6,7 @@ return [
         'request_options' => [
             'headers' => [
                 'Authorization' => [
-                    'Basic' . base64_encode(
+                    'Basic ' . base64_encode(
                         env('AVRO_SCHEMA_USERNAME') . ':' . env(
                             'AVRO_SCHEMA_PASSWORD'
                         )

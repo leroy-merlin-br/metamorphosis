@@ -1,15 +1,10 @@
 <?php
 
-use Rector\Core\ValueObject\PhpVersion;
-use Rector\Set\ValueObject\SetList;
 use Rector\Config\RectorConfig;
+use Rector\ValueObject\PhpVersion;
+use Rector\Set\ValueObject\SetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
-
-    $rectorConfig->sets([
-        SetList::CODE_QUALITY,
-    ]);
-
-    $rectorConfig->phpVersion(PhpVersion::PHP_74);
-};
+return RectorConfig::configure()
+    ->withPaths([__DIR__ . '/src', __DIR__ . '/tests'])
+    ->withSets([SetList::CODE_QUALITY])
+    ->withPhpVersion(PhpVersion::PHP_83);

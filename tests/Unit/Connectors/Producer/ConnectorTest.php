@@ -57,9 +57,16 @@ class ConnectorTest extends LaravelTestCase
         $conf->expects()
             ->set('metadata.broker.list', $connections);
 
+        $conf->expects()
+            ->set('compression.type', 'none');
+
         $producerConfigOptions->expects()
             ->getBroker()
             ->andReturn($broker);
+
+        $producerConfigOptions->expects()
+            ->getCompressionType()
+            ->andReturn('none');
 
         // Actions
         $result = $connector->getProducerTopic(
@@ -110,9 +117,16 @@ class ConnectorTest extends LaravelTestCase
         $conf->expects()
             ->set('metadata.broker.list', $connections);
 
+        $conf->expects()
+            ->set('compression.type', 'none');
+
         $producerConfigOptions->expects()
             ->getBroker()
             ->andReturn($broker);
+
+        $producerConfigOptions->expects()
+            ->getCompressionType()
+            ->andReturn('none');
 
         // Actions
         $result = $connector->getProducerTopic(

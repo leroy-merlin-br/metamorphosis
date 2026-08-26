@@ -41,6 +41,7 @@ class ProducerTest extends LaravelTestCase
             'required_acknowledgment' => true,
             'max_poll_records' => 500,
             'flush_attempts' => 10,
+            'compression_type' => 'none',
         ];
 
         // Actions

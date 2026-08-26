@@ -40,6 +40,10 @@ class ProducerFactory
             $config['flushAttempts'] = $config['flush_attempts'];
         }
 
+        if (isset($config['compression_type'])) {
+            $config['compressionType'] = $config['compression_type'];
+        }
+
         return $config;
     }
 }

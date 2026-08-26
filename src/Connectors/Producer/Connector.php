@@ -34,6 +34,8 @@ class Connector
         $broker = $producerConfigOptions->getBroker();
         $conf->set('metadata.broker.list', $broker->getConnections());
 
+        $conf->set('compression.type', $producerConfigOptions->getCompressionType());
+
         Factory::authenticate($conf, $broker->getAuth());
 
         return app(KafkaProducer::class, compact('conf'));

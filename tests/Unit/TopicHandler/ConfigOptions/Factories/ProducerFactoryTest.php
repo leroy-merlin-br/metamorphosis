@@ -35,6 +35,7 @@ class ProducerFactoryTest extends LaravelTestCase
                 'max_poll_records' => 500,
                 'flush_attempts' => 10,
                 'middlewares' => [],
+                'compression_type' => 'gzip',
             ],
         ];
         $expected = [
@@ -53,6 +54,7 @@ class ProducerFactoryTest extends LaravelTestCase
             'max_poll_records' => 500,
             'flush_attempts' => 10,
             'middlewares' => [],
+            'compression_type' => 'gzip',
         ];
 
         // Actions

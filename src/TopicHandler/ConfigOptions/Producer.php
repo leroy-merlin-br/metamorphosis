@@ -53,6 +53,8 @@ class Producer
 
     private ?int $partition = null;
 
+    private string $compressionType;
+
     public function __construct(
         string $topicId,
         Broker $broker,
@@ -63,7 +65,8 @@ class Producer
         bool $isAsync = true,
         bool $requiredAcknowledgment = false,
         int $maxPollRecords = 500,
-        int $flushAttempts = 10
+        int $flushAttempts = 10,
+        string $compressionType = 'none'
     ) {
         $this->broker = $broker;
         $this->middlewares = $middlewares;
@@ -75,6 +78,7 @@ class Producer
         $this->topicId = $topicId;
         $this->avroSchema = $avroSchema;
         $this->partition = $partition;
+        $this->compressionType = $compressionType;
     }
 
     public function getTimeout(): int
@@ -133,6 +137,7 @@ class Producer
             'max_poll_records' => $this->getMaxPollRecords(),
             'flush_attempts' => $this->getFlushAttempts(),
             'middlewares' => $this->getMiddlewares(),
+            'compression_type' => $this->getCompressionType(),
         ];
 
         if ($avroSchema = $this->getAvroSchema()) {
@@ -145,5 +150,10 @@ class Producer
     public function getPartition(): int
     {
         return $this->partition ?? RD_KAFKA_PARTITION_UA;
+    }
+
+    public function getCompressionType(): string
+    {
+        return $this->compressionType;
     }
 }

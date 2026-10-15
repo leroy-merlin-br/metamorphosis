@@ -20,6 +20,7 @@ class Config extends AbstractConfig
         'auth' => 'nullable|array',
         'middlewares' => 'array',
         'ssl_verify' => 'boolean',
+        'compression_type' => 'in:none,gzip,snappy,lz4,zstd',
     ];
 
     /**
@@ -33,5 +34,6 @@ class Config extends AbstractConfig
         'flush_attempts' => 10,
         'partition' => RD_KAFKA_PARTITION_UA,
         'ssl_verify' => false,
+        'compression_type' => 'none',
     ];
 }

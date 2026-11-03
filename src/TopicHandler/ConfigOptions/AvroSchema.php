@@ -2,6 +2,8 @@
 
 namespace Metamorphosis\TopicHandler\ConfigOptions;
 
+use Metamorphosis\Exceptions\ConfigurationException;
+
 class AvroSchema
 {
     /**
@@ -33,11 +35,19 @@ class AvroSchema
      */
     private array $requestOptions;
 
-    public function __construct(string $url, array $requestOptions = [], bool $sslVerify = true)
+    private array $configOptions;
+
+    public function __construct(
+        string $url,
+        array $requestOptions = [],
+        bool $sslVerify = true,
+        array $configOptions = []
+    )
     {
         $this->url = $url;
         $this->requestOptions = $requestOptions;
         $this->sslVerify = $sslVerify;
+        $this->configOptions = $configOptions;
     }
 
     public function toArray(): array
@@ -46,6 +56,7 @@ class AvroSchema
             'url' => $this->getUrl(),
             'request_options' => $this->getRequestOptions(),
             'ssl_verify' => $this->isSslVerify(),
+            'config_options' => $this->getConfigOptions(),
         ];
     }
 
@@ -62,5 +73,26 @@ class AvroSchema
     public function getRequestOptions(): array
     {
         return $this->requestOptions;
+    }
+
+    public function getConfigOptions(): array
+    {
+        return $this->configOptions;
+    }
+
+    /**
+     * @throws ConfigurationException
+     */
+    public function getValueSubjectName(string $topic): string
+    {
+        $strategy = $this->configOptions['subject']['value']['strategy'] ?? "TopicNameStrategy";
+        $namespace = $this->configOptions['subject']['value']['namespace'] ?? null;
+
+        return match($strategy) {
+          'TopicNameStrategy' => "{$topic}-value",
+          'TopicRecordNameStrategy' => $namespace ? "{$topic}-{$namespace}": throw new ConfigurationException('Namespace is required for TopicRecordNameStrategy'),
+          'RecordNameStrategy' => throw new ConfigurationException('RecordNameStrategy is not supported. Please use TopicNameStrategy (default) or TopicRecordNameStrategy instead.'),
+          default => throw new ConfigurationException('Invalid name strategy'),
+        };
     }
 }

@@ -8,7 +8,6 @@ class AvroSchema
 {
     /**
      * @example 'http://schema-registry:8081'
-     *
      */
     private string $url;
 
@@ -35,6 +34,9 @@ class AvroSchema
      */
     private array $requestOptions;
 
+    /**
+     * @var mixed[]
+     */
     private array $configOptions;
 
     public function __construct(
@@ -42,8 +44,7 @@ class AvroSchema
         array $requestOptions = [],
         bool $sslVerify = true,
         array $configOptions = []
-    )
-    {
+    ) {
         $this->url = $url;
         $this->requestOptions = $requestOptions;
         $this->sslVerify = $sslVerify;
@@ -83,16 +84,16 @@ class AvroSchema
     /**
      * @throws ConfigurationException
      */
-    public function getValueSubjectName(string $topic): string
+    public function getValueSubjectName(string $topicName): string
     {
-        $strategy = $this->configOptions['subject']['value']['strategy'] ?? "TopicNameStrategy";
+        $strategy = $this->configOptions['subject']['value']['strategy'] ?? 'TopicNameStrategy';
         $namespace = $this->configOptions['subject']['value']['namespace'] ?? null;
 
-        return match($strategy) {
-          'TopicNameStrategy' => "{$topic}-value",
-          'TopicRecordNameStrategy' => $namespace ? "{$topic}-{$namespace}": throw new ConfigurationException('Namespace is required for TopicRecordNameStrategy'),
-          'RecordNameStrategy' => throw new ConfigurationException('RecordNameStrategy is not supported. Please use TopicNameStrategy (default) or TopicRecordNameStrategy instead.'),
-          default => throw new ConfigurationException('Invalid name strategy'),
+        return match ($strategy) {
+            'TopicNameStrategy' => "{$topicName}-value",
+            'TopicRecordNameStrategy' => $namespace ? "{$topicName}-{$namespace}" : throw new ConfigurationException('Namespace is required for TopicRecordNameStrategy'),
+            'RecordNameStrategy' => throw new ConfigurationException('RecordNameStrategy is not supported. Please use TopicNameStrategy (default) or TopicRecordNameStrategy instead.'),
+            default => throw new ConfigurationException('Invalid name strategy'),
         };
     }
 }

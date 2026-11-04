@@ -40,8 +40,8 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
         );
         $avroSchemaConfigOptions = $producerConfigOptions->getAvroSchema();
         $clientFactory = m::mock(ClientFactory::class);
-        $cachedSchemaRegistryClient = m::mock(CachedSchemaRegistryClient::class);
-        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedSchemaRegistryClient]);
+        $cachedClient = m::mock(CachedSchemaRegistryClient::class);
+        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedClient]);
 
         $schema = new Schema();
         $parsedSchema = $schema->parse(
@@ -63,9 +63,9 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
         // Expectations
         $clientFactory->expects()
             ->make($avroSchemaConfigOptions)
-            ->andReturn($cachedSchemaRegistryClient);
+            ->andReturn($cachedClient);
 
-        $cachedSchemaRegistryClient->expects()
+        $cachedClient->expects()
             ->getBySubjectAndVersion('kafka-test-value', 'latest')
             ->andReturn($schema);
 
@@ -95,28 +95,29 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
             'kafka:29092'
         );
         $broker = new Broker($connections, new None());
+        $avroConfig = new AvroSchemaConfigOptions(
+            'schema.registry.url',
+            [],
+            true,
+            [
+                'subject' => [
+                    'value' => [
+                        'strategy' => 'TopicRecordNameStrategy',
+                        'namespace' => 'com.some.namespace',
+                    ],
+                ],
+            ]
+        );
         $producerConfigOptions = new ProducerConfigOptions(
             'kafka-test',
             $broker,
             null,
-            new AvroSchemaConfigOptions(
-                'schema.registry.url',
-                [],
-                true,
-                [
-                    'subject' => [
-                        'value' => [
-                            'strategy' => 'TopicRecordNameStrategy',
-                            'namespace' => 'com.some.namespace',
-                        ],
-                    ],
-                ]
-            )
+            $avroConfig
         );
         $avroSchemaConfigOptions = $producerConfigOptions->getAvroSchema();
         $clientFactory = m::mock(ClientFactory::class);
-        $cachedSchemaRegistryClient = m::mock(CachedSchemaRegistryClient::class);
-        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedSchemaRegistryClient]);
+        $cachedClient = m::mock(CachedSchemaRegistryClient::class);
+        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedClient]);
 
         $schema = new Schema();
         $parsedSchema = $schema->parse(
@@ -138,9 +139,9 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
         // Expectations
         $clientFactory->expects()
             ->make($avroSchemaConfigOptions)
-            ->andReturn($cachedSchemaRegistryClient);
+            ->andReturn($cachedClient);
 
-        $cachedSchemaRegistryClient->expects()
+        $cachedClient->expects()
             ->getBySubjectAndVersion('kafka-test-com.some.namespace', 'latest')
             ->andReturn($schema);
 
@@ -178,16 +179,21 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
                 ],
             ]
         );
-        $producerConfigOptions = new ProducerConfigOptions('kafka-test', $broker, null, $avroConfig);
+        $producerConfigOptions = new ProducerConfigOptions(
+            'kafka-test',
+            $broker,
+            null,
+            $avroConfig
+        );
         $avroSchemaConfigOptions = $producerConfigOptions->getAvroSchema();
         $clientFactory = m::mock(ClientFactory::class);
-        $cachedSchemaRegistryClient = m::mock(CachedSchemaRegistryClient::class);
-        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedSchemaRegistryClient]);
+        $cachedClient = m::mock(CachedSchemaRegistryClient::class);
+        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedClient]);
 
         // Expectations
         $clientFactory->expects()
             ->make($avroSchemaConfigOptions)
-            ->andReturn($cachedSchemaRegistryClient);
+            ->andReturn($cachedClient);
 
         $this->expectException(ConfigurationException::class);
 

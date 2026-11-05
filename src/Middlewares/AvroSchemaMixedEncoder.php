@@ -23,6 +23,8 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
 
     private ProducerConfigOptions $producerConfigOptions;
 
+    private string $valueSubject;
+
     public function __construct(
         SchemaId $schemaIdEncoder,
         ClientFactory $factory,
@@ -40,13 +42,13 @@ class AvroSchemaMixedEncoder implements MiddlewareInterface
         $this->schemaIdEncoder = $schemaIdEncoder;
         $this->schemaRegistry = $schemaRegistry;
         $this->producerConfigOptions = $producerConfigOptions;
+        $this->valueSubject = $producerConfigOptions->getAvroSchema()->getValueSubjectName($producerConfigOptions->getTopicId());
     }
 
     public function process(RecordInterface $record, Closure $next)
     {
-        $topic = $this->producerConfigOptions->getTopicId();
         $schema = $this->schemaRegistry->getBySubjectAndVersion(
-            "{$topic}-value",
+            $this->valueSubject,
             'latest'
         );
         $arrayPayload = json_decode($record->getPayload(), true);

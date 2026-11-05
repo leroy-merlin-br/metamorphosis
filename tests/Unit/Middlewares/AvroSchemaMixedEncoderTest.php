@@ -8,6 +8,7 @@ use Metamorphosis\Avro\CachedSchemaRegistryClient;
 use Metamorphosis\Avro\ClientFactory;
 use Metamorphosis\Avro\Schema;
 use Metamorphosis\Avro\Serializer\Encoders\SchemaId;
+use Metamorphosis\Exceptions\ConfigurationException;
 use Metamorphosis\Middlewares\AvroSchemaMixedEncoder;
 use Metamorphosis\Record\ProducerRecord;
 use Metamorphosis\TopicHandler\ConfigOptions\Auth\None;
@@ -38,16 +39,9 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
             )
         );
         $avroSchemaConfigOptions = $producerConfigOptions->getAvroSchema();
-
         $clientFactory = m::mock(ClientFactory::class);
-
-        $cachedSchemaRegistryClient = m::mock(
-            CachedSchemaRegistryClient::class
-        );
-        $schemaIdEncoder = m::mock(
-            SchemaId::class,
-            [$cachedSchemaRegistryClient]
-        );
+        $cachedClient = m::mock(CachedSchemaRegistryClient::class);
+        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedClient]);
 
         $schema = new Schema();
         $parsedSchema = $schema->parse(
@@ -69,9 +63,9 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
         // Expectations
         $clientFactory->expects()
             ->make($avroSchemaConfigOptions)
-            ->andReturn($cachedSchemaRegistryClient);
+            ->andReturn($cachedClient);
 
-        $cachedSchemaRegistryClient->expects()
+        $cachedClient->expects()
             ->getBySubjectAndVersion('kafka-test-value', 'latest')
             ->andReturn($schema);
 
@@ -90,6 +84,123 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
         // Assertions
         $this->assertSame($record, $result->getOriginal());
         $this->assertSame($encodedMessage, $result->getPayload());
+    }
+
+    public function testShouldEncodeRecordWhenTopicNameHasTopicRecordNameStrategy(): void
+    {
+        // Set
+        $avroSchema = $this->getSchemaFixture();
+        $connections = (string) config(
+            'service.broker.connections',
+            'kafka:29092'
+        );
+        $broker = new Broker($connections, new None());
+        $avroConfig = new AvroSchemaConfigOptions(
+            'schema.registry.url',
+            [],
+            true,
+            [
+                'subject' => [
+                    'value' => [
+                        'strategy' => 'TopicRecordNameStrategy',
+                        'namespace' => 'com.some.namespace',
+                    ],
+                ],
+            ]
+        );
+        $producerConfigOptions = new ProducerConfigOptions(
+            'kafka-test',
+            $broker,
+            null,
+            $avroConfig
+        );
+        $avroSchemaConfigOptions = $producerConfigOptions->getAvroSchema();
+        $clientFactory = m::mock(ClientFactory::class);
+        $cachedClient = m::mock(CachedSchemaRegistryClient::class);
+        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedClient]);
+
+        $schema = new Schema();
+        $parsedSchema = $schema->parse(
+            $avroSchema,
+            '123',
+            'kafka-test-com.some.namespace',
+            'latest'
+        );
+        $record = $this->getRecord($parsedSchema->getAvroSchema());
+        $producerRecord = new ProducerRecord($record, 'kafka-test');
+
+        $closure = Closure::fromCallable(function ($producerRecord) {
+            return $producerRecord;
+        });
+
+        $payload = json_decode($producerRecord->getPayload(), true);
+        $encodedMessage = 'binary_message';
+
+        // Expectations
+        $clientFactory->expects()
+            ->make($avroSchemaConfigOptions)
+            ->andReturn($cachedClient);
+
+        $cachedClient->expects()
+            ->getBySubjectAndVersion('kafka-test-com.some.namespace', 'latest')
+            ->andReturn($schema);
+
+        $schemaIdEncoder->expects()
+            ->encode($schema, $payload)
+            ->andReturn($encodedMessage);
+
+        // Actions
+        $avroSchemaMixedEncoder = new AvroSchemaMixedEncoder(
+            $schemaIdEncoder,
+            $clientFactory,
+            $producerConfigOptions
+        );
+        $result = $avroSchemaMixedEncoder->process($producerRecord, $closure);
+
+        // Assertions
+        $this->assertSame($record, $result->getOriginal());
+        $this->assertSame($encodedMessage, $result->getPayload());
+    }
+
+    public function testShouldNotEncodeRecordWhenTopicNameHasRecordNameStrategy(): void
+    {
+        // Set
+        $connections = (string) config('service.broker.connections', 'kafka:29092');
+        $broker = new Broker($connections, new None());
+        $avroConfig = new AvroSchemaConfigOptions(
+            'schema.registry.url',
+            [],
+            true,
+            [
+                'subject' => [
+                    'value' => [
+                        'strategy' => 'RecordNameStrategy',
+                    ],
+                ],
+            ]
+        );
+        $producerConfigOptions = new ProducerConfigOptions(
+            'kafka-test',
+            $broker,
+            null,
+            $avroConfig
+        );
+        $avroSchemaConfigOptions = $producerConfigOptions->getAvroSchema();
+        $clientFactory = m::mock(ClientFactory::class);
+        $cachedClient = m::mock(CachedSchemaRegistryClient::class);
+        $schemaIdEncoder = m::mock(SchemaId::class, [$cachedClient]);
+
+        // Expectations
+        $clientFactory->expects()
+            ->make($avroSchemaConfigOptions)
+            ->andReturn($cachedClient);
+
+        $this->expectException(ConfigurationException::class);
+
+        $this->expectExceptionMessage('RecordNameStrategy is not supported. Please use TopicNameStrategy (default) or TopicRecordNameStrategy instead.');
+
+        // Actions
+        new AvroSchemaMixedEncoder($schemaIdEncoder, $clientFactory, $producerConfigOptions);
     }
 
     private function getRecord(AvroSchema $avroSchema): string

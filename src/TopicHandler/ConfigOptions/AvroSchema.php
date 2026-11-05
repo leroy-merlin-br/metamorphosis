@@ -6,6 +6,12 @@ use Metamorphosis\Exceptions\ConfigurationException;
 
 class AvroSchema
 {
+    private const STRATEGIES = [
+        'TopicNameStrategy',
+        'TopicRecordNameStrategy',
+        'RecordNameStrategy',
+    ];
+
     /**
      * @example 'http://schema-registry:8081'
      */
@@ -86,14 +92,30 @@ class AvroSchema
      */
     public function getValueSubjectName(string $topicName): string
     {
-        $strategy = $this->configOptions['subject']['value']['strategy'] ?? 'TopicNameStrategy';
+        $strategy = $this->configOptions['subject']['value']['strategy'] ?? null;
+
+
+        if (!$strategy || 'TopicNameStrategy' === $strategy) {
+            return "{$topicName}-value";
+        }
+
+
+        if (!in_array($strategy, self::STRATEGIES)) {
+            throw new ConfigurationException('Invalid name strategy');
+        }
+
+        if ('RecordNameStrategy' === $strategy) {
+            throw new ConfigurationException('RecordNameStrategy is not supported. Please use TopicNameStrategy (default) or TopicRecordNameStrategy instead.');
+        }
+
+
         $namespace = $this->configOptions['subject']['value']['namespace'] ?? null;
 
-        return match ($strategy) {
-            'TopicNameStrategy' => "{$topicName}-value",
-            'TopicRecordNameStrategy' => $namespace ? "{$topicName}-{$namespace}" : throw new ConfigurationException('Namespace is required for TopicRecordNameStrategy'),
-            'RecordNameStrategy' => throw new ConfigurationException('RecordNameStrategy is not supported. Please use TopicNameStrategy (default) or TopicRecordNameStrategy instead.'),
-            default => throw new ConfigurationException('Invalid name strategy'),
-        };
+
+        if (!$namespace) {
+            throw new ConfigurationException('Namespace is required for TopicRecordNameStrategy');
+        }
+
+        return "{$topicName}-$namespace";
     }
 }

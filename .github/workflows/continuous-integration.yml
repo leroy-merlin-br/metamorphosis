@@ -89,4 +89,4 @@ jobs:
 
       - name: Report Coverage
         continue-on-error: true
-        run: CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} bash <(curl -Ls https://coverage.codacy.com/get.sh) report
+        run: CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} bash .codacy/get.sh report

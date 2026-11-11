@@ -94,13 +94,11 @@ class AvroSchema
     {
         $strategy = $this->configOptions['subject']['value']['strategy'] ?? null;
 
-
         if (!$strategy || 'TopicNameStrategy' === $strategy) {
             return "{$topicName}-value";
         }
 
-
-        if (!in_array($strategy, self::STRATEGIES)) {
+        if (!in_array($strategy, self::STRATEGIES, true)) {
             throw new ConfigurationException('Invalid name strategy');
         }
 
@@ -108,9 +106,7 @@ class AvroSchema
             throw new ConfigurationException('RecordNameStrategy is not supported. Please use TopicNameStrategy (default) or TopicRecordNameStrategy instead.');
         }
 
-
         $namespace = $this->configOptions['subject']['value']['namespace'] ?? null;
-
 
         if (!$namespace) {
             throw new ConfigurationException('Namespace is required for TopicRecordNameStrategy');

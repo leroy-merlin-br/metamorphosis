@@ -94,6 +94,7 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
             'service.broker.connections',
             'kafka:29092'
         );
+
         $broker = new Broker($connections, new None());
         $avroConfig = new AvroSchemaConfigOptions(
             'schema.registry.url',
@@ -108,12 +109,14 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
                 ],
             ]
         );
+
         $producerConfigOptions = new ProducerConfigOptions(
             'kafka-test',
             $broker,
             null,
             $avroConfig
         );
+
         $avroSchemaConfigOptions = $producerConfigOptions->getAvroSchema();
         $clientFactory = m::mock(ClientFactory::class);
         $cachedClient = m::mock(CachedSchemaRegistryClient::class);
@@ -167,6 +170,7 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
         // Set
         $connections = (string) config('service.broker.connections', 'kafka:29092');
         $broker = new Broker($connections, new None());
+
         $avroConfig = new AvroSchemaConfigOptions(
             'schema.registry.url',
             [],
@@ -179,12 +183,14 @@ class AvroSchemaMixedEncoderTest extends LaravelTestCase
                 ],
             ]
         );
+
         $producerConfigOptions = new ProducerConfigOptions(
             'kafka-test',
             $broker,
             null,
             $avroConfig
         );
+
         $avroSchemaConfigOptions = $producerConfigOptions->getAvroSchema();
         $clientFactory = m::mock(ClientFactory::class);
         $cachedClient = m::mock(CachedSchemaRegistryClient::class);

@@ -7,16 +7,16 @@ use Metamorphosis\Record\RecordInterface;
 abstract class AbstractMiddlewareHandler implements MiddlewareHandlerInterface
 {
     /**
-     * @var iterable<mixed>
+     * @var array<mixed>
      */
-    protected iterable $queue;
+    protected array $queue;
 
     /**
      * Handles the current entry in the middleware queue and advances.
      */
     abstract public function handle(RecordInterface $record);
 
-    public function __construct(iterable $queue)
+    public function __construct(array $queue)
     {
         $this->queue = $queue;
     }

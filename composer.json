@@ -10,7 +10,7 @@
         "php": "^8.2",
         "ext-rdkafka": ">=4.0",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "^6.5.0 || ^7.0",
+        "guzzlehttp/guzzle": "^7.15.2",
         "illuminate/support": "^12.60",
         "illuminate/console": "^12.60",
         "illuminate/config": "^12.60",

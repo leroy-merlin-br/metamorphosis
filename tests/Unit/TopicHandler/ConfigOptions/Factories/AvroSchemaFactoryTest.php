@@ -21,6 +21,15 @@ class AvroSchemaFactoryTest extends LaravelTestCase
                     ],
                 ],
             ],
+            'config_options' => [
+                'subject' => [
+                    'value' => [
+                        'strategy' => 'TopicRecordNameStrategy',
+                        'namespace' =>
+                            'your.namespace.here',
+                    ],
+                ],
+            ],
         ];
 
         // Actions

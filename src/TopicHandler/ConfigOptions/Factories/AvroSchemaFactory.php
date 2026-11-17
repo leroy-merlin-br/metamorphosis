@@ -28,6 +28,10 @@ class AvroSchemaFactory
             $config['requestOptions'] = $config['request_options'];
         }
 
+        if (isset($config['config_options'])) {
+            $config['configOptions'] = $config['config_options'];
+        }
+
         return $config;
     }
 }

@@ -69,6 +69,7 @@ class ConsumerFactoryTest extends LaravelTestCase
                     ],
                 ],
             ],
+            'config_options' => [],
         ];
         $topicData = [
             'topic_id' => 'kafka-test',
@@ -108,6 +109,7 @@ class ConsumerFactoryTest extends LaravelTestCase
                     ],
                 ],
             ],
+            'config_options' => [],
             'auto_commit' => true,
             'commit_async' => true,
             'offset_reset' => 'earliest',

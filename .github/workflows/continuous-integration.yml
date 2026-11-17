@@ -63,6 +63,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         env:
           RDKAFKA_LIBS: librdkafka-dev
+          RDKAFKA_PATH: '.' # Avoids cd "" failing on Bash 5.3 until setup-php@v2 includes the upstream fix.
         with:
           php-version: ${{ matrix.php }}
           extensions: rdkafka-arnaud-lb/php-rdkafka@6.0.3

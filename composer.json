@@ -25,7 +25,7 @@
         "phpro/grumphp": "v2.26.0",
         "vimeo/psalm": "^6.16",
         "psalm/plugin-mockery": "^1.2.1",
-        "rector/rector": "^0.13.10"
+        "rector/rector": "^2.8"
     },
     "autoload": {
         "psr-4": {

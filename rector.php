@@ -1,15 +1,17 @@
 <?php
 
-use Rector\Core\ValueObject\PhpVersion;
-use Rector\Set\ValueObject\SetList;
 use Rector\Config\RectorConfig;
+use Rector\Php84\Rector\FuncCall\AddEscapeArgumentRector;
+use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
+use Rector\ValueObject\PhpVersion;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
+// Only rules that fix PHP 8.4 deprecations/breaking changes,
+// keeping compatibility with the minimum supported version (PHP 8.2).
 
-    $rectorConfig->sets([
-        SetList::CODE_QUALITY,
+return RectorConfig::configure()
+    ->withPaths([__DIR__ . '/config', __DIR__ . '/src', __DIR__ . '/tests'])
+    ->withPhpVersion(PhpVersion::PHP_82)
+    ->withRules([
+        ExplicitNullableParamTypeRector::class,
+        AddEscapeArgumentRector::class,
     ]);
-
-    $rectorConfig->phpVersion(PhpVersion::PHP_74);
-};
